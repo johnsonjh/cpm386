@@ -1,0 +1,16 @@
+boot.bin
+bss.inc
+cpm386.bin
+cpm386.elf
+*.img
+*.log
+NOTES.TXT
+*.o
+os.bin
+payload.bin
+/p*.md
+ramdisk.bin
+RES*.md
+RES*.txt
+test_bdos
+/T*.md

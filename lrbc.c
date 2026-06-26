@@ -1,0 +1,173 @@
+/* lrbc.c - print CP/M file size using Last Record Byte Count */
+
+typedef unsigned short UWORD;
+typedef short WORD;
+typedef long LONG;
+typedef unsigned char UBYTE;
+
+#include "absaddr.h"
+
+#define BDOS_INT 0x30
+
+/* TPA-relative classic base page (user DS base = TPA) */
+#define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
+#define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
+
+void _start (void) __attribute__ ((section (".text._start")));
+
+static UWORD
+bdos (WORD func, LONG info)
+{
+  UWORD ret;
+
+  __asm__ volatile ("int %2"
+                    : "=a"(ret)
+                    : "a"((unsigned)func), "i"(BDOS_INT),
+                      "d"((unsigned long)info)
+                    : "memory", "cc");
+  return ret;
+}
+
+static void
+putch (char c)
+{
+  bdos (2, (LONG)(unsigned char)c);
+}
+
+static void
+puts (const char *s)
+{
+  while (*s)
+    {
+      putch (*s++);
+    }
+}
+
+static void
+putu (unsigned long n)
+{
+  char buf[12];
+  int i = 0;
+
+  if (n == 0)
+    {
+      putch ('0');
+      return;
+    }
+
+  while (n && i < 12)
+    {
+      buf[i++] = (char)('0' + (n % 10));
+      n /= 10;
+    }
+  while (i > 0)
+    {
+      putch (buf[--i]);
+    }
+}
+
+/* Exact byte length from record count + DOS-PLUS LRBC */
+static unsigned long
+exact_size (unsigned long records, UBYTE lrbc)
+{
+  if (records == 0)
+    {
+      return 0;
+    }
+
+  if (lrbc == 0)
+    {
+      return records * 128UL;
+    }
+
+  return (records - 1) * 128UL + (unsigned long)lrbc;
+}
+
+void
+_start (void)
+{
+  UBYTE fcb[36];
+  UWORD r;
+  UBYTE lrbc;
+  unsigned long records, bytes_alloc, bytes_exact;
+  int i;
+
+  puts ("\r\nLRBC (Last Record Byte Count)\r\n");
+
+  /* Need a filename in the default FCB (from CCP base-page setup) */
+  if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
+    {
+      puts ("Usage: LRBC filename\r\n");
+      bdos (0, 0);
+    }
+
+  /* Copy default FCB; open with cur_rec=0xFF to fetch LRBC into FCB+32 */
+  for (i = 0; i < 36; i++)
+    {
+      fcb[i] = DEF_FCB[i];
+    }
+
+  fcb[12] = 0;    /* extent */
+  fcb[14] = 0;    /* s2 */
+  fcb[32] = 0xFF; /* request LRBC on open (CP/M Plus / DOS Plus) */
+
+  r = bdos (15, (LONG)(unsigned long)fcb);
+
+  if (r > 3)
+    {
+      puts ("File not found\r\n");
+      bdos (0, 0);
+    }
+
+  /* After open with 0xFF: cur_rec and s1 hold DOS-PLUS LRBC */
+  lrbc = fcb[32];
+  fcb[32] = 0; /* reset before any sequential I/O (not used here) */
+
+  /*
+   * Function 35: compute file size → ran0..ran2 = next-record count
+   * (CP/M-68K packing: ran0=bits16-23, ran1=8-15, ran2=0-7).
+   */
+
+  bdos (35, (LONG)(unsigned long)fcb);
+  records = ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
+            | (unsigned long)fcb[35];
+
+  bytes_alloc = records * 128UL;
+  bytes_exact = exact_size (records, lrbc);
+
+  puts ("File: ");
+
+  for (i = 1; i <= 8 && fcb[i] != ' '; i++)
+    {
+      putch ((char)(fcb[i] & 0x7f));
+    }
+
+  if (fcb[9] != ' ')
+    {
+      putch ('.');
+      for (i = 9; i <= 11 && fcb[i] != ' '; i++)
+        {
+          putch ((char)(fcb[i] & 0x7f));
+        }
+    }
+
+  puts ("\r\n");
+
+  puts ("Records (storage): ");
+  putu (records);
+  puts ("\r\n");
+
+  puts ("Bytes (records*128): ");
+  putu (bytes_alloc);
+  puts ("\r\n");
+
+  puts ("LRBC (DOS-PLUS, bytes used in last rec): ");
+  putu ((unsigned long)lrbc);
+  puts ("\r\n");
+
+  puts ("Exact size (bytes): ");
+  putu (bytes_exact);
+  puts ("\r\n");
+
+  bdos (0, 0);
+}
