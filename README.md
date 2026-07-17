@@ -118,7 +118,7 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>1509</th>
                 <th>14463</th>
                 <th>3161</th>
-                <th>428390</th>
+                <th>428350</th>
                 <th>8149</th>
         </tr><tr>
                 <th>C Header</th>
@@ -169,7 +169,7 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>1895</th>
                 <th>16219</th>
                 <th>3191</th>
-                <th>513464</th>
+                <th>513424</th>
                 <th>9987</th>
         </tr></tfoot></table>
 <!-- scc-end -->
