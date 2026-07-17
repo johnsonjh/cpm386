@@ -153,24 +153,24 @@ apk add binutils coreutils gawk gcc make nasm
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>172</th>
-                <th>31</th>
+                <th>179</th>
+                <th>32</th>
                 <th>0</th>
-                <th>141</th>
+                <th>147</th>
                 <th>0</th>
-                <th>4672</th>
-                <th>131</th>
+                <th>4832</th>
+                <th>133</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>57</th>
-                <th>16621</th>
-                <th>2258</th>
+                <th>16628</th>
+                <th>2259</th>
                 <th>1702</th>
-                <th>12661</th>
+                <th>12667</th>
                 <th>2537</th>
-                <th>425442</th>
-                <th>8190</th>
+                <th>425602</th>
+                <th>8192</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
