@@ -1,7 +1,9 @@
-CC = gcc
-AS = nasm
-LD = ld
-OBJCOPY = objcopy
+CC := $(shell command -v gcc 2> /dev/null || command -v clang 2> /dev/null || printf '%s' "cc")
+AS := $(shell command -v nasm 2> /dev/null || printf '%s' "nasm")
+LD := $(shell command -c gld 2> /dev/null || command -v ld 2> /dev/null || printf '%s' "ld")
+OBJCOPY := $(shell command -v gobjcopy 2> /dev/null || command -v objcopy 2> /dev/null || printf '%s' "objcopy")
+AWK := $(shell command -v gawk 2> /dev/null || command -v mawk 2> /dev/null || command -v awk 2> /dev/null || printf '%s' "awk")
+DD := $(shell command -v gdd 2> /dev/null || command -v dd 2> /dev/null || printf '%s' "dd")
 
 W_NO_RETURN_MISMATCH := $(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-return-mismatch")
 W_NO_DEPRECATED_NON_PROTOTYPE := $(shell $(CC) -Werror -Wno-deprecated-non-prototype -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-deprecated-non-prototype")
@@ -75,7 +77,7 @@ all: $(TARGET) boot.bin os.bin floppy.img
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o $*.o $<
 	$(LD) -m $(ELF_I386) -T user.ld -o $*.elf $*.o
-	@entry=$$(nm $*.elf | awk '$$NF=="_start"{print $$1}'); \
+	@entry=$$(nm $*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    echo "ERROR: _start at 0x$$entry, expected 0x100"; \
 	    nm $*.elf | head -20; exit 1; \
@@ -149,7 +151,7 @@ pause.386: pause.bin $(MK386)
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o vgaon.o conctl.c
 	$(LD) -m $(ELF_I386) -T user.ld -o vgaon.elf vgaon.o
-	@entry=$$(nm vgaon.elf | awk '$$NF=="_start"{print $$1}'); \
+	@entry=$$(nm vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: vgaon _start"; exit 1; fi
 	$(OBJCOPY) -O binary vgaon.elf $@
 	rm -f vgaon.o vgaon.elf
@@ -157,7 +159,7 @@ vgaon.bin: conctl.c user.ld
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o vgaoff.o conctl.c
 	$(LD) -m $(ELF_I386) -T user.ld -o vgaoff.elf vgaoff.o
-	@entry=$$(nm vgaoff.elf | awk '$$NF=="_start"{print $$1}'); \
+	@entry=$$(nm vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: vgaoff _start"; exit 1; fi
 	$(OBJCOPY) -O binary vgaoff.elf $@
 	rm -f vgaoff.o vgaoff.elf
@@ -165,7 +167,7 @@ vgaoff.bin: conctl.c user.ld
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o seron.o conctl.c
 	$(LD) -m $(ELF_I386) -T user.ld -o seron.elf seron.o
-	@entry=$$(nm seron.elf | awk '$$NF=="_start"{print $$1}'); \
+	@entry=$$(nm seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: seron _start"; exit 1; fi
 	$(OBJCOPY) -O binary seron.elf $@
 	rm -f seron.o seron.elf
@@ -173,7 +175,7 @@ seron.bin: conctl.c user.ld
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o seroff.o conctl.c
 	$(LD) -m $(ELF_I386) -T user.ld -o seroff.elf seroff.o
-	@entry=$$(nm seroff.elf | awk '$$NF=="_start"{print $$1}'); \
+	@entry=$$(nm seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: seroff _start"; exit 1; fi
 	$(OBJCOPY) -O binary seroff.elf $@
 	rm -f seroff.o seroff.elf
@@ -224,7 +226,7 @@ ed.386: ed.bin $(MK386)
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o big.o big.c
 	$(LD) -m $(ELF_I386) -T user.ld -o big.elf big.o
-	@entry=$$(nm big.elf | awk '$$NF=="_start"{print $$1}'); \
+	@entry=$$(nm big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: big _start"; exit 1; fi
 	$(OBJCOPY) -O binary big.elf big_stub.bin
 	@stub=$$(wc -c < big_stub.bin); \
@@ -232,7 +234,7 @@ big.bin: big.c user.ld
 	    echo "ERROR: big stub $$stub >= $(BIG_IMG_SIZE)"; exit 1; fi; \
 	  pad=$$(( $(BIG_IMG_SIZE) - stub )); \
 	  cp big_stub.bin big.bin; \
-	  dd if=/dev/zero bs=1 count=$$pad status=none 2>/dev/null | \
+	  $(DD) if=/dev/zero bs=1 count=$$pad status=none 2>/dev/null | \
 	    tr '\0' '\220' >> big.bin
 	rm -f big.o big.elf big_stub.bin
 
@@ -322,8 +324,8 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 
 	  /tmp/cpmd/VGATEXT.386 \
 	    0:
 	$(PATCH_HOLE) /tmp/ramdisk.tmp BIG.386 || true
-	dd if=/dev/zero of=ramdisk.bin bs=1024 count=$(RAMDISK_KB) status=none 2>/dev/null
-	dd if=/tmp/ramdisk.tmp of=ramdisk.bin conv=notrunc status=none 2>/dev/null
+	$(DD) if=/dev/zero of=ramdisk.bin bs=1024 count=$(RAMDISK_KB) status=none 2>/dev/null
+	$(DD) if=/tmp/ramdisk.tmp of=ramdisk.bin conv=notrunc status=none 2>/dev/null
 	rm -rf /tmp/ramdisk.tmp /tmp/cpmd
 
 cpm_bringup.o: cpm_bringup.c ramdisk.bin cpm_bringup.h
@@ -351,13 +353,13 @@ mbentry.o: mbentry.S multiboot.h
 	$(AS) $(ASFLAGS) -I . -o $@ $<
 
 bss.inc: $(TARGET)
-	nm $(TARGET) | awk '/__bss_start/ { print "bss_start equ 0x" $$1 }' > bss.inc
-	nm $(TARGET) | awk '/__bss_end/ { print "bss_end equ 0x" $$1 }' >> bss.inc
-	nm $(TARGET) | awk '/__kernel_end/ { print "kernel_end equ 0x" $$1 }' >> bss.inc
-	nm $(TARGET) | awk '/ _start$$/ { print "kernel_entry equ 0x" $$1 }' >> bss.inc
+	nm $(TARGET) | $(AWK) '/__bss_start/ { print "bss_start equ 0x" $$1 }' > bss.inc
+	nm $(TARGET) | $(AWK) '/__bss_end/ { print "bss_end equ 0x" $$1 }' >> bss.inc
+	nm $(TARGET) | $(AWK) '/__kernel_end/ { print "kernel_end equ 0x" $$1 }' >> bss.inc
+	nm $(TARGET) | $(AWK) '/ _start$$/ { print "kernel_entry equ 0x" $$1 }' >> bss.inc
 	# Floppy boot loads this many 512-byte sectors of os.bin at 0x10000.
 	# Must cover kernel_end (code+data+bss hole+ramdisk); +2 for headroom.
-	ke=$$(nm $(TARGET) | awk '/__kernel_end/ { print $$1 }'); \
+	ke=$$(nm $(TARGET) | $(AWK) '/__kernel_end/ { print $$1 }'); \
 	  bytes=$$((0x$$ke - 0x10000)); \
 	  sec=$$(( (bytes + 511) / 512 + 2 )); \
 	  echo "SECTORS_TO_LOAD equ $$sec" >> bss.inc
@@ -373,9 +375,8 @@ $(TARGET): $(OBJS) linker.ld
 
 floppy.img: boot.bin os.bin
 	cat boot.bin os.bin > payload.bin
-	# Full 1.44M image
-	dd if=/dev/zero of=$@ bs=512 count=2880 status=none 2>/dev/null
-	dd if=payload.bin of=$@ conv=notrunc status=none 2>/dev/null
+	$(DD) if=/dev/zero of=$@ bs=512 count=2880 status=none 2>/dev/null
+	$(DD) if=payload.bin of=$@ conv=notrunc status=none 2>/dev/null
 
 clean:
 	rm -f *.o $(TARGET) *.img *.log cpm386.bin test_bdos os.bin boot.bin \
