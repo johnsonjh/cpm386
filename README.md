@@ -146,23 +146,23 @@ apt install binutils coreutils cpmtools gawk gcc make nasm
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>171</th>
-                <th>28</th>
+                <th>172</th>
+                <th>31</th>
                 <th>0</th>
-                <th>143</th>
+                <th>141</th>
                 <th>0</th>
-                <th>4810</th>
+                <th>4672</th>
                 <th>131</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>57</th>
-                <th>16620</th>
-                <th>2255</th>
+                <th>16621</th>
+                <th>2258</th>
                 <th>1702</th>
-                <th>12663</th>
+                <th>12661</th>
                 <th>2537</th>
-                <th>425580</th>
+                <th>425442</th>
                 <th>8190</th>
         </tr></tfoot></table>
 <!-- scc-end -->
