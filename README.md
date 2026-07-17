@@ -113,23 +113,23 @@ apk add binutils coreutils gawk gcc make nasm
         <tbody><tr>
                 <th>C</th>
                 <th>41</th>
-                <th>14505</th>
-                <th>1994</th>
-                <th>1344</th>
-                <th>11167</th>
+                <th>14577</th>
+                <th>2019</th>
+                <th>1388</th>
+                <th>11170</th>
                 <th>2507</th>
-                <th>357302</th>
-                <th>6587</th>
+                <th>357541</th>
+                <th>6593</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>11</th>
-                <th>1023</th>
-                <th>102</th>
-                <th>250</th>
+                <th>1034</th>
+                <th>108</th>
+                <th>255</th>
                 <th>671</th>
                 <th>9</th>
-                <th>38480</th>
-                <th>824</th>
+                <th>38482</th>
+                <th>821</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -164,13 +164,13 @@ apk add binutils coreutils gawk gcc make nasm
         <tfoot><tr>
                 <th>Total</th>
                 <th>57</th>
-                <th>16628</th>
-                <th>2259</th>
-                <th>1702</th>
-                <th>12667</th>
+                <th>16711</th>
+                <th>2290</th>
+                <th>1751</th>
+                <th>12670</th>
                 <th>2537</th>
-                <th>425602</th>
-                <th>8192</th>
+                <th>425843</th>
+                <th>8196</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
