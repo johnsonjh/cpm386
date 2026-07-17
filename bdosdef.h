@@ -103,6 +103,18 @@
 #define BDOS_CON_CLEAR 221     /* clear serial ANSI + VGA (CLS.386) */
 #define BDOS_CON_VGA 222       /* get/set VGA console enable        */
 #define BDOS_CON_SER 223       /* get/set serial console enable     */
+#define BDOS_CON_VIDEO 224     /* map info for direct VGA text (sel) */
+
+/* Ring-3 video map result (BDOS 224; DE -> this, TPA-relative). */
+struct cpm_vga_text
+{
+  UWORD sel;        /* selector|RPL3, or 0 if unavailable */
+  UWORD cols;       /* text columns (e.g. 80)             */
+  UWORD rows;       /* text rows (e.g. 25)                */
+  UWORD cell_bytes; /* bytes per cell (2)                 */
+  ULONG map_size;   /* mapped byte length (e.g. 32K)      */
+  ULONG phys_base;  /* physical base (informational)      */
+};
 
 #define robit 0    /* read-only bit in file type field of fcb */
 #define arbit 2    /* archive bit in file type field of fcb   */

@@ -10,9 +10,11 @@
 # define SEL_UCODE 0x18 /* DPL=3; use with RPL3 => 0x1B */
 # define SEL_UDATA 0x20 /* DPL=3; use with RPL3 => 0x23 */
 # define SEL_TSS 0x28
+# define SEL_UVIDEO 0x30 /* DPL=3 VGA text; use with RPL3 => 0x33 */
 
 # define SEL_UCODE_RPL3 0x1B
 # define SEL_UDATA_RPL3 0x23
+# define SEL_UVIDEO_RPL3 0x33
 
 /* User-callable BDOS software interrupt */
 # define BDOS_INT 0x30
@@ -37,5 +39,14 @@ unsigned long pmode_tpa_len (void);
 
 /* Nonzero after pmode_init (ring-3 TPA window active). */
 int pmode_active (void);
+
+/*
+ * User VGA text segment (platform.h).  Returns selector|RPL3, or 0 if
+ * CPM386_HAS_VGA_TEXT is 0 / not installed.
+ */
+
+unsigned short pmode_vga_selector (void);
+unsigned long pmode_vga_phys_base (void);
+unsigned long pmode_vga_map_size (void);
 
 #endif

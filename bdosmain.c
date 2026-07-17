@@ -24,6 +24,7 @@
 #include "bdosdef.h" /* Type and structure declarations for BDOS */
 
 #include "biosdef.h" /* Declarations of BIOS functions */
+#include "platform.h" /* VGA text geometry for BDOS 224 */
 
 struct tempstr
 {
@@ -550,6 +551,50 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       {
         extern unsigned short bios_con_ser_ctl (unsigned short);
         rtnval = bios_con_ser_ctl (info);
+      }
+      break;
+
+    /*
+     * BDOS 224 (CON_VIDEO): direct VGA text map for ring-3.
+     * DE -> struct cpm_vga_text (TPA-relative).  Fills sel/cols/rows/…
+     * AX = selector|RPL3 on success, 0xFFFF if platform has no text map
+     * (see platform.h CPM386_HAS_VGA_TEXT).
+     */
+    case 224:
+      {
+        extern unsigned short pmode_vga_selector (void);
+        extern unsigned long pmode_vga_phys_base (void);
+        extern unsigned long pmode_vga_map_size (void);
+        REG struct cpm_vga_text *vp = (struct cpm_vga_text *)infop;
+        UWORD sel = pmode_vga_selector ();
+
+        if (!sel || !vp)
+          {
+            if (vp)
+              {
+                vp->sel = 0;
+                vp->cols = 0;
+                vp->rows = 0;
+                vp->cell_bytes = 0;
+                vp->map_size = 0;
+                vp->phys_base = 0;
+              }
+            rtnval = 0xFFFF;
+            break;
+          }
+        vp->sel = sel;
+#if CPM386_HAS_VGA_TEXT
+        vp->cols = (UWORD)CPM386_VGA_TEXT_COLS;
+        vp->rows = (UWORD)CPM386_VGA_TEXT_ROWS;
+        vp->cell_bytes = (UWORD)CPM386_VGA_TEXT_CELL;
+#else
+        vp->cols = 0;
+        vp->rows = 0;
+        vp->cell_bytes = 0;
+#endif
+        vp->map_size = (ULONG)pmode_vga_map_size ();
+        vp->phys_base = (ULONG)pmode_vga_phys_base ();
+        rtnval = sel;
       }
       break;
 

@@ -436,6 +436,25 @@ pmode_tpa_len (void)
   return 0;
 }
 
+/* no ring-3 VGA segment in unit tests */
+unsigned short
+pmode_vga_selector (void)
+{
+  return 0;
+}
+
+unsigned long
+pmode_vga_phys_base (void)
+{
+  return 0;
+}
+
+unsigned long
+pmode_vga_map_size (void)
+{
+  return 0;
+}
+
 /* DOS-PLUS exact size: records*128 if lrbc==0, else (records-1)*128+lrbc */
 static unsigned long
 dosplus_exact (unsigned long records, unsigned lrbc)

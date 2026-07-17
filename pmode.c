@@ -1,6 +1,7 @@
 /* pmode.c - GDT / IDT / TSS setup and BDOS syscall C path for ring-3 */
 
 #include "bdosinc.h"
+#include "platform.h"
 #include "pmode.h"
 
 typedef unsigned char uint8_t;
@@ -54,7 +55,7 @@ struct tss32
   uint16_t iomap_base;
 } __attribute__ ((packed));
 
-#define GDT_COUNT 6
+#define GDT_COUNT 7 /* + SEL_UVIDEO at index 6 */
 #define IDT_COUNT 256
 
 static struct gdt_entry gdt[GDT_COUNT];
@@ -92,6 +93,38 @@ int
 pmode_active (void)
 {
   return pmode_ready && g_tpa_len > 0;
+}
+
+unsigned short
+pmode_vga_selector (void)
+{
+#if CPM386_HAS_VGA_TEXT
+  if (!pmode_ready)
+    return 0;
+  return (unsigned short)SEL_UVIDEO_RPL3;
+#else
+  return 0;
+#endif
+}
+
+unsigned long
+pmode_vga_phys_base (void)
+{
+#if CPM386_HAS_VGA_TEXT
+  return (unsigned long)CPM386_VGA_TEXT_BASE;
+#else
+  return 0;
+#endif
+}
+
+unsigned long
+pmode_vga_map_size (void)
+{
+#if CPM386_HAS_VGA_TEXT
+  return (unsigned long)CPM386_VGA_TEXT_SIZE;
+#else
+  return 0;
+#endif
 }
 
 /* GDT helpers */
@@ -429,6 +462,7 @@ bdos_arg_is_ptr (WORD func)
     case 105: /* get date/time */
     case 152: /* F_PARSE PFCB */
     case 155: /* T_SECONDS get date/time BCD */
+    case 224: /* BDOS_CON_VIDEO - fill cpm_vga_text */
       return 1;
 
     default:
@@ -532,8 +566,25 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
   {
     uint32_t tb = (uint32_t)(unsigned long)&tss;
     uint32_t tl = sizeof (tss) - 1;
+
     gdt_set (5, tb, tl, 0x89, 0x00); /* 32-bit TSS available, byte gran */
   }
+
+  /*
+   * 0x30 user VGA text: base/size from platform.h (default B8000 / 32K).
+   * Byte granularity, 32-bit data, DPL=3.
+   */
+
+#if CPM386_HAS_VGA_TEXT
+  {
+    uint32_t vbase = (uint32_t)CPM386_VGA_TEXT_BASE;
+    uint32_t vlim = (uint32_t)CPM386_VGA_TEXT_SIZE - 1u; /* byte gran */
+
+    gdt_set (6, vbase, vlim, 0xF2, 0x40); /* DPL3 RW data, D=1, G=0 */
+  }
+#else
+  gdt_set (6, 0, 0, 0, 0);
+#endif
 
   /* TSS contents */
   for (i = 0; i < (int)sizeof (tss); i++)
