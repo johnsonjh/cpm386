@@ -105,23 +105,23 @@
         <tbody><tr>
                 <th>C</th>
                 <th>41</th>
-                <th>14486</th>
-                <th>1980</th>
-                <th>1341</th>
-                <th>11165</th>
+                <th>14505</th>
+                <th>1994</th>
+                <th>1344</th>
+                <th>11167</th>
                 <th>2507</th>
-                <th>357474</th>
-                <th>6579</th>
+                <th>357302</th>
+                <th>6587</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>11</th>
-                <th>1014</th>
-                <th>100</th>
-                <th>245</th>
-                <th>669</th>
+                <th>1023</th>
+                <th>102</th>
+                <th>250</th>
+                <th>671</th>
                 <th>9</th>
-                <th>38135</th>
-                <th>819</th>
+                <th>38480</th>
+                <th>824</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -135,34 +135,34 @@
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>343</th>
-                <th>64</th>
-                <th>16</th>
-                <th>263</th>
-                <th>20</th>
-                <th>11844</th>
-                <th>274</th>
+                <th>347</th>
+                <th>65</th>
+                <th>17</th>
+                <th>265</th>
+                <th>21</th>
+                <th>12043</th>
+                <th>277</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>145</th>
-                <th>21</th>
+                <th>171</th>
+                <th>28</th>
                 <th>0</th>
-                <th>124</th>
+                <th>143</th>
                 <th>0</th>
-                <th>4156</th>
-                <th>116</th>
+                <th>4810</th>
+                <th>131</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>57</th>
-                <th>16562</th>
-                <th>2231</th>
-                <th>1693</th>
-                <th>12638</th>
-                <th>2536</th>
-                <th>424554</th>
-                <th>8159</th>
+                <th>16620</th>
+                <th>2255</th>
+                <th>1702</th>
+                <th>12663</th>
+                <th>2537</th>
+                <th>425580</th>
+                <th>8190</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
