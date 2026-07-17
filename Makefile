@@ -157,6 +157,15 @@ fparse.386: fparse.bin $(MK386)
 illegal.386: illegal.bin $(MK386)
 	$(MK386) illegal.bin illegal.386 0x100
 
+dumpfcb.386: dumpfcb.bin $(MK386)
+	$(MK386) dumpfcb.bin dumpfcb.386 0x100
+
+dumpdir.386: dumpdir.bin $(MK386)
+	$(MK386) dumpdir.bin dumpdir.386 0x100
+
+mem.386: mem.bin $(MK386)
+	$(MK386) mem.bin mem.386 0x100
+
 # Pad stub to BIG_IMG_SIZE with 0x90 so the .386 spans multiple extents and >64K
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o big.o big.c
@@ -177,7 +186,7 @@ big.386: big.bin $(MK386)
 	$(MK386) big.bin big.386 0x100
 
 # RAM disk: programs + accurate DOS-PLUS LRBC (cpmtools)
-ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 seroff.386 fparse.386 illegal.386 $(PATCH_HOLE)
+ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 $(PATCH_HOLE)
 	mkdir -p /tmp/cpmd
 	printf 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' > /tmp/cpmd/README.TXT
 	# Sample environment file for PRINTENV (upstream-style VAR=value)
@@ -211,6 +220,9 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 
 	cp seroff.386 /tmp/cpmd/SEROFF.386
 	cp fparse.386 /tmp/cpmd/FPARSE.386
 	cp illegal.386 /tmp/cpmd/ILLEGAL.386
+	cp dumpfcb.386 /tmp/cpmd/DUMPFCB.386
+	cp dumpdir.386 /tmp/cpmd/DUMPDIR.386
+	cp mem.386 /tmp/cpmd/MEM.386
 	mkfs.cpm -f 4mb-hd /tmp/ramdisk.tmp
 	cpmcp -f 4mb-hd /tmp/ramdisk.tmp \
 	  /tmp/cpmd/README.TXT /tmp/cpmd/ENV.DAT /tmp/cpmd/DEMO.SUB \
@@ -224,7 +236,8 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 
 	  /tmp/cpmd/PRINTENV.386 /tmp/cpmd/PAUSE.386 \
 	  /tmp/cpmd/VGAON.386 /tmp/cpmd/VGAOFF.386 \
 	  /tmp/cpmd/SERON.386 /tmp/cpmd/SEROFF.386 /tmp/cpmd/FPARSE.386 \
-	  /tmp/cpmd/ILLEGAL.386 0:
+	  /tmp/cpmd/ILLEGAL.386 /tmp/cpmd/DUMPFCB.386 /tmp/cpmd/DUMPDIR.386 \
+	  /tmp/cpmd/MEM.386 0:
 	# Patch BIG.386 dirent: zero a middle allocation block that only covers
 	# 0x90 padding → sparse hole; streaming loader zero-fills it.
 	$(PATCH_HOLE) /tmp/ramdisk.tmp BIG.386 || true
@@ -294,6 +307,8 @@ clean:
 	      vgaon.bin vgaon.386 vgaoff.bin vgaoff.386 \
 	      seron.bin seron.386 seroff.bin seroff.386 \
 	      fparse.bin fparse.386 illegal.bin illegal.386 \
+	      dumpfcb.bin dumpfcb.386 dumpdir.bin dumpdir.386 \
+	      mem.bin mem.386 \
 	      $(MK386) $(PATCH_HOLE)
 
 

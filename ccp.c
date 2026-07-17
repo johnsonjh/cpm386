@@ -1391,6 +1391,7 @@ REG BYTE *cmd;
                                                                const void *,
                                                                const char *);
                                 extern UWORD pgm_go(void);
+                                dirflag = FALSE;
                                 fill_fcb(1, argfcb1);
                                 fill_fcb(2, argfcb2);
                                 bios_setup_basepage(argfcb1, argfcb2,
@@ -1480,6 +1481,7 @@ REG BYTE *cmd;
                                                 extern void bios_setup_basepage(
                                                     const void *, const void *,
                                                     const char *);
+                                                dirflag = FALSE;
                                                 fill_fcb(1, argfcb1);
                                                 fill_fcb(2, argfcb2);
                                                 bios_setup_basepage(
