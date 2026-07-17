@@ -79,13 +79,13 @@
         <tbody><tr>
                 <th>C</th>
                 <th>41</th>
-                <th>14461</th>
-                <th>1971</th>
-                <th>1339</th>
-                <th>11151</th>
-                <th>2501</th>
-                <th>356935</th>
-                <th>6567</th>
+                <th>14486</th>
+                <th>1980</th>
+                <th>1341</th>
+                <th>11165</th>
+                <th>2507</th>
+                <th>357474</th>
+                <th>6579</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>11</th>
@@ -130,13 +130,13 @@
         <tfoot><tr>
                 <th>Total</th>
                 <th>57</th>
-                <th>16537</th>
-                <th>2222</th>
-                <th>1691</th>
-                <th>12624</th>
-                <th>2530</th>
-                <th>424015</th>
-                <th>8147</th>
+                <th>16562</th>
+                <th>2231</th>
+                <th>1693</th>
+                <th>12638</th>
+                <th>2536</th>
+                <th>424554</th>
+                <th>8159</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
