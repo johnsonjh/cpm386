@@ -3,9 +3,9 @@ AS = nasm
 LD = ld
 OBJCOPY = objcopy
 
-# Detect if -Wno-return-mismatch flag works
 W_NO_RETURN_MISMATCH := $(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-return-mismatch")
 W_NO_DEPRECATED_NON_PROTOTYPE := $(shell $(CC) -Werror -Wno-deprecated-non-prototype -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-deprecated-non-prototype")
+ELF_I386 := $(shell if [ "$$(uname -s)" = "Haiku" ]; then printf '%s' "elf_i386_haiku"; else printf '%s' "elf_i386"; fi)
 
 CFLAGS = \
 	 $(W_NO_DEPRECATED_NON_PROTOTYPE) \
@@ -50,7 +50,7 @@ CFLAGS = \
 
 ASFLAGS = -f elf32
 
-LDFLAGS = -m elf_i386 -T linker.ld -nostdlib --gc-sections --print-gc-sections
+LDFLAGS = -m $(ELF_I386) -T linker.ld -nostdlib --gc-sections --print-gc-sections
 
 BDOS_OBJS = bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil.o iosys.o
 CCP_OBJ = ccp.o
@@ -74,7 +74,7 @@ all: $(TARGET) boot.bin os.bin floppy.img
 # --- transient .386 programs (load at TPA+0x100) ---
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o $*.o $<
-	$(LD) -m elf_i386 -T user.ld -o $*.elf $*.o
+	$(LD) -m $(ELF_I386) -T user.ld -o $*.elf $*.o
 	@entry=$$(nm $*.elf | awk '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    echo "ERROR: _start at 0x$$entry, expected 0x100"; \
@@ -148,7 +148,7 @@ pause.386: pause.bin $(MK386)
 # Console enable helpers (one source, four -DPROG_* builds)
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o vgaon.o conctl.c
-	$(LD) -m elf_i386 -T user.ld -o vgaon.elf vgaon.o
+	$(LD) -m $(ELF_I386) -T user.ld -o vgaon.elf vgaon.o
 	@entry=$$(nm vgaon.elf | awk '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: vgaon _start"; exit 1; fi
 	$(OBJCOPY) -O binary vgaon.elf $@
@@ -156,7 +156,7 @@ vgaon.bin: conctl.c user.ld
 
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o vgaoff.o conctl.c
-	$(LD) -m elf_i386 -T user.ld -o vgaoff.elf vgaoff.o
+	$(LD) -m $(ELF_I386) -T user.ld -o vgaoff.elf vgaoff.o
 	@entry=$$(nm vgaoff.elf | awk '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: vgaoff _start"; exit 1; fi
 	$(OBJCOPY) -O binary vgaoff.elf $@
@@ -164,7 +164,7 @@ vgaoff.bin: conctl.c user.ld
 
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o seron.o conctl.c
-	$(LD) -m elf_i386 -T user.ld -o seron.elf seron.o
+	$(LD) -m $(ELF_I386) -T user.ld -o seron.elf seron.o
 	@entry=$$(nm seron.elf | awk '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: seron _start"; exit 1; fi
 	$(OBJCOPY) -O binary seron.elf $@
@@ -172,7 +172,7 @@ seron.bin: conctl.c user.ld
 
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o seroff.o conctl.c
-	$(LD) -m elf_i386 -T user.ld -o seroff.elf seroff.o
+	$(LD) -m $(ELF_I386) -T user.ld -o seroff.elf seroff.o
 	@entry=$$(nm seroff.elf | awk '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: seroff _start"; exit 1; fi
 	$(OBJCOPY) -O binary seroff.elf $@
@@ -223,7 +223,7 @@ ed.386: ed.bin $(MK386)
 # Pad stub to BIG_IMG_SIZE with 0x90 so the .386 spans multiple extents and >64K
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o big.o big.c
-	$(LD) -m elf_i386 -T user.ld -o big.elf big.o
+	$(LD) -m $(ELF_I386) -T user.ld -o big.elf big.o
 	@entry=$$(nm big.elf | awk '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: big _start"; exit 1; fi
 	$(OBJCOPY) -O binary big.elf big_stub.bin

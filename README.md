@@ -30,8 +30,8 @@
 
 ## Build requirements
 
-* Compiler (supporting Intel x86 `-m32`):
-  * [GNU GCC](https://gcc.gnu.org/), *or*,
+* Supported compilers (supporting Intel x86 `-m32`)
+  * [GNU GCC](https://gcc.gnu.org/)
   * [LLVM Clang](https://clang.llvm.org)
 []()
 
@@ -160,10 +160,10 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>1</th>
                 <th>431</th>
                 <th>72</th>
-                <th>10</th>
-                <th>349</th>
-                <th>22</th>
-                <th>13789</th>
+                <th>9</th>
+                <th>350</th>
+                <th>24</th>
+                <th>13887</th>
                 <th>352</th>
         </tr><tr>
                 <th>Markdown</th>
@@ -173,7 +173,7 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>158</th>
                 <th>0</th>
-                <th>5052</th>
+                <th>5054</th>
                 <th>136</th>
         </tr></tbody>
         <tfoot><tr>
@@ -181,10 +181,10 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>67</th>
                 <th>21170</th>
                 <th>2992</th>
-                <th>1888</th>
-                <th>16290</th>
-                <th>3192</th>
-                <th>514377</th>
+                <th>1887</th>
+                <th>16291</th>
+                <th>3194</th>
+                <th>514477</th>
                 <th>10045</th>
         </tr></tfoot></table>
 <!-- scc-end -->
