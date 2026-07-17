@@ -5,7 +5,7 @@ typedef short WORD;
 typedef long LONG;
 
 #define BDOS_INT 0x30
-#define BDOS_CLS 221 /* BDOS_CON_CLEAR - not 108 (P_CODE) */
+#define BDOS_CLS 221
 
 void _start (void) __attribute__ ((section (".text._start")));
 
