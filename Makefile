@@ -353,7 +353,11 @@ test_bdos: test_bdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil
 test: test_bdos
 	./test_bdos
 
-scc: README.md
+scc:
+	"$${MAKE:-$(MAKE)}" scc-real
+	"$${MAKE:-$(MAKE)}" scc-real
+
+scc-real: README.md
 	"$${MAKE:-$(MAKE)}" clean
 	awk '/<!-- scc-start -->/ { \
 		print; system("scc \
@@ -371,4 +375,4 @@ scc: README.md
 	mv -f README.out README.md
 
 .NOTPARALLEL:
-.PHONY: all clean run test
+.PHONY: all clean run test scc scc-real
