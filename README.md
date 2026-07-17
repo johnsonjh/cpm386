@@ -112,24 +112,24 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>41</th>
-                <th>14577</th>
-                <th>2019</th>
-                <th>1388</th>
-                <th>11170</th>
-                <th>2507</th>
-                <th>357541</th>
-                <th>6593</th>
+                <th>46</th>
+                <th>15833</th>
+                <th>2258</th>
+                <th>1437</th>
+                <th>12138</th>
+                <th>2633</th>
+                <th>379287</th>
+                <th>7017</th>
         </tr><tr>
                 <th>C Header</th>
-                <th>11</th>
-                <th>1034</th>
-                <th>108</th>
-                <th>255</th>
-                <th>671</th>
+                <th>15</th>
+                <th>1318</th>
+                <th>137</th>
+                <th>278</th>
+                <th>903</th>
                 <th>9</th>
-                <th>38482</th>
-                <th>821</th>
+                <th>54241</th>
+                <th>1041</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -143,13 +143,13 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>347</th>
-                <th>65</th>
+                <th>370</th>
+                <th>70</th>
                 <th>17</th>
-                <th>265</th>
+                <th>283</th>
                 <th>21</th>
-                <th>12043</th>
-                <th>277</th>
+                <th>12826</th>
+                <th>294</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
@@ -158,19 +158,19 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>147</th>
                 <th>0</th>
-                <th>4856</th>
-                <th>131</th>
+                <th>4857</th>
+                <th>130</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>57</th>
-                <th>16711</th>
-                <th>2290</th>
-                <th>1751</th>
-                <th>12670</th>
-                <th>2537</th>
-                <th>425867</th>
-                <th>8194</th>
+                <th>66</th>
+                <th>18274</th>
+                <th>2563</th>
+                <th>1823</th>
+                <th>13888</th>
+                <th>2663</th>
+                <th>464156</th>
+                <th>8850</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
