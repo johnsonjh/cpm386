@@ -112,14 +112,14 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>46</th>
-                <th>15833</th>
-                <th>2258</th>
-                <th>1437</th>
-                <th>12138</th>
-                <th>2633</th>
-                <th>379287</th>
-                <th>7017</th>
+                <th>47</th>
+                <th>18653</th>
+                <th>2681</th>
+                <th>1509</th>
+                <th>14463</th>
+                <th>3161</th>
+                <th>428390</th>
+                <th>8149</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -143,13 +143,13 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>370</th>
-                <th>70</th>
+                <th>374</th>
+                <th>71</th>
                 <th>17</th>
-                <th>283</th>
+                <th>286</th>
                 <th>21</th>
-                <th>12826</th>
-                <th>294</th>
+                <th>12947</th>
+                <th>297</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
@@ -159,18 +159,18 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>147</th>
                 <th>0</th>
                 <th>4857</th>
-                <th>130</th>
+                <th>131</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>66</th>
-                <th>18274</th>
-                <th>2563</th>
-                <th>1823</th>
-                <th>13888</th>
-                <th>2663</th>
-                <th>464156</th>
-                <th>8850</th>
+                <th>67</th>
+                <th>21098</th>
+                <th>2987</th>
+                <th>1895</th>
+                <th>16216</th>
+                <th>3191</th>
+                <th>513380</th>
+                <th>9985</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
