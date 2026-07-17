@@ -9,7 +9,9 @@
 /*
  * 256 KiB image: enough for multi-extent and >64K .386 test programs
  */
+
 # define RAMDISK_SIZE (256 * 1024)
+
 extern unsigned char ramdisk[RAMDISK_SIZE];
 extern struct dph dph0;
 extern struct dpb dpb0;

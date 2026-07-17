@@ -17,17 +17,24 @@
 /* User-callable BDOS software interrupt */
 # define BDOS_INT 0x30
 
-/* Install flat kernel + user TPA segments, TSS, IDT (incl. int 0x30).
- * tpa_base/tpa_len define the ring-3 code/data window. */
+/*
+ * Install flat kernel + user TPA segments, TSS, IDT (incl. int 0x30).
+ * tpa_base/tpa_len define the ring-3 code/data window.
+ */
+
 void pmode_init (unsigned long tpa_base, unsigned long tpa_len);
 
-/* Enter ring 3 at user-relative entry_off with user-relative stack.
- * Returns only when the program exits via BDOS function 0 (int 0x30). */
+/*
+ * Enter ring 3 at user-relative entry_off with user-relative stack.
+ * Returns only when the program exits via BDOS function 0 (int 0x30).
+ */
+
 void enter_ring3 (unsigned long entry_off, unsigned long user_esp);
 
 /* Linear base of current user TPA (for syscall pointer fixup). */
 unsigned long pmode_tpa_base (void);
 unsigned long pmode_tpa_len (void);
+
 /* Nonzero after pmode_init (ring-3 TPA window active). */
 int pmode_active (void);
 

@@ -1,15 +1,16 @@
-/********************************************************
+/*********************************************************
  *                                                       *
  *               CP/M-68K header file                    *
  *    Copyright (c) 1982 by Digital Research, Inc.       *
  *    Structure definitions for doing I/O in packets     *
  *                                                       *
- ********************************************************/
+ *********************************************************/
 
 /*
  * May use this information structure instead of disk parameter header and
  * disk parameter block in future, but for now it's unused
  */
+
 #if 0
 struct dskinfo
 {

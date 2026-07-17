@@ -21,7 +21,7 @@
 *                                                       *
 *       Modified 2/5/84 sw Allow typeahead              *
 *                          ^C warmboot modifications    *
-*       Again    3/17/84 sw Chain hack                  *
+*       Again   3/17/84 sw Chain hack                   *
 *                                                       *
 ********************************************************/
 
@@ -67,7 +67,9 @@ BOOLEAN constat()
 /* check for ctrl/s */
 /* used internally  */
 /********************/
-/* Called before every cooked console character (BDOS 2).
+
+/*
+ * Called before every cooked console character (BDOS 2).
  *
  * Ctrl-S pauses output.  Classic CP/M resumes on *any* following key
  * (not only Ctrl-Q).  That matters here because host serial PTYs often
@@ -77,6 +79,7 @@ BOOLEAN constat()
  * The wake-up key after a pause is discarded (not typed ahead), matching
  * typical CP/M 2 behavior so it does not pollute the next CCP command.
  */
+
 conbrk()
 {
     REG UBYTE ch;

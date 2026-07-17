@@ -243,7 +243,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 
 	  /tmp/cpmd/ILLEGAL.386 /tmp/cpmd/DUMPFCB.386 /tmp/cpmd/DUMPDIR.386 \
 	  /tmp/cpmd/MEM.386 0:
 	# Patch BIG.386 dirent: zero a middle allocation block that only covers
-	# 0x90 padding → sparse hole; streaming loader zero-fills it.
+	# 0x90 padding for sparse hole; streaming loader zero-fills it.
 	$(PATCH_HOLE) /tmp/ramdisk.tmp BIG.386 || true
 	# Fixed-size image: zero-fill then overlay cpmtools filesystem (dd count
 	# alone stops at EOF and would shrink as the FS grows).

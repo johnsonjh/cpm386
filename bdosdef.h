@@ -222,7 +222,8 @@ struct conbuf
   UBYTE cbuf[0]; /* Console data                        */
 };
 
-/* .386 absolute executable format (minimal, inspired by CP/M-68K absolute
+/*
+ * .386 absolute executable format (minimal, inspired by CP/M-68K absolute
  * files, adapted to flat 32-bit protected mode, using relative offsets from
  * TPA base): Offset 0:  32-bit little-endian load offset (image at TPA_base +
  * load_off) Offset 4:  32-bit little-endian image size in bytes Offset 8:
@@ -256,7 +257,7 @@ UWORD cpm386_load_from_buf (const UBYTE *filebuf, unsigned long buflen,
  * Reader returns: 0 = record data valid, 1 = EOF/unwritten (zero-fill if still
  * within image), other = hard error. Handles multi-extent files (caller's
  * sequential BDOS read crosses extents) and allocation holes (status 1
- * mid-image → zero-filled record). No size cap beyond TPA.
+ * mid-image -> zero-filled record). No size cap beyond TPA.
  */
 
 typedef UWORD (*cpm386_rec_reader) (UBYTE rec[128], void *ctx);
@@ -273,4 +274,4 @@ typedef BOOLEAN (*DIRSCAN_FN) (UBYTE *fcbp, UBYTE *dirp, WORD dirindx);
 
 UWORD dirscan (DIRSCAN_FN funcp, UBYTE *fcbp, UWORD parms);
 
-#endif /* BDOSDEF_H */
+#endif

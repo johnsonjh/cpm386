@@ -239,9 +239,14 @@ _start (void)
   r = bdos (33, (LONG)(unsigned long)fcb);
   result (r == 0 && dma[0] == 'X' && dma[1] == 0x5A, 'Q');
 
-  /* H = hole: with 2K blocks, 16 records/block. Seq wrote 0-4 → map[0].
-   * Write random record 40 → map[2]. map[1] (recs 16-31) stays unallocated.
-   * Random read record 20 must return EOF (1). */
+  /*
+   * H = hole: with 2K blocks, 16 records/block.
+   * Seq wrote 0-4 -> map[0].
+   * Write random record 40 -> map[2].
+   * map[1] (recs 16-31) stays unallocated.
+   * Random read record 20 must return EOF (1).
+   */
+
   for (i = 0; i < 128; i++)
     {
       dma[i] = 0xEE;

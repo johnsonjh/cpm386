@@ -53,7 +53,7 @@ static int com_probe(void)
 
   /* 8250 IER test */
   lcr = inb(COM1_PORT + 3);
-  outb(COM1_PORT + 3, (uint8_t)(lcr & ~0x80)); /* DLAB = 0 → +1 is IER */
+  outb(COM1_PORT + 3, (uint8_t)(lcr & ~0x80)); /* DLAB = 0 -> +1 is IER */
 
   outb(COM1_PORT + 1, 0x00);
   ier = inb(COM1_PORT + 1);

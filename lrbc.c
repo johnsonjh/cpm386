@@ -124,8 +124,8 @@ _start (void)
   fcb[32] = 0; /* reset before any sequential I/O (not used here) */
 
   /*
-   * Function 35: compute file size → ran0..ran2 = next-record count
-   * (CP/M-68K packing: ran0=bits16-23, ran1=8-15, ran2=0-7).
+   * Function 35: compute file size -> ran0..ran2 = next-record count
+   * (CP/M-68K packing: ran0 = bits16-23, ran1 = 8-15, ran2 = 0-7).
    */
 
   bdos (35, (LONG)(unsigned long)fcb);

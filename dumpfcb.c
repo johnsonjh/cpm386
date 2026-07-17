@@ -411,7 +411,11 @@ _start (void)
       bdos (0, 0);
     }
 
-  /* No name in default FCB → dump base-page FCB1 (and FCB2 prefix) */
+  /*
+   * No name in default FCB
+   * dump base-page FCB1 (and FCB2 prefix)
+   */
+
   if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
     {
       dump_fcb (DEF_FCB, "FCB1 at TPA+0x5C (first 16 bytes)", 0);

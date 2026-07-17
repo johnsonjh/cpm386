@@ -9,9 +9,12 @@
 #include "biosdef.h"
 #include "cpm_bringup.h" /* brings the dpb/dph structs and externs */
 
-/* RAM disk image: MUST live after kernel .data/.bss (see linker.ld .ramdisk).
+/*
+ * RAM disk image: MUST live after kernel .data/.bss (see linker.ld .ramdisk).
  * If it sits in .rodata amid the kernel image, bios_write to high block
- * numbers overwrites cmd_tbl / GDT / BDOS globals (same linear addresses). */
+ * numbers overwrites cmd_tbl / GDT / BDOS globals (same linear addresses)
+ */
+
 asm (" .section .ramdisk, \"aw\", @progbits\n"
      " .global ramdisk\n"
      " .align 16\n"
@@ -24,27 +27,37 @@ extern unsigned char ramdisk[RAMDISK_SIZE]; /* provided by incbin asm above */
 static UBYTE xlt[26];
 static UBYTE dirbuf[128];
 static UBYTE csv[64];
-/* Word-mode alloc (dsm>255) to match cpmtools 4mb-hd directory maps.
- * alv bit vector: (dsm+1+7)/8 ≈ 256 bytes for dsm=2047. */
+
+/*
+ * Word-mode alloc (dsm>255) to match cpmtools 4mb-hd directory maps.
+ * alv bit vector: (dsm+1+7)/8 ≈ 256 bytes for dsm=2047
+ */
+
 static UBYTE alv[256];
 
-/* dpb0: match cpmtools "4mb-hd" (2k blocks, word block numbers, 256 dirents).
- * Physical image is only RAMDISK_SIZE; used blocks stay in that range. */
+/*
+ * dpb0: match cpmtools "4mb-hd" (2k blocks, word block numbers, 256 dirents).
+ * Physical image is only RAMDISK_SIZE; used blocks stay in that range
+ */
+
 struct dpb dpb0 = {
-  32,              /* spt */
-  4,      15,   1, /* bsh blm exm (2k blocks) */
-  0,      2047,    /* dsm: word-mode maps (cpmtools 4mb-hd) */
-  255,             /* drm: 256 directory entries */
-  0x000F,          /* dir_al: first 4 blocks for directory (typical) */
-  64,              /* cks: checksum dir sectors */
-  0                /* trk_off */
+  32,       /* spt                                            */
+  4, 15, 1, /* bsh blm exm (2k blocks)                        */
+  0, 2047,  /* dsm: word-mode maps (cpmtools 4mb-hd)          */
+  255,      /* drm: 256 directory entries                     */
+  0x000F,   /* dir_al: first 4 blocks for directory (typical) */
+  64,       /* cks: checksum dir sectors                      */
+  0         /* trk_off                                        */
 };
 
-struct dph dph0 = { xlt,           /* UBYTE* xlt */
-                    0,      0,  0, /* hiwater, dum1, dum2 */
-                    dirbuf,        /* dbufp */
-                    &dpb0,         /* dpbp */
-                    csv,    alv };
+struct dph dph0 =
+{
+  xlt,      /* UBYTE* xlt          */
+  0, 0,  0, /* hiwater, dum1, dum2 */
+  dirbuf,   /* dbufp               */
+  &dpb0,    /* dpbp                */
+  csv, alv
+};
 
 void
 cpm_bringup (void)
@@ -52,6 +65,7 @@ cpm_bringup (void)
   /* ramdisk data pre-populated by incbin; no fill needed */
   extern void bdosinit (void);
   bdosinit ();
+
   /* select A: */
   extern UWORD bdos (WORD func, LONG info);
   bdos (14, 0);

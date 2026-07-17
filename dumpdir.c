@@ -102,7 +102,7 @@ help (void)
   puts ("  -a         show all users 0..15 (not only current)\r\n");
 }
 
-/* Build FCB name/type from pattern string; * → ? */
+/* Build FCB name/type from pattern string; * -> ? */
 static void
 pattern_to_fcb (UBYTE *fcb, const char *pat)
 {
@@ -189,7 +189,7 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
         }
     }
 
-  /* bare name, no type → any type */
+  /* bare name, no type -> any type */
   if (!in_type && ti == 0)
     {
       fcb[9] = fcb[10] = fcb[11] = '?';

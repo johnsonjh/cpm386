@@ -100,13 +100,16 @@ GLOBAL struct stvars gbls;
  *                                                               *
  *****************************************************************/
 
-/* Program return code for BDOS 108 (P_CODE).  CCP zeroes before each
- * transient; programs may set before BDOS 0.  Survives BDOS 47 chain. */
+/*
+ * Program return code for BDOS 108 (P_CODE).  CCP zeroes before each
+ * transient; programs may set before BDOS 0.  Survives BDOS 47 chain.
+ */
+
 static UWORD program_retcode;
 
 UWORD
-_bdos (func, info, infop) REG WORD func; /* BDOS function number */
-REG UWORD info;                          /* d1.w word parameter  */
+_bdos (func, info, infop) REG WORD func; /* BDOS function number   */
+REG UWORD info;                          /* d1.w word parameter    */
 REG UBYTE *infop;                        /* d1.l pointer parameter */
 {
   REG UWORD rtnval;
@@ -129,8 +132,8 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       /* break; */
 
     case 2:
-      tabout ((UBYTE)info); /* console output with  */
-      break;                /*    tab expansion     */
+      tabout ((UBYTE)info); /* console output with */
+      break;                /*    tab expansion    */
 
     case 3:
       return (UWORD)brdr (); /* get reader from bios */
@@ -198,8 +201,12 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         ((struct fcb *)infop)->extent = 0;
         ((struct fcb *)infop)->s2 = 0;
         rtnval = dirscan (openfile, (UBYTE *)infop, 0);
-        /* DOS-PLUS LRBC is stored on the last extent; open always
-         * binds extent 0, so rewrite s1/cur_rec when requested. */
+
+        /*
+	 * DOS-PLUS LRBC is stored on the last extent; open always
+         * binds extent 0, so rewrite s1/cur_rec when requested.
+	 */
+
         if (want_lrbc && rtnval < 255)
           {
             file_last_lrbc ((UBYTE *)infop);
@@ -323,9 +330,12 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       setran (infop);
       break;
 
-    /* BDOS 37 (DRV_RESET): DE = bitmap of drives to reset
+    /*
+     * BDOS 37 (DRV_RESET): DE = bitmap of drives to reset
      * (bit0=A: … bit15=P:).  Logs them off and clears software R/O
-     * so the next select rebuilds the allocation vector from the dir. */
+     * so the next select rebuilds the allocation vector from the dir.
+     */
+
     case 37:
       info = ~info;
       log_dsk &= info;
@@ -334,8 +344,11 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       rtnval = 0;
       break;
 
-    /* BDOS 40 (F_WRITEZF): random write; newly allocated blocks
-     * are zero-filled before the user record is written (bdosrw random=2). */
+    /*
+     * BDOS 40 (F_WRITEZF): random write; newly allocated blocks
+     * are zero-filled before the user record is written (bdosrw random=2).
+     */
+
     case 40:
       tmp_sel (&temp);
       rtnval = bdosrw (infop, FALSE, 2);
@@ -345,15 +358,21 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       free_sp (info); /* get disk free space */
       break;
 
-    /* BDOS 98 - CP/M 3 "clean up disc" after program exit.
+    /*
+     * BDOS 98 - CP/M 3 "clean up disc" after program exit.
      * Officially closes open files without flushing dirty data.
-     * No multi-open table here; no-op returning 0 is correct. */
+     * No multi-open table here; no-op returning 0 is correct.
+     */
+
     case 98:
       rtnval = 0;
       break;
 
-    /* BDOS 99 (F_TRUNCATE): ran0..2 = new size in records; cannot
-     * extend.  Releases directory extents / allocation past EOF. */
+    /*
+     * BDOS 99 (F_TRUNCATE): ran0..2 = new size in records; cannot
+     * extend.  Releases directory extents / allocation past EOF.
+     */
+
     case 99:
       tmp_sel (&temp);
       rtnval = truncate_fi (infop);
@@ -365,7 +384,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       break;               /* does not return */
 
     case 48:
-      return flushit (); /* flush buffers        */
+      return flushit (); /* flush buffers */
 
       /* break; */
 
@@ -380,17 +399,20 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       /* break; */
 
     case 63:
-      set_tpa (infop); /* get/set TPA limits   */
+      set_tpa (infop); /* get/set TPA limits */
       break;
 
-    /* BDOS 152 (F_PARSE): DE -> PFCB { u32 ascii; u32 fcb }
+    /*
+     * BDOS 152 (F_PARSE): DE -> PFCB { u32 ascii; u32 fcb }
      * Ring-3! both fields are TPA-relative (use unsigned char for LE32;
      * UBYTE is signed char and would sign-extend address bytes).
      * Return (CP/M-386): 0xFFFF invalid; 0 if ended on NUL/CR;
      * else byte offset from the start of the ASCII string to the next
-     * character (caller does ascii + ret with a 32-bit pointer - HL
-     * cannot hold full TPA offsets above 64K).
-     * Password after ';' -> FCB+0x10, length FCB+0x1A. */
+     * character (caller does ascii + ret with a 32-bit pointer
+     * HL cannot hold full TPA offsets above 64K).
+     * Password after ';' -> FCB+0x10, length FCB+0x1A.
+     */
+
     case 152:
       {
         unsigned char *pfcb = (unsigned char *)infop;
@@ -431,9 +453,12 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       rtnval = (UWORD)OSVER_CPM386;
       break;
 
-    /* CP/M Plus-style date/time (CP/M-386: binary h/m/s, not BCD).
+    /*
+     * CP/M Plus-style date/time (CP/M-386: binary h/m/s, not BCD).
      * DE -> struct cpm_datetime { UWORD days; UBYTE h,m,s; }
-     * days since 1978-01-01.  Implemented via CMOS RTC in ring 0. */
+     * days since 1978-01-01.  Implemented via CMOS RTC in ring 0.
+     */
+
     case 104: /* set date and time */
       {
         extern int rtc_set (void *);
@@ -448,9 +473,12 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       }
       break;
 
-    /* BDOS 155 (T_SECONDS) - MP/M / Concurrent: get date and time with
+    /*
+     * BDOS 155 (T_SECONDS) - MP/M / Concurrent: get date and time with
      * packed-BCD hour/minute/second (and filled seconds field).
-     * DE -> same layout as 105; day count matches our BDOS 105. */
+     * DE -> same layout as 105; day count matches our BDOS 105.
+     */
+
     case 155:
       {
         extern int rtc_get_bcd (void *);
@@ -458,11 +486,14 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       }
       break;
 
-    /* BDOS 108 (P_CODE) - CP/M 3 get/put program return code.
-     * DE=0xFFFF → return current code in HL (our UWORD return).
-     * else      → set code from DE and return it.
+    /*
+     * BDOS 108 (P_CODE) - CP/M 3 get/put program return code.
+     * DE=0xFFFF -> return current code in HL (our UWORD return).
+     * else      -> set code from DE and return it.
      * Ranges (seasip): 0000-FEFF non-fatal, FF00-FF7F fatal,
-     * FFFD hardware error terminate, FFFE Control-C terminate. */
+     * FFFD hardware error terminate, FFFE Control-C terminate.
+     */
+
     case 108:
       if (info == (UWORD)0xFFFF)
         {
@@ -476,8 +507,11 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
       break;
 
-    /* CP/M-386 private: machine reboot (REBOOT.386).  Was 107 -
-     * that is S_SERIAL on CP/M 3.  info & 1 = warm (BDA 0x472). */
+    /*
+     * CP/M-386 private: machine reboot (REBOOT.386).
+     * that is S_SERIAL on CP/M 3.  info & 1 = warm (BDA 0x472).
+     */
+
     case 220:
       {
         extern void bios_system_reboot (int);
@@ -485,8 +519,11 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       }
       break;
 
-    /* CP/M-386 private: clear console (CLS.386).  Was 108 -
-     * that is P_CODE.  Serial ANSI + VGA wipe; reset column. */
+    /*
+     * CP/M-386 private: clear console (CLS.386).
+     * that is P_CODE.  Serial ANSI + VGA wipe; reset column.
+     */
+
     case 221:
       {
         extern void bios_con_clear (void);
@@ -495,9 +532,12 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       }
       break;
 
-    /* BDOS 222: VGA console on/off/query.
-     * DE=0 off, DE=1 on, DE=0xFFFF query.  Returns 0/1 or 0xFF if
-     * disabling would leave no output device. */
+    /*
+     * BDOS 222: VGA console on/off/query.
+     * DE=0 off, DE=1 on, DE=0xFFFF query.
+     * Returns 0/1 or 0xFF if disabling would leave no output device.
+     */
+
     case 222:
       {
         extern unsigned short bios_con_vga_ctl (unsigned short);

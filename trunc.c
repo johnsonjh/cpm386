@@ -1,4 +1,4 @@
-/* trunc.c:exercise BDOS 40 (WRITEZF), 99 (TRUNCATE), 37 (DRV_RESET), 98 */
+/* trunc.c: exercise BDOS 40 (WRITEZF), 99 (TRUNCATE), 37 (DRV_RESET), 98 */
 
 typedef unsigned short UWORD;
 typedef short WORD;
@@ -211,10 +211,13 @@ _start (void)
 
   bdos (16, (LONG)(unsigned long)fcb);
 
-  /* BDOS 40 WRITEZF: write random rec 32 (new block + zero-fill).
-   * 2K blocks = 16 recs/block → rec 32 starts a new block; 16-31 stay a hole.
-   * Then write rec 47 (same block, last sector) so size covers 32-47; recs
-   * 33-46 were zero-filled by F_WRITEZF and never rewritten. */
+  /*
+   * BDOS 40 WRITEZF: write random rec 32 (new block + zero-fill).
+   * 2K blocks = 16 recs/block -> rec 32 starts a new block; 16-31 stay a hole.
+   * Then write rec 47 (same block, last sector) so size covers 32-47;
+   * recs 33-46 were zero-filled by F_WRITEZF and never rewritten.
+   */
+
   fill_name (fcb, "TRUNC   ", "DAT");
   r = bdos (15, (LONG)(unsigned long)fcb);
 

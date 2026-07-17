@@ -234,8 +234,8 @@ fault_put_pair (const char *name, uint32_t v)
 /*
  * DOS/4GW-inspired register dump for CPU exceptions.
  * Called from exc_common with a pointer to the saved frame on the ring-0
- * stack. Returns 1 to abort the ring-3 program (return_to_kernel → CCP), 0 to
- * hang (kernel / unrecoverable fault).
+ * stack. Returns 1 to abort the ring-3 program (return_to_kernel -> CCP),
+ * 0 to hang (kernel / unrecoverable fault).
  */
 
 uint32_t

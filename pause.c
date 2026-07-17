@@ -42,8 +42,11 @@ clear_line (void)
 {
   int i;
 
-  /* Portable clear: CR, blank the prompt, CR again.
-   * Dual-console bios_conout paints both serial and VGA. */
+  /*
+   * Portable clear: CR, blank the prompt, CR again.
+   * Dual-console bios_conout paints both serial and VGA.
+   */
+
   putch ('\r');
   for (i = 0; i < PROMPT_COLS; i++)
     {
