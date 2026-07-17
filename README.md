@@ -32,11 +32,37 @@
 
 * [AWK](https://en.wikipedia.org/wiki/AWK)
 * [cpmtools](https://www.moria.de/~michael/cpmtools/)
-* [GCC](https://gcc.gnu.org/) (supporting `-m32`)
+* [GCC](https://gcc.gnu.org/) (supporting Intel x86 `-m32`)
 * [GNU binutils](https://www.gnu.org/software/binutils/)
 * [GNU coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU make](https://www.gnu.org/software/make/)
 * [NASM](https://nasm.us/)
+
+### Common distributions
+
+* RHEL
+
+  1. Enable the [EPEL](https://docs.fedoraproject.org/en-US/epel/) repositories.
+  2. Install the appropriate `libdsk` and `cpmtools` packages from
+     [Koji](https://koji.fedoraproject.org/) (*i.e.*, use Fedora 34 packages
+     for RHEL 9, Fedora 40 packages for RHEL 10, Fedora 42 packages for RHEL
+     11).
+  3. Install the remaining required dependencies:
+     ```sh
+     dnf install binutils coreutils gawk gcc make nasm
+     ```
+
+* Fedora
+
+  ```sh
+  dnf install binutils coreutils cpmtools gawk gcc make nasm
+  ```
+
+* Debian
+
+  ```sh
+  apt install binutils coreutils cpmtools gawk gcc make nasm
+  ```
 
 ## Building
 

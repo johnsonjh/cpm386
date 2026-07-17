@@ -38,7 +38,8 @@
 #include "pktio.h"              /* Packet I/O definitions */
 
 /* declare external fucntions (updated for gcc arg checking) */
-EXTERN UWORD    dirscan(void (*funcp)(), UBYTE *, UWORD);
+
+/* dirscan: bdosdef.h: UWORD dirscan(DIRSCAN_FN, UBYTE *, UWORD) */
 EXTERN UWORD    error(WORD);
 EXTERN UWORD    ro_err(UBYTE *, WORD);
 EXTERN UWORD    do_phio(void *);
@@ -233,20 +234,23 @@ static UBYTE lrbc_found;
 
 /* dirscan callback: track s1 of the highest extent for this filename. */
 static BOOLEAN lrbc_scan(fcbp, dirp, dirindx)
-REG struct fcb *fcbp;
-REG struct dirent *dirp;
+UBYTE *fcbp;
+UBYTE *dirp;
 WORD dirindx;
 {
+    REG struct fcb *f = (struct fcb *)fcbp;
+    REG struct dirent *d = (struct dirent *)dirp;
     UBYTE ex, s2;
 
     (void)dirindx;
-    if (UBWORD(dirp->entry) >= 0x10)
+    if (UBWORD(d->entry) >= 0x10)
         return(FALSE);
-    if (!match((UBYTE *)fcbp, (UBYTE *)dirp, FALSE))
+    if (!match(fcbp, dirp, FALSE))
         return(FALSE); /* name only; all extents */
 
-    ex = (UBYTE)(dirp->extent & 0x1f);
-    s2 = (UBYTE)(dirp->s2 & 0x3f);
+    ex = (UBYTE)(d->extent & 0x1f);
+    s2 = (UBYTE)(d->s2 & 0x3f);
+
     if (!lrbc_found
         || s2 > lrbc_best_s2
         || (s2 == lrbc_best_s2 && ex >= lrbc_best_ex))
@@ -254,8 +258,10 @@ WORD dirindx;
         lrbc_found = 1;
         lrbc_best_ex = ex;
         lrbc_best_s2 = s2;
-        lrbc_best_s1 = dirp->s1;
+        lrbc_best_s1 = d->s1;
     }
+
+    (void)f;
     return(FALSE); /* never stop - need every extent */
 }
 
@@ -275,7 +281,7 @@ REG struct fcb *fcbp;
     lrbc_best_ex = 0;
     lrbc_best_s2 = 0;
     /* Scan whole directory; callback always returns false so parms=0 is fine */
-    (void)dirscan((void (*)())lrbc_scan, (UBYTE *)fcbp, 0);
+    (void)dirscan(lrbc_scan, (UBYTE *)fcbp, 0);
     if (lrbc_found) {
         fcbp->s1 = lrbc_best_s1;
         fcbp->cur_rec = lrbc_best_s1;
@@ -773,55 +779,64 @@ REG struct dirent *dirp;
 
 BOOLEAN truncate_one(fcbp, dirp, dirindx)
 
-REG struct fcb *fcbp;
-REG struct dirent *dirp;
+UBYTE *fcbp;
+UBYTE *dirp;
 WORD dirindx;
 
 {
+    REG struct fcb *f = (struct fcb *)fcbp;
+    REG struct dirent *d = (struct dirent *)dirp;
     REG LONG gbase, gend, last;
     BSETUP
 
-    if (UBWORD(dirp->entry) >= 0x10)
-        return(FALSE);
-    if (!match((UBYTE *)fcbp, (UBYTE *)dirp, FALSE))
+    if (UBWORD(d->entry) >= 0x10)
         return(FALSE);
 
-    if ((dirp->ftype[robit]) & 0x80)
-        ro_err((UBYTE *)fcbp, dirindx);
+    if (!match(fcbp, dirp, FALSE))
+        return(FALSE);
+
+    if ((d->ftype[robit]) & 0x80)
+        ro_err(fcbp, dirindx);
 
     trunc_found = 1;
-    gbase = trunc_group_base(dirp);
-    gend  = trunc_group_end(dirp);
+    gbase = trunc_group_base(d);
+    gend  = trunc_group_end(d);
 
     if (gbase >= trunc_nrecs) {
         /* Whole physical extent past the new EOF - delete it. */
         LOCK
-        trunc_free_all(dirp);
-        dirp->entry = 0xe5;
+        trunc_free_all(d);
+        d->entry = 0xe5;
         dir_wr(dirindx >> 2);
         UNLOCK
+
         return(FALSE); /* keep scanning */
     }
 
     if (gend > trunc_nrecs) {
         /* Partial: keep [gbase, trunc_nrecs), free later blocks. */
         LOCK
-        trunc_free_past(dirp, gbase);
+        trunc_free_past(d, gbase);
+
         if (trunc_nrecs == 0) {
-            dirp->extent = 0;
-            dirp->s2 = (UBYTE)(dirp->s2 & 0xc0);
-            dirp->rcdcnt = 0;
+            d->extent = 0;
+            d->s2 = (UBYTE)(d->s2 & 0xc0);
+            d->rcdcnt = 0;
         } else {
             last = trunc_nrecs - 1;
-            dirp->s2 = (UBYTE)((dirp->s2 & 0xc0) | ((last >> 12) & 0x3f));
-            dirp->extent = (UBYTE)((last >> 7) & 0x1f);
-            dirp->rcdcnt = (UBYTE)((last & 127) + 1);
+            d->s2 = (UBYTE)((d->s2 & 0xc0) | ((last >> 12) & 0x3f));
+            d->extent = (UBYTE)((last >> 7) & 0x1f);
+            d->rcdcnt = (UBYTE)((last & 127) + 1);
         }
-        dirp->s1 = 0; /* record-granular truncate clears LRBC */
+
+        d->s1 = 0; /* record-granular truncate clears LRBC */
         dir_wr(dirindx >> 2);
         UNLOCK
         trunc_code = (UWORD)(dirindx & 3);
     }
+
+    (void)f;
+
     return(FALSE); /* always continue - all extents */
 }
 
@@ -856,11 +871,14 @@ REG struct fcb *fcbp;
     trunc_nrecs = want;
     trunc_found = 0;
     trunc_code = 0;
+
     /* Full directory scan: process every matching extent */
-    (void)dirscan((void (*)())truncate_one, (UBYTE *)fcbp, 2);
+    (void)dirscan(truncate_one, (UBYTE *)fcbp, 2);
+
     if (!trunc_found)
         return(255);
     crit_dsk |= 1 << (GBL.curdsk);
+
     return(trunc_code);
 }
 

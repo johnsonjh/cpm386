@@ -42,16 +42,15 @@ EXTERN UBYTE rawconio (UWORD);
 EXTERN void prt_line (UBYTE *);
 EXTERN void readline (UBYTE *);
 EXTERN void seldsk (UBYTE);
-EXTERN BOOLEAN openfile (UBYTE *, UBYTE *, UWORD);
+EXTERN BOOLEAN openfile (UBYTE *, UBYTE *, WORD);
 EXTERN void file_last_lrbc (UBYTE *);
 EXTERN UWORD close_fi (UBYTE *);
 EXTERN UWORD search (UBYTE *, UWORD, UBYTE *);
-EXTERN UWORD dirscan (void (*funcp) (), UBYTE *, UWORD);
 EXTERN UWORD bdosrw (UBYTE *, UWORD, UWORD);
-EXTERN BOOLEAN create (UBYTE *, UBYTE *, UWORD);
-EXTERN BOOLEAN delete (UBYTE *, UBYTE *, UWORD);
-EXTERN BOOLEAN rename (UBYTE *, UBYTE *, UWORD);
-EXTERN BOOLEAN set_attr (UBYTE *, UBYTE *, UWORD);
+EXTERN BOOLEAN create (UBYTE *, UBYTE *, WORD);
+EXTERN BOOLEAN delete (UBYTE *, UBYTE *, WORD);
+EXTERN BOOLEAN rename (UBYTE *, UBYTE *, WORD);
+EXTERN BOOLEAN set_attr (UBYTE *, UBYTE *, WORD);
 EXTERN void getsize (UBYTE *);
 EXTERN void setran (UBYTE *);
 EXTERN UWORD truncate_fi (UBYTE *);
@@ -198,7 +197,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         want_lrbc = (((struct fcb *)infop)->cur_rec == (UBYTE)0xFF);
         ((struct fcb *)infop)->extent = 0;
         ((struct fcb *)infop)->s2 = 0;
-        rtnval = dirscan ((void (*) ())openfile, (UBYTE *)infop, 0);
+        rtnval = dirscan (openfile, (UBYTE *)infop, 0);
         /* DOS-PLUS LRBC is stored on the last extent; open always
          * binds extent 0, so rewrite s1/cur_rec when requested. */
         if (want_lrbc && rtnval < 255)
@@ -227,7 +226,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 19:
       tmp_sel (&temp); /* delete file */
-      rtnval = dirscan ((void (*) ()) delete, (UBYTE *)infop, 2);
+      rtnval = dirscan (delete, (UBYTE *)infop, 2);
       break;
 
     case 20:
@@ -247,12 +246,12 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       ((struct fcb *)infop)->s2 = 0;
       ((struct fcb *)infop)->rcdcnt = 0;
       /* Zero extent, S1, S2, rcrdcnt. create zeros rest */
-      rtnval = dirscan ((void (*) ())create, (UBYTE *)infop, 8);
+      rtnval = dirscan (create, (UBYTE *)infop, 8);
       break;
 
     case 23:
       tmp_sel (&temp); /* rename file */
-      rtnval = dirscan ((void (*) ())rename, (UBYTE *)infop, 2);
+      rtnval = dirscan (rename, (UBYTE *)infop, 2);
       break;
 
     case 24:
@@ -282,7 +281,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 30:
       tmp_sel (&temp); /* set file attributes */
-      rtnval = dirscan ((void (*) ())set_attr, (UBYTE *)infop, 2);
+      rtnval = dirscan (set_attr, (UBYTE *)infop, 2);
       break;
 
     case 31:

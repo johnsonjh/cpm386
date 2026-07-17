@@ -27,10 +27,11 @@
 EXTERN UWORD rdwrt (WORD, UBYTE *, WORD);
 EXTERN WORD getaloc (WORD);
 EXTERN WORD swap (WORD);
-EXTERN UWORD dirscan (void (*funcp) (), UBYTE *, UWORD);
-EXTERN BOOLEAN openfile (UBYTE *, UBYTE *, UWORD);
+
+/* dirscan / openfile / create */
+EXTERN BOOLEAN openfile (UBYTE *, UBYTE *, WORD);
 EXTERN UWORD close_fi (UBYTE *);
-EXTERN BOOLEAN create (UBYTE *, UBYTE *, UWORD);
+EXTERN BOOLEAN create (UBYTE *, UBYTE *, WORD);
 EXTERN UWORD ro_err (UBYTE *, WORD);
 
 /* External variable definitions */

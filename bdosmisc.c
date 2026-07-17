@@ -45,7 +45,8 @@ EXTERN void prt_line (UBYTE *);
 EXTERN UWORD _bdos (WORD, UWORD, UBYTE *);
 EXTERN UBYTE *traphndl (void);
 EXTERN void initexc (UBYTE **);
-EXTERN UWORD dirscan (void (*funcp) (), UBYTE *, UWORD);
+
+/* dirscan */
 EXTERN BOOLEAN set_attr (UBYTE *, UBYTE *, UWORD);
 EXTERN UWORD dir_rd (WORD);
 

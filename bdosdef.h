@@ -264,4 +264,13 @@ UWORD cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx,
                                UBYTE *tpa_base, unsigned long tpa_len,
                                UBYTE **entry_out);
 
+/*
+ * dirscan() callback: invoked for each directory entry.
+ * Return non-zero to report a match (see dskutil.c parms bits).
+ * Matches the K&R definitions of openfile/create/delete/… (fcbp, dirp, index).
+ */
+typedef BOOLEAN (*DIRSCAN_FN) (UBYTE *fcbp, UBYTE *dirp, WORD dirindx);
+
+UWORD dirscan (DIRSCAN_FN funcp, UBYTE *fcbp, UWORD parms);
+
 #endif /* BDOSDEF_H */

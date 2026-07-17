@@ -150,9 +150,9 @@ UBYTE dchksum()
 
 UWORD dirscan(funcp, fcbp, parms)
 
-BOOLEAN (*funcp)(UBYTE *, UBYTE *, WORD);               /* funcp is a pointer to a Boolean function */
-REG struct fcb *fcbp;           /* fcbp is a pointer to a fcb */
-REG UWORD parms;                /* parms is 16 bit set of bit parameters */
+DIRSCAN_FN funcp; /* pointer to Boolean match/action function */
+UBYTE *fcbp;      /* pointer to FCB (often struct fcb *)      */
+REG UWORD parms;  /* parms is 16 bit set of bit parameters    */
 
 /* Parms & 1  = 0 to start at beginning of dir, 1 to continue from last */
 /* Parms & 2  = 0 to stop when *funcp is true, 1 to go until end        */
@@ -208,7 +208,7 @@ retry:      dirsec = i >> 2;
         }
 
         GBL.srchpos = i;
-        if ( (*funcp)(fcbp, (GBL.dirbufp) + (i&3), i) )
+        if ( (*funcp)(fcbp, (GBL.dirbufp) + (i&3), (WORD)i) )
                         /* call function with parms of (1) fcb ptr,
                            (2) pointer to directory entry, and
                            (3) directory index                  */

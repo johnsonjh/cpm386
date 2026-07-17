@@ -3,11 +3,15 @@ AS = nasm
 LD = ld
 OBJCOPY = objcopy
 
+# Detect if -Wno-return-mismatch flag works
+W_NO_RETURN_MISMATCH := $(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/null -o /dev/null 2>/dev/null && echo -Wno-return-mismatch)
+
 CFLAGS = -m32 -ffreestanding -nostdinc -nostdlib -fno-builtin -fno-stack-protector \
          -fno-pic -fno-pie -O2 -Wall -Wextra -Wno-unused-parameter \
          -Wno-implicit-int -Wno-old-style-definition -Wno-return-type \
          -Wno-implicit-function-declaration -Wno-incompatible-pointer-types \
-         -Wno-pointer-sign -Wno-sign-compare -Wno-int-conversion -Wno-return-mismatch \
+         -Wno-pointer-sign -Wno-sign-compare -Wno-int-conversion \
+         $(W_NO_RETURN_MISMATCH) \
          -I. -D__i386__ -DCPM386
 
 ASFLAGS = -f elf32
