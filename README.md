@@ -30,54 +30,17 @@
 
 ## Build requirements
 
-* Supported compilers (supporting Intel x86 `-m32`)
-  * [GNU GCC](https://gcc.gnu.org/)
-  * [LLVM Clang](https://clang.llvm.org)
-[]()
-
-[]()
 * [AWK](https://en.wikipedia.org/wiki/AWK)
-* [cpmtools](https://www.moria.de/~michael/cpmtools/)
-* [GNU binutils](https://www.gnu.org/software/binutils/)
-* [GNU coreutils](https://www.gnu.org/software/coreutils/)
-* [GNU make](https://www.gnu.org/software/make/)
+* [Cpmtools](https://www.moria.de/~michael/cpmtools/)
+* [GNU Binutils](https://www.gnu.org/software/binutils/)
+* [GNU Coreutils](https://www.gnu.org/software/coreutils/)
+* [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
+* [GNU Make](https://www.gnu.org/software/make/)
 * [NASM](https://nasm.us/)
 
-### Common distributions
-
-#### RHEL
-
-1. Enable the [EPEL](https://docs.fedoraproject.org/en-US/epel/) repositories.
-2. Install the appropriate `libdsk` and `cpmtools` packages from
-   [Koji](https://koji.fedoraproject.org/).
-3. Install the required build dependencies:
-
-```sh
-dnf install clang binutils coreutils gawk gcc make nasm
-```
-
-#### Fedora
-
-```sh
-dnf install clang binutils coreutils cpmtools gawk gcc make nasm
-```
-
-#### Debian
-
-```sh
-apt install clang binutils coreutils cpmtools gawk gcc make nasm
-```
-
-#### Alpine
-
-Alpine users will need to manually install
-[cpmtools](https://www.moria.de/~michael/cpmtools/).
-
-```sh
-apk add clang binutils coreutils gawk gcc make nasm
-```
-
 ## Compilation
+
+Building **CP/M-386** is supported on **Linux**, **FreeBSD**, and **Haiku**.
 
 **GCC** build (default):
 
@@ -168,27 +131,31 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>194</th>
-                <th>36</th>
+                <th>161</th>
+                <th>26</th>
                 <th>0</th>
-                <th>158</th>
+                <th>135</th>
                 <th>0</th>
-                <th>5054</th>
-                <th>136</th>
+                <th>4593</th>
+                <th>122</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>67</th>
-                <th>21170</th>
-                <th>2992</th>
+                <th>21137</th>
+                <th>2982</th>
                 <th>1887</th>
-                <th>16291</th>
+                <th>16268</th>
                 <th>3194</th>
-                <th>514477</th>
-                <th>10045</th>
+                <th>514016</th>
+                <th>10031</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
 ## License
 
-* [MIT License](LICENSE)
+* **CP/M-386** is distributed under the terms of the [MIT License](LICENSE).
+
+* In 2022, DRDOS, Inc. explicitly granted unlimited authorization to use,
+  distribute, modify, enhance, and otherwise make available CP/M and
+  its derivatives.

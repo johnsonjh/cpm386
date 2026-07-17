@@ -36,6 +36,8 @@ SECTIONS
     } :data
 
     /DISCARD/ : {
-        *(*)
+        *(.comment)
+        *(.note.*)
+        *(.eh_frame)
     }
 }
