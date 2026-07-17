@@ -37,16 +37,41 @@ static inline uint8_t inb(uint16_t port) {
 static void vga_init(void); /* forward */
 static void vga_update_cursor(void); /* forward for calls in clear/scroll */
 
-/* 16550 scratch register (COM1+7): write/read back; absent bus returns 0xFF. */
 static int com_probe(void)
 {
-  uint8_t a, b;
+  uint8_t a, b, lcr, ier;
 
-  outb(COM1_PORT + 7, 0x5A);
+  /* 16450/16550 scratch register test */
+  outb(COM1_PORT + 7, 0x55);
   a = inb(COM1_PORT + 7);
-  outb(COM1_PORT + 7, 0xA5);
+
+  outb(COM1_PORT + 7, 0xAA);
   b = inb(COM1_PORT + 7);
-  return (a == 0x5A && b == 0xA5);
+
+  if (a == 0x55 && b == 0xAA)
+    return 1;
+
+  /* 8250 IER test */
+  lcr = inb(COM1_PORT + 3);
+  outb(COM1_PORT + 3, (uint8_t)(lcr & ~0x80)); /* DLAB = 0 → +1 is IER */
+
+  outb(COM1_PORT + 1, 0x00);
+  ier = inb(COM1_PORT + 1);
+
+  if ((ier & 0xF0) != 0) {
+    outb(COM1_PORT + 3, lcr); /* restore LCR */
+
+    return 0;
+  }
+
+  outb(COM1_PORT + 1, 0x0F);
+  ier = inb(COM1_PORT + 1);
+
+  outb(COM1_PORT + 1, 0x00); /* leave interrupts off if we init later */
+  outb(COM1_PORT + 3, lcr);
+
+  /* Low nibble should stick; high nibble must remain clear. */
+  return (ier & 0x0F) == 0x0F && (ier & 0xF0) == 0;
 }
 
 static void com_init(void) {
