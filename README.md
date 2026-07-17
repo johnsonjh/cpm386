@@ -20,12 +20,12 @@
 ## Screenshots
 
 <div style="display:flex; justify-content:center; align-items:center;">
-  <a href=".img/VGA.png" style="flex:1; text-align:center;">
-    <img src=".img/VGA.png" style="width:100%;">
-  </a>
-  <a href=".img/SER.png" style="flex:1; text-align:center;">
-    <img src=".img/SER.png" style="width:100%;">
-  </a>
+ <a href=".img/VGA.png" style="flex:1; text-align:center;">
+  <img src=".img/VGA.png" style="width:100%;">
+ </a>
+ <a href=".img/SER.png" style="flex:1; text-align:center;">
+  <img src=".img/SER.png" style="width:100%;">
+ </a>
 </div>
 
 ## Build requirements
@@ -65,8 +65,8 @@ apt install binutils coreutils cpmtools gawk gcc make nasm
 
 #### Alpine
 
-* Alpine users will need to manually install
-  [cpmtools](https://www.moria.de/~michael/cpmtools/).
+Alpine users will need to manually install
+[cpmtools](https://www.moria.de/~michael/cpmtools/).
 
 ```sh
 apk add binutils coreutils gawk gcc make nasm
@@ -78,17 +78,17 @@ apk add binutils coreutils gawk gcc make nasm
 
 ## QEMU Testing
 
-* [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel:
+[Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel:
 
-  ```sh
-  qemu-system-x86_64 -m 4G -serial stdio -monitor none -kernel "cpm386.elf"
-  ```
+```sh
+qemu-system-x86_64 -m 4G -serial stdio -monitor none -kernel "cpm386.elf"
+```
 
-* Floppy (MBR) loader:
+Floppy ([MBR](https://en.wikipedia.org/wiki/Master_boot_record)) loader:
 
-  ```sh
-  qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
-  ```
+```sh
+qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
+```
 
 ### QEMU notes
 
@@ -158,8 +158,8 @@ apk add binutils coreutils gawk gcc make nasm
                 <th>0</th>
                 <th>147</th>
                 <th>0</th>
-                <th>4832</th>
-                <th>133</th>
+                <th>4856</th>
+                <th>131</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
@@ -169,8 +169,8 @@ apk add binutils coreutils gawk gcc make nasm
                 <th>1751</th>
                 <th>12670</th>
                 <th>2537</th>
-                <th>425843</th>
-                <th>8196</th>
+                <th>425867</th>
+                <th>8194</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
