@@ -183,6 +183,9 @@ vgatext.386: vgatext.bin $(MK386)
 ticks.386: ticks.bin $(MK386)
 	$(MK386) ticks.bin ticks.386 0x100
 
+ed.386: ed.bin $(MK386)
+	$(MK386) ed.bin ed.386 0x100
+
 # Pad stub to BIG_IMG_SIZE with 0x90 so the .386 spans multiple extents and >64K
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o big.o big.c
@@ -203,7 +206,7 @@ big.386: big.bin $(MK386)
 	$(MK386) big.bin big.386 0x100
 
 # RAM disk: programs + accurate DOS-PLUS LRBC (cpmtools)
-ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 $(PATCH_HOLE)
+ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 ed.386 $(PATCH_HOLE)
 	mkdir -p /tmp/cpmd
 	printf 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' > /tmp/cpmd/README.TXT
 	# Sample environment file for PRINTENV (upstream-style VAR=value)
@@ -244,6 +247,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 
 	cp aclockdv.386 /tmp/cpmd/ACLOCKDV.386
 	cp vgatext.386 /tmp/cpmd/VGATEXT.386
 	cp ticks.386 /tmp/cpmd/TICKS.386
+	cp ed.386 /tmp/cpmd/ED.386
 	mkfs.cpm -f 4mb-hd /tmp/ramdisk.tmp
 	cpmcp -f 4mb-hd /tmp/ramdisk.tmp \
 	  /tmp/cpmd/README.TXT /tmp/cpmd/ENV.DAT /tmp/cpmd/DEMO.SUB \
@@ -259,7 +263,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 
 	  /tmp/cpmd/SERON.386 /tmp/cpmd/SEROFF.386 /tmp/cpmd/FPARSE.386 \
 	  /tmp/cpmd/ILLEGAL.386 /tmp/cpmd/DUMPFCB.386 /tmp/cpmd/DUMPDIR.386 \
 	  /tmp/cpmd/MEM.386 /tmp/cpmd/ACLOCKVT.386 /tmp/cpmd/ACLOCKDV.386 \
-	  /tmp/cpmd/VGATEXT.386 /tmp/cpmd/TICKS.386 0:
+	  /tmp/cpmd/VGATEXT.386 /tmp/cpmd/TICKS.386 /tmp/cpmd/ED.386 0:
 	# Patch BIG.386 dirent: zero a middle allocation block that only covers
 	# 0x90 padding for sparse hole; streaming loader zero-fills it.
 	$(PATCH_HOLE) /tmp/ramdisk.tmp BIG.386 || true
@@ -335,7 +339,7 @@ clean:
 	      dumpfcb.bin dumpfcb.386 dumpdir.bin dumpdir.386 \
 	      mem.bin mem.386 aclockvt.bin aclockvt.386 \
 	      aclockdv.bin aclockdv.386 vgatext.bin vgatext.386 \
-	      ticks.bin ticks.386 \
+	      ticks.bin ticks.386 ed.bin ed.386 \
 	      $(MK386) $(PATCH_HOLE)
 
 
