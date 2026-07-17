@@ -468,22 +468,20 @@ REG struct dirent *dirp;        /* pointer to directory entry   */
 REG WORD dirindx;               /* index into directory         */
 
 {
-    REG BYTE *p;
     REG WORD i;
     REG BOOLEAN rtn;
     BSETUP
 
     if ( (rtn = ((dirp->entry) == (UBYTE)0xe5)) )
     {
-        p = &(fcbp->rcdcnt);
-        i = 17;
-        do
-        {                       /* clear fcb rcdcnt and disk map */
-            *p++ = 0;
-            i -= 1;
-        } while (i);
+        fcbp->rcdcnt = 0; /* clear fcb rcdcnt */
+
+        for (i = 0; i < 16; i++) /* clear disk map */
+          fcbp->dskmap.small[i] = 0;
+
         move(fcbp, dirp, sizeof *dirp); /* move the fcb to the directory */
         dir_wr(dirindx >> 2);           /* write the directory sector */
+
         if ( dirindx > (GBL.dphp)->hiwater )
             (GBL.dphp)->hiwater = dirindx;
         crit_dsk |= 1 << (GBL.curdsk);
