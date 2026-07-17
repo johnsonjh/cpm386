@@ -4,19 +4,53 @@ LD = ld
 OBJCOPY = objcopy
 
 # Detect if -Wno-return-mismatch flag works
-W_NO_RETURN_MISMATCH := $(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/null -o /dev/null 2>/dev/null && echo -Wno-return-mismatch)
+W_NO_RETURN_MISMATCH := $(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-return-mismatch")
+W_NO_DEPRECATED_NON_PROTOTYPE := $(shell $(CC) -Werror -Wno-deprecated-non-prototype -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-deprecated-non-prototype")
 
-CFLAGS = -m32 -ffreestanding -nostdinc -nostdlib -fno-builtin -fno-stack-protector \
-         -fno-pic -fno-pie -O2 -Wall -Wextra -Wno-unused-parameter \
-         -Wno-implicit-int -Wno-old-style-definition -Wno-return-type \
-         -Wno-implicit-function-declaration -Wno-incompatible-pointer-types \
-         -Wno-pointer-sign -Wno-sign-compare -Wno-int-conversion \
-         $(W_NO_RETURN_MISMATCH) \
-         -I. -D__i386__ -DCPM386
+CFLAGS = \
+	 $(W_NO_DEPRECATED_NON_PROTOTYPE) \
+	 $(W_NO_RETURN_MISMATCH) \
+	 -D__CPM386__ \
+	 -DCPM386 \
+	 -D__i386__ \
+	 -ffreestanding \
+	 -fmerge-all-constants \
+	 -fno-asynchronous-unwind-tables \
+	 -fno-builtin \
+	 -fno-pic \
+	 -fno-pie \
+	 -fno-plt \
+	 -fno-stack-clash-protection \
+	 -fno-stack-protector \
+	 -fno-tree-vectorize \
+	 -fno-unwind-tables \
+	 -fomit-frame-pointer \
+	 -I. \
+	 -m32 \
+	 -march=i386 \
+	 -mtune=i686 \
+	 -nostdinc \
+	 -nostdlib \
+	 -O2 \
+	 -Wall \
+	 -Wcast-qual \
+	 -Wdouble-promotion \
+	 -Wextra \
+	 -Wformat-security \
+	 -Wno-implicit-function-declaration \
+	 -Wno-implicit-int \
+	 -Wno-incompatible-pointer-types \
+	 -Wno-int-conversion \
+	 -Wno-old-style-definition \
+	 -Wno-pointer-sign \
+	 -Wno-return-type \
+	 -Wno-sign-compare \
+	 -Wno-unused-parameter \
+	 -Wshadow
 
 ASFLAGS = -f elf32
 
-LDFLAGS = -m elf_i386 -T linker.ld -nostdlib --gc-sections
+LDFLAGS = -m elf_i386 -T linker.ld -nostdlib --gc-sections --print-gc-sections
 
 BDOS_OBJS = bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil.o iosys.o
 CCP_OBJ = ccp.o
@@ -207,68 +241,87 @@ big.386: big.bin $(MK386)
 
 # RAM disk: programs + accurate DOS-PLUS LRBC (cpmtools)
 ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 ed.386 $(PATCH_HOLE)
+	rm -f /tmp/ramdisk.tmp
+	rm -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
 	printf 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' > /tmp/cpmd/README.TXT
-	# Sample environment file for PRINTENV (upstream-style VAR=value)
 	printf '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' > /tmp/cpmd/ENV.DAT
-	# SUBMIT demo (plain CR/LF lines; ; comments; CP/M-68K CCP style)
-	printf '; DEMO.SUB - exercise SUBMIT on CP/M-386\r\nVER\r\nPRINTENV\r\nDIR\r\n\x1a' > /tmp/cpmd/DEMO.SUB
-	# Cold-boot profile: auto-run once at power-on if present (see try_cold_profile)
+	printf '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nPRINTENV\r\nLS -A\r\nDIR *.*\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from existing TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' > /tmp/cpmd/DEMO.SUB
 	printf 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
-	cp hello.386 /tmp/cpmd/HELLO.386
-	cp lrbc.386 /tmp/cpmd/LRBC.386
-	cp iotest.386 /tmp/cpmd/IOTEST.386
-	cp big.386 /tmp/cpmd/BIG.386
-	cp tod.386 /tmp/cpmd/TOD.386
-	cp hd.386 /tmp/cpmd/HD.386
-	cp od.386 /tmp/cpmd/OD.386
-	cp ls.386 /tmp/cpmd/LS.386
-	cp ver.386 /tmp/cpmd/VER.386
-	cp reboot.386 /tmp/cpmd/REBOOT.386
-	cp touch.386 /tmp/cpmd/TOUCH.386
-	cp more.386 /tmp/cpmd/MORE.386
-	cp cls.386 /tmp/cpmd/CLS.386
-	cp rc.386 /tmp/cpmd/RC.386
-	cp tsec.386 /tmp/cpmd/TSEC.386
-	cp trunc.386 /tmp/cpmd/TRUNC.386
-	cp rm.386 /tmp/cpmd/RM.386
-	cp printenv.386 /tmp/cpmd/PRINTENV.386
-	cp pause.386 /tmp/cpmd/PAUSE.386
-	cp vgaon.386 /tmp/cpmd/VGAON.386
-	cp vgaoff.386 /tmp/cpmd/VGAOFF.386
-	cp seron.386 /tmp/cpmd/SERON.386
-	cp seroff.386 /tmp/cpmd/SEROFF.386
-	cp fparse.386 /tmp/cpmd/FPARSE.386
-	cp illegal.386 /tmp/cpmd/ILLEGAL.386
-	cp dumpfcb.386 /tmp/cpmd/DUMPFCB.386
-	cp dumpdir.386 /tmp/cpmd/DUMPDIR.386
-	cp mem.386 /tmp/cpmd/MEM.386
-	cp aclockvt.386 /tmp/cpmd/ACLOCKVT.386
 	cp aclockdv.386 /tmp/cpmd/ACLOCKDV.386
-	cp vgatext.386 /tmp/cpmd/VGATEXT.386
-	cp ticks.386 /tmp/cpmd/TICKS.386
+	cp aclockvt.386 /tmp/cpmd/ACLOCKVT.386
+	cp big.386 /tmp/cpmd/BIG.386
+	cp cls.386 /tmp/cpmd/CLS.386
+	cp dumpdir.386 /tmp/cpmd/DUMPDIR.386
+	cp dumpfcb.386 /tmp/cpmd/DUMPFCB.386
 	cp ed.386 /tmp/cpmd/ED.386
+	cp fparse.386 /tmp/cpmd/FPARSE.386
+	cp hd.386 /tmp/cpmd/HD.386
+	cp hello.386 /tmp/cpmd/HELLO.386
+	cp illegal.386 /tmp/cpmd/ILLEGAL.386
+	cp iotest.386 /tmp/cpmd/IOTEST.386
+	cp lrbc.386 /tmp/cpmd/LRBC.386
+	cp ls.386 /tmp/cpmd/LS.386
+	cp mem.386 /tmp/cpmd/MEM.386
+	cp more.386 /tmp/cpmd/MORE.386
+	cp od.386 /tmp/cpmd/OD.386
+	cp pause.386 /tmp/cpmd/PAUSE.386
+	cp printenv.386 /tmp/cpmd/PRINTENV.386
+	cp rc.386 /tmp/cpmd/RC.386
+	cp reboot.386 /tmp/cpmd/REBOOT.386
+	cp rm.386 /tmp/cpmd/RM.386
+	cp seroff.386 /tmp/cpmd/SEROFF.386
+	cp seron.386 /tmp/cpmd/SERON.386
+	cp ticks.386 /tmp/cpmd/TICKS.386
+	cp tod.386 /tmp/cpmd/TOD.386
+	cp touch.386 /tmp/cpmd/TOUCH.386
+	cp trunc.386 /tmp/cpmd/TRUNC.386
+	cp tsec.386 /tmp/cpmd/TSEC.386
+	cp ver.386 /tmp/cpmd/VER.386
+	cp vgaoff.386 /tmp/cpmd/VGAOFF.386
+	cp vgaon.386 /tmp/cpmd/VGAON.386
+	cp vgatext.386 /tmp/cpmd/VGATEXT.386
 	mkfs.cpm -f 4mb-hd /tmp/ramdisk.tmp
 	cpmcp -f 4mb-hd /tmp/ramdisk.tmp \
-	  /tmp/cpmd/README.TXT /tmp/cpmd/ENV.DAT /tmp/cpmd/DEMO.SUB \
+	  /tmp/cpmd/ACLOCKDV.386 \
+	  /tmp/cpmd/ACLOCKVT.386 \
+	  /tmp/cpmd/BIG.386 \
+	  /tmp/cpmd/CLS.386 \
+	  /tmp/cpmd/DEMO.SUB \
+	  /tmp/cpmd/DUMPDIR.386 \
+	  /tmp/cpmd/DUMPFCB.386 \
+	  /tmp/cpmd/ED.386 \
+	  /tmp/cpmd/ENV.DAT \
+	  /tmp/cpmd/FPARSE.386 \
+	  /tmp/cpmd/HD.386 \
+	  /tmp/cpmd/HELLO.386 \
+	  /tmp/cpmd/ILLEGAL.386 \
+	  /tmp/cpmd/IOTEST.386 \
+	  /tmp/cpmd/LRBC.386 \
+	  /tmp/cpmd/LS.386 \
+	  /tmp/cpmd/MEM.386 \
+	  /tmp/cpmd/MORE.386 \
+	  /tmp/cpmd/OD.386 \
+	  /tmp/cpmd/PAUSE.386 \
+	  /tmp/cpmd/PRINTENV.386 \
 	  /tmp/cpmd/PROFILE.SUB \
-	  /tmp/cpmd/HELLO.386 /tmp/cpmd/LRBC.386 \
-	  /tmp/cpmd/IOTEST.386 /tmp/cpmd/BIG.386 /tmp/cpmd/TOD.386 \
-	  /tmp/cpmd/HD.386 /tmp/cpmd/OD.386 /tmp/cpmd/LS.386 \
-	  /tmp/cpmd/VER.386 /tmp/cpmd/REBOOT.386 /tmp/cpmd/TOUCH.386 \
-	  /tmp/cpmd/MORE.386 /tmp/cpmd/CLS.386 /tmp/cpmd/RC.386 \
-	  /tmp/cpmd/TSEC.386 /tmp/cpmd/TRUNC.386 /tmp/cpmd/RM.386 \
-	  /tmp/cpmd/PRINTENV.386 /tmp/cpmd/PAUSE.386 \
-	  /tmp/cpmd/VGAON.386 /tmp/cpmd/VGAOFF.386 \
-	  /tmp/cpmd/SERON.386 /tmp/cpmd/SEROFF.386 /tmp/cpmd/FPARSE.386 \
-	  /tmp/cpmd/ILLEGAL.386 /tmp/cpmd/DUMPFCB.386 /tmp/cpmd/DUMPDIR.386 \
-	  /tmp/cpmd/MEM.386 /tmp/cpmd/ACLOCKVT.386 /tmp/cpmd/ACLOCKDV.386 \
-	  /tmp/cpmd/VGATEXT.386 /tmp/cpmd/TICKS.386 /tmp/cpmd/ED.386 0:
-	# Patch BIG.386 dirent: zero a middle allocation block that only covers
-	# 0x90 padding for sparse hole; streaming loader zero-fills it.
+	  /tmp/cpmd/RC.386 \
+	  /tmp/cpmd/README.TXT \
+	  /tmp/cpmd/REBOOT.386 \
+	  /tmp/cpmd/RM.386 \
+	  /tmp/cpmd/SEROFF.386 \
+	  /tmp/cpmd/SERON.386 \
+	  /tmp/cpmd/TICKS.386 \
+	  /tmp/cpmd/TOD.386 \
+	  /tmp/cpmd/TOUCH.386 \
+	  /tmp/cpmd/TRUNC.386 \
+	  /tmp/cpmd/TSEC.386 \
+	  /tmp/cpmd/VER.386 \
+	  /tmp/cpmd/VGAOFF.386 \
+	  /tmp/cpmd/VGAON.386 \
+	  /tmp/cpmd/VGATEXT.386 \
+	    0:
 	$(PATCH_HOLE) /tmp/ramdisk.tmp BIG.386 || true
-	# Fixed-size image: zero-fill then overlay cpmtools filesystem (dd count
-	# alone stops at EOF and would shrink as the FS grows).
 	dd if=/dev/zero of=ramdisk.bin bs=1024 count=$(RAMDISK_KB) status=none 2>/dev/null
 	dd if=/tmp/ramdisk.tmp of=ramdisk.bin conv=notrunc status=none 2>/dev/null
 	rm -rf /tmp/ramdisk.tmp /tmp/cpmd

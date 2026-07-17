@@ -30,9 +30,14 @@
 
 ## Build requirements
 
+* Compiler (supporting Intel x86 `-m32`):
+  * [GNU GCC](https://gcc.gnu.org/), *or*,
+  * [LLVM Clang](https://clang.llvm.org)
+[]()
+
+[]()
 * [AWK](https://en.wikipedia.org/wiki/AWK)
 * [cpmtools](https://www.moria.de/~michael/cpmtools/)
-* [GCC](https://gcc.gnu.org/) (supporting Intel x86 `-m32`)
 * [GNU binutils](https://www.gnu.org/software/binutils/)
 * [GNU coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU make](https://www.gnu.org/software/make/)
@@ -48,19 +53,19 @@
 3. Install the required build dependencies:
 
 ```sh
-dnf install binutils coreutils gawk gcc make nasm
+dnf install clang binutils coreutils gawk gcc make nasm
 ```
 
 #### Fedora
 
 ```sh
-dnf install binutils coreutils cpmtools gawk gcc make nasm
+dnf install clang binutils coreutils cpmtools gawk gcc make nasm
 ```
 
 #### Debian
 
 ```sh
-apt install binutils coreutils cpmtools gawk gcc make nasm
+apt install clang binutils coreutils cpmtools gawk gcc make nasm
 ```
 
 #### Alpine
@@ -69,12 +74,22 @@ Alpine users will need to manually install
 [cpmtools](https://www.moria.de/~michael/cpmtools/).
 
 ```sh
-apk add binutils coreutils gawk gcc make nasm
+apk add clang binutils coreutils gawk gcc make nasm
 ```
 
-## Building
+## Compilation
 
-* `make && make test`
+**GCC** build (default):
+
+```sh
+make && make test
+```
+
+**Clang** build:
+
+```sh
+make CC="clang" && make test
+```
 
 ## QEMU Testing
 
@@ -143,34 +158,34 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>378</th>
+                <th>431</th>
                 <th>72</th>
-                <th>17</th>
-                <th>289</th>
-                <th>21</th>
-                <th>13031</th>
-                <th>299</th>
+                <th>10</th>
+                <th>349</th>
+                <th>22</th>
+                <th>13789</th>
+                <th>352</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>179</th>
-                <th>32</th>
+                <th>194</th>
+                <th>36</th>
                 <th>0</th>
-                <th>147</th>
+                <th>158</th>
                 <th>0</th>
-                <th>4857</th>
-                <th>131</th>
+                <th>5052</th>
+                <th>136</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>67</th>
-                <th>21102</th>
-                <th>2988</th>
-                <th>1895</th>
-                <th>16219</th>
-                <th>3191</th>
-                <th>513424</th>
-                <th>9987</th>
+                <th>21170</th>
+                <th>2992</th>
+                <th>1888</th>
+                <th>16290</th>
+                <th>3192</th>
+                <th>514377</th>
+                <th>10045</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
