@@ -38,13 +38,21 @@
 
 ## Testing
 
-```sh
-qemu-system-x86_64 -m 4G -serial stdio -monitor none -kernel "cpm386.elf"
-```
+* Multiboot kernel:
 
-```sh
-qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
-```
+  ```sh
+  qemu-system-x86_64 -m 4G -serial stdio -monitor none -kernel "cpm386.elf"
+  ```
+
+* Floppy (MBR) loader:
+
+  ```sh
+  qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
+  ```
+
+### Testing notes
+
+* Add `-display none` to disable VGA video (and use only serial console).
 
 ## License
 
