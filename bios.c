@@ -22,6 +22,8 @@ typedef unsigned long size_t; /* rough */
 
 #define COM1_PORT 0x3f8
 
+static int com_present;
+
 static inline void outb(uint16_t port, uint8_t val) {
   __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
 }
@@ -35,41 +37,68 @@ static inline uint8_t inb(uint16_t port) {
 static void vga_init(void); /* forward */
 static void vga_update_cursor(void); /* forward for calls in clear/scroll */
 
+/* 16550 scratch register (COM1+7): write/read back; absent bus returns 0xFF. */
+static int com_probe(void)
+{
+  uint8_t a, b;
+
+  outb(COM1_PORT + 7, 0x5A);
+  a = inb(COM1_PORT + 7);
+  outb(COM1_PORT + 7, 0xA5);
+  b = inb(COM1_PORT + 7);
+  return (a == 0x5A && b == 0xA5);
+}
+
 static void com_init(void) {
-  /* init for 9600 8N1 */
-  outb(COM1_PORT + 1, 0x00); /* disable ints */
-  outb(COM1_PORT + 3, 0x80); /* enable DLAB */
-  outb(COM1_PORT + 0, 0x0C); /* 9600 divisor low (115200/9600=12) */
-  outb(COM1_PORT + 1, 0x00); /* high */
-  outb(COM1_PORT + 3, 0x03); /* 8N1 */
-  outb(COM1_PORT + 2, 0xC7); /* fifo */
-  outb(COM1_PORT + 4, 0x0B); /* DTR/RTS/OUT2 */
-  vga_init();                /* PC video text but serial remains active */
+  com_present = com_probe();
+
+  if (com_present) {
+    /* init for 9600 8N1 */
+    outb(COM1_PORT + 1, 0x00); /* disable ints */
+    outb(COM1_PORT + 3, 0x80); /* enable DLAB */
+    outb(COM1_PORT + 0, 0x0C); /* 9600 divisor low (115200/9600=12) */
+    outb(COM1_PORT + 1, 0x00); /* high */
+    outb(COM1_PORT + 3, 0x03); /* 8N1 */
+    outb(COM1_PORT + 2, 0xC7); /* fifo */
+    outb(COM1_PORT + 4, 0x0B); /* DTR/RTS/OUT2 */
+  }
+
+  vga_init(); /* VGA text always; serial only if present */
 }
 
 static int com_stat(void) {
+  if (!com_present)
+    return 0;
   return (inb(COM1_PORT + 5) & 0x01) ? 0x00FF : 0x0000;
 }
 
 static void com_out(unsigned char c) {
-  /* Bounded poll to tolerate missing serial UART (no physical COM1) */
   int spins = 0;
 
-  while ((inb(COM1_PORT + 5) & 0x20) == 0 && ++spins < 1000000);
+  if (!com_present)
+    return;
+
+  /* Bounded poll if UART is stuck */
+  while ((inb(COM1_PORT + 5) & 0x20) == 0 && ++spins < 1000000)
+    ;
 
   outb(COM1_PORT, c);
 
   if (c == '\n') { /* auto CR for terminals */
     spins = 0;
-    while ((inb(COM1_PORT + 5) & 0x20) == 0 && ++spins < 1000000);
+    while ((inb(COM1_PORT + 5) & 0x20) == 0 && ++spins < 1000000)
+      ;
     outb(COM1_PORT, '\r');
   }
 }
 
 static unsigned char com_in(void) {
-  /* avoid hanging if no serial hardware */
   int spins = 0;
-  while ((inb(COM1_PORT + 5) & 0x01) == 0 && ++spins < 1000000);
+
+  if (!com_present)
+    return 0;
+  while ((inb(COM1_PORT + 5) & 0x01) == 0 && ++spins < 1000000)
+    ;
   return inb(COM1_PORT);
 }
 
@@ -310,10 +339,13 @@ static mrt_t mrt;
 
 /* --- BIOS entry points, some to be completed) --- */
 
-/* Console output enables (BDOS 222/223). Both on by default. */
+/*
+ * Console output enables (BDOS 222/223). VGA on by default.
+ * Serial is enabled in cpm386_init only if COM1 probe succeeds.
+ */
 
 static int con_vga_en = 1;
-static int con_ser_en = 1;
+static int con_ser_en = 0;
 
 void bios_wboot(void) {
   /* for now, just loop or jump to ccp restart */
@@ -327,6 +359,7 @@ unsigned short int bios_const(void) {
    * Input stays available even if that device's *output* is disabled
    * (so SERON can still be typed after SEROFF on a serial-only box).
    */
+
   if (kbd_stat())
     return 0x00FF;
 
@@ -372,7 +405,11 @@ void bios_conout(unsigned char c)
 static void com_out_raw(unsigned char c)
 {
   int spins = 0;
-  while ((inb(COM1_PORT + 5) & 0x20) == 0 && ++spins < 1000000);
+
+  if (!com_present)
+    return;
+  while ((inb(COM1_PORT + 5) & 0x20) == 0 && ++spins < 1000000)
+    ;
   outb(COM1_PORT, c);
 }
 
@@ -702,6 +739,8 @@ void bios_system_reboot(int warm)
 /* cold boot entry from asm */
 void cpm386_init(void) {
   com_init();
+  /* Dual console only when hardware is there; VGA-only is fine. */
+  con_ser_en = com_present ? 1 : 0;
 
   /* Install user TPA segments, TSS, and int 0x30 BDOS gate before any load. */
   {
