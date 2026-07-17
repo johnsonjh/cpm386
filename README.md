@@ -43,15 +43,13 @@
 #### RHEL
 
 1. Enable the [EPEL](https://docs.fedoraproject.org/en-US/epel/) repositories.
-
 2. Install the appropriate `libdsk` and `cpmtools` packages from
    [Koji](https://koji.fedoraproject.org/).
-
 3. Install the required build dependencies:
 
-   ```sh
-   dnf install binutils coreutils gawk gcc make nasm
-   ```
+```sh
+dnf install binutils coreutils gawk gcc make nasm
+```
 
 #### Fedora
 
@@ -63,6 +61,15 @@ dnf install binutils coreutils cpmtools gawk gcc make nasm
 
 ```sh
 apt install binutils coreutils cpmtools gawk gcc make nasm
+```
+
+#### Alpine
+
+* Alpine users will need to manually install
+  [cpmtools](https://www.moria.de/~michael/cpmtools/).
+
+```sh
+apk add binutils coreutils gawk gcc make nasm
 ```
 
 ## Building
