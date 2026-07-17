@@ -54,6 +54,85 @@
 
 * Add `-display none` to disable VGA video (and use only serial console).
 
+## Code statistics
+
+<!-- scc-start -->
+<table id="scc-table">
+        <thead><tr>
+                <th>Language</th>
+                <th>Files</th>
+                <th>Lines</th>
+                <th>Blank</th>
+                <th>Comment</th>
+                <th>Code</th>
+                <th>Complexity</th>
+                <th>Bytes</th>
+                <th>Uloc</th>
+        </tr></thead>
+        <tbody><tr>
+                <th>C</th>
+                <th>41</th>
+                <th>14461</th>
+                <th>1971</th>
+                <th>1339</th>
+                <th>11151</th>
+                <th>2501</th>
+                <th>356935</th>
+                <th>6567</th>
+        </tr><tr>
+                <th>C Header</th>
+                <th>11</th>
+                <th>1014</th>
+                <th>100</th>
+                <th>245</th>
+                <th>669</th>
+                <th>9</th>
+                <th>38135</th>
+                <th>819</th>
+        </tr><tr>
+                <th>Assembly</th>
+                <th>3</th>
+                <th>574</th>
+                <th>66</th>
+                <th>91</th>
+                <th>417</th>
+                <th>0</th>
+                <th>12945</th>
+                <th>396</th>
+        </tr><tr>
+                <th>Makefile</th>
+                <th>1</th>
+                <th>343</th>
+                <th>64</th>
+                <th>16</th>
+                <th>263</th>
+                <th>20</th>
+                <th>11844</th>
+                <th>274</th>
+        </tr><tr>
+                <th>Markdown</th>
+                <th>1</th>
+                <th>138</th>
+                <th>21</th>
+                <th>0</th>
+                <th>117</th>
+                <th>0</th>
+                <th>3696</th>
+                <th>109</th>
+        </tr></tbody>
+        <tfoot><tr>
+                <th>Total</th>
+                <th>57</th>
+                <th>16530</th>
+                <th>2222</th>
+                <th>1691</th>
+                <th>12617</th>
+                <th>2530</th>
+                <th>423555</th>
+                <th>8140</th>
+        </tr></tfoot></table>
+<!-- scc-end -->
+
 ## License
 
-* [**MIT License**](LICENSE)
+* [MIT License](LICENSE)

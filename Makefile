@@ -322,5 +322,22 @@ test_bdos: test_bdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil
 test: test_bdos
 	./test_bdos
 
+scc: README.md
+	"$${MAKE:-$(MAKE)}" clean
+	awk '/<!-- scc-start -->/ { \
+		print; system("scc \
+			--exclude-file LICENSE,README.awk,log.pvs \
+			--exclude-file log.pvs,compile_commands.json \
+			--exclude-file REUSE.toml \
+			--exclude-dir LICENSES,.git,pvsreport,bindist \
+			--no-cocomo -u --no-size -s lines -f html-table; \
+			printf \"\n%s\n\" \"<!-- scc-end -->\""); \
+			skip=1; next } \
+		skip && /<!-- scc-end -->/ { skip=0; next } \
+		!skip' README.md > README.awk && \
+	mv -f README.awk README.md && \
+	expand README.md > README.out && \
+	mv -f README.out README.md
+
 .NOTPARALLEL:
 .PHONY: all clean run test
