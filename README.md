@@ -15,7 +15,7 @@
 * Supports [VGA text](https://en.wikipedia.org/wiki/VGA_text_mode) (`0xB8000`)
   and/or [COM1 serial](https://en.wikipedia.org/wiki/Serial_port)
   (9600/N/8/1, `0x3F8`) consoles.
-* **No floppy/hard disk/CD/USB/network/sound/other drivers** (***yet***).
+* **No floppy/hard disk/CD/USB/network/sound/other drivers** (**yet**).
 
 ## Screenshots
 
@@ -40,29 +40,30 @@
 
 ### Common distributions
 
-* RHEL
+#### RHEL
 
-  1. Enable the [EPEL](https://docs.fedoraproject.org/en-US/epel/) repositories.
-  2. Install the appropriate `libdsk` and `cpmtools` packages from
-     [Koji](https://koji.fedoraproject.org/) (*i.e.*, use Fedora 34 packages
-     for RHEL 9, Fedora 40 packages for RHEL 10, Fedora 42 packages for RHEL
-     11).
-  3. Install the remaining required dependencies:
-     ```sh
-     dnf install binutils coreutils gawk gcc make nasm
-     ```
+1. Enable the [EPEL](https://docs.fedoraproject.org/en-US/epel/) repositories.
 
-* Fedora
+2. Install the appropriate `libdsk` and `cpmtools` packages from
+   [Koji](https://koji.fedoraproject.org/).
 
-  ```sh
-  dnf install binutils coreutils cpmtools gawk gcc make nasm
-  ```
+3. Install the required build dependencies:
 
-* Debian
+   ```sh
+   dnf install binutils coreutils gawk gcc make nasm
+   ```
 
-  ```sh
-  apt install binutils coreutils cpmtools gawk gcc make nasm
-  ```
+#### Fedora
+
+```sh
+dnf install binutils coreutils cpmtools gawk gcc make nasm
+```
+
+#### Debian
+
+```sh
+apt install binutils coreutils cpmtools gawk gcc make nasm
+```
 
 ## Building
 
