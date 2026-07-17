@@ -6,10 +6,16 @@
 
 **CP/M-386 is currently in the** ***very*** **early development stages.**
 
-* Full 32-bit protected mode implementation with Ring-3 TPA.
-* Bootable via 1.44MB floppy MBR or GRUB Multiboot kernel
-* Supports VGA text (`0xB8000`) and/or COM1 serial (9600/N/8/1, `0x3F8`) consoles.
-* No floppy/hard disk/CD/USB/network/sound/other drivers (yet).
+* Full 32-bit [protected mode](https://en.wikipedia.org/wiki/Protected_mode)
+  implementation with
+  [Ring-3 TPA](https://en.wikipedia.org/wiki/Protection_ring).
+* Bootable via 1.44MB floppy
+  [MBR](https://en.wikipedia.org/wiki/Master_boot_record) or GRUB
+  [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel.
+* Supports [VGA text](https://en.wikipedia.org/wiki/VGA_text_mode) (`0xB8000`)
+  and/or [COM1 serial](https://en.wikipedia.org/wiki/Serial_port)
+  (9600/N/8/1, `0x3F8`) consoles.
+* **No floppy/hard disk/CD/USB/network/sound/other drivers** (***yet***).
 
 ## Screenshots
 
@@ -36,9 +42,9 @@
 
 * `make && make test`
 
-## Testing
+## QEMU Testing
 
-* Multiboot kernel:
+* [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel:
 
   ```sh
   qemu-system-x86_64 -m 4G -serial stdio -monitor none -kernel "cpm386.elf"
@@ -50,9 +56,10 @@
   qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
   ```
 
-### Testing notes
+### QEMU notes
 
-* Add `-display none` to disable VGA video (and use only serial console).
+* Use `-display none` to disable VGA video (and use *only* serial console).
+* Use `-serial none` to disable the serial UART (and use *only* VGA console).
 
 ## Code statistics
 
@@ -112,24 +119,24 @@
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>138</th>
+                <th>145</th>
                 <th>21</th>
                 <th>0</th>
-                <th>117</th>
+                <th>124</th>
                 <th>0</th>
-                <th>3696</th>
-                <th>109</th>
+                <th>4156</th>
+                <th>116</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>57</th>
-                <th>16530</th>
+                <th>16537</th>
                 <th>2222</th>
                 <th>1691</th>
-                <th>12617</th>
+                <th>12624</th>
                 <th>2530</th>
-                <th>423555</th>
-                <th>8140</th>
+                <th>424015</th>
+                <th>8147</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
