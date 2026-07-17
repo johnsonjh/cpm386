@@ -598,6 +598,65 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       }
       break;
 
+    /*
+     * BDOS 225 (GET_TICKS): high-resolution free-running counter.
+     * DE -> struct cpm_ticks (TPA-relative).
+     * Fills lo/hi/hz.
+     * hz = 1_193_182 (8253/8254 PIT).
+     * AX = 0 on success, 0xFFFF if DE is null / out of range.
+     */
+
+    case 225:
+      {
+        extern void pit_read (unsigned long *, unsigned long *);
+        REG struct cpm_ticks *tp = (struct cpm_ticks *)infop;
+
+        if (!tp)
+          {
+            rtnval = 0xFFFF;
+            break;
+          }
+
+        {
+          unsigned long lo = 0, hi = 0;
+
+          pit_read (&lo, &hi);
+          tp->lo = (ULONG)lo;
+          tp->hi = (ULONG)hi;
+          tp->hz = 1193182UL; /* PIT_HZ; keep literal for freestanding */
+        }
+
+        rtnval = 0;
+      }
+
+      break;
+
+    /*
+     * BDOS 226 (SLEEP_UNTIL): busy-wait until absolute tick >= (hi:lo).
+     * DE -> struct cpm_ticks
+     * only lo/hi matter (hz ignored).
+     * Returns immediately if already in the past.
+     * AX = 0, or 0xFFFF if DE null / out of range.
+     */
+
+    case 226:
+      {
+        extern void pit_sleep_until (unsigned long, unsigned long);
+        REG struct cpm_ticks *tp = (struct cpm_ticks *)infop;
+
+        if (!tp)
+          {
+            rtnval = 0xFFFF;
+
+            break;
+          }
+
+        pit_sleep_until ((unsigned long)tp->lo, (unsigned long)tp->hi);
+        rtnval = 0;
+      }
+
+      break;
+
     default:
       return -1; /* bad function number */
                  /* break; */

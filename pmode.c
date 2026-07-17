@@ -463,6 +463,8 @@ bdos_arg_is_ptr (WORD func)
     case 152: /* F_PARSE PFCB */
     case 155: /* T_SECONDS get date/time BCD */
     case 224: /* BDOS_CON_VIDEO - fill cpm_vga_text */
+    case 225: /* BDOS_GET_TICKS - fill cpm_ticks */
+    case 226: /* BDOS_SLEEP_UNTIL - read cpm_ticks target */
       return 1;
 
     default:
@@ -476,6 +478,12 @@ bdos_syscall_c (WORD func, unsigned long info, unsigned long user_cs)
 {
   unsigned long infop = info;
   UWORD r;
+
+  /* keep 64-bit PIT extension accurate */
+  {
+    extern void pit_poll (void);
+    pit_poll ();
+  }
 
   /* Program exit from ring 3: resume kernel after enter_ring3 */
   if (func == 0 && (user_cs & 3) == 3)
@@ -541,6 +549,12 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
 
   outb (0x21, 0xFF);
   outb (0xA1, 0xFF);
+
+  /* PIT for BDOS 225/226 high-res ticks */
+  {
+    extern void pit_init (void);
+    pit_init ();
+  }
 
   /* Null */
   gdt_set (0, 0, 0, 0, 0);

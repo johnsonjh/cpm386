@@ -99,11 +99,18 @@
  * MP/M / Concurrent range (also avoiding P2DOS 200/201, DOS+ 210+).
  */
 
-#define BDOS_SYSTEM_REBOOT 220 /* machine reboot (REBOOT.386)       */
-#define BDOS_CON_CLEAR 221     /* clear serial ANSI + VGA (CLS.386) */
-#define BDOS_CON_VGA 222       /* get/set VGA console enable        */
-#define BDOS_CON_SER 223       /* get/set serial console enable     */
+#define BDOS_SYSTEM_REBOOT 220 /* machine reboot (REBOOT.386)        */
+#define BDOS_CON_CLEAR 221     /* clear serial ANSI + VGA (CLS.386)  */
+#define BDOS_CON_VGA 222       /* get/set VGA console enable         */
+#define BDOS_CON_SER 223       /* get/set serial console enable      */
 #define BDOS_CON_VIDEO 224     /* map info for direct VGA text (sel) */
+#define BDOS_GET_TICKS 225     /* high-res 64-bit tick counter       */
+#define BDOS_SLEEP_UNTIL 226   /* busy-wait until absolute tick      */
+
+/*
+ * Private numbers sit above standard CP/M 3 / MP/M / Concurrent calls and
+ * avoid conflicts - see https://www.seasip.info/Cpm/bdos.html for a list.
+ */
 
 /* Ring-3 video map result (BDOS 224; DE -> this, TPA-relative). */
 struct cpm_vga_text
@@ -114,6 +121,20 @@ struct cpm_vga_text
   UWORD cell_bytes; /* bytes per cell (2)                 */
   ULONG map_size;   /* mapped byte length (e.g. 32K)      */
   ULONG phys_base;  /* physical base (informational)      */
+};
+
+/*
+ * High-resolution tick block (BDOS 225/226; DE -> this, TPA-relative).
+ * BDOS 225 (GET_TICKS): fills lo/hi/hz; returns 0, or 0xFFFF if DE bad.
+ * BDOS 226 (SLEEP_UNTIL): waits until absolute tick >= (hi:lo); hz ignored;
+ *   returns 0, or 0xFFFF if DE bad.  Rate is PIT_HZ (1_193_182 Hz).
+ */
+
+struct cpm_ticks
+{
+  ULONG lo; /* low 32 bits of absolute tick              */
+  ULONG hi; /* high 32 bits of absolute tick             */
+  ULONG hz; /* tick frequency (GET fills; SLEEP ignores) */
 };
 
 #define robit 0    /* read-only bit in file type field of fcb */

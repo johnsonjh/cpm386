@@ -398,6 +398,40 @@ bios_system_reboot (int warm)
   (void)warm;
 }
 
+/* Host stubs for private BDOS 225/226 (where PIT not available) */
+void
+pit_read (unsigned long *lo, unsigned long *hi)
+{
+  if (lo)
+    {
+      *lo = 0;
+    }
+
+  if (hi)
+    {
+      *hi = 0;
+    }
+}
+
+void
+pit_sleep_until (unsigned long lo, unsigned long hi)
+{
+  (void)lo;
+  (void)hi;
+}
+
+void
+pit_poll (void)
+{
+  /* void */
+}
+
+void
+pit_init (void)
+{
+  /* void */
+}
+
 void
 bios_con_clear (void)
 {
