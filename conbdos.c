@@ -224,6 +224,7 @@ REG UWORD parm;
 
     if (parm == 0xff) return(getch());
     else if (parm == 0xfe) return(constat());
+    else if (parm == 0xfd) return(getch()); /* CP/M 3: wait, no echo */
     else bconout(parm & 0xff);
 }
 
