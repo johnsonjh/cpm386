@@ -252,6 +252,7 @@ static void vga_init(void) {
 /* Basic PS/2 scancode set1 to ASCII (no numpad yet, basic shifts) */
 
 static int kbd_shift = 0;
+static int kbd_ctrl = 0;
 
 static unsigned char kbd_map[128] = {
   0, 0x1b, '1','2','3','4','5','6','7','8','9','0','-','=', '\b',
@@ -289,6 +290,8 @@ static unsigned char kbd_scancode_to_ascii(void)
   if (sc & 0x80) { /* break */
     if (sc == 0xaa || sc == 0xb6)
       kbd_shift = 0; /* left/right shift release */
+    if (sc == 0x9d)
+      kbd_ctrl = 0; /* Ctrl release */
 
     return 0;
   }
@@ -299,12 +302,35 @@ static unsigned char kbd_scancode_to_ascii(void)
     return 0;
   }
 
+  if (sc == 0x1d) { /* left Ctrl (right is E0 1D; treat 1D as Ctrl) */
+    kbd_ctrl = 1;
+
+    return 0;
+  }
+
   if (sc >= 128)
     return 0;
 
   ch = kbd_shift ? kbd_map_shift[sc] : kbd_map[sc];
+  if (!ch)
+    return 0;
 
-  return ch ? ch : 0;
+  /* Ctrl+letter -> 0x01..0x1A (so Ctrl-Z is ENDFILE for ED, etc.) */
+  if (kbd_ctrl) {
+    unsigned char u = ch;
+
+    if (u >= 'a' && u <= 'z')
+      u = (unsigned char)(u - 'a' + 'A');
+    if (u >= 'A' && u <= 'Z')
+      return (unsigned char)(u - '@'); /* A->1 ... Z->0x1A */
+    if (u == ' ')
+      return 0; /* Ctrl-Space: ignore */
+    if (u == '[')
+      return 0x1b; /* often ESC */
+    return 0;
+  }
+
+  return ch;
 }
 
 /* Drain PS/2 output buffer into kbd_peek (first real ASCII char only). */
