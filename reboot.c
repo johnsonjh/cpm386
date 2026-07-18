@@ -1,24 +1,38 @@
 /* reboot.c */
 
+/*****************************************************************************/
+
 /*
  * Usage:
  *   REBOOT       cold reboot (BIOS reset flag 0)
  *   REBOOT W     warm reboot (BIOS data area 40:72 = 0x1234)
  */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define BDOS_REBOOT 220
 
+/*****************************************************************************/
+
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -33,11 +47,15 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -47,6 +65,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -64,5 +84,8 @@ _start (void)
   bdos (BDOS_REBOOT, (LONG)warm);
 
   puts ("Reboot not supported\r\n");
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

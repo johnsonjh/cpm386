@@ -1,17 +1,27 @@
 /* more.c: file pager for CP/M-386 */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -23,14 +33,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -40,6 +55,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static int
 toupper_ch (int c)
@@ -51,6 +68,8 @@ toupper_ch (int c)
 
   return c;
 }
+
+/*****************************************************************************/
 
 static int
 getch_wait (void)
@@ -72,6 +91,8 @@ getch_wait (void)
   return c & 0xff;
 }
 
+/*****************************************************************************/
+
 static void
 help (void)
 {
@@ -80,6 +101,8 @@ help (void)
   puts ("  Enter  next line\r\n");
   puts ("  Q/^C   quit\r\n");
 }
+
+/*****************************************************************************/
 
 static void
 fill_from_def_fcb (UBYTE *fcb)
@@ -91,6 +114,8 @@ fill_from_def_fcb (UBYTE *fcb)
       fcb[i] = DEF_FCB[i];
     }
 }
+
+/*****************************************************************************/
 
 static int
 parse_tail_help (void)
@@ -112,15 +137,18 @@ parse_tail_help (void)
   tail[tlen] = 0;
 
   i = 0;
+
   while (tail[i] == ' ' || tail[i] == '\t')
     {
       i++;
     }
+
   while (tail[i])
     {
       if (tail[i] == '-' || tail[i] == '/')
         {
           i++;
+
           while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
             {
               if (toupper_ch ((unsigned char)tail[i]) == 'H')
@@ -134,13 +162,17 @@ parse_tail_help (void)
             {
               i++;
             }
+
           continue;
         }
 
       break;
     }
+
   return 0;
 }
+
+/*****************************************************************************/
 
 /* Clear "[More]" prompt */
 static void
@@ -148,6 +180,8 @@ clear_more (void)
 {
   puts ("\r      \r");
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -183,6 +217,7 @@ _start (void)
   fcb[14] = 0;
   fcb[32] = 0xFF;
   r = bdos (15, (LONG)(unsigned long)fcb);
+
   if (r > 3)
     {
       puts ("ERR: File not found\r\n");
@@ -198,15 +233,18 @@ _start (void)
   for (;;)
     {
       r = bdos (20, (LONG)(unsigned long)fcb);
+
       if (r != 0)
         {
           final = 1;
+
           if (!have)
             {
               break; /* empty file */
             }
 
           rec_len = 128;
+
           if (lrbc != 0)
             {
               rec_len = lrbc;
@@ -229,12 +267,14 @@ _start (void)
                 }
 
               have = 1;
+
               continue;
             }
         }
 
       /* Emit prev[0..rec_len) */
       pos = 0;
+
       while (process && pos < rec_len)
         {
           int c;
@@ -274,6 +314,7 @@ _start (void)
             {
               putch ((char)c);
               col++;
+
               if (col >= 80)
                 {
                   col = 0;
@@ -285,9 +326,11 @@ _start (void)
             {
               int d, wt = 1;
               puts ("[More]");
+
               while (wt)
                 {
                   d = getch_wait ();
+
                   switch (d)
                     {
                     case 'q':
@@ -296,18 +339,21 @@ _start (void)
                       clear_more ();
                       wt = 0;
                       process = 0;
+
                       break;
 
                     case 13:
                       clear_more ();
                       wt = 0;
                       ctr = 22;
+
                       break;
 
                     case 32:
                       clear_more ();
                       wt = 0;
                       ctr = 0;
+
                       break;
 
                     default:
@@ -320,9 +366,11 @@ _start (void)
               while (bdos (11, 0))
                 {
                   int d = (int)bdos (1, 0);
+
                   if (d == 3)
                     {
                       process = 0;
+
                       break;
                     }
                 }
@@ -345,5 +393,8 @@ _start (void)
 
 done:
   bdos (16, (LONG)(unsigned long)fcb);
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

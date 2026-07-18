@@ -1,13 +1,21 @@
 /* pause.c: wait for a key */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
 #define PROMPT_COLS 40
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -19,14 +27,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -36,6 +49,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 clear_line (void)
@@ -56,18 +71,25 @@ clear_line (void)
   putch ('\r');
 }
 
+/*****************************************************************************/
+
 void
 _start (void)
 {
   int c;
 
   puts ("Press any key to continue...");
+
   /* Wait for a key without echo (raw console) */
   while (!(c = (int)bdos (6, 0xFF)))
     {
       ;
     }
+
   (void)c;
   clear_line ();
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

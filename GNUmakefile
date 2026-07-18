@@ -36,6 +36,7 @@ CFLAGS = \
 	 $(WNO_UNUSED_COMMAND_LINE_ARGUMENT) \
 	 -D__CPM386__ \
 	 -DCPM386 \
+	 -D__i386 \
 	 -D__i386__ \
 	 -ffreestanding \
 	 -fmerge-all-constants \

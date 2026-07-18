@@ -1,13 +1,21 @@
 /* iotest.c - exercise CP/M-386 BDOS file APIs from ring 3 */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -19,14 +27,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -36,6 +49,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned long n)
@@ -54,13 +69,18 @@ putu (unsigned long n)
       buf[i++] = (char)('0' + (n % 10));
       n /= 10;
     }
+
   while (i)
     {
       putch (buf[--i]);
     }
 }
 
+/*****************************************************************************/
+
 static unsigned fails;
+
+/*****************************************************************************/
 
 static void
 result (int cond, char tag)
@@ -72,11 +92,14 @@ result (int cond, char tag)
   putch (tag);
   putch ('\r');
   putch ('\n');
+
   if (!cond)
     {
       fails++;
     }
 }
+
+/*****************************************************************************/
 
 static void
 fill_name (UBYTE *fcb, const char *name8, const char *typ3)
@@ -89,6 +112,7 @@ fill_name (UBYTE *fcb, const char *name8, const char *typ3)
     }
 
   fcb[0] = 0;
+
   for (i = 0; i < 8; i++)
     {
       fcb[1 + i] = (UBYTE)(name8[i] ? name8[i] : ' ');
@@ -99,6 +123,8 @@ fill_name (UBYTE *fcb, const char *name8, const char *typ3)
       fcb[9 + i] = (UBYTE)(typ3[i] ? typ3[i] : ' ');
     }
 }
+
+/*****************************************************************************/
 
 /* CP/M-68K random record: ran0=bits16-23, ran1=8-15, ran2=0-7 */
 static void
@@ -148,6 +174,7 @@ _start (void)
 
       dma[0] = (UBYTE)('0' + rec);
       r = bdos (21, (LONG)(unsigned long)fcb);
+
       if (r != 0)
         {
           break;
@@ -168,6 +195,7 @@ _start (void)
   for (rec = 0; rec < 5; rec++)
     {
       r = bdos (20, (LONG)(unsigned long)fcb);
+
       if (r != 0 || dma2[0] != (UBYTE)('0' + rec))
         {
           break;
@@ -285,6 +313,7 @@ _start (void)
   putu (fails);
   putch ('\r');
   putch ('\n');
+
   bdos (0, 0);
 
   for (;;)
@@ -292,3 +321,5 @@ _start (void)
       ;
     }
 }
+
+/*****************************************************************************/

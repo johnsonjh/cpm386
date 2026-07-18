@@ -1,19 +1,31 @@
 /* lrbc.c - print CP/M file size using Last Record Byte Count */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
+
+/*****************************************************************************/
 
 /* TPA-relative classic base page (user DS base = TPA) */
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -25,14 +37,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -42,6 +59,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned long n)
@@ -60,11 +79,14 @@ putu (unsigned long n)
       buf[i++] = (char)('0' + (n % 10));
       n /= 10;
     }
+
   while (i > 0)
     {
       putch (buf[--i]);
     }
 }
+
+/*****************************************************************************/
 
 /* Exact byte length from record count + DOS-PLUS LRBC */
 static unsigned long
@@ -83,6 +105,8 @@ exact_size (unsigned long records, UBYTE lrbc)
   return (records - 1) * 128UL + (unsigned long)lrbc;
 }
 
+/*****************************************************************************/
+
 void
 _start (void)
 {
@@ -98,6 +122,7 @@ _start (void)
   if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
     {
       puts ("Usage: LRBC filename\r\n");
+
       bdos (0, 0);
     }
 
@@ -145,6 +170,7 @@ _start (void)
   if (fcb[9] != ' ')
     {
       putch ('.');
+
       for (i = 9; i <= 11 && fcb[i] != ' '; i++)
         {
           putch ((char)(fcb[i] & 0x7f));
@@ -171,3 +197,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

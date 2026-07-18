@@ -1,3 +1,5 @@
+/*****************************************************************************/
+
 /****
  *
  * This file forces internal CP/M names to diverge from those used
@@ -5,6 +7,8 @@
  * massaging the output of nm.
  *
  ****/
+
+/*****************************************************************************/
 
 #define abrt_err cpm_abrt_err
 #define alloc cpm_alloc
@@ -163,3 +167,5 @@
 #define user_ptr cpm_user_ptr
 #define warmboot cpm_warmboot
 #define warning cpm_warning
+
+/*****************************************************************************/

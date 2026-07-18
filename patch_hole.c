@@ -1,9 +1,13 @@
 /* patch_hole.c - punch sparse hole in a CP/M dirent map */
 
+/*****************************************************************************/
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+/*****************************************************************************/
 
 /*
  * Copy src into dst[width], uppercased
@@ -31,6 +35,8 @@ pad_field (char *dst, int width, const char *src, int srclen)
     }
 }
 
+/*****************************************************************************/
+
 int
 main (int argc, char **argv)
 {
@@ -52,6 +58,7 @@ main (int argc, char **argv)
   want = argv[2];
 
   dot = strchr (want, '.');
+
   if (dot)
     {
       pad_field (name, 8, want, (int)(dot - want));
@@ -64,6 +71,7 @@ main (int argc, char **argv)
     }
 
   f = fopen (path, "rb");
+
   if (!f)
     {
       perror (path);
@@ -80,6 +88,7 @@ main (int argc, char **argv)
     }
 
   sz = ftell (f);
+
   if (sz < 32)
     {
       fclose (f);
@@ -90,6 +99,7 @@ main (int argc, char **argv)
 
   rewind (f);
   data = malloc ((size_t)sz);
+
   if (!data || fread (data, 1, (size_t)sz, f) != (size_t)sz)
     {
       fprintf (stderr, "patch_hole: read failed\n");
@@ -152,6 +162,7 @@ main (int argc, char **argv)
     }
 
   f = fopen (path, "wb");
+
   if (!f)
     {
       perror (path);
@@ -174,3 +185,5 @@ main (int argc, char **argv)
 
   return 0;
 }
+
+/*****************************************************************************/

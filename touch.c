@@ -1,16 +1,26 @@
 /* touch.c: create empty file if missing */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -24,6 +34,8 @@ bdos (WORD func, LONG info)
                     : "memory", "cc");
   return ret;
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -49,6 +61,7 @@ _start (void)
 
   /* Already there? leave it */
   r = bdos (15, (LONG)(unsigned long)fcb);
+
   if (r <= 3)
     {
       bdos (16, (LONG)(unsigned long)fcb); /* close */
@@ -75,3 +88,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

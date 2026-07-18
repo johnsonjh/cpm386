@@ -1,3 +1,5 @@
+/*****************************************************************************/
+
 /*********************************************************
  *                                                       *
  *               CP/M-68K header file                    *
@@ -5,6 +7,8 @@
  *    Structure definitions for doing I/O in packets     *
  *                                                       *
  *********************************************************/
+
+/*****************************************************************************/
 
 /*
  * May use this information structure instead of disk parameter header and
@@ -25,6 +29,8 @@ struct dskinfo
 };
 #endif /* if 0 */
 
+/*****************************************************************************/
+
 struct iopb
 {
   UBYTE iofcn;       /* function number, see defines below    */
@@ -42,12 +48,16 @@ struct iopb
                      /* return parm for fcn 0, input for rest */
 };
 
+/*****************************************************************************/
+
 /*  Definitions for iofcn, the function number */
 #define sel_info 0 /* select and return info on device */
 #define read 1
 #define write 2
 #define flush 3
 #define status 4 /* not currently used */
+
+/*****************************************************************************/
 
 /* Definitions for devtype, the device type */
 #define console 0
@@ -56,3 +66,5 @@ struct iopb
 #define memory 3  /* gets TPA boundaries  */
 #define redir 4   /* read/write IOByte    */
 #define exc_vec 5 /* set exception vector */
+
+/*****************************************************************************/

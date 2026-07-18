@@ -1,6 +1,10 @@
+/*****************************************************************************/
+
 #ifdef RLI
 #include "diverge.h"
 #endif
+
+/*****************************************************************************/
 
 /****************************************************************
 *                                                               *
@@ -23,22 +27,32 @@
 *                                                               *
 ****************************************************************/
 
+/*****************************************************************************/
+
 #include "bdosinc.h"            /* Standard I/O declarations */
+
+/*****************************************************************************/
 
 #include "bdosdef.h"            /* Type and structure declarations for BDOS */
 
+/*****************************************************************************/
+
 #include "pktio.h"              /* Packet I/O definitions */
 
+/*****************************************************************************/
 
 /* declare external functions and variables */
 EXTERN UWORD    do_phio(void *); /* external physical disk I/O routine */
 EXTERN UWORD    error(WORD);     /* external error routine             */
+
+/*****************************************************************************/
 
 EXTERN UWORD    log_dsk;  /* logged-on disk vector */
 EXTERN UWORD    ro_dsk;   /* read-only disk vector */
 EXTERN UWORD    crit_dsk; /* critical disk vector  */
 UBYTE dchksum();
 
+/*****************************************************************************/
 
 /**********************
 * read/write routine  *
@@ -47,16 +61,15 @@ UBYTE dchksum();
 UWORD rdwrt(secnum, dma, parm)
 /* General disk sector read/write routine */
 /* It simply sets up a I/O packet and sends it to do_phio */
-
 LONG    secnum;                 /* logical sector number to read/write */
 UBYTE   *dma;                   /* dma address                          */
 REG WORD parm;                  /* 0 for read, write parm + 1 for write */
-
 {
     struct iopb rwpkt;
     BSETUP
 
     rwpkt.devnum = GBL.curdsk;          /* disk to read/write   */
+
     if (parm)
     {
         rwpkt.iofcn = (BYTE)write; /* if parm non-zero, we're doing a write */
@@ -69,6 +82,7 @@ REG WORD parm;                  /* 0 for read, write parm + 1 for write */
         rwpkt.iofcn = (BYTE)read;
         rwpkt.ioflags = (BYTE)0;
     }
+
     rwpkt.devadr = secnum;                      /* sector number        */
     rwpkt.xferadr = dma;                        /* dma address          */
 
@@ -77,18 +91,20 @@ REG WORD parm;                  /* 0 for read, write parm + 1 for write */
     rwpkt.xferlen = 1;
                                 */
     rwpkt.infop = GBL.dphp;                     /* pass ptr to dph      */
+
     while ( do_phio(&rwpkt) )
         if ( error( parm ? 1 : 0 ) ) break;
+
     return(0);
 }
 
+/*****************************************************************************/
 
 /***************************
 *  directory read routine  *
 ***************************/
 
 UWORD dir_rd(secnum)
-
 WORD secnum;
 {
     BSETUP
@@ -96,24 +112,27 @@ WORD secnum;
     return( rdwrt((LONG)secnum, GBL.dirbufp, 0) );
 }
 
+/*****************************************************************************/
 
 /****************************
 *  directory write routine  *
 ****************************/
 
 UWORD dir_wr(secnum)
-
 REG WORD secnum;
 {
     REG UWORD rtn;
     BSETUP
 
     rtn = rdwrt( (LONG)secnum, GBL.dirbufp, 2);
+
     if ( secnum < (GBL.parmp)->cks )
         *((GBL.dphp)->csv + secnum) = dchksum();
+
     return(rtn);
 }
 
+/*****************************************************************************/
 
 /*******************************
 *  directory checksum routine  *
@@ -133,23 +152,26 @@ UBYTE dchksum()
     p = (void *)GBL.dirbufp;            /* point to directory buffer */
     lsum = 0;
     i = SECLEN / (sizeof lsum);
+
     do
     {
         lsum += *p++;           /* add next 4 bytes of directory */
         i -= 1;
     } while (i);
+
     lsum += (lsum >> 16);
     lsum += (lsum >> 8);
+
     return( (UBYTE)(lsum & 0xff) );
 }
 
+/*****************************************************************************/
 
 /************************
 *  dirscan entry point  *
 ************************/
 
 UWORD dirscan(funcp, fcbp, parms)
-
 DIRSCAN_FN funcp; /* pointer to Boolean match/action function */
 UBYTE *fcbp;      /* pointer to FCB (often struct fcb *)      */
 REG UWORD parms;  /* parms is 16 bit set of bit parameters    */
@@ -163,7 +185,6 @@ REG UWORD parms;  /* parms is 16 bit set of bit parameters    */
 #define full     2
 #define initckv  4
 #define pasthw   8
-
 {
     REG UWORD   i;              /* loop counter         */
     REG struct dpb *dparmp;     /* pointer to disk parm block */
@@ -178,14 +199,17 @@ REG UWORD parms;  /* parms is 16 bit set of bit parameters    */
     rtn  = 255;                         /* assume it doesn't work */
 
     i = ( (parms & continue) ? GBL.srchpos + 1 : 0 );
+
     while ( (parms & pasthw) || (i <= ((GBL.dphp)->hiwater + 1)) )
     {                           /* main directory scanning loop         */
         if ( i > dparmp->drm ) break;
+
         if ( ! (i & 3) )
         {                       /* inside loop happens when we need to
                                    read another directory sector        */
 retry:      dirsec = i >> 2;
             dir_rd(dirsec);     /* read the directory sector    */
+
             if ( dirsec < (dparmp->cks) )  /* checksumming on this sector? */
             {
                 p = ((GBL.dphp)->csv) + dirsec;
@@ -195,6 +219,7 @@ retry:      dirsec = i >> 2;
                 {                       /* checksum error! */
                     (GBL.dphp)->hiwater = dparmp->drm;  /* reset hi water */
                     bitvec = 1 << (GBL.curdsk);
+
                     if (crit_dsk & bitvec)      /* if disk in critical mode */
                         ro_dsk |= bitvec;       /* then set it to r/o   */
                     else
@@ -208,6 +233,7 @@ retry:      dirsec = i >> 2;
         }
 
         GBL.srchpos = i;
+
         if ( (*funcp)(fcbp, (GBL.dirbufp) + (i&3), (WORD)i) )
                         /* call function with parms of (1) fcb ptr,
                            (2) pointer to directory entry, and
@@ -221,6 +247,7 @@ retry:      dirsec = i >> 2;
     return(rtn);
 }
 
+/*****************************************************************************/
 
 /****************************************
 *  Routines to manage allocation vector *
@@ -242,6 +269,7 @@ REG UWORD       bitnum;
         *((GBL.dphp)->alv + (bitnum>>3)) |= 0x80 >> (bitnum & 7);
 }
 
+/*****************************************************************************/
 
 clraloc(bitnum)
 /* Clear bit in allocation vector       */
@@ -253,6 +281,7 @@ REG UWORD       bitnum;
         *((GBL.dphp)->alv + (bitnum>>3)) &= ~(0x80 >> (bitnum & 7));
 }
 
+/*****************************************************************************/
 
 UWORD   chkaloc(i)
 /* Check bit i in allocation vector                     */
@@ -264,6 +293,7 @@ REG UWORD i;
     return( ~(*( (GBL.dphp)->alv + (i >> 3) )) & (0x80 >> (i&7)) );
 }
 
+/*****************************************************************************/
 
 UWORD   getaloc(leftblk)
 /* Get a free block in the file system and set the bit in allocation vector */
@@ -291,6 +321,7 @@ REG UWORD leftblk;
                 blk = leftblk;
                 break;
             }
+
         if (rtblk < diskmax)
             if (chkaloc(++rtblk))
             {
@@ -298,7 +329,12 @@ REG UWORD leftblk;
                 break;
             }
     }
+
     if (blk != (UWORD)~0) setaloc(blk);
+
     UNLOCK
+
     return(blk);
 }
+
+/*****************************************************************************/

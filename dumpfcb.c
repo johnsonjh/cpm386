@@ -1,5 +1,7 @@
 /* dumpfcb.c: pretty-print a File Control Block */
 
+/*****************************************************************************/
+
 /*
  * Usage:
  *   DUMPFCB              dump default FCB at base page 0x5C (as CCP set it)
@@ -7,18 +9,28 @@
  *   DUMPFCB -h           help
  */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -30,14 +42,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -48,6 +65,8 @@ puts (const char *s)
     }
 }
 
+/*****************************************************************************/
+
 static void
 puthex2 (unsigned v)
 {
@@ -56,6 +75,8 @@ puthex2 (unsigned v)
   putch (h[(v >> 4) & 0xF]);
   putch (h[v & 0xF]);
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned n)
@@ -66,6 +87,7 @@ putu (unsigned n)
   if (!n)
     {
       putch ('0');
+
       return;
     }
 
@@ -81,6 +103,8 @@ putu (unsigned n)
     }
 }
 
+/*****************************************************************************/
+
 static char
 toupper_ch (unsigned char c)
 {
@@ -92,6 +116,8 @@ toupper_ch (unsigned char c)
   return (char)c;
 }
 
+/*****************************************************************************/
+
 static void
 help (void)
 {
@@ -99,6 +125,8 @@ help (void)
   puts ("  no args   dump default FCB at TPA+0x5C\r\n");
   puts ("  filename  open file (FCB+32=0xFF for LRBC), dump FCB\r\n");
 }
+
+/*****************************************************************************/
 
 /*
  * full != 0: 36 bytes
@@ -339,6 +367,7 @@ dump_fcb (const UBYTE *f, const char *title, int full)
   for (i = 1; i <= 8; i++)
     {
       c = (unsigned char)(f[i] & 0x7f);
+
       if (c != ' ')
         {
           putch ((c >= 32 && c < 127) ? (char)c : '?');
@@ -352,6 +381,7 @@ dump_fcb (const UBYTE *f, const char *title, int full)
       for (i = 9; i <= 11; i++)
         {
           c = (unsigned char)(f[i] & 0x7f);
+
           if (c != ' ')
             {
               putch ((c >= 32 && c < 127) ? (char)c : '?');
@@ -361,6 +391,8 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
   puts ("\r\n");
 }
+
+/*****************************************************************************/
 
 static int
 parse_help (void)
@@ -397,6 +429,8 @@ parse_help (void)
 
   return 0;
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -445,5 +479,8 @@ _start (void)
   putu (r);
   puts (")\r\n");
   dump_fcb (fcb, "FCB after open (cur_rec may hold LRBC if was 0xFF)", 1);
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

@@ -1,16 +1,26 @@
 /* ver.c - print OS / BDOS version */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
+
+/*****************************************************************************/
 
 /* Matches bdosdef.h VERSION - CP/M-68K lineage, used here for CP/M-386! */
 #define VER_CPM386 0x2022
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -25,11 +35,15 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -39,6 +53,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 /* Decimal (original print_uint16 with bx=10); version nibbles are 0..15. */
 static void
@@ -58,11 +74,14 @@ putu (unsigned n)
       b[i++] = (char)('0' + n % 10);
       n /= 10;
     }
+
   while (i)
     {
       putch (b[--i]);
     }
 }
+
+/*****************************************************************************/
 
 /* Print BDOS version from low byte as major.minor (high/low nibble). */
 static void
@@ -74,6 +93,8 @@ print_bdos_ver (UWORD ver)
   putch ('.');
   putu ((unsigned)(lo & 0x0f));
 }
+
+/*****************************************************************************/
 
 /*
  * Original also calls BDOS 0xA3 for MPM/CDOS/DOS Plus OS product version.
@@ -92,6 +113,8 @@ print_os_product_ver (void)
   putu ((unsigned)(v & 0x0f));
   puts (", ");
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -148,9 +171,13 @@ _start (void)
       puts ("CP/M-86, ");
     }
 
+/*****************************************************************************/
+
   puts ("BDOS ");
   print_bdos_ver (ver);
   puts ("\r\n");
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

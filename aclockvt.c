@@ -1,23 +1,33 @@
 /* aclockvt.c - VT100 aclock for CP/M-386 */
 
+/*****************************************************************************/
+
 /*
  * Based on aclock-vt100.c
  * Copyright (c) 2002 Antoni Sawicki <tenox@tenox.tc>
  * Version 1.8 (knr-nofloat-vt100); Dublin, June 2002
  */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "aclock.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT     0x30
 #define BDOS_CONOUT  2
 #define BDOS_CONIN   1
 #define BDOS_CONST   11
 #define BDOS_GET_TOD 105
+
+/*****************************************************************************/
 
 struct cpm_datetime {
   UWORD days;
@@ -26,7 +36,11 @@ struct cpm_datetime {
   UBYTE sec;
 };
 
+/*****************************************************************************/
+
 void _start(void) __attribute__((section(".text._start")));
+
+/*****************************************************************************/
 
 static UWORD bdos(WORD func, LONG info)
 {
@@ -41,10 +55,14 @@ static UWORD bdos(WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void putch(char c)
 {
   bdos(BDOS_CONOUT, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void puts(const char *s)
 {
@@ -52,16 +70,22 @@ static void puts(const char *s)
     putch(*s++);
 }
 
+/*****************************************************************************/
+
 static int key_ready(void)
 {
   return bdos(BDOS_CONST, 0) != 0;
 }
+
+/*****************************************************************************/
 
 static void flush_key(void)
 {
   while (key_ready())
     (void)bdos(BDOS_CONIN, 0);
 }
+
+/*****************************************************************************/
 
 static int wait_next_second(UBYTE last_sec)
 {
@@ -79,10 +103,14 @@ static int wait_next_second(UBYTE last_sec)
   }
 }
 
+/*****************************************************************************/
+
 static void cls(void)
 {
   puts("\033[0;0H\033[J");
 }
+
+/*****************************************************************************/
 
 static void draw_point(int x, int y, char c)
 {
@@ -127,6 +155,8 @@ static void draw_point(int x, int y, char c)
   putch(c);
 }
 
+/*****************************************************************************/
+
 static void draw_text(int x, int y, const char *string)
 {
   puts("\033[");
@@ -169,6 +199,8 @@ static void draw_text(int x, int y, const char *string)
   puts(string);
 }
 
+/*****************************************************************************/
+
 static void draw_circle(void)
 {
   int n;
@@ -176,6 +208,8 @@ static void draw_circle(void)
   for (n = 0; n < 60; n++)
     draw_point(circle[n][0], circle[n][1], (char)circle[n][2]);
 }
+
+/*****************************************************************************/
 
 static void draw_hour(int n)
 {
@@ -185,6 +219,8 @@ static void draw_hour(int n)
     draw_point(hour[n][m][0], hour[n][m][1], 'h');
 }
 
+/*****************************************************************************/
+
 static void draw_minute(int n)
 {
   int m;
@@ -193,6 +229,8 @@ static void draw_minute(int n)
     draw_point(minute[n][m][0], minute[n][m][1], 'm');
 }
 
+/*****************************************************************************/
+
 static void draw_seconds(int n)
 {
   int m;
@@ -200,6 +238,8 @@ static void draw_seconds(int n)
   for (m = 0; m < 8; m++)
     draw_point(minute[n][m][0], minute[n][m][1], '.');
 }
+
+/*****************************************************************************/
 
 void _start(void)
 {
@@ -256,3 +296,5 @@ void _start(void)
 
   bdos(0, 0);
 }
+
+/*****************************************************************************/

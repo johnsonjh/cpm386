@@ -1,13 +1,19 @@
 /* ticks.c: BDOS 225 (GET_TICKS) and 226 (SLEEP_UNTIL) tests */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned long ULONG;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
 #define BDOS_GET_TICKS 225
 #define BDOS_SLEEP_UNTIL 226
+
+/*****************************************************************************/
 
 struct cpm_ticks
 {
@@ -16,7 +22,11 @@ struct cpm_ticks
   ULONG hz;
 };
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -31,11 +41,15 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -45,6 +59,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu32 (ULONG n)
@@ -70,6 +86,8 @@ putu32 (ULONG n)
     }
 }
 
+/*****************************************************************************/
+
 static void
 ticks_add32 (struct cpm_ticks *t, ULONG delta)
 {
@@ -82,6 +100,8 @@ ticks_add32 (struct cpm_ticks *t, ULONG delta)
 
   t->lo = nlo;
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -114,6 +134,7 @@ _start (void)
     ticks_add32 (&t, half);
     puts ("sleep ~0.5s ...\r\n");
     r = bdos (BDOS_SLEEP_UNTIL, (LONG)(unsigned long)&t);
+
     if (r == 0xFFFF)
       {
         puts ("SLEEP_UNTIL failed\r\n");
@@ -145,3 +166,5 @@ _start (void)
   puts ("\r\ndone\r\n");
   bdos (0, 0);
 }
+
+/*****************************************************************************/

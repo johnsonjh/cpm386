@@ -1,12 +1,20 @@
 /* illegal.c - violate ring-3 rules for testing */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -18,14 +26,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -35,6 +48,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -50,5 +65,8 @@ _start (void)
   /* Not reached if protection worked!! */
   puts ("ERROR: privileged IN did not fault - protection is broken!\r\n");
   (void)junk;
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

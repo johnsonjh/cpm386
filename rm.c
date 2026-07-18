@@ -1,5 +1,7 @@
 /* rm.c: delete files */
 
+/*****************************************************************************/
+
 /*
  * Usage: RM [-h] | [-a][-i][-f] filespec
  *
@@ -10,19 +12,29 @@
  * BDOS only (int 0x30).  Multi-extent names appear once (ex/s2 search = '?').
  */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 #define MAX_NAMES 64
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -37,11 +49,15 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -51,6 +67,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static int
 toupper_ch (int c)
@@ -62,6 +80,8 @@ toupper_ch (int c)
 
   return c;
 }
+
+/*****************************************************************************/
 
 static int
 getch_wait (void)
@@ -86,6 +106,8 @@ getch_wait (void)
   return c & 0xff;
 }
 
+/*****************************************************************************/
+
 static void
 help (void)
 {
@@ -94,6 +116,8 @@ help (void)
   puts ("  -i  confirm each file\r\n");
   puts ("  -f  force delete of R/O files\r\n");
 }
+
+/*****************************************************************************/
 
 /* Collect unique 11-char names (+ sys/ro flags) matching pattern */
 struct ent
@@ -104,8 +128,12 @@ struct ent
   UBYTE used;
 };
 
+/*****************************************************************************/
+
 static struct ent ents[MAX_NAMES];
 static int nents;
+
+/*****************************************************************************/
 
 static int
 name_eq (const struct ent *e, const UBYTE *de)
@@ -123,6 +151,8 @@ name_eq (const struct ent *e, const UBYTE *de)
   return 1;
 }
 
+/*****************************************************************************/
+
 static void
 add_ent (const UBYTE *de)
 {
@@ -138,6 +168,7 @@ add_ent (const UBYTE *de)
       if (ents[i].used && name_eq (&ents[i], de))
         {
           idx = i;
+
           break;
         }
     }
@@ -171,6 +202,8 @@ add_ent (const UBYTE *de)
       ents[idx].sys = 1;
     }
 }
+
+/*****************************************************************************/
 
 static void
 pattern_to_fcb (UBYTE *fcb, const char *pat)
@@ -276,6 +309,8 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
     }
 }
 
+/*****************************************************************************/
+
 static void
 print_name (const struct ent *e)
 {
@@ -295,6 +330,7 @@ print_name (const struct ent *e)
   if (e->name[8] != ' ' || e->name[9] != ' ' || e->name[10] != ' ')
     {
       putch ('.');
+
       for (i = 8; i < 11; i++)
         {
           if (e->name[i] == ' ')
@@ -310,6 +346,8 @@ print_name (const struct ent *e)
       puts ("?");
     }
 }
+
+/*****************************************************************************/
 
 static void
 fill_del_fcb (UBYTE *fcb, const struct ent *e)
@@ -327,6 +365,8 @@ fill_del_fcb (UBYTE *fcb, const struct ent *e)
     }
 }
 
+/*****************************************************************************/
+
 void
 _start (void)
 {
@@ -340,6 +380,7 @@ _start (void)
   int user;
 
   tlen = CMD_TAIL[0];
+
   if (tlen > 126)
     {
       tlen = 126;
@@ -353,6 +394,7 @@ _start (void)
   tail[tlen] = 0;
 
   i = 0;
+
   while (tail[i] == ' ' || tail[i] == '\t')
     {
       i++;
@@ -362,6 +404,7 @@ _start (void)
       if (tail[i] == '-' || tail[i] == '/')
         {
           i++;
+
           while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
             {
               char c = (char)toupper_ch ((unsigned char)tail[i++]);
@@ -415,6 +458,7 @@ _start (void)
         {
           help ();
           puts ("ERROR: No filespec\r\n");
+
           bdos (0, 0);
         }
 
@@ -557,3 +601,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

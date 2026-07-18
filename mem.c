@@ -1,14 +1,22 @@
 /* mem.c */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
 #define BDOS_TPA 63
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 /* Must match kernel set_tpa_struct layout */
 struct tpa_req
@@ -18,6 +26,8 @@ struct tpa_req
   unsigned long low; /* BYTE * in kernel */
   unsigned long high;
 };
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -29,14 +39,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -46,6 +61,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned long n)
@@ -64,11 +81,14 @@ putu (unsigned long n)
       b[i++] = (char)('0' + (n % 10));
       n /= 10;
     }
+
   while (i)
     {
       putch (b[--i]);
     }
 }
+
+/*****************************************************************************/
 
 static void
 puthex32 (unsigned long v)
@@ -77,11 +97,14 @@ puthex32 (unsigned long v)
   int i;
 
   puts ("0x");
+
   for (i = 7; i >= 0; i--)
     {
       putch (h[(v >> (i * 4)) & 0xF]);
     }
 }
+
+/*****************************************************************************/
 
 /* Print n bytes as KB (rounded down) with unit. */
 static void
@@ -90,6 +113,8 @@ put_kb (unsigned long bytes)
   putu (bytes / 1024UL);
   puts ("K");
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -106,6 +131,7 @@ _start (void)
 
   base = t.low;
   top = t.high;
+
   if (top < base)
     {
       top = base;
@@ -161,5 +187,8 @@ _start (void)
   puts (" (TPA minus base page)\r\n");
 
   puts ("\r\n");
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

@@ -1,18 +1,26 @@
 /* aclockdv.c - direct VGA aclock for CP/M-386 */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "aclock.h"
 #include "vgauser.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define BDOS_CONOUT 2
 #define BDOS_CONIN 1
 #define BDOS_CONST 11
 #define BDOS_GET_TOD 105
+
+/*****************************************************************************/
 
 struct cpm_datetime
 {
@@ -22,7 +30,11 @@ struct cpm_datetime
   UBYTE sec;
 };
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -34,14 +46,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (BDOS_CONOUT, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -52,11 +69,15 @@ puts (const char *s)
     }
 }
 
+/*****************************************************************************/
+
 static int
 key_ready (void)
 {
   return bdos (BDOS_CONST, 0) != 0;
 }
+
+/*****************************************************************************/
 
 static void
 flush_key (void)
@@ -66,6 +87,8 @@ flush_key (void)
       (void)bdos (BDOS_CONIN, 0);
     }
 }
+
+/*****************************************************************************/
 
 static int
 wait_next_second (UBYTE last_sec)
@@ -88,8 +111,12 @@ wait_next_second (UBYTE last_sec)
     }
 }
 
+/*****************************************************************************/
+
 static unsigned short g_sel;
 static unsigned g_cols = 80, g_rows = 25, g_cell = 2;
+
+/*****************************************************************************/
 
 static void
 vga_put (int x, int y, char ch, unsigned char attr)
@@ -117,6 +144,8 @@ vga_put (int x, int y, char ch, unsigned char attr)
                   (unsigned short)((unsigned char)ch | (attr << 8)));
 }
 
+/*****************************************************************************/
+
 static void
 cls_vga (void)
 {
@@ -133,11 +162,15 @@ cls_vga (void)
     }
 }
 
+/*****************************************************************************/
+
 static void
 draw_point (int x, int y, char c)
 {
   vga_put (x, y, c, 0x0F);
 }
+
+/*****************************************************************************/
 
 static void
 draw_text (int x, int y, const char *s)
@@ -150,6 +183,8 @@ draw_text (int x, int y, const char *s)
     }
 }
 
+/*****************************************************************************/
+
 static void
 draw_circle (void)
 {
@@ -160,6 +195,8 @@ draw_circle (void)
       draw_point (circle[n][0], circle[n][1], (char)circle[n][2]);
     }
 }
+
+/*****************************************************************************/
 
 static void
 draw_hour (int n)
@@ -172,6 +209,8 @@ draw_hour (int n)
     }
 }
 
+/*****************************************************************************/
+
 static void
 draw_minute (int n)
 {
@@ -183,6 +222,8 @@ draw_minute (int n)
     }
 }
 
+/*****************************************************************************/
+
 static void
 draw_seconds (int n)
 {
@@ -193,6 +234,8 @@ draw_seconds (int n)
       draw_point (minute[n][m][0], minute[n][m][1], '.');
     }
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -212,6 +255,7 @@ _start (void)
     }
 
   g_sel = vi.sel;
+
   if (vi.cols)
     {
       g_cols = vi.cols;
@@ -281,5 +325,8 @@ _start (void)
     }
 
   puts ("\r\n");
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

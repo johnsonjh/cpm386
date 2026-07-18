@@ -1,13 +1,19 @@
 /* call cpm_bringup() after low-level load, before using BDOS/CCP or disk. */
 
+/*****************************************************************************/
+
 /*
  * Contains init_ramdisk, dph0/dpb0/xlt/csv/alv setup, bdosinit() + bdos(14,0).
  * Used by both cpm386_init() and test_bdos main!
  */
 
+/*****************************************************************************/
+
 #include "bdosinc.h"
 #include "biosdef.h"
 #include "cpm_bringup.h" /* brings the dpb/dph structs and externs */
+
+/*****************************************************************************/
 
 /*
  * RAM disk image: MUST live after kernel .data/.bss (see linker.ld .ramdisk).
@@ -22,11 +28,17 @@ asm (" .section .ramdisk, \"aw\", @progbits\n"
      " .incbin \"ramdisk.bin\"\n"
      " .previous\n");
 
+/*****************************************************************************/
+
 extern unsigned char ramdisk[RAMDISK_SIZE]; /* provided by incbin asm above */
+
+/*****************************************************************************/
 
 static UBYTE xlt[26];
 static UBYTE dirbuf[128];
 static UBYTE csv[64];
+
+/*****************************************************************************/
 
 /*
  * Word-mode alloc (dsm>255) to match cpmtools 4mb-hd directory maps.
@@ -34,6 +46,8 @@ static UBYTE csv[64];
  */
 
 static UBYTE alv[256];
+
+/*****************************************************************************/
 
 /*
  * dpb0: match cpmtools "4mb-hd" (2k blocks, word block numbers, 256 dirents).
@@ -50,6 +64,8 @@ struct dpb dpb0 = {
   0         /* trk_off                                        */
 };
 
+/*****************************************************************************/
+
 struct dph dph0 =
 {
   xlt,      /* UBYTE* xlt          */
@@ -58,6 +74,8 @@ struct dph dph0 =
   &dpb0,    /* dpbp                */
   csv, alv
 };
+
+/*****************************************************************************/
 
 void
 cpm_bringup (void)
@@ -70,3 +88,5 @@ cpm_bringup (void)
   extern UWORD bdos (WORD func, LONG info);
   bdos (14, 0);
 }
+
+/*****************************************************************************/

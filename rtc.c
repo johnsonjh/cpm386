@@ -1,19 +1,29 @@
 /* rtc.c: CMOS RTC */
 
+/*****************************************************************************/
+
 /*
  * Ring-0 only: programs use BDOS 104 (set) / 105 (get) via int 0x30.
  */
 
+/*****************************************************************************/
+
 #include "rtc.h"
+
+/*****************************************************************************/
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
+
+/*****************************************************************************/
 
 static inline void
 outb (uint16_t port, uint8_t val)
 {
   __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
 }
+
+/*****************************************************************************/
 
 static inline uint8_t
 inb (uint16_t port)
@@ -24,9 +34,13 @@ inb (uint16_t port)
   return r;
 }
 
+/*****************************************************************************/
+
 /* CMOS index/data ports; NMI stays enabled (bit7 clear on index). */
 #define CMOS_ADDR 0x70
 #define CMOS_DATA 0x71
+
+/*****************************************************************************/
 
 static uint8_t
 cmos_read (uint8_t reg)
@@ -35,6 +49,8 @@ cmos_read (uint8_t reg)
   return inb (CMOS_DATA);
 }
 
+/*****************************************************************************/
+
 static void
 cmos_write (uint8_t reg, uint8_t val)
 {
@@ -42,11 +58,15 @@ cmos_write (uint8_t reg, uint8_t val)
   outb (CMOS_DATA, val);
 }
 
+/*****************************************************************************/
+
 static int
 cmos_update_in_progress (void)
 {
   return (cmos_read (0x0a) & 0x80) != 0;
 }
+
+/*****************************************************************************/
 
 static uint8_t
 bcd_to_bin (uint8_t v)
@@ -54,11 +74,15 @@ bcd_to_bin (uint8_t v)
   return (uint8_t)((v & 0x0f) + ((v >> 4) * 10));
 }
 
+/*****************************************************************************/
+
 static uint8_t
 bin_to_bcd (uint8_t v)
 {
   return (uint8_t)(((v / 10) << 4) | (v % 10));
 }
+
+/*****************************************************************************/
 
 static int
 is_leap (unsigned y)
@@ -66,8 +90,12 @@ is_leap (unsigned y)
   return y % 4 == 0 && (y % 100 != 0 || y % 400 == 0);
 }
 
+/*****************************************************************************/
+
 static const unsigned char mdays_n[]
     = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+/*****************************************************************************/
 
 unsigned short
 rtc_ymd_to_days (unsigned y, unsigned m, unsigned d)
@@ -96,6 +124,8 @@ rtc_ymd_to_days (unsigned y, unsigned m, unsigned d)
   return (unsigned short)day;
 }
 
+/*****************************************************************************/
+
 void
 rtc_days_to_ymd (unsigned short days, unsigned *y, unsigned *m, unsigned *d)
 {
@@ -106,6 +136,7 @@ rtc_days_to_ymd (unsigned short days, unsigned *y, unsigned *m, unsigned *d)
   for (;;)
     {
       unsigned ylen = is_leap (yy) ? 366u : 365u;
+
       if (rem < ylen)
         {
           break;
@@ -117,9 +148,11 @@ rtc_days_to_ymd (unsigned short days, unsigned *y, unsigned *m, unsigned *d)
 
   *y = yy;
   *m = 1;
+
   for (;;)
     {
       dim = mdays_n[*m - 1];
+
       if (*m == 2 && is_leap (yy))
         {
           dim = 29;
@@ -136,6 +169,8 @@ rtc_days_to_ymd (unsigned short days, unsigned *y, unsigned *m, unsigned *d)
 
   *d = rem + 1;
 }
+
+/*****************************************************************************/
 
 int
 rtc_get (struct cpm_datetime *dt)
@@ -188,6 +223,7 @@ rtc_get (struct cpm_datetime *dt)
     {
       uint8_t pm = h & 0x80;
       h &= 0x7f;
+
       if (pm && h < 12)
         {
           h = (uint8_t)(h + 12);
@@ -225,8 +261,11 @@ rtc_get (struct cpm_datetime *dt)
   dt->hour = h;
   dt->min = m;
   dt->sec = s;
+
   return 0;
 }
+
+/*****************************************************************************/
 
 /*
  * MP/M BDOS 155 (T_SECONDS): fill stamp with BCD h/m/s (and seconds).
@@ -246,8 +285,11 @@ rtc_get_bcd (struct cpm_datetime *dt)
   dt->hour = bin_to_bcd (dt->hour);
   dt->min = bin_to_bcd (dt->min);
   dt->sec = bin_to_bcd (dt->sec);
+
   return 0;
 }
+
+/*****************************************************************************/
 
 int
 rtc_set (const struct cpm_datetime *dt)
@@ -302,3 +344,5 @@ rtc_set (const struct cpm_datetime *dt)
 
   return 0;
 }
+
+/*****************************************************************************/

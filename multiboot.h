@@ -1,7 +1,11 @@
 /* multiboot.h - minimal multiboot definitions for CP/M-386 */
 
+/*****************************************************************************/
+
 #ifndef MULTIBOOT_H
 # define MULTIBOOT_H
+
+/*****************************************************************************/
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -9,13 +13,19 @@ typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 typedef unsigned long uintptr_t;
 
+/*****************************************************************************/
+
 # define MULTIBOOT_HEADER_MAGIC 0x1BADB002U
 # define MULTIBOOT_BOOTLOADER_MAGIC 0x2BADB002U
+
+/*****************************************************************************/
 
 /* flags in multiboot header */
 # define MULTIBOOT_HEADER_FLAG_ALIGN (1U << 0)
 # define MULTIBOOT_HEADER_FLAG_MEMINFO (1U << 1)
 /* 0x00000003 = align + meminfo */
+
+/*****************************************************************************/
 
 struct multiboot_header
 {
@@ -32,6 +42,8 @@ struct multiboot_header
   uint32_t height;
   uint32_t depth;
 } __attribute__ ((packed));
+
+/*****************************************************************************/
 
 /* Multiboot information structure passed in EBX, magic in EAX */
 struct multiboot_info
@@ -59,6 +71,8 @@ struct multiboot_info
   uint16_t vbe_interface_len;
 } __attribute__ ((packed));
 
+/*****************************************************************************/
+
 /* memory map entry (when flags & (1<<6)) */
 struct multiboot_mmap_entry
 {
@@ -68,7 +82,13 @@ struct multiboot_mmap_entry
   uint32_t type; /* 1 = available, 2 = reserved, etc. */
 } __attribute__ ((packed));
 
+/*****************************************************************************/
+
 /* init function */
 void mb_init_from_multiboot (void *mbi_ptr);
 
+/*****************************************************************************/
+
 #endif
+
+/*****************************************************************************/

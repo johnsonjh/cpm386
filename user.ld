@@ -1,4 +1,5 @@
-/* user.ld - link transient programs at classic CP/M load address 0x100
+/*
+ * user.ld - link transient programs at classic CP/M load address 0x100
  * (TPA-relative). Base page 0x00-0xFF is reserved for FCBs / command tail.
  * ENTRY(_start) must be the first byte of the image (load_off == entry_off).
  *
@@ -6,13 +7,19 @@
  * After objcopy -O binary the image is still a flat blob for the loader.
  */
 
+/*****************************************************************************/
+
 ENTRY(_start)
+
+/*****************************************************************************/
 
 PHDRS
 {
     text PT_LOAD FLAGS(5); /* PF_R | PF_X */
     data PT_LOAD FLAGS(6); /* PF_R | PF_W */
 }
+
+/*****************************************************************************/
 
 SECTIONS
 {
@@ -41,3 +48,5 @@ SECTIONS
         *(.eh_frame)
     }
 }
+
+/*****************************************************************************/

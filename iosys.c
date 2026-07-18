@@ -2,6 +2,8 @@
 #include "diverge.h"
 #endif
 
+/*****************************************************************************/
+
 /****************************************************************
 *                                                               *
 *               CP/M-68K BDOS Disk I/O System Module            *
@@ -17,17 +19,29 @@
 *                                                               *
 ****************************************************************/
 
+/*****************************************************************************/
+
 #include "bdosinc.h"            /* Standard I/O declarations */
+
+/*****************************************************************************/
 
 #include "bdosdef.h"            /* Type and structure declarations for BDOS */
 
+/*****************************************************************************/
+
 #include "pktio.h"              /* Packet I/O definitions */
 
+/*****************************************************************************/
+
 #include "biosdef.h"            /* Declarations for BIOS entry points */
+
+/*****************************************************************************/
 
 EXTERN  UWORD udiv(LONG, UWORD, UWORD *); /* Assembly language unsigned divide routine */
                                 /* in bdosif.s.  It's used because Alcyon C  */
                                 /* can't do / or % without an external */
+
+/*****************************************************************************/
 
 /************************
 *  do_phio entry point  *
@@ -35,8 +49,9 @@ EXTERN  UWORD udiv(LONG, UWORD, UWORD *); /* Assembly language unsigned divide r
 
 UWORD do_phio(iop)
 
-REG struct iopb *iop;           /* iop is a pointer to a i/o parameter block */
+/*****************************************************************************/
 
+REG struct iopb *iop;           /* iop is a pointer to a i/o parameter block */
 {
     MLOCAL UBYTE last_dsk;      /* static variable to tell which disk
                                      was last used, to avoid disk selects */
@@ -48,14 +63,17 @@ REG struct iopb *iop;           /* iop is a pointer to a i/o parameter block */
     LOCK                /* lock the disk system while doing physical i/o */
 
     rtn = 0;
+
     switch (iop->iofcn)
     {
         case sel_info:
                 last_dsk = iop->devnum;
                 iop->infop = (void *)bseldsk(last_dsk, iop->ioflags);
+
                 break;
 
         case read:
+
         case write:
                 if (last_dsk != iop->devnum)
                     bseldsk((last_dsk = iop->devnum), 0);
@@ -68,8 +86,10 @@ REG struct iopb *iop;           /* iop is a pointer to a i/o parameter block */
                          + dparmp->trk_off );
                 bsetsec( bsectrn( iosect, hdrp->xlt ) );
                 bsetdma(iop->xferadr);
+
                 if ((iop->iofcn) == read) rtn = bread();
                 else rtn = bwrite(iop->ioflags);
+
                 break;
 
         case flush:
@@ -77,5 +97,8 @@ REG struct iopb *iop;           /* iop is a pointer to a i/o parameter block */
     }
 
     UNLOCK
+
     return(rtn);
 }
+
+/*****************************************************************************/

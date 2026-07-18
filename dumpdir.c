@@ -1,5 +1,7 @@
 /* dumpdir.c - pretty-print CP/M directory entry */
 
+/*****************************************************************************/
+
 /*
  * Usage:
  *   DUMPDIR              list all non-empty dirents (user 0..15)
@@ -8,18 +10,28 @@
  *   DUMPDIR -h           help
  */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -31,14 +43,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -49,6 +66,8 @@ puts (const char *s)
     }
 }
 
+/*****************************************************************************/
+
 static void
 puthex2 (unsigned v)
 {
@@ -57,6 +76,8 @@ puthex2 (unsigned v)
   putch (h[(v >> 4) & 0xF]);
   putch (h[v & 0xF]);
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned n)
@@ -82,6 +103,8 @@ putu (unsigned n)
     }
 }
 
+/*****************************************************************************/
+
 static char
 toupper_ch (unsigned char c)
 {
@@ -93,6 +116,8 @@ toupper_ch (unsigned char c)
   return (char)c;
 }
 
+/*****************************************************************************/
+
 static void
 help (void)
 {
@@ -101,6 +126,8 @@ help (void)
   puts ("  filespec   name pattern (* and ? wildcards)\r\n");
   puts ("  -a         show all users 0..15 (not only current)\r\n");
 }
+
+/*****************************************************************************/
 
 /* Build FCB name/type from pattern string; * -> ? */
 static void
@@ -196,6 +223,8 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
     }
 }
 
+/*****************************************************************************/
+
 static void
 put_name11 (const UBYTE *p)
 {
@@ -216,6 +245,8 @@ put_name11 (const UBYTE *p)
       putch ((c >= 32 && c < 127) ? (char)c : '.');
     }
 }
+
+/*****************************************************************************/
 
 static void
 dump_dirent (const UBYTE *de, unsigned dir_index)
@@ -313,6 +344,7 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
   puts ("\r\n");
 
   puts ("map words");
+
   for (i = 0; i < 8; i++)
     {
       w = (UWORD)de[16 + i * 2] | ((UWORD)de[17 + i * 2] << 8);
@@ -323,6 +355,8 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
 
   puts (" (LE)\r\n\r\n");
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -442,6 +476,7 @@ _start (void)
   while (r != 255)
     {
       UBYTE *de = dma + (r * 32);
+
       if (de[0] != 0xE5 && (flag_all || de[0] == (UBYTE)user))
         {
           dump_dirent (de, (unsigned)r);
@@ -454,5 +489,8 @@ _start (void)
   puts ("Total entries shown: ");
   putu ((unsigned)count);
   puts ("\r\n");
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

@@ -1,13 +1,21 @@
 /* pit.c: 8253/8254 (ring 0) */
 
+/*****************************************************************************/
+
 /* User programs use BDOS 225 (get) / 226 (sleep-until), not these helpers! */
 
+/*****************************************************************************/
+
 #include "pit.h"
+
+/*****************************************************************************/
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned long uint32_t;
 typedef unsigned long long uint64_t;
+
+/*****************************************************************************/
 
 static inline void
 outb (uint16_t port, uint8_t val)
@@ -15,24 +23,35 @@ outb (uint16_t port, uint8_t val)
   __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
 }
 
+/*****************************************************************************/
+
 static inline uint8_t
 inb (uint16_t port)
 {
   uint8_t r;
 
   __asm__ volatile ("inb %1, %0" : "=a"(r) : "Nd"(port));
+
   return r;
 }
+
+/*****************************************************************************/
 
 #define PIT_CH0 0x40
 #define PIT_CMD 0x43
 
+/*****************************************************************************/
+
 #define PIT_CMD_CH0_MODE2 0x34
 #define PIT_CMD_LATCH0 0x00
+
+/*****************************************************************************/
 
 static uint32_t pit_wraps;
 static uint16_t pit_last;
 static int pit_ready;
+
+/*****************************************************************************/
 
 static uint16_t
 pit_raw (void)
@@ -46,6 +65,8 @@ pit_raw (void)
   return (uint16_t)(lo | ((uint16_t)hi << 8));
 }
 
+/*****************************************************************************/
+
 void
 pit_init (void)
 {
@@ -57,6 +78,8 @@ pit_init (void)
   pit_last = pit_raw ();
   pit_ready = 1;
 }
+
+/*****************************************************************************/
 
 void
 pit_poll (void)
@@ -77,6 +100,8 @@ pit_poll (void)
 
   pit_last = now;
 }
+
+/*****************************************************************************/
 
 static uint64_t
 pit_now64 (void)
@@ -100,6 +125,8 @@ pit_now64 (void)
   return ((uint64_t)pit_wraps << 16) + (uint16_t)(0u - now);
 }
 
+/*****************************************************************************/
+
 void
 pit_read (unsigned long *lo, unsigned long *hi)
 {
@@ -116,6 +143,8 @@ pit_read (unsigned long *lo, unsigned long *hi)
     }
 }
 
+/*****************************************************************************/
+
 void
 pit_sleep_until (unsigned long lo, unsigned long hi)
 {
@@ -127,3 +156,5 @@ pit_sleep_until (unsigned long lo, unsigned long hi)
       ;
     }
 }
+
+/*****************************************************************************/

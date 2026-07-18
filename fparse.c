@@ -1,18 +1,31 @@
 /* fparse.c - exercise BDOS 152 F_PARSE and 163 S_OSVER */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define BDOS_FPARSE 152
 #define BDOS_OSVER 163
+
+/*****************************************************************************/
+
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -24,14 +37,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -42,6 +60,8 @@ puts (const char *s)
     }
 }
 
+/*****************************************************************************/
+
 static void
 puthex2 (unsigned v)
 {
@@ -51,12 +71,16 @@ puthex2 (unsigned v)
   putch (h[v & 0xf]);
 }
 
+/*****************************************************************************/
+
 static void
 puthex4 (UWORD v)
 {
   puthex2 (v >> 8);
   puthex2 (v & 0xff);
 }
+
+/*****************************************************************************/
 
 static void
 store_le32 (UBYTE *p, unsigned long v)
@@ -66,6 +90,8 @@ store_le32 (UBYTE *p, unsigned long v)
   p[2] = (UBYTE)((v >> 16) & 0xff);
   p[3] = (UBYTE)((v >> 24) & 0xff);
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -79,6 +105,7 @@ _start (void)
   char *src;
 
   tlen = CMD_TAIL[0];
+
   if (tlen > 80)
     {
       tlen = 80;
@@ -93,6 +120,7 @@ _start (void)
 
       line[tlen] = 0;
       j = 0;
+
       while (line[j] == ' ' || line[j] == '\t')
         {
           j++;
@@ -102,6 +130,7 @@ _start (void)
   else
     {
       const char *d = "B:HELLO.386;SECRET  rest";
+
       for (i = 0; d[i]; i++)
         {
           line[i] = d[i];
@@ -137,12 +166,14 @@ _start (void)
   puts ("drive=");
   puthex2 (fcb[0]);
   puts (" name=");
+
   for (i = 1; i <= 8; i++)
     {
       putch (fcb[i] ? (char)fcb[i] : ' ');
     }
 
   puts (" typ=");
+
   for (i = 9; i <= 11; i++)
     {
       putch (fcb[i] ? (char)fcb[i] : ' ');
@@ -151,6 +182,7 @@ _start (void)
   if (fcb[0x1A])
     {
       puts (" pw=");
+
       for (i = 0; i < fcb[0x1A] && i < 8; i++)
         {
           putch ((char)fcb[0x10 + i]);
@@ -179,3 +211,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

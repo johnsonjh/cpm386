@@ -1,15 +1,23 @@
 /* tod.c - Time Of Day */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define BDOS_GET_TOD 105
 #define BDOS_SET_TOD 104
+
+/*****************************************************************************/
 
 /* Must match rtc.h / kernel */
 struct cpm_datetime
@@ -20,9 +28,15 @@ struct cpm_datetime
   UBYTE sec;
 };
 
+/*****************************************************************************/
+
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -37,11 +51,16 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
+
 static void
 puts (const char *s)
 {
@@ -51,17 +70,23 @@ puts (const char *s)
     }
 }
 
+/*****************************************************************************/
+
 static int
 isdigit (char c)
 {
   return c >= '0' && c <= '9';
 }
 
+/*****************************************************************************/
+
 static unsigned
 u2 (const char *p)
 {
   return (unsigned)(p[0] - '0') * 10u + (unsigned)(p[1] - '0');
 }
+
+/*****************************************************************************/
 
 /* days since 1978-01-01 (must match kernel rtc_ymd_to_days) */
 static int
@@ -70,8 +95,12 @@ is_leap (unsigned y)
   return y % 4 == 0 && (y % 100 != 0 || y % 400 == 0);
 }
 
+/*****************************************************************************/
+
 static const UBYTE mdays[]
     = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+/*****************************************************************************/
 
 static UWORD
 ymd_to_days (unsigned y, unsigned m, unsigned d)
@@ -86,6 +115,7 @@ ymd_to_days (unsigned y, unsigned m, unsigned d)
   for (mm = 1; mm < m; mm++)
     {
       day += mdays[mm - 1];
+
       if (mm == 2 && is_leap (y))
         {
           day++;
@@ -93,8 +123,11 @@ ymd_to_days (unsigned y, unsigned m, unsigned d)
     }
 
   day += (d - 1);
+
   return (UWORD)day;
 }
+
+/*****************************************************************************/
 
 static void
 days_to_ymd (UWORD days, unsigned *y, unsigned *m, unsigned *d)
@@ -104,6 +137,7 @@ days_to_ymd (UWORD days, unsigned *y, unsigned *m, unsigned *d)
   for (;;)
     {
       unsigned ylen = is_leap (yy) ? 366u : 365u;
+
       if (rem < ylen)
         {
           break;
@@ -115,9 +149,11 @@ days_to_ymd (UWORD days, unsigned *y, unsigned *m, unsigned *d)
 
   *y = yy;
   *m = 1;
+
   for (;;)
     {
       dim = mdays[*m - 1];
+
       if (*m == 2 && is_leap (yy))
         {
           dim = 29;
@@ -135,12 +171,16 @@ days_to_ymd (UWORD days, unsigned *y, unsigned *m, unsigned *d)
   *d = rem + 1;
 }
 
+/*****************************************************************************/
+
 static void
 put2 (unsigned v)
 {
   putch ((char)('0' + (v / 10) % 10));
   putch ((char)('0' + v % 10));
 }
+
+/*****************************************************************************/
 
 static void
 show_tod (const struct cpm_datetime *dt)
@@ -161,6 +201,8 @@ show_tod (const struct cpm_datetime *dt)
   put2 (dt->sec);
 }
 
+/*****************************************************************************/
+
 /* Parse "MM/DD/YY HH:MM:SS" from command tail; return 0 ok */
 static int
 parse_set (const char *p, struct cpm_datetime *dt)
@@ -180,6 +222,7 @@ parse_set (const char *p, struct cpm_datetime *dt)
 
   buf[i] = 0;
   n = i;
+
   /* MM/DD/YY HH:MM:SS = 17 chars */
   if (n < 17)
     {
@@ -222,6 +265,7 @@ parse_set (const char *p, struct cpm_datetime *dt)
 
   {
     unsigned dim = mdays[mo - 1];
+
     if (mo == 2 && is_leap (y))
       {
         dim = 29;
@@ -232,26 +276,34 @@ parse_set (const char *p, struct cpm_datetime *dt)
         return 1;
       }
   }
+
   dt->days = ymd_to_days (y, mo, da);
   dt->hour = (UBYTE)hh;
   dt->min = (UBYTE)mi;
   dt->sec = (UBYTE)ss;
+
   return 0;
 }
+
+/*****************************************************************************/
 
 static void
 usage (void)
 {
-  char m1[] = "Invalid Date & Time Format\r\n";
-  char m2[] = "Please retry using:\r\n";
-  char m3[] = "TOD MM/DD/YY HH:MM:SS\r\n";
-  char m4[] = "where YY is 00-99 for 2000-2099\r\n";
+  const char m1[] = "Invalid Date & Time Format\r\n";
+  const char m2[] = "Please retry using:\r\n";
+  const char m3[] = "\"TOD MM/DD/YY HH:MM:SS\"\r\n";
+  const char m4[] = "where YY is 00-99 for 2000-2099, or:\r\n";
+  const char m5[] = "\"TOD P\" for continuous display.";
 
   puts (m1);
   puts (m2);
   puts (m3);
   puts (m4);
+  puts (m5);
 }
+
+/*****************************************************************************/
 
 /*
  * After continuous mode stops on a key, eat that key and at most a
@@ -267,6 +319,7 @@ eat_stop_key (void)
   while (bdos (11, 0) != 0 && n++ < 3)
     {
       c = (int)bdos (6, 0xFF) & 0xff;
+
       if (c != '\r' && c != '\n' && c != 0)
         {
           break;
@@ -274,11 +327,15 @@ eat_stop_key (void)
     }
 }
 
+/*****************************************************************************/
+
 static void
 exit_ccp (void)
 {
   bdos (0, 0);
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -294,6 +351,7 @@ _start (void)
 
   /* Copy command tail (length at 0x80) */
   tlen = tail[0];
+
   if (tlen > 126)
     {
       tlen = 126;
@@ -308,14 +366,17 @@ _start (void)
 
   /* Skip leading spaces; check for P or date */
   i = 0;
+
   while (arg[i] == ' ' || arg[i] == '\t')
     {
       i++;
     }
+
   if (arg[i] == 'P' || arg[i] == 'p')
     {
       continuous = 1;
       i++;
+
       while (arg[i] == ' ' || arg[i] == '\t')
         {
           i++;
@@ -327,12 +388,14 @@ _start (void)
       if (parse_set (&arg[i], &dt) != 0)
         {
           usage ();
+
           exit_ccp ();
         }
 
       if (bdos (BDOS_SET_TOD, (LONG)(unsigned long)&dt) != 0)
         {
           usage ();
+
           exit_ccp ();
         }
 
@@ -346,25 +409,30 @@ _start (void)
         {
           char e[] = "RTC read failed\r\n";
           puts (e);
+
           exit_ccp ();
         }
 
       show_tod (&dt);
+
       if (!continuous)
         {
           puts (nl);
+
           exit_ccp ();
         }
 
       /* Continuous (P): poll for key, else refresh on same line */
       {
         int spins;
+
         for (spins = 0; spins < 200000; spins++)
           {
             if (bdos (11, 0) != 0)
               {
                 puts (nl);
                 eat_stop_key ();
+
                 exit_ccp ();
               }
           }
@@ -373,3 +441,5 @@ _start (void)
       }
     }
 }
+
+/*****************************************************************************/

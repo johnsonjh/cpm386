@@ -1,5 +1,7 @@
 /* rc.c - set / show CP/M program return code (BDOS 108 P_CODe) */
 
+/*****************************************************************************/
+
 /*
  * Usage:
  *   RC nnn     set return code to nnn (decimal) and exit
@@ -7,24 +9,36 @@
  *   RC -h      help
  */
 
+/*****************************************************************************/
+
 /*
  * After "RC 42", CCP prints "Return code 42" (nonzero only).
  * Codes 0xFF00-0xFF7F are "fatal" per CP/M 3; 0xFFFE = ^C terminate.
  */
+
+/*****************************************************************************/
 
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define BDOS_PCODE 108
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -39,11 +53,15 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -53,6 +71,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned long n)
@@ -78,6 +98,8 @@ putu (unsigned long n)
     }
 }
 
+/*****************************************************************************/
+
 static void
 help (void)
 {
@@ -85,6 +107,8 @@ help (void)
   puts ("  RC nnn  set BDOS 108 return code and exit\r\n");
   puts ("  RC      show current return code\r\n");
 }
+
+/*****************************************************************************/
 
 /* Parse unsigned decimal from default FCB name (first token) or tail. */
 static int
@@ -97,6 +121,7 @@ parse_u (unsigned *out)
 
   /* Prefer command tail (allows multi-digit without FCB 8-char limit) */
   tlen = CMD_TAIL[0];
+
   if (tlen > 126)
     {
       tlen = 126;
@@ -158,6 +183,8 @@ parse_u (unsigned *out)
   return 0; /* no number */
 }
 
+/*****************************************************************************/
+
 void
 _start (void)
 {
@@ -186,3 +213,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

@@ -1,17 +1,27 @@
 /* od.c - octal dump for CP/M-386 */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define BYTES_PER_LINE 16
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -23,14 +33,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -40,6 +55,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 octaldump (const UBYTE *buf, unsigned size)
@@ -80,6 +97,7 @@ octaldump (const UBYTE *buf, unsigned size)
         }
 
       num++;
+
       if (num == BYTES_PER_LINE)
         {
           puts ((const char *)line);
@@ -97,6 +115,8 @@ octaldump (const UBYTE *buf, unsigned size)
     }
 }
 
+/*****************************************************************************/
+
 static void
 fill_from_def_fcb (UBYTE *fcb)
 {
@@ -107,6 +127,8 @@ fill_from_def_fcb (UBYTE *fcb)
       fcb[i] = DEF_FCB[i];
     }
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -132,6 +154,7 @@ _start (void)
   fcb[14] = 0;
   fcb[32] = 0xFF;
   r = bdos (15, (LONG)(unsigned long)fcb);
+
   if (r > 3)
     {
       puts (nofile);
@@ -142,9 +165,11 @@ _start (void)
   fcb[32] = 0;
 
   bdos (26, (LONG)(unsigned long)dma);
+
   for (;;)
     {
       r = bdos (20, (LONG)(unsigned long)fcb);
+
       if (r != 0)
         {
           break;
@@ -166,6 +191,7 @@ _start (void)
   if (have)
     {
       unsigned n = 128;
+
       if (lrbc != 0)
         {
           n = lrbc;
@@ -175,5 +201,8 @@ _start (void)
     }
 
   bdos (16, (LONG)(unsigned long)fcb);
+
   bdos (0, 0);
 }
+
+/*****************************************************************************/

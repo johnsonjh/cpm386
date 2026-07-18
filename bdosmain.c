@@ -1,6 +1,10 @@
+/*****************************************************************************/
+
 #ifdef RLI
 # include "diverge.h"
 #endif /* ifdef RLI */
+
+/*****************************************************************************/
 
 /*****************************************************************
  *                                                               *
@@ -19,12 +23,23 @@
  *                                                               *
  *****************************************************************/
 
+/*****************************************************************************/
+
 #include "bdosinc.h" /* Standard I/O declarations */
+
+/*****************************************************************************/
 
 #include "bdosdef.h" /* Type and structure declarations for BDOS */
 
+/*****************************************************************************/
+
 #include "biosdef.h" /* Declarations of BIOS functions */
+
+/*****************************************************************************/
+
 #include "platform.h" /* VGA text geometry for BDOS 224 */
+
+/*****************************************************************************/
 
 struct tempstr
 {
@@ -32,6 +47,8 @@ struct tempstr
   BOOLEAN reselect;
   struct fcb *fptr;
 };
+
+/*****************************************************************************/
 
 /* Declare EXTERN functions (adapted for modern gcc) */
 
@@ -63,7 +80,11 @@ EXTERN UWORD setexc (UBYTE *);
 EXTERN void set_tpa (UBYTE *);
 EXTERN void move (UBYTE *, UBYTE *, WORD);
 
+/*****************************************************************************/
+
 void tmp_sel (struct tempstr *temptr); /* local helper, defined below */
+
+/*****************************************************************************/
 
 /* Declare "true" global variables; i.e., those which will pertain to the
  * entire file system and thus will remain global even when this becomes
@@ -79,6 +100,8 @@ GLOBAL BYTE *tpa_lt;   /* TPA lower boundary (temporary)         */
 GLOBAL BYTE *tpa_hp;   /* TPA upper boundary (permanent)         */
 GLOBAL BYTE *tpa_ht;   /* TPA upper boundary (temporary)         */
 
+/*****************************************************************************/
+
 /*
  * Declare the "state variables".  These are globals for the single-thread
  * version of the file system, but are put in a structure so they can be
@@ -87,19 +110,23 @@ GLOBAL BYTE *tpa_ht;   /* TPA upper boundary (temporary)         */
 
 GLOBAL struct stvars gbls;
 
-/*****************************************************************
- *                                                               *
- *               _bdos MAIN ROUTINE                              *
- *                                                               *
- *       Called with  _bdos(func, info, infop)                   *
- *                                                               *
- *       Where:                                                  *
- *               func    is the BDOS function number (d0.w)      *
- *               info    is the word parameter (d1.w)            *
- *               infop   is the pointer parameter (d1.l)         *
- *                       note that info is the word form of infop*
- *                                                               *
- *****************************************************************/
+/*****************************************************************************/
+
+/******************************************************************
+ *                                                                *
+ *               _bdos MAIN ROUTINE                               *
+ *                                                                *
+ *       Called with  _bdos(func, info, infop)                    *
+ *                                                                *
+ *       Where:                                                   *
+ *               func    is the BDOS function number (d0.w)       *
+ *               info    is the word parameter (d1.w)             *
+ *               infop   is the pointer parameter (d1.l)          *
+ *                       note that info is the word form of infop *
+ *                                                                *
+ ******************************************************************/
+
+/*****************************************************************************/
 
 /*
  * Program return code for BDOS 108 (P_CODE).  CCP zeroes before each
@@ -107,6 +134,8 @@ GLOBAL struct stvars gbls;
  */
 
 static UWORD program_retcode;
+
+/*****************************************************************************/
 
 UWORD
 _bdos (func, info, infop) REG WORD func; /* BDOS function number   */
@@ -510,7 +539,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     /*
      * CP/M-386 private: machine reboot (REBOOT.386).
-     * that is S_SERIAL on CP/M 3.  info & 1 = warm (BDA 0x472).
+     * info & 1 = warm (BDA 0x472).
      */
 
     case 220:
@@ -522,7 +551,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     /*
      * CP/M-386 private: clear console (CLS.386).
-     * that is P_CODE.  Serial ANSI + VGA wipe; reset column.
+     * Serial ANSI + VGA wipe; reset column.
      */
 
     case 221:
@@ -582,6 +611,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
             rtnval = 0xFFFF;
             break;
           }
+
         vp->sel = sel;
 #if CPM386_HAS_VGA_TEXT
         vp->cols = (UWORD)CPM386_VGA_TEXT_COLS;
@@ -661,6 +691,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       return -1; /* bad function number */
                  /* break; */
     }; /* end of switch statement */
+
   if (temp.reselect)
     {
       ((struct fcb *)infop)->drvcode = temp.tempdisk;
@@ -670,6 +701,8 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
   return rtnval; /* return the BDOS return value */
 } /* end _bdos */
+
+/*****************************************************************************/
 
 void
 tmp_sel (
@@ -686,3 +719,5 @@ tmp_sel (
   fcbp->drvcode = GBL.user;
   temptr->reselect = TRUE;
 }
+
+/*****************************************************************************/

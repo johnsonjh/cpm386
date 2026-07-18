@@ -1,18 +1,28 @@
 /* vgatext.c: BDOS 224 direct VGA text test */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "vgauser.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define BDOS_CONIN 1
 #define BDOS_CONOUT 2
 #define BDOS_CONST 11
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -27,11 +37,15 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (BDOS_CONOUT, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -41,6 +55,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 puthex16 (unsigned v)
@@ -53,6 +69,8 @@ puthex16 (unsigned v)
       putch (h[(v >> (i * 4)) & 0xF]);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned n)
@@ -78,6 +96,8 @@ putu (unsigned n)
     }
 }
 
+/*****************************************************************************/
+
 static void
 puthex32 (unsigned long v)
 {
@@ -92,6 +112,8 @@ puthex32 (unsigned long v)
     }
 }
 
+/*****************************************************************************/
+
 static void
 wait_key (void)
 {
@@ -102,6 +124,8 @@ wait_key (void)
 
   (void)bdos (BDOS_CONIN, 0);
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -155,16 +179,19 @@ _start (void)
 
   /* title bar */
   p = msg;
+
   for (x = 0; x < cols; x++)
     {
       char ch = ' ';
       unsigned len = 0;
       const char *q = msg;
+
       while (*q)
         {
           len++;
           q++;
         }
+
       if (x >= (cols - len) / 2 && p && *p)
         {
           ch = *p++;
@@ -213,3 +240,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

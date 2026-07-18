@@ -1,14 +1,18 @@
 /* pmode.c - GDT / IDT / TSS setup and BDOS syscall C path for ring-3 */
 
+/*****************************************************************************/
+
 #include "bdosinc.h"
 #include "platform.h"
 #include "pmode.h"
+
+/*****************************************************************************/
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 
-/* descriptors */
+/*****************************************************************************/
 
 struct gdt_entry
 {
@@ -20,6 +24,8 @@ struct gdt_entry
   uint8_t base_hi;
 } __attribute__ ((packed));
 
+/*****************************************************************************/
+
 struct idt_entry
 {
   uint16_t off_lo;
@@ -29,11 +35,15 @@ struct idt_entry
   uint16_t off_hi;
 } __attribute__ ((packed));
 
+/*****************************************************************************/
+
 struct dt_ptr
 {
   uint16_t limit;
   uint32_t base;
 } __attribute__ ((packed));
+
+/*****************************************************************************/
 
 /* 32-bit TSS */
 struct tss32
@@ -55,13 +65,19 @@ struct tss32
   uint16_t iomap_base;
 } __attribute__ ((packed));
 
+/*****************************************************************************/
+
 #define GDT_COUNT 7 /* + SEL_UVIDEO at index 6 */
 #define IDT_COUNT 256
+
+/*****************************************************************************/
 
 static struct gdt_entry gdt[GDT_COUNT];
 static struct idt_entry idt[IDT_COUNT];
 static struct tss32 tss;
 static struct dt_ptr gdtp, idtp;
+
+/*****************************************************************************/
 
 /*
  * Dedicated ring-0 stack for privilege transitions (int from ring 3).
@@ -71,29 +87,46 @@ static struct dt_ptr gdtp, idtp;
 
 static uint8_t ring0_stack[32768] __attribute__ ((aligned (16)));
 
+/*****************************************************************************/
+
 static unsigned long g_tpa_base;
 static unsigned long g_tpa_len;
+
+/*****************************************************************************/
+
 static int pmode_ready;
+
+/*****************************************************************************/
 
 extern void bdos_irq (void);
 extern void return_to_kernel (void);
 extern UWORD _bdos (WORD func, UWORD info, UBYTE *infop);
+
+/*****************************************************************************/
 
 unsigned long
 pmode_tpa_base (void)
 {
   return g_tpa_base;
 }
+
+/*****************************************************************************/
+
 unsigned long
 pmode_tpa_len (void)
 {
   return g_tpa_len;
 }
+
+/*****************************************************************************/
+
 int
 pmode_active (void)
 {
   return pmode_ready && g_tpa_len > 0;
 }
+
+/*****************************************************************************/
 
 unsigned short
 pmode_vga_selector (void)
@@ -107,6 +140,8 @@ pmode_vga_selector (void)
 #endif
 }
 
+/*****************************************************************************/
+
 unsigned long
 pmode_vga_phys_base (void)
 {
@@ -117,6 +152,8 @@ pmode_vga_phys_base (void)
 #endif
 }
 
+/*****************************************************************************/
+
 unsigned long
 pmode_vga_map_size (void)
 {
@@ -126,6 +163,8 @@ pmode_vga_map_size (void)
   return 0;
 #endif
 }
+
+/*****************************************************************************/
 
 /* GDT helpers */
 
@@ -145,6 +184,8 @@ gdt_set (int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
   gdt[idx].base_hi = (uint8_t)((base >> 24) & 0xFF);
 }
 
+/*****************************************************************************/
+
 static void
 idt_set (int vec, void (*handler) (void), uint8_t type)
 {
@@ -157,6 +198,8 @@ idt_set (int vec, void (*handler) (void), uint8_t type)
   idt[vec].off_hi = (uint16_t)((off >> 16) & 0xFFFF);
 }
 
+/*****************************************************************************/
+
 /* Fallback for IRQ vectors etc.: freeze (PIC is masked; should be rare). */
 static void
 fault_hang (void)
@@ -167,8 +210,12 @@ fault_hang (void)
     }
 }
 
+/*****************************************************************************/
+
 /* Print via BIOS console (serial + VGA as configured). Safe from ring 0. */
 extern void bios_conout (unsigned char c);
+
+/*****************************************************************************/
 
 /*
  * Stack image built by exc_common (pmode.S). Field order must match the
@@ -185,6 +232,8 @@ struct fault_frame
   uint32_t uesp, uss;
 };
 
+/*****************************************************************************/
+
 static void
 fault_puts (const char *s)
 {
@@ -193,6 +242,8 @@ fault_puts (const char *s)
       bios_conout ((unsigned char)*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 fault_puthex (uint32_t v, int digits)
@@ -216,11 +267,15 @@ fault_puthex (uint32_t v, int digits)
     }
 }
 
+/*****************************************************************************/
+
 static void
 fault_puthex32 (uint32_t v)
 {
   fault_puthex (v, 8);
 }
+
+/*****************************************************************************/
 
 /* DOS/4GW-style exception names (vectors 0-19; rest numeric). */
 static const char *
@@ -257,12 +312,16 @@ fault_name (uint32_t vec)
   return "unknown";
 }
 
+/*****************************************************************************/
+
 static void
 fault_put_pair (const char *name, uint32_t v)
 {
   fault_puts (name);
   fault_puthex32 (v);
 }
+
+/*****************************************************************************/
 
 /*
  * DOS/4GW-inspired register dump for CPU exceptions.
@@ -309,6 +368,7 @@ fault_handler_c (struct fault_frame *f)
   fault_puthex32 (f->eip);
   fault_puts ("  Err ");
   fault_puthex32 (f->err);
+
   if (from_user && g_tpa_base)
     {
       fault_puts ("  linear ");
@@ -346,6 +406,7 @@ fault_handler_c (struct fault_frame *f)
 
   fault_put_pair ("EFL=", f->eflags);
   fault_puts ("  (");
+
   if (f->eflags & (1u << 0))
     {
       fault_puts ("CF ");
@@ -393,6 +454,7 @@ fault_handler_c (struct fault_frame *f)
 
   fault_puts ("IOPL=");
   fault_puthex ((f->eflags >> 12) & 3u, 1);
+
   if (f->eflags & (1u << 14))
     {
       fault_puts (" NT");
@@ -426,8 +488,12 @@ fault_handler_c (struct fault_frame *f)
   return 0;
 }
 
+/*****************************************************************************/
+
 /* Exception entry stubs (pmode.S); one pointer per vector 0..31 */
 extern void (*exc_stub_table[32]) (void);
+
+/*****************************************************************************/
 
 /* pointer-arg BDOS functions (info is TPA-relative from ring 3!) */
 
@@ -472,6 +538,8 @@ bdos_arg_is_ptr (WORD func)
     }
 }
 
+/*****************************************************************************/
+
 /* C side of int 0x30. Called from bdos_irq with kernel DS. */
 UWORD
 bdos_syscall_c (WORD func, unsigned long info, unsigned long user_cs)
@@ -505,14 +573,19 @@ bdos_syscall_c (WORD func, unsigned long info, unsigned long user_cs)
     }
 
   r = _bdos (func, (UWORD)info, (UBYTE *)(unsigned long)infop);
+
   return r;
 }
+
+/*****************************************************************************/
 
 static inline void
 outb (uint16_t port, uint8_t val)
 {
   __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
 }
+
+/*****************************************************************************/
 
 void
 pmode_init (unsigned long tpa_base, unsigned long tpa_len)
@@ -652,3 +725,5 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
 
   pmode_ready = 1;
 }
+
+/*****************************************************************************/

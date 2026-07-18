@@ -1,14 +1,22 @@
 /* conctl.c - builds VGAON / VGAOFF / SERON / SEROFF for CP/M-386 */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define BDOS_CON_VGA 222
 #define BDOS_CON_SER 223
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -20,14 +28,20 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
+
 static void
 puts (const char *s)
 {
@@ -36,6 +50,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -56,6 +72,7 @@ _start (void)
   /* Announce while VGA still enabled so both paths may show it */
   puts ("VGA console OFF\r\n");
   r = bdos (func, arg);
+
   if (r == 0xFF)
     {
       puts ("VGA OFF refused (last console?)\r\n");
@@ -73,6 +90,7 @@ _start (void)
   /* Announce on serial before disabling it */
   puts ("Serial console OFF\r\n");
   r = bdos (func, arg);
+
   if (r == 0xFF)
     {
       puts ("Serial OFF refused (last console?)\r\n");
@@ -84,3 +102,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

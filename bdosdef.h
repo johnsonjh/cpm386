@@ -1,3 +1,5 @@
+/*****************************************************************************/
+
 /*********************************************************
  *                                                       *
  *               CP/M-68K header file                    *
@@ -10,8 +12,12 @@
  *                                                       *
  *********************************************************/
 
+/*****************************************************************************/
+
 #ifndef BDOSDEF_H
 #define BDOSDEF_H
+
+/*****************************************************************************/
 
 /**************************************************************************
  * The BDOS data structures, especially those relating to global variables,
@@ -33,6 +39,8 @@
  * possibilities open for the multi-thread environment.
  ****************************************************************************/
 
+/*****************************************************************************/
+
 #define snglthrd TRUE
 /* TRUE for single-thread environment */
 /* FALSE to create based structure for re-entrant model */
@@ -43,6 +51,8 @@
 /* and BSETUP defines the extern structure */
 #endif /* if snglthrd */
 
+/*****************************************************************************/
+
 #if !snglthrd
 # define GBL (*statep)
 /* If multi-task, state vars are based */
@@ -52,6 +62,8 @@
 /* set up pointer to state variables */
 /* This is intended as an example to show the intent */
 #endif /* if !snglthrd */
+
+/*****************************************************************************/
 
 /*
  * Note that there are a few critical regions in the file system that must
@@ -65,6 +77,8 @@
 #define LOCK   /**/
 #define UNLOCK /**/
 
+/*****************************************************************************/
+
 /*
  * Be sure LOCK and UNLOCK are implemented to allow recursive calls to LOCK.
  * That is, if a process that calls LOCK already owns the lock, let it proceed,
@@ -72,7 +86,11 @@
  * file system.
  */
 
+/*****************************************************************************/
+
 #define VERSION 0x2022 /* BDOS version (func 12): type 0x20, BDOS 2.2 */
+
+/*****************************************************************************/
 
 /*
  * S_OSVER (func 163): user-visible product version.  High byte = machine
@@ -81,6 +99,8 @@
  */
 
 #define OSVER_CPM386 0x2001
+
+/*****************************************************************************/
 
 /*
  * CP/M Plus-compatible date/time (see rtc.h).  days since 1978-01-01;
@@ -93,6 +113,8 @@
 #define BDOS_F_PARSE 152       /* F_PARSE   - parse ASCII filename to FCB  */
 #define BDOS_T_SECONDS 155     /* T_SECONDS - MP/M get date/time, BCD hms  */
 #define BDOS_S_OSVER 163       /* S_OSVER   - user-visible OS version      */
+
+/*****************************************************************************/
 
 /*
  * CP/M-386 private BDOS calls!  Above the standard documented CP/M 3
@@ -107,10 +129,14 @@
 #define BDOS_GET_TICKS 225     /* high-res 64-bit tick counter       */
 #define BDOS_SLEEP_UNTIL 226   /* busy-wait until absolute tick      */
 
+/*****************************************************************************/
+
 /*
  * Private numbers sit above standard CP/M 3 / MP/M / Concurrent calls and
  * avoid conflicts - see https://www.seasip.info/Cpm/bdos.html for a list.
  */
+
+/*****************************************************************************/
 
 /* Ring-3 video map result (BDOS 224; DE -> this, TPA-relative). */
 struct cpm_vga_text
@@ -122,6 +148,8 @@ struct cpm_vga_text
   ULONG map_size;   /* mapped byte length (e.g. 32K)      */
   ULONG phys_base;  /* physical base (informational)      */
 };
+
+/*****************************************************************************/
 
 /*
  * High-resolution tick block (BDOS 225/226; DE -> this, TPA-relative).
@@ -137,9 +165,13 @@ struct cpm_ticks
   ULONG hz; /* tick frequency (GET fills; SLEEP ignores) */
 };
 
+/*****************************************************************************/
+
 #define robit 0    /* read-only bit in file type field of fcb */
 #define arbit 2    /* archive bit in file type field of fcb   */
 #define SECLEN 128 /* length of a CP/M sector                 */
+
+/*****************************************************************************/
 
 /* File Control Block definition */
 struct fcb
@@ -172,6 +204,8 @@ struct fcb
   UBYTE ran2;
 };
 
+/*****************************************************************************/
+
 /* Declaration of directory entry */
 struct dirent
 {
@@ -190,6 +224,8 @@ struct dirent
   } dskmap;
 };
 
+/*****************************************************************************/
+
 /* Declaration of disk parameter tables */
 struct dpb /* disk parameter table */
 {
@@ -205,6 +241,8 @@ struct dpb /* disk parameter table */
   UWORD trk_off; /* track offset                 */
 };
 
+/*****************************************************************************/
+
 struct dph /* disk parameter header */
 {
   UBYTE *xlt;       /* pointer to sector translate table    */
@@ -216,6 +254,8 @@ struct dph /* disk parameter header */
   UBYTE *csv;       /* pointer to check vector              */
   UBYTE *alv;       /* pointer to allocation vector         */
 };
+
+/*****************************************************************************/
 
 /* Declaration of structure containing "global" state variables */
 #define TBUFSIZ 126 /*sw # typed-ahead characters */
@@ -246,6 +286,8 @@ struct stvars
 /*sw removed next line from structure */
 extern UBYTE *chainp; /* Used for chain to program call */
 
+/*****************************************************************************/
+
 /* Console buffer structure declaration */
 
 struct conbuf
@@ -254,6 +296,8 @@ struct conbuf
   UBYTE retlen;  /* Length actually found by BDOS       */
   UBYTE cbuf[0]; /* Console data                        */
 };
+
+/*****************************************************************************/
 
 /*
  * .386 absolute executable format (minimal, inspired by CP/M-68K absolute
@@ -274,6 +318,8 @@ typedef struct
   unsigned long entry_off;
 } CPM386_HDR;
 
+/*****************************************************************************/
+
 /*
  * Pure loader: parse header from in-memory buffer (hdr+img), validate
  * against provided TPA base/len, copy raw image bytes to (tpa_base +
@@ -284,6 +330,8 @@ typedef struct
 UWORD cpm386_load_from_buf (const UBYTE *filebuf, unsigned long buflen,
                             UBYTE *tpa_base, unsigned long tpa_len,
                             UBYTE **entry_out);
+
+/*****************************************************************************/
 
 /*
  * Streaming loader: pull back to back 128-byte CP/M records via callback.
@@ -298,6 +346,8 @@ UWORD cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx,
                                UBYTE *tpa_base, unsigned long tpa_len,
                                UBYTE **entry_out);
 
+/*****************************************************************************/
+
 /*
  * dirscan() callback: invoked for each directory entry.
  * Return non-zero to report a match (see dskutil.c parms bits).
@@ -307,4 +357,8 @@ typedef BOOLEAN (*DIRSCAN_FN) (UBYTE *fcbp, UBYTE *dirp, WORD dirindx);
 
 UWORD dirscan (DIRSCAN_FN funcp, UBYTE *fcbp, UWORD parms);
 
+/*****************************************************************************/
+
 #endif
+
+/*****************************************************************************/

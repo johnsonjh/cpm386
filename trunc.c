@@ -1,13 +1,21 @@
 /* trunc.c: exercise BDOS 40 (WRITEZF), 99 (TRUNCATE), 37 (DRV_RESET), 98 */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -22,11 +30,15 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -36,6 +48,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned long n)
@@ -60,7 +74,11 @@ putu (unsigned long n)
     }
 }
 
+/*****************************************************************************/
+
 static unsigned fails;
+
+/*****************************************************************************/
 
 static void
 result (int cond, const char *tag)
@@ -74,6 +92,8 @@ result (int cond, const char *tag)
       fails++;
     }
 }
+
+/*****************************************************************************/
 
 static void
 fill_name (UBYTE *fcb, const char *n8, const char *t3)
@@ -96,6 +116,8 @@ fill_name (UBYTE *fcb, const char *n8, const char *t3)
     }
 }
 
+/*****************************************************************************/
+
 static void
 set_ran (UBYTE *fcb, unsigned long rec)
 {
@@ -104,12 +126,16 @@ set_ran (UBYTE *fcb, unsigned long rec)
   fcb[35] = (UBYTE)(rec & 0xff);
 }
 
+/*****************************************************************************/
+
 static unsigned long
 get_ran (UBYTE *fcb)
 {
   return ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
          | (unsigned long)fcb[35];
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -199,6 +225,7 @@ _start (void)
     for (i = 0; i < 4; i++)
       {
         r = bdos (20, (LONG)(unsigned long)fcb);
+
         if (r != 0 || dma[0] != (UBYTE)('0' + i))
           {
             ok = 0;
@@ -236,6 +263,7 @@ _start (void)
   result (r == 1, "hole@16 EOF");
 
   set_ran (fcb, 32);
+
   for (i = 0; i < 128; i++)
     {
       dma[i] = 0;
@@ -298,3 +326,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

@@ -1,17 +1,27 @@
 /* big.c - test of a >64KB .386 image (multi-extent load test). */
 
+/*****************************************************************************/
+
 /*
  * Real payload size is produced by padding big.bin via Makefile.
  * _start must remain at VMA 0x100 (first bytes of the image)!
  */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -22,8 +32,11 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -40,6 +53,7 @@ _start (void)
     volatile unsigned char *end
         = (volatile unsigned char *)(0x100 + 71680 - 1);
     (void)p;
+
     if (*end == 0x90 || *end == 0x00 || *end == 0xCC)
       bdos (2, (LONG)'!'); /* pad present */
 
@@ -48,5 +62,8 @@ _start (void)
   }
 
   bdos (0, 0);
+
   for (;;);
 }
+
+/*****************************************************************************/

@@ -1,5 +1,7 @@
 /* mk386.c: wrap a raw binary as a 386 absolute command file. */
 
+/*****************************************************************************/
+
 /*
  * Header (12 bytes LE) of:
  *   load_off   - TPA-relative load offset (usually 0x100)
@@ -7,14 +9,20 @@
  *   entry_off  - TPA-relative entry (usually same as load_off)
  */
 
+/*****************************************************************************/
+
 /*
  * Usage: mk386 input.bin output.386 [load_off_hex]
  */
+
+/*****************************************************************************/
 
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+/*****************************************************************************/
 
 int
 main (int argc, char **argv)
@@ -34,12 +42,14 @@ main (int argc, char **argv)
 
   in = argv[1];
   out = argv[2];
+
   if (argc >= 4)
     {
       load = (uint32_t)strtoul (argv[3], NULL, 0);
     }
 
   f = fopen (in, "rb");
+
   if (!f)
     {
       perror (in);
@@ -56,6 +66,7 @@ main (int argc, char **argv)
     }
 
   sz = ftell (f);
+
   if (sz < 0)
     {
       fclose (f);
@@ -65,6 +76,7 @@ main (int argc, char **argv)
 
   rewind (f);
   buf = malloc ((size_t)sz);
+
   if (!buf || (sz && fread (buf, 1, (size_t)sz, f) != (size_t)sz))
     {
       fprintf (stderr, "read failed\n");
@@ -113,3 +125,5 @@ main (int argc, char **argv)
 
   return 0;
 }
+
+/*****************************************************************************/

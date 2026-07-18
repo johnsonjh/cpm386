@@ -1,18 +1,28 @@
 /* ls.c - directory lister for CP/M-386 */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #include "absaddr.h"
+
+/*****************************************************************************/
 
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 #define MAX_FILES 128
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -24,14 +34,19 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
+
+/*****************************************************************************/
 
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -41,6 +56,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned long n)
@@ -59,11 +76,14 @@ putu (unsigned long n)
       b[i++] = (char)('0' + n % 10);
       n /= 10;
     }
+
   while (i)
     {
       putch (b[--i]);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu_w (unsigned long n, int w)
@@ -95,6 +115,8 @@ putu_w (unsigned long n, int w)
     }
 }
 
+/*****************************************************************************/
+
 /* DOS-PLUS exact size from total records + LRBC of last extent */
 static unsigned long
 exact_size (unsigned long records, UBYTE lrbc)
@@ -112,6 +134,8 @@ exact_size (unsigned long records, UBYTE lrbc)
   return (records - 1) * 128UL + (unsigned long)lrbc;
 }
 
+/*****************************************************************************/
+
 struct fileent
 {
   char name[8];
@@ -127,8 +151,12 @@ struct fileent
   UBYTE used;
 };
 
+/*****************************************************************************/
+
 static struct fileent files[MAX_FILES];
 static int nfiles;
+
+/*****************************************************************************/
 
 static int
 name_eq (const struct fileent *f, const UBYTE *de)
@@ -154,6 +182,8 @@ name_eq (const struct fileent *f, const UBYTE *de)
   return 1;
 }
 
+/*****************************************************************************/
+
 static unsigned
 count_map_blocks (const UBYTE *de, int word_mode)
 {
@@ -165,6 +195,7 @@ count_map_blocks (const UBYTE *de, int word_mode)
       for (i = 0; i < 8; i++)
         {
           UWORD b = (UWORD)de[16 + i * 2] | ((UWORD)de[17 + i * 2] << 8);
+
           if (b)
             {
               n++;
@@ -185,6 +216,8 @@ count_map_blocks (const UBYTE *de, int word_mode)
   return n;
 }
 
+/*****************************************************************************/
+
 static int
 later_extent (UBYTE s2, UBYTE ex, UBYTE os2, UBYTE oex)
 {
@@ -200,6 +233,8 @@ later_extent (UBYTE s2, UBYTE ex, UBYTE os2, UBYTE oex)
 
   return (ex & 0x1f) >= (oex & 0x1f);
 }
+
+/*****************************************************************************/
 
 static void
 add_dirent (const UBYTE *de, int word_mode)
@@ -220,6 +255,7 @@ add_dirent (const UBYTE *de, int word_mode)
       if (files[i].used && name_eq (&files[i], de))
         {
           idx = i;
+
           break;
         }
     }
@@ -232,6 +268,7 @@ add_dirent (const UBYTE *de, int word_mode)
         }
 
       idx = nfiles++;
+
       for (i = 0; i < 8; i++)
         {
           files[idx].name[i] = (char)(de[1 + i] & 0x7f);
@@ -256,6 +293,7 @@ add_dirent (const UBYTE *de, int word_mode)
   files[idx].records += rc;
   files[idx].blocks += count_map_blocks (de, word_mode);
   files[idx].fcbs++;
+
   if (de[9] & 0x80)
     {
       files[idx].ro = 1;
@@ -274,6 +312,8 @@ add_dirent (const UBYTE *de, int word_mode)
     }
 }
 
+/*****************************************************************************/
+
 static int
 cmp_name (const struct fileent *a, const struct fileent *b)
 {
@@ -282,6 +322,7 @@ cmp_name (const struct fileent *a, const struct fileent *b)
   for (i = 0; i < 8; i++)
     {
       d = (a->name[i] & 0x7f) - (b->name[i] & 0x7f);
+
       if (d)
         {
           return d;
@@ -291,6 +332,7 @@ cmp_name (const struct fileent *a, const struct fileent *b)
   for (i = 0; i < 3; i++)
     {
       d = (a->typ[i] & 0x7f) - (b->typ[i] & 0x7f);
+
       if (d)
         {
           return d;
@@ -299,6 +341,8 @@ cmp_name (const struct fileent *a, const struct fileent *b)
 
   return 0;
 }
+
+/*****************************************************************************/
 
 static void
 sort_files (int order)
@@ -316,6 +360,7 @@ sort_files (int order)
       for (j = i + 1; j < nfiles; j++)
         {
           int c = cmp_name (&files[i], &files[j]);
+
           if ((order > 0 && c > 0) || (order < 0 && c < 0))
             {
               t = files[i];
@@ -325,6 +370,8 @@ sort_files (int order)
         }
     }
 }
+
+/*****************************************************************************/
 
 static void
 print_name (const struct fileent *f, int pack)
@@ -370,6 +417,8 @@ print_name (const struct fileent *f, int pack)
     }
 }
 
+/*****************************************************************************/
+
 static void
 print_name_fixed (const struct fileent *f)
 {
@@ -388,6 +437,8 @@ print_name_fixed (const struct fileent *f)
     }
 }
 
+/*****************************************************************************/
+
 static int
 getch_wait (void)
 {
@@ -397,17 +448,22 @@ getch_wait (void)
     {
       ;
     }
+
   /* drain typeahead CR/LF only */
   while (bdos (11, 0))
     {
       int d = (int)bdos (6, 0xFF) & 0xff;
+
       if (d != '\r' && d != '\n' && d != 0)
         {
           break;
         }
     }
+
   return c & 0xff;
 }
+
+/*****************************************************************************/
 
 static void
 help (void)
@@ -422,6 +478,8 @@ help (void)
   puts ("  -b  bare names only\r\n");
 }
 
+/*****************************************************************************/
+
 static int
 toupper_ch (int c)
 {
@@ -432,6 +490,8 @@ toupper_ch (int c)
 
   return c;
 }
+
+/*****************************************************************************/
 
 /* Build search FCB from pattern text (e.g. *.386 or HELLO.*) */
 static void
@@ -445,6 +505,7 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
     }
 
   fcb[0] = 0; /* default drive */
+
   for (i = 1; i <= 11; i++)
     {
       fcb[i] = ' ';
@@ -454,11 +515,13 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
     {
       pat++;
     }
+
   /* optional n/ prefix for user */
   /* optional d: drive */
   if (pat[0] && pat[1] == ':')
     {
       int d = toupper_ch ((unsigned char)pat[0]);
+
       if (d >= 'A' && d <= 'P')
         {
           fcb[0] = (UBYTE)(d - 'A' + 1);
@@ -470,10 +533,12 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
   while (*pat && *pat != ' ' && *pat != '\t' && *pat != '\r')
     {
       char c = (char)toupper_ch ((unsigned char)*pat++);
+
       if (c == '.')
         {
           in_typ = 1;
           ti = 0;
+
           continue;
         }
 
@@ -520,6 +585,7 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
           fcb[9 + ti++] = c;
         }
     }
+
   /* bare name with no type => * type? original uses *.* default */
   if (!in_typ && ni == 0)
     {
@@ -537,6 +603,8 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
         }
     }
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -558,6 +626,7 @@ _start (void)
 
   /* Parse command tail */
   tlen = CMD_TAIL[0];
+
   if (tlen > 126)
     {
       tlen = 126;
@@ -571,6 +640,7 @@ _start (void)
   tail[tlen] = 0;
 
   i = 0;
+
   while (tail[i] == ' ' || tail[i] == '\t')
     {
       i++;
@@ -580,43 +650,53 @@ _start (void)
       if (tail[i] == '-' || tail[i] == '/')
         {
           i++;
+
           while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
             {
               char c = (char)toupper_ch ((unsigned char)tail[i++]);
+
               switch (c)
                 {
                 case 'H':
                   help ();
                   bdos (0, 0);
+
                   break;
 
                 case 'A':
                   flag_all = 1;
+
                   break;
 
                 case 'S':
                   sort_order = 1;
+
                   break;
 
                 case 'R':
                   sort_order = -1;
+
                   break;
 
                 case 'B':
                   flag_mode = 2;
+
                   break;
 
                 case 'L':
                   flag_mode = 1;
+
                   break;
 
                 case 'P':
                   flag_pause = 1;
+
                   break;
 
                 default:
                   help ();
                   puts ("ERR: Wrong parameters\r\n");
+
                   bdos (0, 0);
                 }
             }
@@ -624,6 +704,7 @@ _start (void)
             {
               i++;
             }
+
           continue;
         }
 
@@ -671,6 +752,7 @@ _start (void)
    * files are returned (needed for correct record totals + last LRBC). */
   nfiles = 0;
   bdos (26, (LONG)(unsigned long)dma);
+
   if (fcb[0])
     {
       bdos (14, (LONG)(fcb[0] - 1));
@@ -680,9 +762,11 @@ _start (void)
   fcb[12] = '?'; /* all extents */
   fcb[14] = '?'; /* all modules */
   r = bdos (17, (LONG)(unsigned long)fcb);
+
   while (r != 255)
     {
       UBYTE *de = dma + (r * 32);
+
       /* current user only (search may return other users with ?) */
       if (de[0] == (UBYTE)user)
         {
@@ -719,12 +803,15 @@ _start (void)
           while (bdos (11, 0))
             {
               int d = (int)bdos (1, 0);
+
               if (d == 3)
                 {
                   process = 0;
+
                   break;
                 }
             }
+
           if (!process)
             {
               break;
@@ -769,6 +856,7 @@ _start (void)
           print_name_fixed (f);
           putu_w (exact_k, 5);
           putch ('K');
+
           if (count % 4 != 0)
             {
               putch (',');
@@ -790,13 +878,16 @@ _start (void)
       if (ctr > 22 || (ctr > 21 && i + 1 >= (unsigned)nfiles))
         {
           ctr = 0;
+
           if (flag_pause)
             {
               int d, wt = 1;
               puts ("[More]");
+
               while (wt)
                 {
                   d = getch_wait ();
+
                   switch (d)
                     {
                     case 'q':
@@ -805,18 +896,21 @@ _start (void)
                       puts ("\r\n");
                       wt = 0;
                       process = 0;
+
                       break;
 
                     case 13: /* CR: one line */
                       puts ("\r      \r");
                       wt = 0;
                       ctr = 22;
+
                       break;
 
                     case 32: /* space: next page */
                       puts ("\r      \r");
                       wt = 0;
                       ctr = 0;
+
                       break;
 
                     default:
@@ -839,3 +933,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/

@@ -1,3 +1,5 @@
+/*****************************************************************************/
+
 /*********************************************************
  *                                                       *
  *       BIOS definitions for CP/M-68K                   *
@@ -7,6 +9,8 @@
  *       This include file simply defines the BIOS calls *
  *                                                       *
  *********************************************************/
+
+/*****************************************************************************/
 
 #if 0
 EXTERN UBYTE    bios1();  /* used for character I/O functions     */
@@ -44,17 +48,25 @@ EXTERN BYTE     *bios6(); /* for get memory segment table         */
 /* set exception vector */
 #endif /* if 0 */
 
+/*****************************************************************************/
+
 extern void bios_wboot (void);
 extern unsigned short int bios_const (void);
 extern unsigned char bios_conin (void);
 extern void bios_conout (unsigned char victim);
 
+/*****************************************************************************/
+
 /* Clear serial (ANSI) + VGA text; see bios_con_clear(). */
 extern void bios_con_clear (void);
+
+/*****************************************************************************/
 
 /* BDOS 222/223: enable/disable console devices (0=off 1=on 0xFFFF=query). */
 extern unsigned short bios_con_vga_ctl (unsigned short info);
 extern unsigned short bios_con_ser_ctl (unsigned short info);
+
+/*****************************************************************************/
 
 extern void bios_list (unsigned char victim);
 extern void bios_punch (unsigned char victim);
@@ -71,6 +83,8 @@ extern unsigned short int bios_sectran (unsigned short int sector,
                                         void *table);
 extern void *bios_getmrt (void);
 
+/*****************************************************************************/
+
 /*
  * Build classic CP/M base page in TPA[0..0xFF]: FCBs at 0x5C/0x6C, tail at 0x80.
  * fcb1/fcb2 are 36-byte FCBs (may be NULL); tail is the raw command tail text.
@@ -78,13 +92,19 @@ extern void *bios_getmrt (void);
 extern void bios_setup_basepage (const void *fcb1, const void *fcb2,
                                  const char *tail);
 
+/*****************************************************************************/
+
 /* ZCPR-style GO: re-enter last loaded TPA program (0xFFFF if none). */
 extern unsigned short pgm_go (void);
+
+/*****************************************************************************/
 
 extern unsigned short int bios_getiobyte (void);
 extern void bios_setiobyte (unsigned short int iobyte);
 extern unsigned short int bios_flush (void);
 void *bios_setexc (unsigned short int vector, void *handler);
+
+/*****************************************************************************/
 
 #define bwboot() bios_wboot ()
 #define bconstat() bios_const ()
@@ -107,3 +127,5 @@ void *bios_setexc (unsigned short int vector, void *handler);
 #define bsetiob(parm) bios_setiobyte (parm)
 #define bflush() bios_flush ()
 #define bsetvec(parm1, parm2) bios_setexc (parm1, parm2)
+
+/*****************************************************************************/

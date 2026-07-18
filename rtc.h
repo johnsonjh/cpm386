@@ -1,5 +1,9 @@
+/*****************************************************************************/
+
 #ifndef RTC_H
 # define RTC_H
+
+/*****************************************************************************/
 
 /*
  * CP/M-386 date/time block (pointer arg for BDOS 104/105).
@@ -15,6 +19,8 @@ struct cpm_datetime
   unsigned char sec;
 };
 
+/*****************************************************************************/
+
 /*
  * Read CMOS RTC into *dt. Returns 0 on success, non-zero on failure.
  * hour/min/sec are binary (CP/M-386 BDOS 105).
@@ -22,15 +28,25 @@ struct cpm_datetime
 
 int rtc_get (struct cpm_datetime *dt);
 
+/*****************************************************************************/
+
 /* BDOS 155 (T_SECONDS / MP/M): same as rtc_get but hour/min/sec packed BCD. */
 int rtc_get_bcd (struct cpm_datetime *dt);
 
+/*****************************************************************************/
+
 /* Write *dt to CMOS RTC. Returns 0 on success, non-zero on failure. */
 int rtc_set (const struct cpm_datetime *dt);
+
+/*****************************************************************************/
 
 /* Convert calendar <-> days since 1978-01-01 */
 unsigned short rtc_ymd_to_days (unsigned y, unsigned m, unsigned d);
 void rtc_days_to_ymd (unsigned short days, unsigned *y, unsigned *m,
                       unsigned *d);
 
+/*****************************************************************************/
+
 #endif
+
+/*****************************************************************************/

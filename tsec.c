@@ -1,13 +1,19 @@
 /* tsec.c - exercise BDOS 155 (T_SECONDS) vs BDOS 105 (T_GET) */
 
+/*****************************************************************************/
+
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
 
+/*****************************************************************************/
+
 #define BDOS_INT 0x30
 #define BDOS_105 105
 #define BDOS_155 155
+
+/*****************************************************************************/
 
 struct cpm_datetime
 {
@@ -17,7 +23,11 @@ struct cpm_datetime
   UBYTE sec;
 };
 
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
+
+/*****************************************************************************/
 
 static UWORD
 bdos (WORD func, LONG info)
@@ -32,11 +42,15 @@ bdos (WORD func, LONG info)
   return ret;
 }
 
+/*****************************************************************************/
+
 static void
 putch (char c)
 {
   bdos (2, (LONG)(unsigned char)c);
 }
+
+/*****************************************************************************/
 
 static void
 puts (const char *s)
@@ -46,6 +60,8 @@ puts (const char *s)
       putch (*s++);
     }
 }
+
+/*****************************************************************************/
 
 static void
 putu (unsigned n)
@@ -64,11 +80,14 @@ putu (unsigned n)
       b[i++] = (char)('0' + n % 10);
       n /= 10;
     }
+
   while (i)
     {
       putch (b[--i]);
     }
 }
+
+/*****************************************************************************/
 
 static void
 put2 (unsigned n)
@@ -77,12 +96,16 @@ put2 (unsigned n)
   putch ((char)('0' + n % 10));
 }
 
+/*****************************************************************************/
+
 /* Decode packed BCD nibble-pair to binary 0-99 */
 static unsigned
 from_bcd (UBYTE v)
 {
   return (unsigned)((v >> 4) * 10 + (v & 0x0f));
 }
+
+/*****************************************************************************/
 
 void
 _start (void)
@@ -92,6 +115,7 @@ _start (void)
 
   puts ("BDOS 105 (binary hms):\r\n");
   r = bdos (BDOS_105, (LONG)(unsigned long)&bin);
+
   if (r)
     {
       puts ("  failed\r\n");
@@ -111,6 +135,7 @@ _start (void)
 
   puts ("BDOS 155 (BCD hms):\r\n");
   r = bdos (BDOS_155, (LONG)(unsigned long)&bcd);
+
   if (r)
     {
       puts ("  failed\r\n");
@@ -147,3 +172,5 @@ _start (void)
 
   bdos (0, 0);
 }
+
+/*****************************************************************************/
