@@ -11,23 +11,30 @@ OPTFLAGS:=-O2
 
 ################################################################################
 
+PRINTF:=$(shell \
+	command -v gprintf 2> /dev/null || \
+	command -v printf 2> /dev/null || \
+	printf '%s' "printf")
+
+################################################################################
+
 CC:=$(shell \
 	command -v gcc 2> /dev/null || \
 	command -v clang 2> /dev/null || \
-	printf '%s' "cc")
+	$(PRINTF) '%s' "cc")
 
 ################################################################################
 
 AS:=$(shell \
 	command -v nasm 2> /dev/null || \
-	printf '%s' "nasm")
+	$(PRINTF) '%s' "nasm")
 
 ################################################################################
 
 NM:=$(shell \
 	command -v gnm 2> /dev/null || \
 	command -v nm 2> /dev/null || \
-	printf '%s' "nm")
+	$(PRINTF) '%s' "nm")
 
 ################################################################################
 
@@ -37,14 +44,14 @@ LD:=$(shell \
 	command -v ld.gold 2> /dev/null || \
 	command -v ld.lld 2> /dev/null || \
 	command -v ld > /dev/null || \
-	printf '%s' "ld")
+	$(PRINTF) '%s' "ld")
 
 ################################################################################
 
 OBJCOPY:=$(shell \
 	command -v gobjcopy 2> /dev/null || \
 	command -v objcopy 2> /dev/null || \
-	printf '%s' "objcopy")
+	$(PRINTF) '%s' "objcopy")
 
 ################################################################################
 
@@ -54,35 +61,35 @@ AWK:=$(shell \
 	command -v nawk 2> /dev/null || \
 	command -v oawk 2> /dev/null || \
 	command -v awk 2> /dev/null || \
-	printf '%s' "awk")
+	$(PRINTF) '%s' "awk")
 
 ################################################################################
 
 DD:=$(shell \
 	command -v gdd 2> /dev/null || \
 	command -v dd 2> /dev/null || \
-	printf '%s' "dd")
+	$(PRINTF) '%s' "dd")
 
 ################################################################################
 
 W_NO_RETURN_MISMATCH:=$(shell \
 	$(CC) -Werror -Wno-return-mismatch \
 	-x c -c /dev/null -o /dev/null 2> /dev/null && \
-	printf '%s' "-Wno-return-mismatch")
+	$(PRINTF) '%s' "-Wno-return-mismatch")
 
 ################################################################################
 
 W_NO_DEPRECATED_NON_PROTOTYPE:=$(shell \
 	$(CC) -Werror -Wno-deprecated-non-prototype \
 	-x c -c /dev/null -o /dev/null 2> /dev/null && \
-	printf '%s' "-Wno-deprecated-non-prototype")
+	$(PRINTF) '%s' "-Wno-deprecated-non-prototype")
 
 ################################################################################
 
 WNO_UNUSED_COMMAND_LINE_ARGUMENT:=$(shell \
 	$(CC) -Werror -Wno-unused-command-line-argument \
 	-x c -c /dev/null -o /dev/null 2> /dev/null && \
-	printf '%s' "-Wno-unused-command-line-argument")
+	$(PRINTF) '%s' "-Wno-unused-command-line-argument")
 
 ################################################################################
 
@@ -203,7 +210,7 @@ all: $(TARGET) boot.bin os.bin floppy.img
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o $*.elf $*.o
 	@entry=$$($(NM) $*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	    printf '%s\n' "ERROR: _start at 0x$$entry, expected 0x100"; \
+	    $(PRINTF) '%s\n' "ERROR: _start at 0x$$entry, expected 0x100"; \
 	    $(NM) $*.elf | head -20; \
 	    exit 1; fi
 	$(OBJCOPY) -O binary $*.elf $@
@@ -317,7 +324,7 @@ vgaon.bin: conctl.c user.ld
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o vgaon.elf vgaon.o
 	@entry=$$($(NM) vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  printf '%s\n' "ERROR: vgaon _start"; \
+	  $(PRINTF) '%s\n' "ERROR: vgaon _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary vgaon.elf $@
 	rm -f vgaon.o vgaon.elf
@@ -329,7 +336,7 @@ vgaoff.bin: conctl.c user.ld
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o vgaoff.elf vgaoff.o
 	@entry=$$($(NM) vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  printf '%s\n' "ERROR: vgaoff _start"; \
+	  $(PRINTF) '%s\n' "ERROR: vgaoff _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary vgaoff.elf $@
 	rm -f vgaoff.o vgaoff.elf
@@ -341,7 +348,7 @@ seron.bin: conctl.c user.ld
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o seron.elf seron.o
 	@entry=$$($(NM) seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  printf '%s\n' "ERROR: seron _start"; \
+	  $(PRINTF) '%s\n' "ERROR: seron _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary seron.elf $@
 	rm -f seron.o seron.elf
@@ -353,7 +360,7 @@ seroff.bin: conctl.c user.ld
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o seroff.elf seroff.o
 	@entry=$$($(NM) seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  printf '%s\n' "ERROR: seroff _start"; \
+	  $(PRINTF) '%s\n' "ERROR: seroff _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary seroff.elf $@
 	rm -f seroff.o seroff.elf
@@ -430,12 +437,12 @@ big.bin: big.c user.ld
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o big.elf big.o
 	@entry=$$($(NM) big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  printf '%s\n' "ERROR: big _start"; \
+	  $(PRINTF) '%s\n' "ERROR: big _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary big.elf big_stub.bin
 	@stub=$$(wc -c < big_stub.bin); \
 	  if [ "$$stub" -ge $(BIG_IMG_SIZE) ]; then \
-	    printf '%s\n' "ERROR: big stub $$stub >= $(BIG_IMG_SIZE)"; \
+	    $(PRINTF) '%s\n' "ERROR: big stub $$stub >= $(BIG_IMG_SIZE)"; \
 	    exit 1; fi; \
 	  pad=$$(( $(BIG_IMG_SIZE) - stub )); \
 	  cp -f big_stub.bin big.bin; \
@@ -458,13 +465,13 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	rm -f /tmp/ramdisk.tmp
 	rm -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
-	printf 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' \
+	$(PRINTF) 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' \
 		> /tmp/cpmd/README.TXT
-	printf '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
+	$(PRINTF) '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
 		> /tmp/cpmd/ENV.DAT
-	printf '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nPRINTENV\r\nLS -A\r\nDIR\r\n\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from existing TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
+	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nPRINTENV\r\nLS -A\r\nDIR\r\n\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from existing TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
 		> /tmp/cpmd/DEMO.SUB
-	printf 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
+	$(PRINTF) 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
 	cp -f aclockdv.386 /tmp/cpmd/ACLOCKDV.386
 	cp -f aclockvt.386 /tmp/cpmd/ACLOCKVT.386
 	cp -f big.386 /tmp/cpmd/BIG.386
@@ -598,7 +605,7 @@ bss.inc: $(TARGET)
 		$(AWK) '/__kernel_end/ { print $$1 }'); \
 			bytes=$$((0x$$ke - 0x10000)); \
 			sec=$$(( (bytes + 511) / 512 + 2 )); \
-			printf '%s\n' "SECTORS_TO_LOAD equ $$sec" >> bss.inc
+			$(PRINTF) '%s\n' "SECTORS_TO_LOAD equ $$sec" >> bss.inc
 
 ################################################################################
 
@@ -679,7 +686,7 @@ scc-real: README.md
 			--exclude-file REUSE.toml \
 			--exclude-dir LICENSES,.git,pvsreport,bindist \
 			--no-cocomo -u --no-size -s lines -f html-table; \
-			printf \"\n%s\n\" \"<!-- scc-end -->\""); \
+			$(PRINTF) \"\n%s\n\" \"<!-- scc-end -->\""); \
 			skip=1; next } \
 		skip && /<!-- scc-end -->/ { skip=0; next } \
 		!skip' README.md > README.awk && \
@@ -696,9 +703,9 @@ scc-real: README.md
 .PHONY: printvars printenv
 
 printvars printenv:
-	-@printf '%s: ' "FEATURES" 2> /dev/null
-	-@printf '%s ' "$(.FEATURES)" 2> /dev/null
-	-@printf '%s\n' "" 2> /dev/null
+	-@$(PRINTF) '%s: ' "FEATURES" 2> /dev/null
+	-@$(PRINTF) '%s ' "$(.FEATURES)" 2> /dev/null
+	-@$(PRINTF) '%s\n' "" 2> /dev/null
 	-@$(foreach V,$(sort $(.VARIABLES)), \
 	    $(if $(filter-out environment% default automatic,$(origin $V)), \
 	    $(if $(strip $($V)),$(info $V: [$($V)]),)))
