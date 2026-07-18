@@ -1348,9 +1348,9 @@ REG BYTE *cmd;
 
         switch( decode(cmd) )
         {
-                case  DIRCMD:   dir_cmd(0);
+                case  DIRCMD:   dirflag=TRUE;dir_cmd(0);
                                 break;
-                case DIRSCMD:   dir_cmd(1);
+                case DIRSCMD:   dirflag=TRUE;dir_cmd(1);
                                 break;
                 case TYPECMD:   type_cmd();
                                 break;
