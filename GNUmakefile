@@ -234,6 +234,11 @@ hello.386: hello.bin $(MK386)
 
 ################################################################################
 
+test211.386: test211.bin $(MK386)
+	$(MK386) test211.bin test211.386 0x100
+
+################################################################################
+
 lrbc.386: lrbc.bin $(MK386)
 	$(MK386) lrbc.bin lrbc.386 0x100
 
@@ -477,7 +482,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 		trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 \
 		seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 \
 		mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 delay.386 \
-		getsn.386 sync.386 $(PATCH_HOLE)
+		getsn.386 sync.386 test211.386 $(PATCH_HOLE)
 	rm -f /tmp/ramdisk.tmp
 	rm -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
@@ -485,7 +490,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 		> /tmp/cpmd/README.TXT
 	$(PRINTF) '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
 		> /tmp/cpmd/ENV.DAT
-	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nPRINTENV\r\nLS -A\r\nDIR\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from existing TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
+	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nPRINTENV\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from program still existing in TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
 		> /tmp/cpmd/DEMO.SUB
 	$(PRINTF) 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
 	cp -f aclockdv.386 /tmp/cpmd/ACLOCKDV.386
@@ -514,6 +519,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	cp -f seroff.386 /tmp/cpmd/SEROFF.386
 	cp -f seron.386 /tmp/cpmd/SERON.386
 	cp -f sync.386 /tmp/cpmd/SYNC.386
+	cp -f test211.386 /tmp/cpmd/TEST211.386
 	cp -f ticks.386 /tmp/cpmd/TICKS.386
 	cp -f tod.386 /tmp/cpmd/TOD.386
 	cp -f touch.386 /tmp/cpmd/TOUCH.386
@@ -555,6 +561,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/SEROFF.386 \
 	  /tmp/cpmd/SERON.386 \
 	  /tmp/cpmd/SYNC.386 \
+	  /tmp/cpmd/TEST211.386 \
 	  /tmp/cpmd/TICKS.386 \
 	  /tmp/cpmd/TOD.386 \
 	  /tmp/cpmd/TOUCH.386 \

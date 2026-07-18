@@ -693,6 +693,44 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       break;
 
     /*
+     * BDOS 211 (Print decimal number)
+     * DE = 16-bit unsigned integer to print w/ leading zero suppression.
+     */
+
+    case 211:
+      {
+        UWORD val = info;
+        UWORD div = 10000;
+        int started = 0;
+        UBYTE digit = 0;
+
+        if (val == 0)
+          {
+            tabout ('0');
+          }
+        else
+          {
+            while (div > 0)
+              {
+                digit = val / div;
+                val %= div;
+
+                if (digit > 0 || started)
+                  {
+                    tabout (digit + '0');
+                    started = 1;
+                  }
+
+                div /= 10;
+              }
+          }
+
+        rtnval = 0;
+      }
+
+      break;
+
+    /*
      * BDOS 225 (GET_TICKS): high-resolution free-running counter.
      * DE -> struct cpm_ticks (TPA-relative).
      * Fills lo/hi/hz.
