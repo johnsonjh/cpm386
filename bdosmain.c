@@ -240,9 +240,9 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         rtnval = dirscan (openfile, (UBYTE *)infop, 0);
 
         /*
-	 * DOS-PLUS LRBC is stored on the last extent; open always
+         * DOS-PLUS LRBC is stored on the last extent; open always
          * binds extent 0, so rewrite s1/cur_rec when requested.
-	 */
+         */
 
         if (want_lrbc && rtnval < 255)
           {
@@ -508,6 +508,33 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         extern int rtc_get (void *);
         rtnval = (UWORD)rtc_get (infop);
       }
+      break;
+
+    /*
+     * BDOS 141 (P_DELAY) - Delay process for DE ticks (60Hz).
+     */
+
+    case 141:
+      {
+        extern void pit_read (unsigned long *, unsigned long *);
+        extern void pit_sleep_until (unsigned long, unsigned long);
+        unsigned long lo = 0, hi = 0;
+        unsigned long long target;
+        unsigned long ticks = (unsigned long)infop;
+
+        if (ticks > 0)
+          {
+            pit_read (&lo, &hi);
+            target = ((unsigned long long)hi << 32) | lo;
+            /* 1 tick at 60Hz = 1193182 / 60 = 19886 PIT cycles */
+            target += (unsigned long long)ticks * 19886ULL;
+            pit_sleep_until ((unsigned long)target,
+                             (unsigned long)(target >> 32));
+          }
+
+        rtnval = 0;
+      }
+
       break;
 
     /*

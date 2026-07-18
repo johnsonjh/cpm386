@@ -244,6 +244,11 @@ iotest.386: iotest.bin $(MK386)
 
 ################################################################################
 
+delay.386: delay.bin $(MK386)
+	$(MK386) delay.bin delay.386 0x100
+
+################################################################################
+
 tod.386: tod.bin $(MK386)
 	$(MK386) tod.bin tod.386 0x100
 
@@ -461,7 +466,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 \
 	trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 \
 	seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 \
-	aclockvt.386 aclockdv.386 vgatext.386 ticks.386 $(PATCH_HOLE)
+	aclockvt.386 aclockdv.386 vgatext.386 ticks.386 delay.386 $(PATCH_HOLE)
 	rm -f /tmp/ramdisk.tmp
 	rm -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
@@ -476,6 +481,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	cp -f aclockvt.386 /tmp/cpmd/ACLOCKVT.386
 	cp -f big.386 /tmp/cpmd/BIG.386
 	cp -f cls.386 /tmp/cpmd/CLS.386
+	cp -f delay.386 /tmp/cpmd/DELAY.386
 	cp -f dumpdir.386 /tmp/cpmd/DUMPDIR.386
 	cp -f dumpfcb.386 /tmp/cpmd/DUMPFCB.386
 	cp -f fparse.386 /tmp/cpmd/FPARSE.386
@@ -510,6 +516,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/ACLOCKVT.386 \
 	  /tmp/cpmd/BIG.386 \
 	  /tmp/cpmd/CLS.386 \
+	  /tmp/cpmd/DELAY.386 \
 	  /tmp/cpmd/DEMO.SUB \
 	  /tmp/cpmd/DUMPDIR.386 \
 	  /tmp/cpmd/DUMPFCB.386 \
