@@ -1,5 +1,9 @@
 # CP/M-386
 
+<!-- Copyright (c) 2026 Jeffrey H. Johnson -->
+<!-- SPDX-License-Identifier: MIT -->
+<!-- scspell-id: 696e52ee-8276-11f1-b02c-80ee73e9b8e7 -->
+
 **CP/M-386** is CP/M for 386 protected mode, derived from CP/M-68K.
 
 ## Overview
@@ -132,24 +136,24 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>168</th>
-                <th>27</th>
+                <th>184</th>
+                <th>29</th>
                 <th>0</th>
-                <th>141</th>
+                <th>155</th>
                 <th>0</th>
-                <th>5080</th>
-                <th>129</th>
+                <th>5474</th>
+                <th>143</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>67</th>
-                <th>23973</th>
-                <th>4098</th>
+                <th>23989</th>
+                <th>4100</th>
                 <th>3491</th>
-                <th>16384</th>
+                <th>16398</th>
                 <th>3216</th>
-                <th>605565</th>
-                <th>10140</th>
+                <th>605959</th>
+                <th>10154</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
@@ -166,3 +170,15 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
   grants an unlimited authorization to use, distribute, modify, enhance, and
   otherwise make available CP/M technology, including the CP/M operating
   systems and their derivatives.
+
+<!--
+Local Variables:
+mode: markdown
+indent-tabs-mode: nil
+fill-column: 80
+eval: (setq-local display-fill-column-indicator-column 72)
+eval: (display-fill-column-indicator-mode 1)
+End:
+-->
+<!-- vim: set ft=markdown expandtab cc=80 : -->
+<!-- EOF -->
