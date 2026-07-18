@@ -134,8 +134,6 @@ print:
 ; Memory top (bytes) into [0x600]
 detect_memory:
     pusha
-    mov ax, [0x413]            ; KB conventional
-    movzx ecx, ax
     mov ax, 0xe801
     xor bx, bx
     int 0x15
@@ -149,14 +147,21 @@ detect_memory:
     movzx eax, bx              ; 64K blocks above 16M
     shl eax, 6
     add edx, eax
-    add ecx, edx
-    jmp .scale
+    jmp .addext
 .try88:
     mov ah, 0x88
     int 0x15
     jc .fallback
     movzx edx, ax
+.addext:
+    test edx, edx
+    jz .noext
+    mov ecx, 1024
     add ecx, edx
+    jmp .scale
+.noext:
+    mov ax, [0x413]            ; KB conventional
+    movzx ecx, ax
 .scale:
     test ecx, ecx
     jnz .ok

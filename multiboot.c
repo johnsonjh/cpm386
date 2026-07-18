@@ -49,6 +49,7 @@ mb_init_from_multiboot (void *mbi_ptr)
     {
       uint32_t p = mbi->mmap_addr;
       uint32_t end = p + mbi->mmap_length;
+      uint64_t mmap_top = 0;
 
       while (p < end)
         {
@@ -62,13 +63,18 @@ mb_init_from_multiboot (void *mbi_ptr)
           if (e->type == 1)
             { /* available RAM */
               uint64_t eend = e->addr + e->len;
-              if (eend > top)
+              if (eend > mmap_top)
                 {
-                  top = eend;
+                  mmap_top = eend;
                 }
             }
 
           p += e->size + sizeof (uint32_t);
+        }
+
+      if (mmap_top > 0)
+        {
+          top = mmap_top;
         }
     }
 
