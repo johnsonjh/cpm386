@@ -4,15 +4,15 @@
 <!-- SPDX-License-Identifier: MIT -->
 <!-- scspell-id: 696e52ee-8276-11f1-b02c-80ee73e9b8e7 -->
 
-**CP/M-386** is CP/M for 386 protected mode, derived from CP/M-68K.
+**CP/M‑386** is CP/M for 386 protected mode, derived from CP/M‑68K.
 
 ## Overview
 
-**CP/M-386 is currently in the** ***very*** **early development stages.**
+**CP/M‑386 is currently in the** ***very*** **early development stages.**
 
-* Full 32-bit [protected mode](https://en.wikipedia.org/wiki/Protected_mode)
+* Full 32‑bit [protected mode](https://en.wikipedia.org/wiki/Protected_mode)
   implementation with
-  [Ring-3 TPA](https://en.wikipedia.org/wiki/Protection_ring).
+  [Ring‑3 TPA](https://en.wikipedia.org/wiki/Protection_ring).
 * Bootable via 3.5" 1.44MB floppy disk
   [MBR](https://en.wikipedia.org/wiki/Master_boot_record) or GRUB
   [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel.
@@ -20,6 +20,26 @@
   and/or [COM1 serial](https://en.wikipedia.org/wiki/Serial_port)
   (9600/N/8/1, `0x3F8`) consoles.
 * **No floppy/hard disk/CD/USB/network/sound/other drivers** (**yet**).
+
+## CP/M compatibility
+
+|            System | Coverage |
+|------------------:|:---------|
+| CP/M‑68K&nbsp;1.2 | **100%** |
+| CP/M&nbsp;2.2     | **98%**  |
+| CP/M‑Plus         | **71%**  |
+| DOS‑Plus          | **62%**  |
+| MP/M&nbsp;2.1     | **50%**  |
+
+* The **CP/M‑386** BDOS is at full parity with CP/M‑68K&nbsp;1.2.
+* CP/M&nbsp;2.2 equivalence is lacking only
+  [BDOS 27](https://www.seasip.info/Cpm/bdos.html#27) (which was deliberately
+  omitted from CP/M‑68K by Digital Research).
+* A large majority of the CP/M‑Plus (CP/M&nbsp;3) BDOS is also supported.
+* More than 60% of the DOS‑Plus additions have been implemented.
+* Approximately half of the MP/M extensions have been completed.  The missing
+  functionality is largely the multi‑user, multi‑tasking, message queuing, and
+  process control calls that don't apply to a single‑user CP/M implementation.
 
 ## Screenshots
 
@@ -100,14 +120,14 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>47</th>
-                <th>18750</th>
-                <th>3452</th>
-                <th>3049</th>
-                <th>12249</th>
-                <th>2641</th>
-                <th>467100</th>
-                <th>7119</th>
+                <th>50</th>
+                <th>19133</th>
+                <th>3533</th>
+                <th>3147</th>
+                <th>12453</th>
+                <th>2661</th>
+                <th>475526</th>
+                <th>7194</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -121,13 +141,13 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>747</th>
-                <th>179</th>
-                <th>114</th>
-                <th>454</th>
+                <th>769</th>
+                <th>185</th>
+                <th>117</th>
+                <th>467</th>
                 <th>48</th>
-                <th>24247</th>
-                <th>449</th>
+                <th>24976</th>
+                <th>462</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -141,30 +161,30 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>186</th>
-                <th>29</th>
+                <th>206</th>
+                <th>32</th>
                 <th>0</th>
-                <th>157</th>
+                <th>174</th>
                 <th>0</th>
-                <th>5358</th>
-                <th>144</th>
+                <th>6257</th>
+                <th>161</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>67</th>
-                <th>22225</th>
-                <th>4054</th>
-                <th>3986</th>
-                <th>14185</th>
-                <th>2698</th>
-                <th>585360</th>
-                <th>9149</th>
+                <th>70</th>
+                <th>22650</th>
+                <th>4144</th>
+                <th>4087</th>
+                <th>14419</th>
+                <th>2718</th>
+                <th>595414</th>
+                <th>9254</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
 ## License
 
-* **CP/M-386** is distributed under the terms of the permissive
+* **CP/M‑386** is distributed under the terms of the permissive
   [MIT&nbsp;License](LICENSE).
 
 * Bryan W. Sparks of DRDOS,&nbsp;Inc. dba DeviceLogics&nbsp;LLC, successor
