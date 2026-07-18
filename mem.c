@@ -176,13 +176,16 @@ _start (void)
   put_kb (kernel_size);
   puts (")\r\n");
 
-  puts ("Internal RAM Disk:     ");
-  puthex32 (kernel_size);
-  puts (" -> ");
-  puthex32 (base);
-  puts (" (");
-  put_kb (ramdisk_size);
-  puts (")\r\n");
+  if (ramdisk_size > 0)
+    {
+      puts ("Internal RAM Disk:     ");
+      puthex32 (kernel_size);
+      puts (" -> ");
+      puthex32 (base);
+      puts (" (");
+      put_kb (ramdisk_size);
+      puts (")\r\n");
+    }
 
   puts ("TPA base:              ");
   puthex32 (base);
