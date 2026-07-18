@@ -2,6 +2,8 @@ CC:=$(shell command -v gcc 2> /dev/null || command -v clang 2> /dev/null || prin
 
 AS:=$(shell command -v nasm 2> /dev/null || printf '%s' "nasm")
 
+NM:=$(shell command -v gnm 2> /dev/null || command -v nm 2> /dev/null || printf '%s' "nm")
+
 LD:=$(shell command -v gld 2> /dev/null || command -v ld 2> /dev/null || printf '%s' "ld")
 
 OBJCOPY:=$(shell command -v gobjcopy 2> /dev/null || command -v objcopy 2> /dev/null || printf '%s' "objcopy")
@@ -94,10 +96,10 @@ all: $(TARGET) boot.bin os.bin floppy.img
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o $*.o $<
 	$(LD) -m $(ELF_I386) -T user.ld -o $*.elf $*.o
-	@entry=$$(nm $*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
+	@entry=$$($(NM) $*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    echo "ERROR: _start at 0x$$entry, expected 0x100"; \
-	    nm $*.elf | head -20; exit 1; \
+	    $(NM) $*.elf | head -20; exit 1; \
 	  fi
 	$(OBJCOPY) -O binary $*.elf $@
 	rm -f $*.o $*.elf
@@ -168,7 +170,7 @@ pause.386: pause.bin $(MK386)
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o vgaon.o conctl.c
 	$(LD) -m $(ELF_I386) -T user.ld -o vgaon.elf vgaon.o
-	@entry=$$(nm vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
+	@entry=$$($(NM) vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: vgaon _start"; exit 1; fi
 	$(OBJCOPY) -O binary vgaon.elf $@
 	rm -f vgaon.o vgaon.elf
@@ -176,7 +178,7 @@ vgaon.bin: conctl.c user.ld
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o vgaoff.o conctl.c
 	$(LD) -m $(ELF_I386) -T user.ld -o vgaoff.elf vgaoff.o
-	@entry=$$(nm vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
+	@entry=$$($(NM) vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: vgaoff _start"; exit 1; fi
 	$(OBJCOPY) -O binary vgaoff.elf $@
 	rm -f vgaoff.o vgaoff.elf
@@ -184,7 +186,7 @@ vgaoff.bin: conctl.c user.ld
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o seron.o conctl.c
 	$(LD) -m $(ELF_I386) -T user.ld -o seron.elf seron.o
-	@entry=$$(nm seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
+	@entry=$$($(NM) seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: seron _start"; exit 1; fi
 	$(OBJCOPY) -O binary seron.elf $@
 	rm -f seron.o seron.elf
@@ -192,7 +194,7 @@ seron.bin: conctl.c user.ld
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o seroff.o conctl.c
 	$(LD) -m $(ELF_I386) -T user.ld -o seroff.elf seroff.o
-	@entry=$$(nm seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
+	@entry=$$($(NM) seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: seroff _start"; exit 1; fi
 	$(OBJCOPY) -O binary seroff.elf $@
 	rm -f seroff.o seroff.elf
@@ -243,7 +245,7 @@ ed.386: ed.bin $(MK386)
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o big.o big.c
 	$(LD) -m $(ELF_I386) -T user.ld -o big.elf big.o
-	@entry=$$(nm big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
+	@entry=$$($(NM) big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then echo "ERROR: big _start"; exit 1; fi
 	$(OBJCOPY) -O binary big.elf big_stub.bin
 	@stub=$$(wc -c < big_stub.bin); \
@@ -370,13 +372,13 @@ mbentry.o: mbentry.S multiboot.h
 	$(AS) $(ASFLAGS) -I . -o $@ $<
 
 bss.inc: $(TARGET)
-	nm $(TARGET) | $(AWK) '/__bss_start/ { print "bss_start equ 0x" $$1 }' > bss.inc
-	nm $(TARGET) | $(AWK) '/__bss_end/ { print "bss_end equ 0x" $$1 }' >> bss.inc
-	nm $(TARGET) | $(AWK) '/__kernel_end/ { print "kernel_end equ 0x" $$1 }' >> bss.inc
-	nm $(TARGET) | $(AWK) '/ _start$$/ { print "kernel_entry equ 0x" $$1 }' >> bss.inc
+	$(NM) $(TARGET) | $(AWK) '/__bss_start/ { print "bss_start equ 0x" $$1 }' > bss.inc
+	$(NM) $(TARGET) | $(AWK) '/__bss_end/ { print "bss_end equ 0x" $$1 }' >> bss.inc
+	$(NM) $(TARGET) | $(AWK) '/__kernel_end/ { print "kernel_end equ 0x" $$1 }' >> bss.inc
+	$(NM) $(TARGET) | $(AWK) '/ _start$$/ { print "kernel_entry equ 0x" $$1 }' >> bss.inc
 	# Floppy boot loads this many 512-byte sectors of os.bin at 0x10000.
 	# Must cover kernel_end (code+data+bss hole+ramdisk); +2 for headroom.
-	ke=$$(nm $(TARGET) | $(AWK) '/__kernel_end/ { print $$1 }'); \
+	ke=$$($(NM) $(TARGET) | $(AWK) '/__kernel_end/ { print $$1 }'); \
 	  bytes=$$((0x$$ke - 0x10000)); \
 	  sec=$$(( (bytes + 511) / 512 + 2 )); \
 	  echo "SECTORS_TO_LOAD equ $$sec" >> bss.inc
