@@ -111,10 +111,16 @@ CFLAGS = \
 	$(W_NO_DEPRECATED_NON_PROTOTYPE) \
 	$(W_NO_RETURN_MISMATCH) \
 	$(WNO_UNUSED_COMMAND_LINE_ARGUMENT) \
+	-D__cpm386 \
+	-D__cpm386__ \
+	-Dcpm386 \
+	-D__CPM386 \
 	-D__CPM386__ \
 	-DCPM386 \
 	-D__i386 \
 	-D__i386__ \
+	-D__I386 \
+	-D__I386__ \
 	-DNDEBUG \
 	-ffreestanding \
 	-fmerge-all-constants \
@@ -419,11 +425,6 @@ ticks.386: ticks.bin $(MK386)
 
 ################################################################################
 
-ed.386: ed.bin $(MK386)
-	$(MK386) ed.bin ed.386 0x100
-
-################################################################################
-
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o big.o big.c
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o big.elf big.o
@@ -453,7 +454,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 \
 	trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 \
 	seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 \
-	aclockvt.386 aclockdv.386 vgatext.386 ticks.386 ed.386 $(PATCH_HOLE)
+	aclockvt.386 aclockdv.386 vgatext.386 ticks.386 $(PATCH_HOLE)
 	rm -f /tmp/ramdisk.tmp
 	rm -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
@@ -470,7 +471,6 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	cp -f cls.386 /tmp/cpmd/CLS.386
 	cp -f dumpdir.386 /tmp/cpmd/DUMPDIR.386
 	cp -f dumpfcb.386 /tmp/cpmd/DUMPFCB.386
-	cp -f ed.386 /tmp/cpmd/ED.386
 	cp -f fparse.386 /tmp/cpmd/FPARSE.386
 	cp -f hd.386 /tmp/cpmd/HD.386
 	cp -f hello.386 /tmp/cpmd/HELLO.386
@@ -506,7 +506,6 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/DEMO.SUB \
 	  /tmp/cpmd/DUMPDIR.386 \
 	  /tmp/cpmd/DUMPFCB.386 \
-	  /tmp/cpmd/ED.386 \
 	  /tmp/cpmd/ENV.DAT \
 	  /tmp/cpmd/FPARSE.386 \
 	  /tmp/cpmd/HD.386 \
@@ -642,7 +641,7 @@ clean:
 	      dumpfcb.bin dumpfcb.386 dumpdir.bin dumpdir.386 \
 	      mem.bin mem.386 aclockvt.bin aclockvt.386 \
 	      aclockdv.bin aclockdv.386 vgatext.bin vgatext.386 \
-	      ticks.bin ticks.386 ed.bin ed.386 \
+	      ticks.bin ticks.386 \
 	      $(MK386) $(PATCH_HOLE)
 
 ################################################################################
