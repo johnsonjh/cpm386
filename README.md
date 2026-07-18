@@ -50,13 +50,15 @@ Building **CP/M-386** is supported on **Solaris**, **illumos**, **FreeBSD**,
 **GCC** build (default):
 
 ```sh
-make -j "$(nproc 2> /dev/null || echo 1)" && make test
+make -j "$(nproc 2> /dev/null || printf '%s' 1)"
+make test
 ```
 
 **Clang** build:
 
 ```sh
-make -j "$(nproc 2> /dev/null || echo 1)" CC="clang" && make test
+make -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
+make test
 ```
 
 ## QEMU Testing
@@ -136,24 +138,24 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>184</th>
+                <th>186</th>
                 <th>29</th>
                 <th>0</th>
-                <th>155</th>
+                <th>157</th>
                 <th>0</th>
-                <th>5474</th>
-                <th>143</th>
+                <th>5482</th>
+                <th>144</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>67</th>
-                <th>23989</th>
+                <th>23991</th>
                 <th>4100</th>
                 <th>3491</th>
-                <th>16398</th>
+                <th>16400</th>
                 <th>3216</th>
-                <th>605959</th>
-                <th>10154</th>
+                <th>605967</th>
+                <th>10155</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
