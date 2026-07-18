@@ -9,7 +9,7 @@
 * Full 32-bit [protected mode](https://en.wikipedia.org/wiki/Protected_mode)
   implementation with
   [Ring-3 TPA](https://en.wikipedia.org/wiki/Protection_ring).
-* Bootable via 1.44MB floppy
+* Bootable via 3.5" 1.44MB floppy disk
   [MBR](https://en.wikipedia.org/wiki/Master_boot_record) or GRUB
   [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel.
 * Supports [VGA text](https://en.wikipedia.org/wiki/VGA_text_mode) (`0xB8000`)
@@ -41,7 +41,7 @@
 ## Compilation
 
 Building **CP/M-386** is supported on **Solaris**, **illumos**, **FreeBSD**,
-**Haiku**, and **Linux**.
+**OpenBSD**, **Haiku**, and **Linux**.
 
 **GCC** build (default):
 
@@ -92,13 +92,13 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         <tbody><tr>
                 <th>C</th>
                 <th>47</th>
-                <th>18653</th>
-                <th>2681</th>
+                <th>18672</th>
+                <th>2698</th>
                 <th>1509</th>
-                <th>14463</th>
+                <th>14465</th>
                 <th>3161</th>
-                <th>428350</th>
-                <th>8149</th>
+                <th>428436</th>
+                <th>8151</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -137,19 +137,19 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>136</th>
                 <th>0</th>
-                <th>4619</th>
+                <th>4642</th>
                 <th>123</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>67</th>
-                <th>21161</th>
-                <th>2994</th>
+                <th>21180</th>
+                <th>3011</th>
                 <th>1886</th>
-                <th>16281</th>
+                <th>16283</th>
                 <th>3209</th>
-                <th>515083</th>
-                <th>10042</th>
+                <th>515192</th>
+                <th>10044</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
