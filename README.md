@@ -165,7 +165,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 | `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
-| `TICKS.386`    | High‑resolution timer tests (BDOS 225, 226)                                                        |
+| `TICKS.386`    | High‑resolution timer tests (BDOS 225, BDOS 226)                                                   |
 | `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104), [BDOS 105](https://www.seasip.info/Cpm/bdos.html#105)) |
 | `TOUCH.386`    | Create an empty file                                                                               |
 | `TRUNC.386`    | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
