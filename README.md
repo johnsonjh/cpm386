@@ -46,8 +46,8 @@
 
 ## Compilation
 
-Building **CP/M-386** is supported on **Haiku**, **Linux**, **NetBSD**,
-and **OpenBSD**,
+Building **CP/M-386** is supported on **Linux**, **NetBSD**, **OpenBSD**, and
+and **Haiku**:
 
 **GCC** build (default):
 
@@ -146,7 +146,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>157</th>
                 <th>0</th>
-                <th>5354</th>
+                <th>5358</th>
                 <th>143</th>
         </tr></tbody>
         <tfoot><tr>
@@ -157,7 +157,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>3951</th>
                 <th>14105</th>
                 <th>2691</th>
-                <th>581674</th>
+                <th>581678</th>
                 <th>9110</th>
         </tr></tfoot></table>
 <!-- scc-end -->
