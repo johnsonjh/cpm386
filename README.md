@@ -101,13 +101,13 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         <tbody><tr>
                 <th>C</th>
                 <th>46</th>
-                <th>18624</th>
-                <th>3426</th>
+                <th>18630</th>
+                <th>3427</th>
                 <th>3016</th>
-                <th>12182</th>
-                <th>2636</th>
-                <th>463982</th>
-                <th>7095</th>
+                <th>12187</th>
+                <th>2637</th>
+                <th>464118</th>
+                <th>7098</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -131,13 +131,13 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
-                <th>600</th>
+                <th>605</th>
                 <th>75</th>
                 <th>108</th>
-                <th>417</th>
+                <th>422</th>
                 <th>0</th>
-                <th>13831</th>
-                <th>403</th>
+                <th>13897</th>
+                <th>409</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
@@ -152,13 +152,13 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         <tfoot><tr>
                 <th>Total</th>
                 <th>66</th>
-                <th>22080</th>
-                <th>4024</th>
+                <th>22091</th>
+                <th>4025</th>
                 <th>3951</th>
-                <th>14105</th>
-                <th>2691</th>
-                <th>581678</th>
-                <th>9110</th>
+                <th>14115</th>
+                <th>2692</th>
+                <th>581880</th>
+                <th>9119</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
