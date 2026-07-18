@@ -40,6 +40,8 @@
 * Approximately half of the MP/M extensions have been completed.  The missing
   functionality is largely the multi‑user, multi‑tasking, message queuing, and
   process control calls that don't apply to a single‑user CP/M implementation.
+* **CP/M‑386**‑specific BDOS extensions exist for some new features (direct
+  video access, high‑resolution timers, etc.)
 
 ## Screenshots
 
@@ -103,6 +105,57 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 * Use `-display none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
 
+## Hardware support
+
+* Compatible with 386 (and later systems) with 1MB (or more) memory.
+* Systems using either PC BIOS or UEFI (with CSM) are supported.
+* VGA, 8042 PS/2, 8250/16450/16550 UART, and 8253/8254 PIT are supported.
+
+## Included utilities
+
+|        Program | Description                                                                                        |
+|---------------:|:---------------------------------------------------------------------------------------------------|
+| `ACLOCKDV.386` | [aclock](https://github.com/tenox7/aclock) (VGA console version)                                   |
+| `ACLOCKVT.386` | [aclock](https://github.com/tenox7/aclock) (ANSI terminal version)                                 |
+| `BIG.386`      | Multi‑extent test executable                                                                       |
+| `CLS.386`      | Clear screen                                                                                       |
+| `DELAY.386`    | Delay test (BDOS 141)                                                                              |
+| `DEMO.SUB`     | SUBMIT demonstration                                                                               |
+| `DUMPDIR.386`  | Directory entry dump utility                                                                       |
+| `DUMPFCB.386`  | File control block dump utility                                                                    |
+| `ENV.DAT`      | Environment data file                                                                              |
+| `FPARSE.386`   | F_PARSE test (BDOS 152)                                                                            |
+| `GETSN.386`    | Display serial number (BDOS 107)                                                                   |
+| `HD.386`       | Hex dump utility                                                                                   |
+| `HELLO.386`    | Hello world                                                                                        |
+| `ILLEGAL.386`  | Ring‑3 protection test                                                                             |
+| `IOTEST.386`   | File I/O BDOS tests                                                                                |
+| `LRBC.386`     | Query Last Record Byte Count                                                                       |
+| `LS.386`       | List files (with sizes)                                                                            |
+| `MEM.386`      | Memory map utility                                                                                 |
+| `MORE.386`     | [`more`](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/more.html)‑style pager         |
+| `OD.386`       | Octal dump utility                                                                                 |
+| `PAUSE.386`    | Wait for keypress                                                                                  |
+| `PRINTENV.386` | Print environment and system data                                                                  |
+| `PROFILE.SUB`  | SUBMIT script (automatically executed at boot)                                                     |
+| `RC.386`       | Return code test and query                                                                         |
+| `README.TXT`   | Sample text file                                                                                   |
+| `REBOOT.386`   | Reboot utility                                                                                     |
+| `RM.386`       | [`rm`](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/rm.html)‑like file deletion tool |
+| `SEROFF.386`   | Disable serial console                                                                             |
+| `SERON.386`    | Enable serial console                                                                              |
+| `SYNC.386`     | Synchronize disks (BDOS 48)                                                                        |
+| `TEST211.386`  | Numeric format test (BDOS 211)                                                                     |
+| `TICKS.386`    | High‑resolution timer test (BDOS 225, 226)                                                         |
+| `TOD.386`      | Get (and set) Time of Day clock (BDOS 104, 105)                                                    |
+| `TOUCH.386`    | Create an empty file                                                                               |
+| `TRUNC.386`    | Truncation tests (BDOS 99)                                                                         |
+| `TSEC.386`     | Get date and time (BDOS 155)                                                                       |
+| `VER.386`      | Display OS version (BDOS 163)                                                                      |
+| `VGAOFF.386`   | Disable VGA console                                                                                |
+| `VGAON.386`    | Enable VGA console                                                                                 |
+| `VGATEXT.386`  | VGA direct access demo (BDOS 224, 225)                                                             |
+
 ## Code statistics
 
 <!-- scc-start -->
@@ -121,33 +174,33 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         <tbody><tr>
                 <th>C</th>
                 <th>50</th>
-                <th>19133</th>
-                <th>3533</th>
-                <th>3147</th>
-                <th>12453</th>
-                <th>2661</th>
-                <th>475526</th>
-                <th>7194</th>
+                <th>19157</th>
+                <th>3537</th>
+                <th>3151</th>
+                <th>12469</th>
+                <th>2662</th>
+                <th>476068</th>
+                <th>7210</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
-                <th>1937</th>
+                <th>1941</th>
                 <th>319</th>
                 <th>715</th>
-                <th>903</th>
+                <th>907</th>
                 <th>9</th>
-                <th>74758</th>
-                <th>1071</th>
+                <th>74836</th>
+                <th>1074</th>
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>769</th>
+                <th>770</th>
                 <th>185</th>
                 <th>117</th>
-                <th>467</th>
+                <th>468</th>
                 <th>48</th>
-                <th>24976</th>
-                <th>462</th>
+                <th>25006</th>
+                <th>463</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -161,24 +214,24 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>206</th>
-                <th>32</th>
+                <th>259</th>
+                <th>36</th>
                 <th>0</th>
-                <th>174</th>
+                <th>223</th>
                 <th>0</th>
-                <th>6257</th>
-                <th>161</th>
+                <th>11690</th>
+                <th>210</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>70</th>
-                <th>22650</th>
-                <th>4144</th>
-                <th>4087</th>
-                <th>14419</th>
-                <th>2718</th>
-                <th>595414</th>
-                <th>9254</th>
+                <th>22732</th>
+                <th>4152</th>
+                <th>4091</th>
+                <th>14489</th>
+                <th>2719</th>
+                <th>601497</th>
+                <th>9323</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
