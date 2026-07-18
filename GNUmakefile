@@ -700,7 +700,18 @@ test: test_bdos
 
 ################################################################################
 
-scc:
+update-readme: README.md
+	"$${MAKE:-$(MAKE)}" markdown-toc
+	"$${MAKE:-$(MAKE)}" scc
+
+################################################################################
+
+markdown-toc: README.md
+	markdown-toc -i README.md
+
+################################################################################
+
+scc: README.md
 	"$${MAKE:-$(MAKE)}" clean
 	"$${MAKE:-$(MAKE)}" scc-real
 	"$${MAKE:-$(MAKE)}" scc-real
@@ -726,7 +737,7 @@ scc-real: README.md
 
 ################################################################################
 
-.PHONY: all clean run test scc scc-real
+.PHONY: all clean run test scc scc-real markdown-toc update-readme
 
 ################################################################################
 

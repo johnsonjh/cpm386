@@ -6,6 +6,24 @@
 
 **CP/M‑386** is CP/M for 386 protected mode, derived from CP/M‑68K.
 
+---
+
+<!-- toc -->
+
+- [Overview](#overview)
+- [CP/M compatibility](#cpm-compatibility)
+- [Screenshots](#screenshots)
+- [Build requirements](#build-requirements)
+- [Compilation](#compilation)
+- [QEMU testing](#qemu-testing)
+  * [QEMU notes](#qemu-notes)
+- [Hardware support](#hardware-support)
+- [Included utilities](#included-utilities)
+- [Code statistics](#code-statistics)
+- [License](#license)
+
+<!-- tocstop -->
+
 ## Overview
 
 **CP/M‑386 is currently in the** ***very*** **early development stages.**
@@ -86,7 +104,7 @@ make -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
 make test
 ```
 
-## QEMU Testing
+## QEMU testing
 
 [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
 kernel (recommended):
@@ -147,7 +165,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 | `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
-| `TICKS.386`    | High‑resolution timer test (BDOS 225, 226)                                                         |
+| `TICKS.386`    | High‑resolution timer tests (BDOS 225, 226)                                                        |
 | `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104), [105](https://www.seasip.info/Cpm/bdos.html#105)) |
 | `TOUCH.386`    | Create an empty file                                                                               |
 | `TRUNC.386`    | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
@@ -155,7 +173,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 | `VER.386`      | Display OS version ([BDOS 163](https://www.seasip.info/Cpm/bdos.html#163))                         |
 | `VGAOFF.386`   | Disable VGA console (BDOS 222)                                                                     |
 | `VGAON.386`    | Enable VGA console (BDOS 222)                                                                      |
-| `VGATEXT.386`  | VGA direct access demo (BDOS 224, 225)                                                             |
+| `VGATEXT.386`  | VGA direct access demo (BDOS 224)                                                                  |
 
 ## Code statistics
 
@@ -195,13 +213,13 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>770</th>
-                <th>185</th>
-                <th>117</th>
-                <th>468</th>
+                <th>781</th>
+                <th>189</th>
+                <th>119</th>
+                <th>473</th>
                 <th>48</th>
-                <th>25006</th>
-                <th>463</th>
+                <th>25344</th>
+                <th>468</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -215,24 +233,24 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>260</th>
-                <th>36</th>
+                <th>278</th>
+                <th>40</th>
                 <th>0</th>
-                <th>224</th>
+                <th>238</th>
                 <th>0</th>
-                <th>11834</th>
-                <th>211</th>
+                <th>12249</th>
+                <th>225</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>70</th>
-                <th>22733</th>
-                <th>4152</th>
-                <th>4091</th>
-                <th>14490</th>
+                <th>22762</th>
+                <th>4160</th>
+                <th>4093</th>
+                <th>14509</th>
                 <th>2719</th>
-                <th>601641</th>
-                <th>9324</th>
+                <th>602394</th>
+                <th>9343</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
