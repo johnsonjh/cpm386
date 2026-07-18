@@ -46,13 +46,13 @@ Building **CP/M-386** is supported on **Solaris**, **illumos**, **FreeBSD**,
 **GCC** build (default):
 
 ```sh
-make && make test
+make -j "$(nproc 2> /dev/null || echo 1)" && make test
 ```
 
 **Clang** build:
 
 ```sh
-make CC="clang" && make test
+make -j "$(nproc 2> /dev/null || echo 1)" CC="clang" && make test
 ```
 
 ## QEMU Testing
@@ -92,23 +92,33 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         <tbody><tr>
                 <th>C</th>
                 <th>47</th>
-                <th>19941</th>
-                <th>3445</th>
-                <th>2032</th>
-                <th>14464</th>
+                <th>20693</th>
+                <th>3537</th>
+                <th>2676</th>
+                <th>14480</th>
                 <th>3161</th>
-                <th>471150</th>
-                <th>8153</th>
+                <th>492629</th>
+                <th>8164</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
-                <th>1565</th>
-                <th>261</th>
-                <th>401</th>
+                <th>1805</th>
+                <th>291</th>
+                <th>611</th>
                 <th>903</th>
                 <th>9</th>
-                <th>64205</th>
-                <th>1042</th>
+                <th>71060</th>
+                <th>1053</th>
+        </tr><tr>
+                <th>Makefile</th>
+                <th>1</th>
+                <th>733</th>
+                <th>177</th>
+                <th>113</th>
+                <th>443</th>
+                <th>46</th>
+                <th>23851</th>
+                <th>439</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -120,16 +130,6 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>12945</th>
                 <th>396</th>
         </tr><tr>
-                <th>Makefile</th>
-                <th>1</th>
-                <th>455</th>
-                <th>84</th>
-                <th>8</th>
-                <th>363</th>
-                <th>39</th>
-                <th>14941</th>
-                <th>363</th>
-        </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
                 <th>168</th>
@@ -137,19 +137,19 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>141</th>
                 <th>0</th>
-                <th>5003</th>
-                <th>128</th>
+                <th>5080</th>
+                <th>129</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>67</th>
-                <th>22703</th>
-                <th>3883</th>
-                <th>2532</th>
-                <th>16288</th>
-                <th>3209</th>
-                <th>568244</th>
-                <th>10052</th>
+                <th>23973</th>
+                <th>4098</th>
+                <th>3491</th>
+                <th>16384</th>
+                <th>3216</th>
+                <th>605565</th>
+                <th>10140</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

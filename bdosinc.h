@@ -82,3 +82,19 @@
 #define min(x, y) (((x) < (y)) ? (x) : (y)) /* Min function            */
 
 /*****************************************************************************/
+
+/*
+ * Local Variables:
+ * mode: c
+ * indent-tabs-mode: nil
+ * tab-width: 2
+ * c-basic-offset: 2
+ * fill-column: 80
+ * eval: (setq-local display-fill-column-indicator-column 80)
+ * eval: (display-fill-column-indicator-mode 1)
+ * End:
+ */
+
+/******************************************************************************/
+/* vim: set ft=c ts=2 sw=2 tw=0 ai expandtab cc=80 : */
+/******************************************************************************/

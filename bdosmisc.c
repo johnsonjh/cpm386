@@ -464,3 +464,19 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
   *entry_out = tpa_base + ent;
   return 0;
 }
+
+/*
+ * Local Variables:
+ * mode: c
+ * indent-tabs-mode: nil
+ * tab-width: 2
+ * c-basic-offset: 2
+ * fill-column: 80
+ * eval: (setq-local display-fill-column-indicator-column 80)
+ * eval: (display-fill-column-indicator-mode 1)
+ * End:
+ */
+
+/******************************************************************************/
+/* vim: set ft=c ts=2 sw=2 tw=0 ai expandtab cc=80 : */
+/******************************************************************************/

@@ -1,311 +1,502 @@
-CC:=$(shell command -v gcc 2> /dev/null || command -v clang 2> /dev/null || printf '%s' "cc")
+################################################################################
+# CP/M-386 - Makefile
+# Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+# SPDX-License-Identifier: MIT
+# scspell-id: b1bb2880-826f-11f1-a5c2-80ee73e9b8e7
+################################################################################
 
-AS:=$(shell command -v nasm 2> /dev/null || printf '%s' "nasm")
+################################################################################
 
-NM:=$(shell command -v gnm 2> /dev/null || command -v nm 2> /dev/null || printf '%s' "nm")
+OPTFLAGS:=-O2
 
-LD:=$(shell command -v gld 2> /dev/null || command -v ld 2> /dev/null || printf '%s' "ld")
+################################################################################
 
-OBJCOPY:=$(shell command -v gobjcopy 2> /dev/null || command -v objcopy 2> /dev/null || printf '%s' "objcopy")
+CC:=$(shell \
+	command -v gcc 2> /dev/null || \
+	command -v clang 2> /dev/null || \
+	printf '%s' "cc")
 
-AWK:=$(shell command -v gawk 2> /dev/null || command -v mawk 2> /dev/null || command -v awk 2> /dev/null || printf '%s' "awk")
+################################################################################
 
-DD:=$(shell command -v gdd 2> /dev/null || command -v dd 2> /dev/null || printf '%s' "dd")
+AS:=$(shell \
+	command -v nasm 2> /dev/null || \
+	printf '%s' "nasm")
 
-W_NO_RETURN_MISMATCH:=$(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-return-mismatch")
+################################################################################
 
-W_NO_DEPRECATED_NON_PROTOTYPE:=$(shell $(CC) -Werror -Wno-deprecated-non-prototype -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-deprecated-non-prototype")
+NM:=$(shell \
+	command -v gnm 2> /dev/null || \
+	command -v nm 2> /dev/null || \
+	printf '%s' "nm")
 
-WNO_UNUSED_COMMAND_LINE_ARGUMENT:=$(shell $(CC) -Werror -Wno-unused-command-line-argument -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-unused-command-line-argument")
+################################################################################
+
+LD:=$(shell \
+	command -v gld 2> /dev/null || \
+	command -v ld.bfd 2> /dev/null || \
+	command -v ld.gold 2> /dev/null || \
+	command -v ld.lld 2> /dev/null || \
+	command -v ld > /dev/null || \
+	printf '%s' "ld")
+
+################################################################################
+
+OBJCOPY:=$(shell \
+	command -v gobjcopy 2> /dev/null || \
+	command -v objcopy 2> /dev/null || \
+	printf '%s' "objcopy")
+
+################################################################################
+
+AWK:=$(shell \
+	command -v gawk 2> /dev/null || \
+	command -v mawk 2> /dev/null || \
+	command -v nawk 2> /dev/null || \
+	command -v oawk 2> /dev/null || \
+	command -v awk 2> /dev/null || \
+	printf '%s' "awk")
+
+################################################################################
+
+DD:=$(shell \
+	command -v gdd 2> /dev/null || \
+	command -v dd 2> /dev/null || \
+	printf '%s' "dd")
+
+################################################################################
+
+W_NO_RETURN_MISMATCH:=$(shell \
+	$(CC) -Werror -Wno-return-mismatch \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
+	printf '%s' "-Wno-return-mismatch")
+
+################################################################################
+
+W_NO_DEPRECATED_NON_PROTOTYPE:=$(shell \
+	$(CC) -Werror -Wno-deprecated-non-prototype \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
+	printf '%s' "-Wno-deprecated-non-prototype")
+
+################################################################################
+
+WNO_UNUSED_COMMAND_LINE_ARGUMENT:=$(shell \
+	$(CC) -Werror -Wno-unused-command-line-argument \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
+	printf '%s' "-Wno-unused-command-line-argument")
+
+################################################################################
 
 OS=$(shell uname -s 2> /dev/null)
 
+################################################################################
+
 ELF_I386=elf_i386
+
+################################################################################
 
 ifneq "$(findstring SunOS,$(OS))" ""
 ELF_I386=elf_i386_sol2
 endif
 
+################################################################################
+
 ifneq "$(findstring Haiku,$(OS))" ""
 ELF_I386=elf_i386_haiku
 endif
 
+################################################################################
+
 CFLAGS = \
-	 $(W_NO_DEPRECATED_NON_PROTOTYPE) \
-	 $(W_NO_RETURN_MISMATCH) \
-	 $(WNO_UNUSED_COMMAND_LINE_ARGUMENT) \
-	 -D__CPM386__ \
-	 -DCPM386 \
-	 -D__i386 \
-	 -D__i386__ \
-	 -ffreestanding \
-	 -fmerge-all-constants \
-	 -fno-asynchronous-unwind-tables \
-	 -fno-builtin \
-	 -fno-pic \
-	 -fno-pie \
-	 -fno-plt \
-	 -fno-stack-clash-protection \
-	 -fno-stack-protector \
-	 -fno-tree-vectorize \
-	 -fno-unwind-tables \
-	 -fomit-frame-pointer \
-	 -I. \
-	 -m32 \
-	 -march=i386 \
-	 -mtune=i686 \
-	 -nostdinc \
-	 -nostdlib \
-	 -O2 \
-	 -Wall \
-	 -Wcast-qual \
-	 -Wdouble-promotion \
-	 -Wextra \
-	 -Wformat-security \
-	 -Wno-implicit-function-declaration \
-	 -Wno-implicit-int \
-	 -Wno-incompatible-pointer-types \
-	 -Wno-int-conversion \
-	 -Wno-old-style-definition \
-	 -Wno-pointer-sign \
-	 -Wno-return-type \
-	 -Wno-sign-compare \
-	 -Wno-unused-parameter \
-	 -Wshadow
+	$(OPTFLAGS) \
+	$(W_NO_DEPRECATED_NON_PROTOTYPE) \
+	$(W_NO_RETURN_MISMATCH) \
+	$(WNO_UNUSED_COMMAND_LINE_ARGUMENT) \
+	-D__CPM386__ \
+	-DCPM386 \
+	-D__i386 \
+	-D__i386__ \
+	-DNDEBUG \
+	-ffreestanding \
+	-fmerge-all-constants \
+	-fno-asynchronous-unwind-tables \
+	-fno-builtin \
+	-fno-pic \
+	-fno-pie \
+	-fno-plt \
+	-fno-stack-clash-protection \
+	-fno-stack-protector \
+	-fno-tree-vectorize \
+	-fno-unwind-tables \
+	-fomit-frame-pointer \
+	-I. \
+	-m32 \
+	-march=i386 \
+	-mtune=i686 \
+	-nostdinc \
+	-nostdlib \
+	-U_FORTIFY_SOURCE \
+	-Wall \
+	-Wcast-qual \
+	-Wdouble-promotion \
+	-Wextra \
+	-Wformat-security \
+	-Wno-implicit-function-declaration \
+	-Wno-implicit-int \
+	-Wno-incompatible-pointer-types \
+	-Wno-int-conversion \
+	-Wno-old-style-definition \
+	-Wno-pointer-sign \
+	-Wno-return-type \
+	-Wno-sign-compare \
+	-Wno-unused-parameter \
+	-Wshadow
+
+################################################################################
 
 ASFLAGS = -f elf32
 
-LDFLAGS = -m $(ELF_I386) -no-pie -T linker.ld -nostdlib --gc-sections --print-gc-sections
+################################################################################
+
+LDFLAGS = -m $(ELF_I386) -no-pie -T linker.ld -nostdlib \
+	--gc-sections --print-gc-sections
+
+################################################################################
 
 BDOS_OBJS = bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil.o iosys.o
 CCP_OBJ = ccp.o
 BIOS_OBJ = bios.o
 BRINGUP_OBJ = cpm_bringup.o
-
 PMODE_OBJS = pmode.o pmode_asm.o
 RTC_OBJ = rtc.o
 PIT_OBJ = pit.o
-OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) $(RTC_OBJ) $(PIT_OBJ) mbentry.o multiboot.o
+OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
+	$(RTC_OBJ) $(PIT_OBJ) mbentry.o multiboot.o
+
+################################################################################
 
 TARGET = cpm386.elf
 
+################################################################################
+
 MK386 = ./mk386
-# 70 KiB image so multi-extent (32 KiB/extent) and >64 KiB
+
+################################################################################
+
+# 70 KiB image: multi-extent and >64 KiB
 BIG_IMG_SIZE = 71680
 RAMDISK_KB = 256
 
+################################################################################
+
 all: $(TARGET) boot.bin os.bin floppy.img
 
-# --- transient .386 programs (load at TPA+0x100) ---
+################################################################################
+
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o $*.o $<
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o $*.elf $*.o
 	@entry=$$($(NM) $*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	    echo "ERROR: _start at 0x$$entry, expected 0x100"; \
-	    $(NM) $*.elf | head -20; exit 1; \
-	  fi
+	    printf '%s\n' "ERROR: _start at 0x$$entry, expected 0x100"; \
+	    $(NM) $*.elf | head -20; \
+	    exit 1; fi
 	$(OBJCOPY) -O binary $*.elf $@
 	rm -f $*.o $*.elf
 
-$(MK386): mk386.c
-	$(CC) -O2 -o $@ $<
+################################################################################
 
-# Host helper: punch allocation hole in BIG.386 dirent on a raw CP/M image
+$(MK386): mk386.c
+	$(CC) $(OPTFLAGS) -o $@ $<
+
+################################################################################
+
 PATCH_HOLE = ./patch_hole
 $(PATCH_HOLE): patch_hole.c
-	$(CC) -O2 -o $@ $<
+	$(CC) $(OPTFLAGS) -o $@ $<
+
+################################################################################
 
 hello.386: hello.bin $(MK386)
 	$(MK386) hello.bin hello.386 0x100
 
+################################################################################
+
 lrbc.386: lrbc.bin $(MK386)
 	$(MK386) lrbc.bin lrbc.386 0x100
+
+################################################################################
 
 iotest.386: iotest.bin $(MK386)
 	$(MK386) iotest.bin iotest.386 0x100
 
+################################################################################
+
 tod.386: tod.bin $(MK386)
 	$(MK386) tod.bin tod.386 0x100
+
+################################################################################
 
 hd.386: hd.bin $(MK386)
 	$(MK386) hd.bin hd.386 0x100
 
+################################################################################
+
 od.386: od.bin $(MK386)
 	$(MK386) od.bin od.386 0x100
+
+################################################################################
 
 ls.386: ls.bin $(MK386)
 	$(MK386) ls.bin ls.386 0x100
 
+################################################################################
+
 ver.386: ver.bin $(MK386)
 	$(MK386) ver.bin ver.386 0x100
+
+################################################################################
 
 reboot.386: reboot.bin $(MK386)
 	$(MK386) reboot.bin reboot.386 0x100
 
+################################################################################
+
 touch.386: touch.bin $(MK386)
 	$(MK386) touch.bin touch.386 0x100
+
+################################################################################
 
 more.386: more.bin $(MK386)
 	$(MK386) more.bin more.386 0x100
 
+################################################################################
+
 cls.386: cls.bin $(MK386)
 	$(MK386) cls.bin cls.386 0x100
+
+################################################################################
 
 rc.386: rc.bin $(MK386)
 	$(MK386) rc.bin rc.386 0x100
 
+################################################################################
+
 tsec.386: tsec.bin $(MK386)
 	$(MK386) tsec.bin tsec.386 0x100
+
+################################################################################
 
 trunc.386: trunc.bin $(MK386)
 	$(MK386) trunc.bin trunc.386 0x100
 
+################################################################################
+
 rm.386: rm.bin $(MK386)
 	$(MK386) rm.bin rm.386 0x100
+
+################################################################################
 
 printenv.386: printenv.bin $(MK386)
 	$(MK386) printenv.bin printenv.386 0x100
 
+################################################################################
+
 pause.386: pause.bin $(MK386)
 	$(MK386) pause.bin pause.386 0x100
 
-# Console enable helpers (one source, four -DPROG_* builds)
+################################################################################
+
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o vgaon.o conctl.c
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o vgaon.elf vgaon.o
 	@entry=$$($(NM) vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
-	  if [ "$$entry" != "00000100" ]; then echo "ERROR: vgaon _start"; exit 1; fi
+	  if [ "$$entry" != "00000100" ]; then \
+	  printf '%s\n' "ERROR: vgaon _start"; \
+	  exit 1; fi
 	$(OBJCOPY) -O binary vgaon.elf $@
 	rm -f vgaon.o vgaon.elf
+
+################################################################################
 
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o vgaoff.o conctl.c
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o vgaoff.elf vgaoff.o
 	@entry=$$($(NM) vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
-	  if [ "$$entry" != "00000100" ]; then echo "ERROR: vgaoff _start"; exit 1; fi
+	  if [ "$$entry" != "00000100" ]; then \
+	  printf '%s\n' "ERROR: vgaoff _start"; \
+	  exit 1; fi
 	$(OBJCOPY) -O binary vgaoff.elf $@
 	rm -f vgaoff.o vgaoff.elf
+
+################################################################################
 
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o seron.o conctl.c
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o seron.elf seron.o
 	@entry=$$($(NM) seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
-	  if [ "$$entry" != "00000100" ]; then echo "ERROR: seron _start"; exit 1; fi
+	  if [ "$$entry" != "00000100" ]; then \
+	  printf '%s\n' "ERROR: seron _start"; \
+	  exit 1; fi
 	$(OBJCOPY) -O binary seron.elf $@
 	rm -f seron.o seron.elf
+
+################################################################################
 
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o seroff.o conctl.c
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o seroff.elf seroff.o
 	@entry=$$($(NM) seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
-	  if [ "$$entry" != "00000100" ]; then echo "ERROR: seroff _start"; exit 1; fi
+	  if [ "$$entry" != "00000100" ]; then \
+	  printf '%s\n' "ERROR: seroff _start"; \
+	  exit 1; fi
 	$(OBJCOPY) -O binary seroff.elf $@
 	rm -f seroff.o seroff.elf
+
+################################################################################
 
 vgaon.386: vgaon.bin $(MK386)
 	$(MK386) vgaon.bin vgaon.386 0x100
 
+################################################################################
+
 vgaoff.386: vgaoff.bin $(MK386)
 	$(MK386) vgaoff.bin vgaoff.386 0x100
+
+################################################################################
 
 seron.386: seron.bin $(MK386)
 	$(MK386) seron.bin seron.386 0x100
 
+################################################################################
+
 seroff.386: seroff.bin $(MK386)
 	$(MK386) seroff.bin seroff.386 0x100
+
+################################################################################
 
 fparse.386: fparse.bin $(MK386)
 	$(MK386) fparse.bin fparse.386 0x100
 
+################################################################################
+
 illegal.386: illegal.bin $(MK386)
 	$(MK386) illegal.bin illegal.386 0x100
+
+################################################################################
 
 dumpfcb.386: dumpfcb.bin $(MK386)
 	$(MK386) dumpfcb.bin dumpfcb.386 0x100
 
+################################################################################
+
 dumpdir.386: dumpdir.bin $(MK386)
 	$(MK386) dumpdir.bin dumpdir.386 0x100
+
+################################################################################
 
 mem.386: mem.bin $(MK386)
 	$(MK386) mem.bin mem.386 0x100
 
+################################################################################
+
 aclockvt.386: aclockvt.bin $(MK386)
 	$(MK386) aclockvt.bin aclockvt.386 0x100
+
+################################################################################
 
 aclockdv.386: aclockdv.bin $(MK386)
 	$(MK386) aclockdv.bin aclockdv.386 0x100
 
+################################################################################
+
 vgatext.386: vgatext.bin $(MK386)
 	$(MK386) vgatext.bin vgatext.386 0x100
+
+################################################################################
 
 ticks.386: ticks.bin $(MK386)
 	$(MK386) ticks.bin ticks.386 0x100
 
+################################################################################
+
 ed.386: ed.bin $(MK386)
 	$(MK386) ed.bin ed.386 0x100
 
-# Pad stub to BIG_IMG_SIZE with 0x90 so the .386 spans multiple extents and >64K
+################################################################################
+
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o big.o big.c
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o big.elf big.o
 	@entry=$$($(NM) big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
-	  if [ "$$entry" != "00000100" ]; then echo "ERROR: big _start"; exit 1; fi
+	  if [ "$$entry" != "00000100" ]; then \
+	  printf '%s\n' "ERROR: big _start"; \
+	  exit 1; fi
 	$(OBJCOPY) -O binary big.elf big_stub.bin
 	@stub=$$(wc -c < big_stub.bin); \
 	  if [ "$$stub" -ge $(BIG_IMG_SIZE) ]; then \
-	    echo "ERROR: big stub $$stub >= $(BIG_IMG_SIZE)"; exit 1; fi; \
+	    printf '%s\n' "ERROR: big stub $$stub >= $(BIG_IMG_SIZE)"; \
+	    exit 1; fi; \
 	  pad=$$(( $(BIG_IMG_SIZE) - stub )); \
-	  cp big_stub.bin big.bin; \
-	  $(DD) if=/dev/zero bs=1 count=$$pad status=none 2>/dev/null | \
+	  cp -f big_stub.bin big.bin; \
+	  $(DD) if="/dev/zero" bs="1" count="$$pad" status="none" 2> /dev/null | \
 	    tr '\0' '\220' >> big.bin
 	rm -f big.o big.elf big_stub.bin
+
+################################################################################
 
 big.386: big.bin $(MK386)
 	$(MK386) big.bin big.386 0x100
 
-# RAM disk: programs + accurate DOS-PLUS LRBC (cpmtools)
-ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 ed.386 $(PATCH_HOLE)
+################################################################################
+
+ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
+	ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 \
+	trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 \
+	seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 \
+	aclockvt.386 aclockdv.386 vgatext.386 ticks.386 ed.386 $(PATCH_HOLE)
 	rm -f /tmp/ramdisk.tmp
 	rm -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
-	printf 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' > /tmp/cpmd/README.TXT
-	printf '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' > /tmp/cpmd/ENV.DAT
-	printf '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nPRINTENV\r\nLS -A\r\nDIR *.*\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from existing TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' > /tmp/cpmd/DEMO.SUB
+	printf 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' \
+		> /tmp/cpmd/README.TXT
+	printf '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
+		> /tmp/cpmd/ENV.DAT
+	printf '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nPRINTENV\r\nLS -A\r\nDIR *.*\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from existing TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
+		> /tmp/cpmd/DEMO.SUB
 	printf 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
-	cp aclockdv.386 /tmp/cpmd/ACLOCKDV.386
-	cp aclockvt.386 /tmp/cpmd/ACLOCKVT.386
-	cp big.386 /tmp/cpmd/BIG.386
-	cp cls.386 /tmp/cpmd/CLS.386
-	cp dumpdir.386 /tmp/cpmd/DUMPDIR.386
-	cp dumpfcb.386 /tmp/cpmd/DUMPFCB.386
-	cp ed.386 /tmp/cpmd/ED.386
-	cp fparse.386 /tmp/cpmd/FPARSE.386
-	cp hd.386 /tmp/cpmd/HD.386
-	cp hello.386 /tmp/cpmd/HELLO.386
-	cp illegal.386 /tmp/cpmd/ILLEGAL.386
-	cp iotest.386 /tmp/cpmd/IOTEST.386
-	cp lrbc.386 /tmp/cpmd/LRBC.386
-	cp ls.386 /tmp/cpmd/LS.386
-	cp mem.386 /tmp/cpmd/MEM.386
-	cp more.386 /tmp/cpmd/MORE.386
-	cp od.386 /tmp/cpmd/OD.386
-	cp pause.386 /tmp/cpmd/PAUSE.386
-	cp printenv.386 /tmp/cpmd/PRINTENV.386
-	cp rc.386 /tmp/cpmd/RC.386
-	cp reboot.386 /tmp/cpmd/REBOOT.386
-	cp rm.386 /tmp/cpmd/RM.386
-	cp seroff.386 /tmp/cpmd/SEROFF.386
-	cp seron.386 /tmp/cpmd/SERON.386
-	cp ticks.386 /tmp/cpmd/TICKS.386
-	cp tod.386 /tmp/cpmd/TOD.386
-	cp touch.386 /tmp/cpmd/TOUCH.386
-	cp trunc.386 /tmp/cpmd/TRUNC.386
-	cp tsec.386 /tmp/cpmd/TSEC.386
-	cp ver.386 /tmp/cpmd/VER.386
-	cp vgaoff.386 /tmp/cpmd/VGAOFF.386
-	cp vgaon.386 /tmp/cpmd/VGAON.386
-	cp vgatext.386 /tmp/cpmd/VGATEXT.386
+	cp -f aclockdv.386 /tmp/cpmd/ACLOCKDV.386
+	cp -f aclockvt.386 /tmp/cpmd/ACLOCKVT.386
+	cp -f big.386 /tmp/cpmd/BIG.386
+	cp -f cls.386 /tmp/cpmd/CLS.386
+	cp -f dumpdir.386 /tmp/cpmd/DUMPDIR.386
+	cp -f dumpfcb.386 /tmp/cpmd/DUMPFCB.386
+	cp -f ed.386 /tmp/cpmd/ED.386
+	cp -f fparse.386 /tmp/cpmd/FPARSE.386
+	cp -f hd.386 /tmp/cpmd/HD.386
+	cp -f hello.386 /tmp/cpmd/HELLO.386
+	cp -f illegal.386 /tmp/cpmd/ILLEGAL.386
+	cp -f iotest.386 /tmp/cpmd/IOTEST.386
+	cp -f lrbc.386 /tmp/cpmd/LRBC.386
+	cp -f ls.386 /tmp/cpmd/LS.386
+	cp -f mem.386 /tmp/cpmd/MEM.386
+	cp -f more.386 /tmp/cpmd/MORE.386
+	cp -f od.386 /tmp/cpmd/OD.386
+	cp -f pause.386 /tmp/cpmd/PAUSE.386
+	cp -f printenv.386 /tmp/cpmd/PRINTENV.386
+	cp -f rc.386 /tmp/cpmd/RC.386
+	cp -f reboot.386 /tmp/cpmd/REBOOT.386
+	cp -f rm.386 /tmp/cpmd/RM.386
+	cp -f seroff.386 /tmp/cpmd/SEROFF.386
+	cp -f seron.386 /tmp/cpmd/SERON.386
+	cp -f ticks.386 /tmp/cpmd/TICKS.386
+	cp -f tod.386 /tmp/cpmd/TOD.386
+	cp -f touch.386 /tmp/cpmd/TOUCH.386
+	cp -f trunc.386 /tmp/cpmd/TRUNC.386
+	cp -f tsec.386 /tmp/cpmd/TSEC.386
+	cp -f ver.386 /tmp/cpmd/VER.386
+	cp -f vgaoff.386 /tmp/cpmd/VGAOFF.386
+	cp -f vgaon.386 /tmp/cpmd/VGAON.386
+	cp -f vgatext.386 /tmp/cpmd/VGATEXT.386
 	mkfs.cpm -f 4mb-hd /tmp/ramdisk.tmp
 	cpmcp -f 4mb-hd /tmp/ramdisk.tmp \
 	  /tmp/cpmd/ACLOCKDV.386 \
@@ -347,59 +538,94 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 ls.386 
 	  /tmp/cpmd/VGATEXT.386 \
 	    0:
 	$(PATCH_HOLE) /tmp/ramdisk.tmp BIG.386 || true
-	$(DD) if=/dev/zero of=ramdisk.bin bs=1024 count=$(RAMDISK_KB) status=none 2>/dev/null
-	$(DD) if=/tmp/ramdisk.tmp of=ramdisk.bin conv=notrunc status=none 2>/dev/null
+	$(DD) if="/dev/zero" of="ramdisk.bin" bs="1024" count="$(RAMDISK_KB)" \
+		status="none" 2> /dev/null
+	$(DD) if="/tmp/ramdisk.tmp" of="ramdisk.bin" conv="notrunc" \
+		status="none" 2> /dev/null
 	rm -rf /tmp/ramdisk.tmp /tmp/cpmd
+
+################################################################################
 
 cpm_bringup.o: cpm_bringup.c ramdisk.bin cpm_bringup.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+################################################################################
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+################################################################################
 
 bios.o: bios.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+################################################################################
+
 rtc.o: rtc.c rtc.h
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+################################################################################
 
 pit.o: pit.c pit.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+################################################################################
+
 pmode.o: pmode.c pmode.h
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+################################################################################
 
 pmode_asm.o: pmode.S
 	$(AS) $(ASFLAGS) -I . -o $@ $<
 
+################################################################################
+
 mbentry.o: mbentry.S multiboot.h
 	$(AS) $(ASFLAGS) -I . -o $@ $<
 
+################################################################################
+
 bss.inc: $(TARGET)
-	$(NM) $(TARGET) | $(AWK) '/__bss_start/ { print "bss_start equ 0x" $$1 }' > bss.inc
-	$(NM) $(TARGET) | $(AWK) '/__bss_end/ { print "bss_end equ 0x" $$1 }' >> bss.inc
-	$(NM) $(TARGET) | $(AWK) '/__kernel_end/ { print "kernel_end equ 0x" $$1 }' >> bss.inc
-	$(NM) $(TARGET) | $(AWK) '/ _start$$/ { print "kernel_entry equ 0x" $$1 }' >> bss.inc
-	# Floppy boot loads this many 512-byte sectors of os.bin at 0x10000.
-	# Must cover kernel_end (code+data+bss hole+ramdisk); +2 for headroom.
-	ke=$$($(NM) $(TARGET) | $(AWK) '/__kernel_end/ { print $$1 }'); \
-	  bytes=$$((0x$$ke - 0x10000)); \
-	  sec=$$(( (bytes + 511) / 512 + 2 )); \
-	  echo "SECTORS_TO_LOAD equ $$sec" >> bss.inc
+	$(NM) $(TARGET) | \
+		$(AWK) '/__bss_start/ { print "bss_start equ 0x" $$1 }' > bss.inc
+	$(NM) $(TARGET) | \
+		$(AWK) '/__bss_end/ { print "bss_end equ 0x" $$1 }' >> bss.inc
+	$(NM) $(TARGET) | \
+		$(AWK) '/__kernel_end/ { print "kernel_end equ 0x" $$1 }' >> bss.inc
+	$(NM) $(TARGET) | \
+		$(AWK) '/ _start$$/ { print "kernel_entry equ 0x" $$1 }' >> bss.inc
+	ke=$$($(NM) $(TARGET) | \
+		$(AWK) '/__kernel_end/ { print $$1 }'); \
+			bytes=$$((0x$$ke - 0x10000)); \
+			sec=$$(( (bytes + 511) / 512 + 2 )); \
+			printf '%s\n' "SECTORS_TO_LOAD equ $$sec" >> bss.inc
+
+################################################################################
 
 boot.bin: boot.S bss.inc
 	$(AS) -f bin -I . -o $@ $<
 
+################################################################################
+
 os.bin: $(TARGET)
 	$(OBJCOPY) -O binary $(TARGET) $@
+
+################################################################################
 
 $(TARGET): $(OBJS) linker.ld
 	$(LD) $(LDFLAGS) -o $@ $(OBJS)
 
+################################################################################
+
 floppy.img: boot.bin os.bin
 	cat boot.bin os.bin > payload.bin
-	$(DD) if=/dev/zero of=$@ bs=512 count=2880 status=none 2>/dev/null
-	$(DD) if=payload.bin of=$@ conv=notrunc status=none 2>/dev/null
+	$(DD) if="/dev/zero" of="$@" bs="512" count="2880" \
+		status="none" 2> /dev/null
+	$(DD) if="payload.bin" of="$@" conv="notrunc" \
+		status="none" 2> /dev/null
+
+################################################################################
 
 clean:
 	rm -f *.o $(TARGET) *.img *.log cpm386.bin test_bdos os.bin boot.bin \
@@ -419,20 +645,30 @@ clean:
 	      ticks.bin ticks.386 ed.bin ed.386 \
 	      $(MK386) $(PATCH_HOLE)
 
+################################################################################
 
 run: floppy.img
 	timeout 5s qemu-system-i386 -nographic -serial stdio -monitor none \
 	  -drive if=floppy,format=raw,file=floppy.img -boot a || true
 
-test_bdos: test_bdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil.o iosys.o ccp.o cpm_bringup.o
-	$(CC) -m32 -O2 -I. -o $@ $^
+################################################################################
+
+test_bdos: test_bdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
+	dskutil.o iosys.o ccp.o cpm_bringup.o
+	$(CC) -m32 $(OPTFLAGS) -I. -o $@ $^
+
+################################################################################
 
 test: test_bdos
 	./test_bdos
 
+################################################################################
+
 scc:
 	"$${MAKE:-$(MAKE)}" scc-real
 	"$${MAKE:-$(MAKE)}" scc-real
+
+################################################################################
 
 scc-real: README.md
 	"$${MAKE:-$(MAKE)}" clean
@@ -451,5 +687,47 @@ scc-real: README.md
 	expand README.md > README.out && \
 	mv -f README.out README.md
 
-.NOTPARALLEL:
+################################################################################
+
 .PHONY: all clean run test scc scc-real
+
+################################################################################
+
+.PHONY: printvars printenv
+
+printvars printenv:
+	-@printf '%s: ' "FEATURES" 2> /dev/null
+	-@printf '%s ' "$(.FEATURES)" 2> /dev/null
+	-@printf '%s\n' "" 2> /dev/null
+	-@$(foreach V,$(sort $(.VARIABLES)), \
+	    $(if $(filter-out environment% default automatic,$(origin $V)), \
+	    $(if $(strip $($V)),$(info $V: [$($V)]),)))
+	-@true > /dev/null 2>&1
+
+################################################################################
+
+.PHONY: print-%
+
+print-%:
+	-@$(info $*: [$($*)] ($(flavor $*). set by $(origin $*)))@true
+	-@true > /dev/null 2>&1
+
+################################################################################
+# Local Variables:
+# mode: makefile
+# indent-tabs-mode: t
+# tab-width: 4
+# whitespace-style: (tabs tab-mark)
+# whitespace-display-mappings: ((tab-mark 9 [45] [45]))
+# fill-column: 78
+# eval: (setq-local whitespace-display-mappings
+#                   '((tab-mark 9
+#                               [45 45 62]
+#                               [45 45 62])))
+# eval: (whitespace-mode 1)
+# eval: (setq-local display-fill-column-indicator-column 78)
+# eval: (display-fill-column-indicator-mode 1)
+# End:
+################################################################################
+# vim: set ft=make ts=4 ai noexpandtab list listchars=tab\:\>\- cc=80 :
+################################################################################
