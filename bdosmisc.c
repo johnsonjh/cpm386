@@ -113,7 +113,7 @@ bdosinit ()
   GBL.insptr = GBL.remptr = &(GBL.t_buff[0]);
   GBL.delim = '$';
   GBL.lstecho = FALSE;
-  GBL.echodel = TRUE;
+  GBL.echodel = FALSE;
   chainp = NULL;             /*sw Used to be GBL.chainp             */
   _bdos (13, 0, 0);          /* reset disk system function          */
   segp = (void *)bgetseg (); /* get pointer to memory segment table */
