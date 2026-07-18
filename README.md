@@ -65,16 +65,17 @@ make test
 
 ## QEMU Testing
 
-[Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel:
+[Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
+kernel (recommended):
 
 ```sh
-qemu-system-i386 -m 4G -serial stdio -monitor none -kernel "cpm386.elf"
+qemu-system-i386 -m 1G -serial stdio -monitor none -kernel "cpm386.elf"
 ```
 
 Floppy ([MBR](https://en.wikipedia.org/wiki/Master_boot_record)) loader:
 
 ```sh
-qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
+qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 ```
 
 ### QEMU notes
@@ -120,12 +121,12 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>732</th>
+                <th>733</th>
                 <th>175</th>
                 <th>112</th>
-                <th>445</th>
+                <th>446</th>
                 <th>46</th>
-                <th>23722</th>
+                <th>23749</th>
                 <th>441</th>
         </tr><tr>
                 <th>Assembly</th>
@@ -140,24 +141,24 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>188</th>
+                <th>189</th>
                 <th>30</th>
                 <th>0</th>
-                <th>158</th>
+                <th>159</th>
                 <th>0</th>
-                <th>5499</th>
-                <th>144</th>
+                <th>5513</th>
+                <th>145</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>66</th>
-                <th>22081</th>
+                <th>22083</th>
                 <th>4025</th>
                 <th>3951</th>
-                <th>14105</th>
+                <th>14107</th>
                 <th>2691</th>
-                <th>581792</th>
-                <th>9111</th>
+                <th>581833</th>
+                <th>9112</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
