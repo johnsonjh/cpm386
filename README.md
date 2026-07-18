@@ -23,13 +23,13 @@
 
 ## CP/M compatibility
 
-|            System | Coverage |
-|------------------:|:---------|
-| CP/M‑68K&nbsp;1.2 | **100%** |
-| CP/M&nbsp;2.2     | **98%**  |
-| CP/M‑Plus         | **71%**  |
-| DOS‑Plus          | **62%**  |
-| MP/M&nbsp;2.1     | **50%**  |
+|            System | BDOS coverage |
+|------------------:|:--------------|
+| CP/M‑68K&nbsp;1.2 | **100%**      |
+| CP/M&nbsp;2.2     | **98%**       |
+| CP/M‑Plus         | **71%**       |
+| DOS‑Plus          | **62%**       |
+| MP/M&nbsp;2.1     | **50%**       |
 
 * The **CP/M‑386** BDOS is at full parity with CP/M‑68K&nbsp;1.2.
 * CP/M&nbsp;2.2 equivalence is lacking only
@@ -37,11 +37,12 @@
   omitted from CP/M‑68K by Digital Research).
 * A large majority of the CP/M‑Plus (CP/M&nbsp;3) BDOS is also supported.
 * More than 60% of the DOS‑Plus additions have been implemented.
-* Approximately half of the MP/M extensions have been completed.  The missing
-  functionality is largely the multi‑user, multi‑tasking, message queuing, and
-  process control calls that don't apply to a single‑user CP/M implementation.
-* **CP/M‑386**‑specific BDOS extensions exist for some new features (direct
-  video access, high‑resolution timers, etc.)
+* Approximately half of the MP/M extensions have been completed.
+  * The missing functionality is largely the multi‑user, multi‑tasking,
+    message queuing, and process control calls that don't apply to a
+    single‑user CP/M implementation.
+* Unique **CP/M‑386**‑specific BDOS extensions have been added to accommodate
+  new features like direct video access and high‑resolution timing.
 
 ## Screenshots
 
@@ -214,24 +215,24 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>259</th>
+                <th>260</th>
                 <th>36</th>
                 <th>0</th>
-                <th>223</th>
+                <th>224</th>
                 <th>0</th>
-                <th>11690</th>
-                <th>210</th>
+                <th>11756</th>
+                <th>211</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>70</th>
-                <th>22732</th>
+                <th>22733</th>
                 <th>4152</th>
                 <th>4091</th>
-                <th>14489</th>
+                <th>14490</th>
                 <th>2719</th>
-                <th>601497</th>
-                <th>9323</th>
+                <th>601563</th>
+                <th>9324</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
