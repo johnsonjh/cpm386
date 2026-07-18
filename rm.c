@@ -76,6 +76,7 @@ getch_wait (void)
   while (bdos (11, 0))
     {
       int d = (int)bdos (6, 0xFF) & 0xff;
+
       if (d != '\r' && d != '\n' && d != 0)
         {
           break;
@@ -211,6 +212,7 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
         {
           in_typ = 1;
           ti = 0;
+
           continue;
         }
 
@@ -363,28 +365,33 @@ _start (void)
           while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
             {
               char c = (char)toupper_ch ((unsigned char)tail[i++]);
+
               switch (c)
                 {
                 case 'H':
                   help ();
                   bdos (0, 0);
+
                   break;
 
                 case 'A':
                   flag_all = 1;
+
                   break;
 
                 case 'I':
                   flag_ask = 1;
+
                   break;
 
                 case 'F':
                   flag_force = 1;
+
                   break;
 
                 default:
                   help ();
-                  puts ("ERR: Wrong parameters\r\n");
+                  puts ("ERROR: Wrong parameters\r\n");
                   bdos (0, 0);
                 }
             }
@@ -392,10 +399,12 @@ _start (void)
             {
               i++;
             }
+
           continue;
         }
 
       pat = &tail[i];
+
       break;
     }
 
@@ -405,7 +414,7 @@ _start (void)
       if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
         {
           help ();
-          puts ("ERR: No filespec\r\n");
+          puts ("ERROR: No filespec\r\n");
           bdos (0, 0);
         }
 
@@ -427,6 +436,7 @@ _start (void)
   user = (int)bdos (32, 0xFF);
   nents = 0;
   bdos (26, (LONG)(unsigned long)dma);
+
   if (fcb[0])
     {
       bdos (14, (LONG)(fcb[0] - 1));
@@ -435,6 +445,7 @@ _start (void)
   fcb[12] = '?';
   fcb[14] = '?';
   r = bdos (17, (LONG)(unsigned long)fcb);
+
   while (r != 255)
     {
       UBYTE *de = dma + (r * 32);
@@ -449,7 +460,7 @@ _start (void)
 
   if (nents == 0)
     {
-      puts ("INF: No file found\r\n");
+      puts ("No file found\r\n");
       bdos (0, 0);
     }
 
@@ -469,7 +480,7 @@ _start (void)
           continue;
         }
 
-      puts ("INF: Deleting ");
+      puts ("Deleting ");
       print_name (e);
       putch (' ');
 
@@ -480,25 +491,30 @@ _start (void)
           for (;;)
             {
               int c = getch_wait ();
+
               if (c == 'y' || c == 'Y')
                 {
-                  puts ("\r      \rINF: Deleting ");
+                  puts ("\r      \rDeleting ");
                   print_name (e);
                   putch (' ');
                   do_del = 1;
+
                   break;
                 }
 
               if (c == 'n' || c == 'N')
                 {
-                  puts ("\r      \rSkipping\r\n");
+                  puts ("\r      \rSkipping ");
+                  print_name (e);
+                  puts ("      \r\n");
                   do_del = 0;
+
                   break;
                 }
 
               if (c == 3)
                 {
-                  puts ("\r      \r^C\r\n");
+                  puts ("\r      \r^C       \r\n");
                   bdos (0, 0);
                 }
             }
@@ -510,17 +526,20 @@ _start (void)
         }
 
       fill_del_fcb (dfcb, e);
+
       if (e->ro && flag_force)
         {
           /* clear R/O attribute then delete */
           dfcb[9] = (UBYTE)(e->name[0] & 0x7f); /* rebuild clean */
           {
             int j;
+
             for (j = 0; j < 11; j++)
               {
                 dfcb[1 + j] = (UBYTE)(e->name[j] & 0x7f);
               }
           }
+
           bdos (30, (LONG)(unsigned long)dfcb); /* set attrs clear high bits */
         }
 
@@ -532,7 +551,7 @@ _start (void)
         }
       else
         {
-          puts ("OK\r\n");
+          puts ("OK   \r\n");
         }
     }
 
