@@ -1,4 +1,13 @@
 /*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ * scspell-id: 6ecd1e9c-82b6-11f1-9a75-80ee73e9b8e7
+ */
+
+/*****************************************************************************/
+
+/*
  * user.ld - link transient programs at classic CP/M load address 0x100
  * (TPA-relative). Base page 0x00-0xFF is reserved for FCBs / command tail.
  * ENTRY(_start) must be the first byte of the image (load_off == entry_off).

@@ -1,4 +1,13 @@
 /*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ * scspell-id: 3cb46d0c-82b6-11f1-a3b5-80ee73e9b8e7
+ */
+
+/*****************************************************************************/
+
+/*
  * linker.ld - flat 32-bit protected mode layout for CP/M-386
  * Load at 64K (for real-mode floppy loader compat)
  * kernel low, TPA after kernel+stack to end of RAM

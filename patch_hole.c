@@ -2,6 +2,7 @@
  * CP/M-386
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
+ * scspell-id: 29a97c58-82b5-11f1-b95a-80ee73e9b8e7
  */
 
 /*****************************************************************************/
