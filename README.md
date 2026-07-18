@@ -121,13 +121,13 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>733</th>
-                <th>175</th>
-                <th>112</th>
-                <th>446</th>
-                <th>46</th>
-                <th>23749</th>
-                <th>441</th>
+                <th>740</th>
+                <th>177</th>
+                <th>113</th>
+                <th>450</th>
+                <th>48</th>
+                <th>24026</th>
+                <th>445</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -147,18 +147,18 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>157</th>
                 <th>0</th>
                 <th>5358</th>
-                <th>143</th>
+                <th>144</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>66</th>
-                <th>22091</th>
-                <th>4025</th>
-                <th>3951</th>
-                <th>14115</th>
-                <th>2692</th>
-                <th>581880</th>
-                <th>9119</th>
+                <th>22098</th>
+                <th>4027</th>
+                <th>3952</th>
+                <th>14119</th>
+                <th>2694</th>
+                <th>582157</th>
+                <th>9124</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
