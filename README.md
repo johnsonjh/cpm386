@@ -118,43 +118,43 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 |---------------:|:---------------------------------------------------------------------------------------------------|
 | `ACLOCKDV.386` | [aclock](https://github.com/tenox7/aclock) (VGA console version)                                   |
 | `ACLOCKVT.386` | [aclock](https://github.com/tenox7/aclock) (ANSI terminal version)                                 |
-| `BIG.386`      | Multi‑extent test executable                                                                       |
-| `CLS.386`      | Clear screen                                                                                       |
-| `DELAY.386`    | Delay test (BDOS 141)                                                                              |
+| `BIG.386`      | Multi‑extent loading test executable                                                               |
+| `CLS.386`      | Clear screen (BDOS 221)                                                                            |
+| `DELAY.386`    | Delay test ([BDOS 141](https://www.seasip.info/Cpm/bdos.html#141))                                 |
 | `DEMO.SUB`     | SUBMIT demonstration                                                                               |
-| `DUMPDIR.386`  | Directory entry dump utility                                                                       |
-| `DUMPFCB.386`  | File control block dump utility                                                                    |
+| `DUMPDIR.386`  | Directory entry dump utility ([BDOS 17](https://www.seasip.info/Cpm/bdos.html#17), [BDOS 18](https://www.seasip.info/Cpm/bdos.html#18)) |
+| `DUMPFCB.386`  | File control block dump utility ([BDOS 15](https://www.seasip.info/Cpm/bdos.html#15))              |
 | `ENV.DAT`      | Environment data file                                                                              |
-| `FPARSE.386`   | F_PARSE test (BDOS 152)                                                                            |
-| `GETSN.386`    | Display serial number (BDOS 107)                                                                   |
+| `FPARSE.386`   | F_PARSE test ([BDOS 152](https://www.seasip.info/Cpm/bdos.html#152))                               |
+| `GETSN.386`    | Display serial number ([BDOS 107](https://www.seasip.info/Cpm/bdos.html#107))                      |
 | `HD.386`       | Hex dump utility                                                                                   |
-| `HELLO.386`    | Hello world                                                                                        |
-| `ILLEGAL.386`  | Ring‑3 protection test                                                                             |
+| `HELLO.386`    | Hello world! (the first CP/M‑386 program!)                                                         |
+| `ILLEGAL.386`  | Ring‑3 protection and exception handler test                                                       |
 | `IOTEST.386`   | File I/O BDOS tests                                                                                |
 | `LRBC.386`     | Query Last Record Byte Count                                                                       |
 | `LS.386`       | List files (with sizes)                                                                            |
-| `MEM.386`      | Memory map utility                                                                                 |
-| `MORE.386`     | [`more`](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/more.html)‑style pager         |
+| `MEM.386`      | Memory map utility (BDOS 227)                                                                      |
+| `MORE.386`     | UNIX `more`‑style pager                                                                            |
 | `OD.386`       | Octal dump utility                                                                                 |
 | `PAUSE.386`    | Wait for keypress                                                                                  |
 | `PRINTENV.386` | Print environment and system data                                                                  |
 | `PROFILE.SUB`  | SUBMIT script (automatically executed at boot)                                                     |
-| `RC.386`       | Return code test and query                                                                         |
+| `RC.386`       | Return code test and query ([BDOS 108](https://www.seasip.info/Cpm/bdos.html#108))                 |
 | `README.TXT`   | Sample text file                                                                                   |
-| `REBOOT.386`   | Reboot utility                                                                                     |
-| `RM.386`       | [`rm`](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/rm.html)‑like file deletion tool |
-| `SEROFF.386`   | Disable serial console                                                                             |
-| `SERON.386`    | Enable serial console                                                                              |
-| `SYNC.386`     | Synchronize disks (BDOS 48)                                                                        |
-| `TEST211.386`  | Numeric format test (BDOS 211)                                                                     |
+| `REBOOT.386`   | Reboot utility (BDOS 220)                                                                          |
+| `RM.386`       | UNIX `rm`‑like interactive file deletion utility                                                   |
+| `SEROFF.386`   | Disable serial console (BDOS 223)                                                                  |
+| `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
+| `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
+| `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
 | `TICKS.386`    | High‑resolution timer test (BDOS 225, 226)                                                         |
-| `TOD.386`      | Get (and set) Time of Day clock (BDOS 104, 105)                                                    |
+| `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104), [105](https://www.seasip.info/Cpm/bdos.html#105)) |
 | `TOUCH.386`    | Create an empty file                                                                               |
-| `TRUNC.386`    | Truncation tests (BDOS 99)                                                                         |
-| `TSEC.386`     | Get date and time (BDOS 155)                                                                       |
-| `VER.386`      | Display OS version (BDOS 163)                                                                      |
-| `VGAOFF.386`   | Disable VGA console                                                                                |
-| `VGAON.386`    | Enable VGA console                                                                                 |
+| `TRUNC.386`    | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
+| `TSEC.386`     | Get date and time ([BDOS 155](https://www.seasip.info/Cpm/bdos.html#155))                          |
+| `VER.386`      | Display OS version ([BDOS 163](https://www.seasip.info/Cpm/bdos.html#163))                         |
+| `VGAOFF.386`   | Disable VGA console (BDOS 222)                                                                     |
+| `VGAON.386`    | Enable VGA console (BDOS 222)                                                                      |
 | `VGATEXT.386`  | VGA direct access demo (BDOS 224, 225)                                                             |
 
 ## Code statistics
@@ -220,7 +220,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>224</th>
                 <th>0</th>
-                <th>11756</th>
+                <th>11834</th>
                 <th>211</th>
         </tr></tbody>
         <tfoot><tr>
@@ -231,7 +231,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>4091</th>
                 <th>14490</th>
                 <th>2719</th>
-                <th>601563</th>
+                <th>601641</th>
                 <th>9324</th>
         </tr></tfoot></table>
 <!-- scc-end -->
