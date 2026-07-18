@@ -72,7 +72,7 @@ kernel (recommended):
 qemu-system-i386 -m 1G -serial stdio -monitor none -kernel "cpm386.elf"
 ```
 
-Floppy ([MBR](https://en.wikipedia.org/wiki/Master_boot_record)) loader:
+Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
 
 ```sh
 qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
@@ -146,7 +146,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>159</th>
                 <th>0</th>
-                <th>5513</th>
+                <th>5511</th>
                 <th>145</th>
         </tr></tbody>
         <tfoot><tr>
@@ -157,7 +157,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>3951</th>
                 <th>14107</th>
                 <th>2691</th>
-                <th>581833</th>
+                <th>581831</th>
                 <th>9112</th>
         </tr></tfoot></table>
 <!-- scc-end -->
