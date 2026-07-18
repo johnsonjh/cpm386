@@ -421,6 +421,10 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       break;               /* does not return */
 
     case 48:
+      /*
+       * XXX: If E=255 (infop == 255), all disk read buffers should be flushed
+       * this is effectively a no-op for read buffers since no cache yet.
+       */
       return flushit (); /* flush buffers */
 
       /* break; */
