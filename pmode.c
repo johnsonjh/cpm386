@@ -535,6 +535,8 @@ bdos_arg_is_ptr (WORD func)
     case 63:  /* get/set TPA */
     case 104: /* set date/time */
     case 105: /* get date/time */
+    case 200: /* P2DOS get time */
+    case 201: /* P2DOS set time */
     case 107: /* get serial number */
     case 152: /* F_PARSE PFCB */
     case 155: /* T_SECONDS get date/time BCD */

@@ -500,6 +500,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
      * days since 1978-01-01.  Implemented via CMOS RTC in ring 0.
      */
 
+    case 201: /* P2DOS set time */
     case 104: /* set date and time */
       {
         extern int rtc_set (void *);
@@ -507,6 +508,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       }
       break;
 
+    case 200: /* P2DOS get time */
     case 105: /* get date and time (binary h/m/s; always includes sec) */
       {
         extern int rtc_get (void *);
