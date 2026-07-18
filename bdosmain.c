@@ -510,6 +510,30 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       }
       break;
 
+    /* BDOS 107 (S_SERIAL) - Get serial number. DE -> 6-byte buffer. */
+    case 107:
+      {
+        extern char *serial; /* defined in bdosmisc.c */
+        char *buf = (char *)infop;
+        int i;
+
+        if (buf)
+          {
+            /*
+             * Copy 6 bytes, assume SN is at least 16 chars, something like
+             * "XXXX-0000-654321$", and take the last 6 chars before the `$`
+             */
+            for (i = 0; i < 6; i++)
+              {
+                buf[i] = serial[10 + i];
+              }
+          }
+
+        rtnval = 0;
+      }
+
+      break;
+
     /*
      * BDOS 141 (P_DELAY) - Delay process for DE ticks (60Hz).
      */

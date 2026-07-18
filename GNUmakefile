@@ -249,6 +249,11 @@ delay.386: delay.bin $(MK386)
 
 ################################################################################
 
+getsn.386: getsn.bin $(MK386)
+	$(MK386) getsn.bin getsn.386 0x100
+
+################################################################################
+
 tod.386: tod.bin $(MK386)
 	$(MK386) tod.bin tod.386 0x100
 
@@ -463,10 +468,11 @@ big.386: big.bin $(MK386)
 ################################################################################
 
 ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
-	ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 \
-	trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 seron.386 \
-	seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 mem.386 \
-	aclockvt.386 aclockdv.386 vgatext.386 ticks.386 delay.386 $(PATCH_HOLE)
+		ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 \
+		trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 \
+		seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 \
+		mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 delay.386 \
+		getsn.386 $(PATCH_HOLE)
 	rm -f /tmp/ramdisk.tmp
 	rm -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
@@ -474,7 +480,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 		> /tmp/cpmd/README.TXT
 	$(PRINTF) '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
 		> /tmp/cpmd/ENV.DAT
-	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nPRINTENV\r\nLS -A\r\nDIR\r\n\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from existing TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
+	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAON\r\nVGAOFF\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nPRINTENV\r\nLS -A\r\nDIR\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from existing TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
 		> /tmp/cpmd/DEMO.SUB
 	$(PRINTF) 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
 	cp -f aclockdv.386 /tmp/cpmd/ACLOCKDV.386
@@ -485,6 +491,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	cp -f dumpdir.386 /tmp/cpmd/DUMPDIR.386
 	cp -f dumpfcb.386 /tmp/cpmd/DUMPFCB.386
 	cp -f fparse.386 /tmp/cpmd/FPARSE.386
+	cp -f getsn.386 /tmp/cpmd/GETSN.386
 	cp -f hd.386 /tmp/cpmd/HD.386
 	cp -f hello.386 /tmp/cpmd/HELLO.386
 	cp -f illegal.386 /tmp/cpmd/ILLEGAL.386
@@ -522,6 +529,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/DUMPFCB.386 \
 	  /tmp/cpmd/ENV.DAT \
 	  /tmp/cpmd/FPARSE.386 \
+	  /tmp/cpmd/GETSN.386 \
 	  /tmp/cpmd/HD.386 \
 	  /tmp/cpmd/HELLO.386 \
 	  /tmp/cpmd/ILLEGAL.386 \
