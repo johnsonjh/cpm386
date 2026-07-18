@@ -395,26 +395,6 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       free_sp (info); /* get disk free space */
       break;
 
-    /*
-     * BDOS 98 - CP/M 3 "clean up disc" after program exit.
-     * Officially closes open files without flushing dirty data.
-     * No multi-open table here; no-op returning 0 is correct.
-     */
-
-    case 98:
-      rtnval = 0;
-      break;
-
-    /*
-     * BDOS 99 (F_TRUNCATE): ran0..2 = new size in records; cannot
-     * extend.  Releases directory extents / allocation past EOF.
-     */
-
-    case 99:
-      tmp_sel (&temp);
-      rtnval = truncate_fi (infop);
-      break;
-
     case 47:
       chainp = GBL.dmaadr; /*sw chain to program */
       warmboot (0);        /* terminate calling program */
@@ -441,6 +421,26 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 63:
       set_tpa (infop); /* get/set TPA limits */
+      break;
+
+    /*
+     * BDOS 98 - CP/M 3 "clean up disc" after program exit.
+     * Officially closes open files without flushing dirty data.
+     * No multi-open table here; no-op returning 0 is correct.
+     */
+
+    case 98:
+      rtnval = 0;
+      break;
+
+    /*
+     * BDOS 99 (F_TRUNCATE): ran0..2 = new size in records; cannot
+     * extend.  Releases directory extents / allocation past EOF.
+     */
+
+    case 99:
+      tmp_sel (&temp);
+      rtnval = truncate_fi (infop);
       break;
 
     /*
