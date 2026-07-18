@@ -166,7 +166,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
 | `TICKS.386`    | High‑resolution timer tests (BDOS 225, 226)                                                        |
-| `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104), [105](https://www.seasip.info/Cpm/bdos.html#105)) |
+| `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104), [BDOS 105](https://www.seasip.info/Cpm/bdos.html#105)) |
 | `TOUCH.386`    | Create an empty file                                                                               |
 | `TRUNC.386`    | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
 | `TSEC.386`     | Get date and time ([BDOS 155](https://www.seasip.info/Cpm/bdos.html#155))                          |
@@ -238,7 +238,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>238</th>
                 <th>0</th>
-                <th>12249</th>
+                <th>12254</th>
                 <th>225</th>
         </tr></tbody>
         <tfoot><tr>
@@ -249,7 +249,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
                 <th>4093</th>
                 <th>14509</th>
                 <th>2719</th>
-                <th>602394</th>
+                <th>602399</th>
                 <th>9343</th>
         </tr></tfoot></table>
 <!-- scc-end -->
