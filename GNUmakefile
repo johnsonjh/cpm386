@@ -14,7 +14,7 @@ W_NO_RETURN_MISMATCH:=$(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/nu
 
 W_NO_DEPRECATED_NON_PROTOTYPE:=$(shell $(CC) -Werror -Wno-deprecated-non-prototype -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-deprecated-non-prototype")
 
-OS:=$(uname -s 2> /dev/null)
+OS=$(shell uname -s 2> /dev/null)
 
 ELF_I386=elf_i386
 
