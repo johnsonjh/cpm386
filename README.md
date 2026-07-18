@@ -141,24 +141,24 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>189</th>
-                <th>30</th>
+                <th>186</th>
+                <th>29</th>
                 <th>0</th>
-                <th>159</th>
+                <th>157</th>
                 <th>0</th>
-                <th>5511</th>
-                <th>145</th>
+                <th>5354</th>
+                <th>143</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>66</th>
-                <th>22083</th>
-                <th>4025</th>
+                <th>22080</th>
+                <th>4024</th>
                 <th>3951</th>
-                <th>14107</th>
+                <th>14105</th>
                 <th>2691</th>
-                <th>581831</th>
-                <th>9112</th>
+                <th>581674</th>
+                <th>9110</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
@@ -166,9 +166,6 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 
 * **CP/M-386** is distributed under the terms of the permissive
   [MIT&nbsp;License](LICENSE).
-
-* **CP/M-386** is a derivative of **CP/M-68K** and includes portions of
-  [CP/M&nbsp;Plus (aka CP/M&nbsp;3)](https://en.wikipedia.org/wiki/CP/M#CP/M_Plus).
 
 * Bryan W. Sparks of DRDOS,&nbsp;Inc. dba DeviceLogics&nbsp;LLC, successor
   in interest to Digital&nbsp;Research,&nbsp;Inc.’s CP/M assets, explicitly
