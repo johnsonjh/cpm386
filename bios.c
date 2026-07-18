@@ -138,7 +138,7 @@ static unsigned char com_in(void) {
 
 /*
  * --- Video (VGA 80x25 0xb8000) + AT keyboard ---
- * Input: prefer keyboard if ready else serial, const checks either.
+ * Input: prefer keyboard if ready else serial
  */
 
 #define VGA_BASE 0xb8000UL
@@ -147,7 +147,7 @@ static unsigned char com_in(void) {
 
 static volatile uint16_t *vga_mem = (volatile uint16_t *)VGA_BASE;
 static int vrow = 0, vcol = 0;
-static int have_kbd_input = 0; /* once we see PS/2 input, ignore serial console input */
+static int have_kbd_input = 0; /* once we see PS/2 input, ignore serial input */
 
 static void vga_clear(void) {
   int i;
