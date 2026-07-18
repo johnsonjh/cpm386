@@ -40,7 +40,8 @@
 
 ## Compilation
 
-Building **CP/M-386** is supported on **Linux**, **FreeBSD**, and **Haiku**.
+Building **CP/M-386** is supported on **Solaris**, **illumos**, **FreeBSD**,
+**Haiku**, and **Linux**.
 
 **GCC** build (default):
 
@@ -121,34 +122,34 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>451</th>
-                <th>83</th>
+                <th>454</th>
+                <th>84</th>
                 <th>8</th>
-                <th>360</th>
-                <th>38</th>
-                <th>14646</th>
-                <th>360</th>
+                <th>362</th>
+                <th>39</th>
+                <th>14928</th>
+                <th>362</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>161</th>
+                <th>162</th>
                 <th>26</th>
                 <th>0</th>
-                <th>135</th>
+                <th>136</th>
                 <th>0</th>
-                <th>4593</th>
-                <th>122</th>
+                <th>4619</th>
+                <th>123</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>67</th>
-                <th>21157</th>
-                <th>2993</th>
+                <th>21161</th>
+                <th>2994</th>
                 <th>1886</th>
-                <th>16278</th>
-                <th>3208</th>
-                <th>514775</th>
-                <th>10039</th>
+                <th>16281</th>
+                <th>3209</th>
+                <th>515083</th>
+                <th>10042</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
