@@ -129,7 +129,7 @@ void
 _start (void)
 {
   struct tpa_req t;
-  unsigned long base, top, tpa_len, free_prog;
+  unsigned long base, top, tpa_len, free_prog, ramdisk_size, kernel_size;
 
   t.parms = 0; /* get */
   t._pad = 0;
@@ -165,12 +165,23 @@ _start (void)
   put_kb (top);
   puts (" from 0)\r\n");
 
+  ramdisk_size = (unsigned long)bdos (227, 0) * 1024UL;
+  kernel_size = base - ramdisk_size;
+
   puts ("System / kernel:       ");
   puthex32 (0);
   puts (" -> ");
+  puthex32 (kernel_size);
+  puts (" (");
+  put_kb (kernel_size);
+  puts (")\r\n");
+
+  puts ("Internal RAM Disk:     ");
+  puthex32 (kernel_size);
+  puts (" -> ");
   puthex32 (base);
   puts (" (");
-  put_kb (base);
+  put_kb (ramdisk_size);
   puts (")\r\n");
 
   puts ("TPA base:              ");

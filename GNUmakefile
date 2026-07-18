@@ -129,6 +129,7 @@ CFLAGS = \
 	-D__I386 \
 	-D__I386__ \
 	-DNDEBUG \
+	-DRAMDISK_KB=$(RAMDISK_KB) \
 	-ffreestanding \
 	-fmerge-all-constants \
 	-fno-asynchronous-unwind-tables \

@@ -45,6 +45,7 @@
 /*****************************************************************************/
 
 #include "platform.h" /* VGA text geometry for BDOS 224 */
+#include "cpm_bringup.h" /* RAMDISK_SIZE */
 
 /*****************************************************************************/
 
@@ -787,6 +788,15 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         rtnval = 0;
       }
 
+      break;
+
+    /*
+     * BDOS 227 (0xE3): Get RAM disk size in KB.
+     * AX = RAM disk size in KB.
+     */
+
+    case 227:
+      rtnval = (UWORD)(RAMDISK_SIZE / 1024);
       break;
 
     default:
