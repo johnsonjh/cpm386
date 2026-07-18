@@ -41,7 +41,7 @@
 ## Compilation
 
 Building **CP/M-386** is supported on **Solaris**, **illumos**, **FreeBSD**,
-**OpenBSD**, **Haiku**, and **Linux**.
+**OpenBSD**, **NetBSD**, **Haiku**, and **Linux**.
 
 **GCC** build (default):
 
@@ -137,7 +137,7 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>0</th>
                 <th>136</th>
                 <th>0</th>
-                <th>4642</th>
+                <th>4654</th>
                 <th>123</th>
         </tr></tbody>
         <tfoot><tr>
@@ -148,7 +148,7 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
                 <th>1886</th>
                 <th>16283</th>
                 <th>3209</th>
-                <th>515192</th>
+                <th>515204</th>
                 <th>10044</th>
         </tr></tfoot></table>
 <!-- scc-end -->
