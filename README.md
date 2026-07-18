@@ -132,36 +132,37 @@ qemu-system-i386 -m 4G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>167</th>
+                <th>168</th>
                 <th>27</th>
                 <th>0</th>
-                <th>140</th>
+                <th>141</th>
                 <th>0</th>
-                <th>4957</th>
-                <th>127</th>
+                <th>5003</th>
+                <th>128</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>67</th>
-                <th>21185</th>
+                <th>21186</th>
                 <th>3012</th>
                 <th>1886</th>
-                <th>16287</th>
+                <th>16288</th>
                 <th>3209</th>
-                <th>515507</th>
-                <th>10048</th>
+                <th>515553</th>
+                <th>10049</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
 ## License
 
-* **CP/M-386** is distributed under the terms of the [MIT License](LICENSE).
+* **CP/M-386** is distributed under the terms of the permissive
+  [MIT&nbsp;License](LICENSE).
 
-* **CP/M-386** is a derivative of **CP/M-68K** (and includes portions of
-  [CP/M Plus (aka CP/M 3)](https://en.wikipedia.org/wiki/CP/M#CP/M_Plus)).
+* **CP/M-386** is a derivative of **CP/M-68K** and includes portions of
+  [CP/M&nbsp;Plus (aka CP/M&nbsp;3)](https://en.wikipedia.org/wiki/CP/M#CP/M_Plus).
 
-* Bryan W. Sparks of DRDOS, Inc. dba DeviceLogics LLC, successor in interest
-  to Digital Research, Inc.’s CP/M assets, explicitly grants an unlimited
-  authorization to use, distribute, modify, enhance, and otherwise make
-  available CP/M technology, including the CP/M operating systems and
-  their derivatives.
+* Bryan W. Sparks of DRDOS,&nbsp;Inc. dba DeviceLogics&nbsp;LLC, successor
+  in interest to Digital&nbsp;Research,&nbsp;Inc.’s CP/M assets, explicitly
+  grants an unlimited authorization to use, distribute, modify, enhance, and
+  otherwise make available CP/M technology, including the CP/M operating
+  systems and their derivatives.
