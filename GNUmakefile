@@ -1,13 +1,29 @@
-CC := $(shell command -v gcc 2> /dev/null || command -v clang 2> /dev/null || printf '%s' "cc")
-AS := $(shell command -v nasm 2> /dev/null || printf '%s' "nasm")
-LD := $(shell command -v gld 2> /dev/null || command -v ld 2> /dev/null || printf '%s' "ld")
-OBJCOPY := $(shell command -v gobjcopy 2> /dev/null || command -v objcopy 2> /dev/null || printf '%s' "objcopy")
-AWK := $(shell command -v gawk 2> /dev/null || command -v mawk 2> /dev/null || command -v awk 2> /dev/null || printf '%s' "awk")
-DD := $(shell command -v gdd 2> /dev/null || command -v dd 2> /dev/null || printf '%s' "dd")
+CC:=$(shell command -v gcc 2> /dev/null || command -v clang 2> /dev/null || printf '%s' "cc")
 
-W_NO_RETURN_MISMATCH := $(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-return-mismatch")
-W_NO_DEPRECATED_NON_PROTOTYPE := $(shell $(CC) -Werror -Wno-deprecated-non-prototype -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-deprecated-non-prototype")
-ELF_I386 := $(shell if [ "$$(uname -s)" = "Haiku" ]; then printf '%s' "elf_i386_haiku"; else printf '%s' "elf_i386"; fi)
+AS:=$(shell command -v nasm 2> /dev/null || printf '%s' "nasm")
+
+LD:=$(shell command -v gld 2> /dev/null || command -v ld 2> /dev/null || printf '%s' "ld")
+
+OBJCOPY:=$(shell command -v gobjcopy 2> /dev/null || command -v objcopy 2> /dev/null || printf '%s' "objcopy")
+
+AWK:=$(shell command -v gawk 2> /dev/null || command -v mawk 2> /dev/null || command -v awk 2> /dev/null || printf '%s' "awk")
+
+DD:=$(shell command -v gdd 2> /dev/null || command -v dd 2> /dev/null || printf '%s' "dd")
+
+W_NO_RETURN_MISMATCH:=$(shell $(CC) -Werror -Wno-return-mismatch -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-return-mismatch")
+
+W_NO_DEPRECATED_NON_PROTOTYPE:=$(shell $(CC) -Werror -Wno-deprecated-non-prototype -x c -c /dev/null -o /dev/null 2>/dev/null && printf '%s' "-Wno-deprecated-non-prototype")
+OS := $(uname -s 2> /dev/null)
+
+ELF_I386:=elf_i386
+
+ifneq "$(findstring SunOS,$(OS))" ""
+ELF_I386:=elf_i386_sol2
+endif
+
+ifneq "$(findstring Haiku,$(OS))" ""
+ELF_I386:=elf_i386_haiku
+endif
 
 CFLAGS = \
 	 $(W_NO_DEPRECATED_NON_PROTOTYPE) \
