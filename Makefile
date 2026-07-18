@@ -1,6 +1,6 @@
 CC := $(shell command -v gcc 2> /dev/null || command -v clang 2> /dev/null || printf '%s' "cc")
 AS := $(shell command -v nasm 2> /dev/null || printf '%s' "nasm")
-LD := $(shell command -c gld 2> /dev/null || command -v ld 2> /dev/null || printf '%s' "ld")
+LD := $(shell command -v gld 2> /dev/null || command -v ld 2> /dev/null || printf '%s' "ld")
 OBJCOPY := $(shell command -v gobjcopy 2> /dev/null || command -v objcopy 2> /dev/null || printf '%s' "objcopy")
 AWK := $(shell command -v gawk 2> /dev/null || command -v mawk 2> /dev/null || command -v awk 2> /dev/null || printf '%s' "awk")
 DD := $(shell command -v gdd 2> /dev/null || command -v dd 2> /dev/null || printf '%s' "dd")
