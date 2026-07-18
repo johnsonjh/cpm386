@@ -1,3 +1,11 @@
+/*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ */
+
+/*****************************************************************************/
+
 /* mk386.c: wrap a raw binary as a 386 absolute command file. */
 
 /*****************************************************************************/

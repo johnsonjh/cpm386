@@ -1,3 +1,11 @@
+/*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ */
+
+/*****************************************************************************/
+
 /* big.c - test of a >64KB .386 image (multi-extent load test). */
 
 /*****************************************************************************/

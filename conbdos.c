@@ -1,3 +1,11 @@
+/*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ */
+
+/*****************************************************************************/
+
 #ifdef RLI
 #include "diverge.h"
 #endif
@@ -388,6 +396,8 @@ REG struct conbuf *p;
             cookdout( p->cbuf[UBWORD((p->retlen)++)] = ch );
     }
 }
+
+/*****************************************************************************/
 
 /*
  * Local Variables:

@@ -1,3 +1,11 @@
+/*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ */
+
+/*****************************************************************************/
+
 /* trunc.c: exercise BDOS 40 (WRITEZF), 99 (TRUNCATE), 37 (DRV_RESET), 98 */
 
 /*****************************************************************************/

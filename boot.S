@@ -1,3 +1,9 @@
+; CP/M-386
+; Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+; SPDX-License-Identifier: MIT
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; boot.S - 16-bit floppy boot for CP/M-386
 ; BIOS loads this at 0000:7C00 with DL = boot drive.
 ; Loads os.bin (LBA 1..) into linear 0x10000, enters protected mode, jumps to kernel.
@@ -8,7 +14,11 @@
 ;  - pmode_init() rebuilds the full GDT/TSS/IDT later
 ;  - SECTORS_TO_LOAD / kernel_* symbols come from bss.inc (nm of cpm386.elf)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 %include "bss.inc"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 bits 16
 org 0x7c00

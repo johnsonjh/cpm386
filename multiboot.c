@@ -1,17 +1,33 @@
+/*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ */
+
+/*****************************************************************************/
+
 /* multiboot.c - multiboot support for CP/M-386 */
+
+/*****************************************************************************/
 
 #include "absaddr.h"
 #include "bdosinc.h"
 #include "biosdef.h"
 #include "multiboot.h"
 
+/*****************************************************************************/
+
 /*
  * We write to the same scratch locations the original real-mode
  * loader in bios_getmrt() and existing TPA logic works unchanged.
  */
 
+/*****************************************************************************/
+
 #define LEGACY_MEMTOP (ABS_U32 (0x600))
 #define LEGACY_TPA_BASE (ABS_U32 (0x604))
+
+/*****************************************************************************/
 
 void
 mb_init_from_multiboot (void *mbi_ptr)
@@ -90,6 +106,8 @@ mb_init_from_multiboot (void *mbi_ptr)
 
   *LEGACY_TPA_BASE = tpa_base;
 }
+
+/*****************************************************************************/
 
 /*
  * Local Variables:

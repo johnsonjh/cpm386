@@ -1,4 +1,11 @@
+; CP/M-386
+; Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+; SPDX-License-Identifier: MIT
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; pmode.S - ring-3 entry/exit and BDOS int 0x30 trampoline
+
 bits 32
 
 section .text

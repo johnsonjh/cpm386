@@ -1,3 +1,11 @@
+/*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ */
+
+/*****************************************************************************/
+
 /* iotest.c - exercise CP/M-386 BDOS file APIs from ring 3 */
 
 /*****************************************************************************/

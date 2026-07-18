@@ -1,8 +1,20 @@
+/*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ */
+
+/*****************************************************************************/
+
 /* test_bdos.c - unit tests */
+
+/*****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+/*****************************************************************************/
 
 #define HOST_TEST 1
 /* Types (bdosinc) must come before bdosdef structures that use them. */
@@ -11,8 +23,12 @@
 #include "biosdef.h"
 #include "cpm_bringup.h" /* shared bring-up */
 
+/*****************************************************************************/
+
 /* the entry we test */
 extern UWORD _bdos (WORD func, UWORD info, UBYTE *infop);
+
+/*****************************************************************************/
 
 /* also bdos wrapper if used, 32-bit safe, matches bios.c */
 UWORD
@@ -22,6 +38,8 @@ bdos (WORD func, LONG info)
   unsigned long pval = (unsigned long)info;
   return _bdos (func, (UWORD)pval, (UBYTE *)pval);
 }
+
+/*****************************************************************************/
 
 /* --- mock BIOS providing the 22-ish entries --- */
 static int mock_disk_selected = -1;
@@ -35,10 +53,14 @@ static UBYTE mock_dir_sector[128];
 static unsigned char
     unit_dma0; /* snapshot for gate, avoid stack clobber in test */
 
+/*****************************************************************************/
+
 /* capture for dir writes (create 22, close 16, set attr 30) per plan checklist */
 static unsigned char last_dir_write[128];
 static int last_dir_write_valid = 0;
 static int mock_write_count = 0;
+
+/*****************************************************************************/
 
 void
 init_mock_dir (void)
@@ -62,6 +84,8 @@ init_mock_dir (void)
                * (with current dpb 2k blocks) */
 }
 
+/*****************************************************************************/
+
 void
 reset_mock_dir_writes (void)
 {
@@ -70,8 +94,12 @@ reset_mock_dir_writes (void)
   memset (last_dir_write, 0, sizeof (last_dir_write));
 }
 
+/*****************************************************************************/
+
 /* shared dph0 from cpm_bringup after cpm_bringup(); local mock_dir_sector for
  * read fill to make search succeed for strict unit asserts */
+
+/*****************************************************************************/
 
 void
 bios_wboot (void)
@@ -80,17 +108,23 @@ bios_wboot (void)
   exit (0);
 }
 
+/*****************************************************************************/
+
 unsigned short int
 bios_const (void)
 {
   return 0;
 }
 
-    unsigned char
+/*****************************************************************************/
+
+unsigned char
 bios_conin (void)
 {
   return 0;
 }
+
+/*****************************************************************************/
 
 void
 bios_conout (unsigned char c)
@@ -103,11 +137,15 @@ bios_conout (unsigned char c)
   mock_conout_count++;
 }
 
+/*****************************************************************************/
+
 void
 bios_list (unsigned char c)
 {
   (void)c;
 }
+
+/*****************************************************************************/
 
 void
 bios_punch (unsigned char c)
@@ -115,17 +153,23 @@ bios_punch (unsigned char c)
   (void)c;
 }
 
+/*****************************************************************************/
+
 unsigned char
 bios_reader (void)
 {
   return 0x1a;
 }
 
+/*****************************************************************************/
+
 void
 bios_home (void)
 {
   /* void */
 }
+
+/*****************************************************************************/
 
 void *
 bios_seldsk (unsigned char d, unsigned char l)
@@ -142,17 +186,23 @@ bios_seldsk (unsigned char d, unsigned char l)
   return 0;
 }
 
+/*****************************************************************************/
+
 void
 bios_settrk (unsigned short t)
 {
   cur_trk = t;
 }
 
+/*****************************************************************************/
+
 void
 bios_setsec (unsigned short s)
 {
   cur_sec = s;
 }
+
+/*****************************************************************************/
 
 void
 bios_setdma (void *a)
@@ -163,6 +213,8 @@ bios_setdma (void *a)
       memcpy (mock_dma, a, 128);
     }
 }
+
+/*****************************************************************************/
 
 unsigned short int
 bios_read (void)
@@ -205,11 +257,14 @@ bios_read (void)
   return 0;
 }
 
+/*****************************************************************************/
+
 unsigned short int
 bios_write (unsigned short t)
 {
   mock_write_count++;
   (void)t;
+
   if (last_dma)
     {
       /* capture; key on whether dma is the dirbufp (dir writes for create/close/attr) */
@@ -227,18 +282,25 @@ bios_write (unsigned short t)
   return 0;
 }
 
+/*****************************************************************************/
+
 unsigned short int
 bios_listst (void)
 {
   return 0;
 }
 
+/*****************************************************************************/
+
 unsigned short int
 bios_sectran (unsigned short s, void *t)
 {
   (void)t;
+
   return s;
 }
+
+/*****************************************************************************/
 
 void *
 bios_getmrt (void)
@@ -251,8 +313,11 @@ bios_getmrt (void)
     void *b;
     unsigned long l;
   } m = { 1, (void *)0x30000, 16 * 1024 * 1024UL };
+
   return &m;
 }
+
+/*****************************************************************************/
 
 unsigned short int
 bios_getiobyte (void)
@@ -260,17 +325,23 @@ bios_getiobyte (void)
   return 0;
 }
 
+/*****************************************************************************/
+
 void
 bios_setiobyte (unsigned short v)
 {
   (void)v;
 }
 
+/*****************************************************************************/
+
 unsigned short int
 bios_flush (void)
 {
   return 0;
 }
+
+/*****************************************************************************/
 
 void *
 bios_setexc (unsigned short v, void *h)
@@ -280,14 +351,20 @@ bios_setexc (unsigned short v, void *h)
   return 0;
 }
 
+/*****************************************************************************/
+
 /* swap/udiv from our bios, but since linked the portable call the ones in
  * bios.o which we provide in build */
 extern WORD swap (WORD);
 extern UWORD udiv (LONG, UWORD, UWORD *);
 
+/*****************************************************************************/
+
 /* disk state vectors for resetting between test groups to avoid ro_dsk/crit
  * causing error(4) on writes after dir data change */
 extern UWORD log_dsk, ro_dsk, crit_dsk;
+
+/*****************************************************************************/
 
 /* provide swap/udiv expected by some portable disk code (from our 386 layer)
  */
@@ -320,6 +397,8 @@ swap (WORD victim)
   return (WORD)temp;
 }
 
+/*****************************************************************************/
+
 UWORD
 udiv (LONG dividend, UWORD divisor, UWORD *remainder)
 {
@@ -330,10 +409,15 @@ udiv (LONG dividend, UWORD divisor, UWORD *remainder)
     }
 
   *remainder = (UWORD)(dividend % (LONG)divisor);
+
   return (UWORD)(dividend / (LONG)divisor);
 }
 
+/*****************************************************************************/
+
 char load_tbl[32]; /* referenced by ccp load path (stubbed) */
+
+/*****************************************************************************/
 
 void
 initexc (UBYTE **v)
@@ -341,11 +425,15 @@ initexc (UBYTE **v)
   (void)v;
 }
 
+/*****************************************************************************/
+
 UBYTE *
 traphndl (void)
 {
   return 0;
 }
+
+/*****************************************************************************/
 
 UWORD
 pgmld (UBYTE *i, UBYTE *d)
@@ -355,11 +443,15 @@ pgmld (UBYTE *i, UBYTE *d)
   return 0xffff;
 }
 
+/*****************************************************************************/
+
 UWORD
 pgm_go (void)
 {
   return 0xffff;
 }
+
+/*****************************************************************************/
 
 void
 bios_setup_basepage (const void *a, const void *b, const char *c)
@@ -369,6 +461,8 @@ bios_setup_basepage (const void *a, const void *b, const char *c)
   (void)c;
 }
 
+/*****************************************************************************/
+
 /* Host stubs for BDOS 104/105/155 (real CMOS is in rtc.o on the target). */
 int
 rtc_get (void *p)
@@ -377,12 +471,16 @@ rtc_get (void *p)
   return 1;
 }
 
+/*****************************************************************************/
+
 int
 rtc_get_bcd (void *p)
 {
   (void)p;
   return 1;
 }
+
+/*****************************************************************************/
 
 int
 rtc_set (void *p)
@@ -391,12 +489,16 @@ rtc_set (void *p)
   return 1;
 }
 
+/*****************************************************************************/
+
 /* Host stubs for private BDOS 220-223 */
 void
 bios_system_reboot (int warm)
 {
   (void)warm;
 }
+
+/*****************************************************************************/
 
 /* Host stubs for private BDOS 225/226 (where PIT not available) */
 void
@@ -413,6 +515,8 @@ pit_read (unsigned long *lo, unsigned long *hi)
     }
 }
 
+/*****************************************************************************/
+
 void
 pit_sleep_until (unsigned long lo, unsigned long hi)
 {
@@ -420,11 +524,15 @@ pit_sleep_until (unsigned long lo, unsigned long hi)
   (void)hi;
 }
 
+/*****************************************************************************/
+
 void
 pit_poll (void)
 {
   /* void */
 }
+
+/*****************************************************************************/
 
 void
 pit_init (void)
@@ -432,11 +540,15 @@ pit_init (void)
   /* void */
 }
 
+/*****************************************************************************/
+
 void
 bios_con_clear (void)
 {
   /* void */
 }
+
+/*****************************************************************************/
 
 unsigned short
 bios_con_vga_ctl (unsigned short info)
@@ -444,11 +556,15 @@ bios_con_vga_ctl (unsigned short info)
   return info == 0xFFFF ? 1 : (info ? 1 : 0);
 }
 
+/*****************************************************************************/
+
 unsigned short
 bios_con_ser_ctl (unsigned short info)
 {
   return info == 0xFFFF ? 1 : (info ? 1 : 0);
 }
+
+/*****************************************************************************/
 
 /* Host stubs for F_PARSE pointer translation (real pmode.o is freestanding).
  * pmode_active()==0 makes BDOS 152 treat ascii/fcb fields as host pointers. */
@@ -458,17 +574,23 @@ pmode_active (void)
   return 0;
 }
 
+/*****************************************************************************/
+
 unsigned long
 pmode_tpa_base (void)
 {
   return 0;
 }
 
+/*****************************************************************************/
+
 unsigned long
 pmode_tpa_len (void)
 {
   return 0;
 }
+
+/*****************************************************************************/
 
 /* no ring-3 VGA segment in unit tests */
 unsigned short
@@ -477,17 +599,23 @@ pmode_vga_selector (void)
   return 0;
 }
 
+/*****************************************************************************/
+
 unsigned long
 pmode_vga_phys_base (void)
 {
   return 0;
 }
 
+/*****************************************************************************/
+
 unsigned long
 pmode_vga_map_size (void)
 {
   return 0;
 }
+
+/*****************************************************************************/
 
 /* DOS-PLUS exact size: records*128 if lrbc==0, else (records-1)*128+lrbc */
 static unsigned long
@@ -506,10 +634,14 @@ dosplus_exact (unsigned long records, unsigned lrbc)
   return (records - 1) * 128UL + lrbc;
 }
 
+/*****************************************************************************/
+
 /* Synthetic CP/M record stream for cpm386_load_from_reader unit tests */
 static UBYTE g_stream_blob[512];
 static int g_stream_idx;
 static int g_stream_hole; /* record index that returns status 1, or -1 */
+
+/*****************************************************************************/
 
 static UWORD
 test_stream_reader (UBYTE rec[128], void *ctx)
@@ -534,8 +666,11 @@ test_stream_reader (UBYTE rec[128], void *ctx)
     }
 
   g_stream_idx++;
+
   return 0;
 }
+
+/*****************************************************************************/
 
 int
 main (void)
@@ -640,6 +775,7 @@ main (void)
   /* prepare empty dir (e5) so create finds free slot; use name not conflicting with prior */
   {
     int ii;
+
     for (ii = 0; ii < 128; ii++)
       {
         mock_dir_sector[ii] = 0xe5;
@@ -663,6 +799,7 @@ main (void)
   {
     long lsum = 0;
     long *p = (long *)dph0.dbufp;
+
     for (int k = 0; k < 32; k++)
       {
         lsum += p[k];
@@ -672,6 +809,7 @@ main (void)
     lsum += (lsum >> 8);
     ((UBYTE *)dph0.csv)[0] = (UBYTE)(lsum & 0xff);
   }
+
   unsigned char fcb2[36];
   memset (fcb2, 0, 36);
   fcb2[0] = 1;
@@ -685,6 +823,7 @@ main (void)
   printf ("post-create fcb2: ex=%u s2=%02x rc=%u dsk0=%u (create zeros "
           "rcdcnt/dskmap, moves name to dir)\n",
           fcb2[12], fcb2[14], fcb2[15], fcb2[16]);
+
   if (last_dir_write_valid)
     {
       UBYTE *de = last_dir_write;
@@ -705,6 +844,7 @@ main (void)
   UWORD attr_ret = _bdos (30, 0, fcb2);
   printf ("set attr ret=%u writecnt=%d\n", attr_ret, mock_write_count);
   unsigned char dir_after_attr[128] = { 0 };
+
   if (last_dir_write_valid)
     {
       memcpy (dir_after_attr, last_dir_write, 128);
@@ -719,6 +859,7 @@ main (void)
                       * merge+dir_wr */
   UWORD clo_ret = _bdos (16, 0, fcb2);
   printf ("close ret=%u writecnt=%d\n", clo_ret, mock_write_count);
+
   if (last_dir_write_valid)
     {
       UBYTE *de = last_dir_write;
@@ -741,6 +882,7 @@ main (void)
       UBYTE *de = last_dir_write;
       /* Word-mode map: block 5 is LE bytes 05 00 at dskmap[0] */
       UWORD merged_blk = (UWORD)de[16] | ((UWORD)de[17] << 8);
+
       if (de[12] != 0 || de[15] != 0 /*rc*/ || merged_blk != 5)
         {
           printf ("UNIT HARD FAIL: created/closed dirent layout wrong (ex=%u "
@@ -778,10 +920,12 @@ main (void)
     log_dsk = ro_dsk = crit_dsk = 0;
     dph0.hiwater = 0;
     memcpy ((void *)dph0.dbufp, mock_dir_sector, 128);
+
     {
       long lsum = 0;
       long *p = (long *)dph0.dbufp;
       int k;
+
       for (k = 0; k < 32; k++)
         {
           lsum += p[k];
@@ -791,6 +935,7 @@ main (void)
       lsum += (lsum >> 8);
       ((UBYTE *)dph0.csv)[0] = (UBYTE)(lsum & 0xff);
     }
+
     memset (lfcb, 0, 36);
     lfcb[0] = 1;
     memcpy (lfcb + 1, "README  TXT", 11);
@@ -798,6 +943,7 @@ main (void)
     oret = _bdos (15, 0, lfcb);
     printf ("LRBC open(0xFF) ret=%u s1=%u cur_rec=%u rc=%u\n", oret, lfcb[13],
             lfcb[32], lfcb[15]);
+
     if (oret > 3 || lfcb[13] != 49 || lfcb[32] != 49)
       {
         printf ("UNIT HARD FAIL: open 0xFF did not return DOS-PLUS LRBC in "
@@ -811,6 +957,7 @@ main (void)
 
     /* exact size for rc=1, lrbc=49 */
     exact = dosplus_exact (1, 49);
+
     if (exact != 49)
       {
         printf ("UNIT HARD FAIL: dosplus_exact(1,49)=%lu expected 49\n",
@@ -822,11 +969,13 @@ main (void)
     reset_mock_dir_writes ();
     {
       int ii;
+
       for (ii = 0; ii < 128; ii++)
         {
           mock_dir_sector[ii] = 0xe5;
         }
     }
+
     /* put a file entry so set_attr can match */
     mock_dir_sector[0] = 0;
     memcpy (mock_dir_sector + 1, "SIZED   DAT", 11);
@@ -838,10 +987,12 @@ main (void)
     log_dsk = ro_dsk = crit_dsk = 0;
     dph0.hiwater = 0;
     memcpy ((void *)dph0.dbufp, mock_dir_sector, 128);
+
     {
       long lsum = 0;
       long *p = (long *)dph0.dbufp;
       int k;
+
       for (k = 0; k < 32; k++)
         {
           lsum += p[k];
@@ -851,14 +1002,17 @@ main (void)
       lsum += (lsum >> 8);
       ((UBYTE *)dph0.csv)[0] = (UBYTE)(lsum & 0xff);
     }
+
     memset (lfcb, 0, 36);
     lfcb[0] = 1;
     memcpy (lfcb + 1, "SIZED   DAT", 11);
     lfcb[6] |= 0x80; /* F6' - signal set LRBC */
     lfcb[32] = 72;   /* DOS-PLUS: 72 bytes used in last record */
+
     {
       UWORD ar = _bdos (30, 0, lfcb);
       printf ("LRBC set_attr(F6',72) ret=%u\n", ar);
+
       if (ar > 3 || !last_dir_write_valid || last_dir_write[13] != 72)
         {
           printf ("UNIT HARD FAIL: set_attr did not store LRBC s1=72 (got "
@@ -897,10 +1051,12 @@ main (void)
       log_dsk = ro_dsk = crit_dsk = 0;
       dph0.hiwater = 0;
       memcpy ((void *)dph0.dbufp, mock_dir_sector, 128);
+
       {
         long lsum = 0;
         long *p = (long *)dph0.dbufp;
         int k;
+
         for (k = 0; k < 32; k++)
           {
             lsum += p[k];
@@ -910,6 +1066,7 @@ main (void)
         lsum += (lsum >> 8);
         ((UBYTE *)dph0.csv)[0] = (UBYTE)(lsum & 0xff);
       }
+
       memset (sfcb, 0, 36);
       sfcb[0] = 1;
       memcpy (sfcb + 1, "README  TXT", 11);
@@ -919,6 +1076,7 @@ main (void)
              | sfcb[35];
       printf ("LRBC getsize(35) ran=%u/%u/%u records=%lu\n", sfcb[33],
               sfcb[34], sfcb[35], nrec);
+
       if (nrec != 1)
         {
           printf ("UNIT HARD FAIL: getsize expected 1 record, got %lu\n",
@@ -934,6 +1092,7 @@ main (void)
     /* --- if ramdisk.bin present, verify real cpmtools LRBC for shipped files -- */
     {
       FILE *rf = fopen ("ramdisk.bin", "rb");
+
       if (rf)
         {
           unsigned char dir[4096];
@@ -941,6 +1100,7 @@ main (void)
           fclose (rf);
           int found_readme = 0, found_hello = 0, found_lrbc = 0;
           size_t i;
+
           for (i = 0; i + 32 <= n; i += 32)
             {
               if (dir[i] >= 16 || dir[i + 1] < 32 || dir[i + 1] >= 127)
@@ -950,6 +1110,7 @@ main (void)
 
               char name[13];
               int j;
+
               for (j = 0; j < 8; j++)
                 {
                   name[j] = dir[i + 1 + j] & 0x7f;
@@ -959,23 +1120,28 @@ main (void)
                 {
                   j--;
                 }
+
               name[j++] = '.';
               name[j++] = dir[i + 9] & 0x7f;
               name[j++] = dir[i + 10] & 0x7f;
               name[j++] = dir[i + 11] & 0x7f;
+
               while (j > 0 && name[j - 1] == ' ')
                 {
                   j--;
                 }
               name[j] = 0;
+
               unsigned s1 = dir[i + 13], rc = dir[i + 15];
               rec = rc; /* single-extent files on our tiny image */
               exact = dosplus_exact (rec, s1);
               printf ("ramdisk dirent %s s1=%u rc=%u exact=%lu\n", name, s1,
                       rc, exact);
+
               if (strncmp (name, "README.TXT", 10) == 0)
                 {
                   found_readme = 1;
+
                   /* printf README is 49 bytes */
                   if (s1 != 49 || rc != 1 || exact != 49)
                     {
@@ -990,6 +1156,7 @@ main (void)
                   found_hello = 1;
                   /* size = 12 hdr + image; verify s1 matches file size mod 128
                    */
+
                   FILE *hf = fopen ("hello.386", "rb");
                   if (hf)
                     {
@@ -998,6 +1165,7 @@ main (void)
                       fclose (hf);
                       unsigned exp_s1 = (unsigned)(hsz % 128);
                       unsigned exp_rc = (unsigned)((hsz + 127) / 128);
+
                       if (s1 != exp_s1 || rc != exp_rc
                           || exact != (unsigned long)hsz)
                         {
@@ -1013,6 +1181,7 @@ main (void)
                 {
                   found_lrbc = 1;
                   FILE *lf = fopen ("lrbc.386", "rb");
+
                   if (lf)
                     {
                       fseek (lf, 0, SEEK_END);
@@ -1020,6 +1189,7 @@ main (void)
                       fclose (lf);
                       unsigned exp_s1 = (unsigned)(lsz % 128);
                       unsigned exp_rc = (unsigned)((lsz + 127) / 128);
+
                       if (s1 != exp_s1 || rc != exp_rc
                           || exact != (unsigned long)lsz)
                         {
@@ -1063,6 +1233,7 @@ main (void)
     UBYTE *ent = 0;
     UWORD lrc;
     int i;
+
     /* zero tpa */
     for (i = 0; i < 64; i++)
       {
@@ -1087,6 +1258,7 @@ main (void)
     fakefile[14] = 0xCC;
     fakefile[15] = 0x90;
     lrc = cpm386_load_from_buf (fakefile, 16, tpa, 64, &ent);
+
     if (lrc != 0 || ent != (tpa + 2) || (UBYTE)tpa[0] != (UBYTE)0x90
         || (UBYTE)tpa[1] != (UBYTE)0x90 || (UBYTE)tpa[2] != (UBYTE)0xCC
         || (UBYTE)tpa[3] != (UBYTE)0x90 || (UBYTE)tpa[4] != (UBYTE)0)
@@ -1110,6 +1282,7 @@ main (void)
     fakefile[6] = 0xff;
     fakefile[7] = 0x7f; /* huge sz */
     lrc = cpm386_load_from_buf (fakefile, 16, tpa, 64, &ent);
+
     if (lrc == 0)
       {
         printf ("UNIT HARD FAIL: core did not reject huge size\n");
@@ -1160,12 +1333,14 @@ main (void)
 
     g_stream_idx = 0;
     g_stream_hole = 1;
+
     for (i = 0; i < 512; i++)
       {
         tpa[i] = 0xEE;
       }
 
     lrc = cpm386_load_from_reader (test_stream_reader, 0, tpa, 512, &ent);
+
     if (lrc != 0 || ent != tpa + 0x100)
       {
         printf ("UNIT HARD FAIL: stream load rc=%u ent=%ld\n", lrc,
@@ -1205,6 +1380,7 @@ main (void)
       unsigned long bsz = 300;
       UBYTE *e2 = 0;
       UBYTE tpa2[400];
+
       for (i = 0; i < (int)sizeof (g_stream_blob); i++)
         {
           g_stream_blob[i] = 0;
@@ -1216,6 +1392,7 @@ main (void)
       g_stream_blob[5] = (UBYTE)(bsz >> 8);
       g_stream_blob[8] = 0;
       g_stream_blob[9] = 0; /* entry 0 */
+
       for (i = 0; i < (int)bsz; i++)
         {
           g_stream_blob[12 + i] = (UBYTE)(0x40 + (i & 0x3f));
@@ -1223,12 +1400,14 @@ main (void)
 
       g_stream_idx = 0;
       g_stream_hole = -1;
+
       for (i = 0; i < 400; i++)
         {
           tpa2[i] = 0;
         }
 
       lrc = cpm386_load_from_reader (test_stream_reader, 0, tpa2, 400, &e2);
+
       if (lrc != 0 || tpa2[0] != 0x40
           || tpa2[299] != (UBYTE)(0x40 + (299 & 0x3f)))
         {
@@ -1247,6 +1426,7 @@ main (void)
   /* ramdisk presence of IOTEST/BIG when built */
   {
     FILE *rf = fopen ("ramdisk.bin", "rb");
+
     if (rf)
       {
         unsigned char dir[8192];
@@ -1254,6 +1434,7 @@ main (void)
         fclose (rf);
         int found_io = 0, found_big = 0, big_hole = 0;
         size_t i;
+
         for (i = 0; i + 32 <= n; i += 32)
           {
             if (dir[i] >= 16 || dir[i + 1] < 32)
@@ -1263,6 +1444,7 @@ main (void)
 
             char nm[16];
             int j;
+
             for (j = 0; j < 8; j++)
               {
                 nm[j] = dir[i + 1 + j] & 0x7f;
@@ -1276,11 +1458,14 @@ main (void)
             nm[j++] = dir[i + 9] & 0x7f;
             nm[j++] = dir[i + 10] & 0x7f;
             nm[j++] = dir[i + 11] & 0x7f;
+
             while (j > 0 && (nm[j - 1] == ' ' || nm[j - 1] == '.'))
               {
                 j--;
               }
+
             nm[j] = 0;
+
             if (strncmp (nm, "IOTEST.386", 10) == 0)
               {
                 found_io = 1;
@@ -1292,6 +1477,7 @@ main (void)
                 /* hole patch leaves a zero in the 16-byte map */
                 {
                   int z;
+
                   for (z = 0; z < 16; z++)
                     {
                       if (dir[i + 16 + z] == 0)
@@ -1346,6 +1532,8 @@ main (void)
 
   return ok ? 0 : 1;
 }
+
+/*****************************************************************************/
 
 /*
  * Local Variables:

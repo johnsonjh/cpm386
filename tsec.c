@@ -1,3 +1,11 @@
+/*
+ * CP/M-386
+ * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * SPDX-License-Identifier: MIT
+ */
+
+/*****************************************************************************/
+
 /* tsec.c - exercise BDOS 155 (T_SECONDS) vs BDOS 105 (T_GET) */
 
 /*****************************************************************************/
