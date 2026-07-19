@@ -114,6 +114,13 @@ EXPAND:=$(shell \
 
 ################################################################################
 
+GREP:=$(shell \
+	command -v ggrep 2> /dev/null || \
+	command -v grep 2> /dev/null || \
+	$(PRINTF) '%s' "grep")
+
+################################################################################
+
 W_NO_RETURN_MISMATCH:=$(shell \
 	$(CC) -Werror -Wno-return-mismatch \
 	-x c -c /dev/null -o /dev/null 2> /dev/null && \
@@ -674,12 +681,13 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
 	$(SHOLE) /tmp/ramdisk.tmp BIG.386
-	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp \
-		| tail -3 | head -1 | /usr/bin/gawk '{ print "0x"a$$1 }')"); \
+	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
+		$(GREP) -v '^*$$' | tail -2 | head -1 | \
+		$(AWK) '{ print "0x"a$$1 }')"); \
 		RDS=$$(( (RDS / 1024) + 4 )); \
-		printf '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4))"; \
+		$(PRINTF) '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4))"; \
 		test "$$RDS" -lt "$(RAMDISK_KB)" || { \
-		printf '%s\n' \
+		$(PRINTF) '%s\n' \
 			"*** ERROR: ramdisk too large for $(RAMDISK_KB) space reserved!"; \
 			exit 2; }
 	$(DD) if="/dev/zero" of="./ramdisk.bin" bs="1024" count="$(RAMDISK_KB)"
@@ -774,8 +782,8 @@ floppy.img: boot.bin os.bin
 	    $(PRINTF) '%s\n' "ERROR: payload.bin $$pbytes >= 1474560 maximum"; \
 	    exit 1; fi
 	@$(PRINTF) '*** floppy.img usage: %d bytes\n' \
-		"$$($(OD) -A x -t x2 ./floppy.img | tail -3 | head -1 | \
-			$(AWK) '{ print "0x"a$$1 }')" || :
+		"$$($(OD) -A x -t x2 ./floppy.img | $(GREP) -v '^*$$' | \
+		tail -2 | head -1 | $(AWK) '{ print "0x"a$$1 }')" || :
 
 ################################################################################
 
@@ -827,7 +835,7 @@ scc: README.md
 
 scc-real: README.md
 	"$${MAKE:-$(MAKE)}" clean
-	awk '/<!-- scc-start -->/ { \
+	$(AWK) '/<!-- scc-start -->/ { \
 		print; system("scc \
 			--exclude-file LICENSE,README.awk,log.pvs \
 			--exclude-file log.pvs,compile_commands.json \
