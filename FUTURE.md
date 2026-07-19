@@ -9,7 +9,7 @@ this section as *wishlist* and not a *roadmap*!
 
 * OS enhancements:
   * Finish remaining unimplemented BDOS functions
-  * Better keyboard support (Alt+nnn‑style 8-bit input, numeric keypad,
+  * Better keyboard support (Alt+nnn‑style 8‑bit input, numeric keypad,
     function keys, arrow/motion keys, etc.)
   * User‑defined configurable first‑class RAM disk (default to M:)
   * Drivers for floppy disk, hard disk, and parallel printer
@@ -20,14 +20,14 @@ this section as *wishlist* and not a *roadmap*!
   * Extend user area support from 16 to 32 user areas per disk
   * Extend direct video support for mode switching and framebuffer
     (Doom port!)
-  * Support for non-PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)
+  * Support for non‑PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)
   * ZCPR TCAP‑like standard terminal capability database
   * DOS‑PLUS / CP/M‑Plus style status line with user customization
   * GSX graphics (mostly standard GSX‑stack of GDD, GIOS, GDOS, etc.)
 
 * Transparent emulation:
   * Transparent CP/M‑80 Z80 emulation for CP/M‑80 `COM` programs
-  * Transparent CP/M‑86 execution environment for CP/M-86 `CMD` programs
+  * Transparent CP/M‑86 execution environment for CP/M‑86 `CMD` programs
     (utilizing V86 mode to avoid emulation overhead)
   * Transparent Heath [HDOS](https://en.wikipedia.org/wiki/HDOS) 8080
     emulation for HDOS `ABS` programs
@@ -61,13 +61,14 @@ this section as *wishlist* and not a *roadmap*!
   * [`pc`](https://github.com/johnsonjh/pc) port
   * UNIX `bc` port
   * UNIX‑style `cp` copy command that supports user areas, LRBC, etc.
+  * CPUID‑type utility
   * Compression tools (`lha`, `gzip`, `compress`, `zip`, etc.) w/LRBC support
   * [TPZASM](https://github.com/johnsonjh/tpzasm) port
   * [T3X/0](https://www.t3x.org/t3x/0/index_d.html)
   * Kermit and YAM ports (requires a proper IOBYTE implementation!)
   * Nice hex editor (supporting direct modification of the TPA)
   * Editors! MINCE, uEmacs, CALVIN, `g`, `s`, `te`,
-    [VEDIT-PLUS](https://github.com/johnsonjh/VEDIT)?
+    [VEDIT‑PLUS](https://github.com/johnsonjh/VEDIT)?
   * [Ack](https://github.com/davidgiven/ack) CP/M‑386 target
   * More tools from
     [tsupplis](https://github.com/tsupplis/cpm86-hacking)

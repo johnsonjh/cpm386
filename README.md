@@ -98,7 +98,7 @@ The following dependencies are required to compile **CP/M‑386**:
 
 ## Compilation
 
-Building **CP/M-386** is supported on **Linux**, **NetBSD**, **OpenBSD**,
+Building **CP/M‑386** is supported on **Linux**, **NetBSD**, **OpenBSD**,
 and **Haiku**:
 
 **GCC** build (default):
