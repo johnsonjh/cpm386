@@ -7,7 +7,13 @@
 
 ################################################################################
 
-OPTFLAGS:=-O2
+ifndef DEBUG
+ DEBUGFLAGS=-DNDEBUG
+ OPTFLAGS=-O2
+else
+ DEBUGFLAGS=-DDEBUG
+ OPTFLAGS=-Og -ggdb -fdata-sections -ffunction-sections
+endif
 
 ################################################################################
 
@@ -27,6 +33,7 @@ CC:=$(shell \
 
 AS:=$(shell \
 	command -v nasm 2> /dev/null || \
+	command -v nasm-segelf 2> /dev/null || \
 	$(PRINTF) '%s' "nasm")
 
 ################################################################################
@@ -34,6 +41,7 @@ AS:=$(shell \
 NM:=$(shell \
 	command -v gnm 2> /dev/null || \
 	command -v nm 2> /dev/null || \
+	command -v llvm-nm 2> /dev/null || \
 	$(PRINTF) '%s' "nm")
 
 ################################################################################
@@ -51,7 +59,23 @@ LD:=$(shell \
 OBJCOPY:=$(shell \
 	command -v gobjcopy 2> /dev/null || \
 	command -v objcopy 2> /dev/null || \
+	command -v llvm-objcopy 2> /dev/null || \
 	$(PRINTF) '%s' "objcopy")
+
+################################################################################
+
+STRIP:=$(shell \
+	command -v gstrip 2> /dev/null || \
+	command -v strip 2> /dev/null || \
+	command -v llvm-strip 2> /dev/null || \
+	$(PRINTF) '%s' "strip")
+
+################################################################################
+
+SIZE:=$(shell \
+	command -v size 2> /dev/null || \
+	command -v llvm-size 2> /dev/null || \
+	$(PRINTF) '%s' "size")
 
 ################################################################################
 
@@ -102,18 +126,19 @@ ELF_I386=elf_i386
 ################################################################################
 
 ifneq "$(findstring SunOS,$(OS))" ""
-ELF_I386=elf_i386_sol2
+ ELF_I386=elf_i386_sol2
 endif
 
 ################################################################################
 
 ifneq "$(findstring Haiku,$(OS))" ""
-ELF_I386=elf_i386_haiku
+ ELF_I386=elf_i386_haiku
 endif
 
 ################################################################################
 
 CFLAGS = \
+	$(DEBUGFLAGS) \
 	$(OPTFLAGS) \
 	$(W_NO_DEPRECATED_NON_PROTOTYPE) \
 	$(W_NO_RETURN_MISMATCH) \
@@ -128,7 +153,6 @@ CFLAGS = \
 	-D__i386__ \
 	-D__I386 \
 	-D__I386__ \
-	-DNDEBUG \
 	-DRAMDISK_KB=$(RAMDISK_KB) \
 	-ffreestanding \
 	-fmerge-all-constants \
@@ -658,6 +682,11 @@ os.bin: $(TARGET)
 
 $(TARGET): $(OBJS) linker.ld
 	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+ifndef DEBUG
+	$(STRIP) --strip-debug $(TARGET)
+endif
+	readelf -S $(TARGET) || :
+	$(SIZE) $(TARGET) || :
 
 ################################################################################
 
@@ -667,6 +696,10 @@ floppy.img: boot.bin os.bin
 		status="none" 2> /dev/null
 	$(DD) if="payload.bin" of="$@" conv="notrunc" \
 		status="none" 2> /dev/null
+	$(PRINTF) '*** floppy.img usage: %d bytes\n' \
+		"$$(od -Ax -t x2 floppy.img 2> /dev/null | tail -3 | head -1 | \
+			$(AWK) '{ print "0x"a$$1 }' 2> /dev/null)" || :
+
 
 ################################################################################
 
