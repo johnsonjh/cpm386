@@ -46,7 +46,8 @@
 
 * Compatible with 386 (and later systems) with 1MB (or more) memory.
 * Systems using either PC BIOS or UEFI (with CSM) are supported.
-* VGA, 8042 PS/2, 8250/16450/16550 UART, and 8253/8254 PIT are supported.
+* VGA, 8042 PS/2, 8250/16450/16550 UART, CMOS RTC, and 8253/8254 PIT
+  are supported.
 
 ## CP/M compatibility
 
@@ -243,24 +244,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>381</th>
+                <th>382</th>
                 <th>51</th>
                 <th>0</th>
-                <th>330</th>
+                <th>331</th>
                 <th>0</th>
-                <th>16799</th>
-                <th>303</th>
+                <th>16811</th>
+                <th>304</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>72</th>
-                <th>24687</th>
+                <th>24688</th>
                 <th>4554</th>
                 <th>4263</th>
-                <th>15870</th>
+                <th>15871</th>
                 <th>2916</th>
-                <th>642259</th>
-                <th>10080</th>
+                <th>642271</th>
+                <th>10081</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
