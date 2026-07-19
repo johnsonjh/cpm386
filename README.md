@@ -229,6 +229,7 @@ this section as *wishlist* and not a *roadmap*!
 * Software/ports needed:
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
   * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984)
+  * Memory test utility (writes and verifies the full TPA)
   * less‑style pager
   * UNIX‑style `cp` copy command that supports user areas, LRBC, etc.
   * Compression tools (`lha`, `gzip`, `compress`, `zip`, etc.) w/LRBC support
@@ -305,24 +306,24 @@ this section as *wishlist* and not a *roadmap*!
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>350</th>
+                <th>351</th>
                 <th>47</th>
                 <th>0</th>
-                <th>303</th>
+                <th>304</th>
                 <th>0</th>
-                <th>15764</th>
-                <th>289</th>
+                <th>15823</th>
+                <th>290</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>71</th>
-                <th>24625</th>
+                <th>24626</th>
                 <th>4547</th>
                 <th>4262</th>
-                <th>15816</th>
+                <th>15817</th>
                 <th>2896</th>
-                <th>641293</th>
-                <th>10062</th>
+                <th>641352</th>
+                <th>10063</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
