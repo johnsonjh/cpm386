@@ -84,6 +84,8 @@
 
 ## Build requirements
 
+The following dependencies are required to compile **CP/M‑386**:
+
 * [AWK](https://en.wikipedia.org/wiki/AWK)
 * [Cpmtools](https://www.moria.de/~michael/cpmtools/)
 * [GNU Binutils](https://www.gnu.org/software/binutils/)
@@ -241,23 +243,23 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>376</th>
-                <th>50</th>
+                <th>378</th>
+                <th>51</th>
                 <th>0</th>
-                <th>326</th>
+                <th>327</th>
                 <th>0</th>
-                <th>16550</th>
+                <th>16618</th>
                 <th>300</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>72</th>
-                <th>24651</th>
-                <th>4550</th>
+                <th>24653</th>
+                <th>4551</th>
                 <th>4262</th>
-                <th>15839</th>
+                <th>15840</th>
                 <th>2896</th>
-                <th>642079</th>
+                <th>642147</th>
                 <th>10073</th>
         </tr></tfoot></table>
 <!-- scc-end -->
