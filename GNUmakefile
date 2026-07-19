@@ -9,9 +9,13 @@
 
 ifndef DEBUG
  DEBUGFLAGS=-DNDEBUG
+ LMAP=
+ NASMDEBUG=
  OPTFLAGS=-O2
 else
  DEBUGFLAGS=-DDEBUG
+ LMAP=--print-map --cref
+ NASMDEBUG=-g
  OPTFLAGS=-Og -ggdb -fdata-sections -ffunction-sections
 endif
 
@@ -255,7 +259,8 @@ strip: $(TARGET) floppy.img
 
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o ./$*.o ./$<
-	$(LD) -m $(ELF_I386) -no-pie -T ./user.ld -o ./$*.elf ./$*.o
+	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
+		-o ./$*.elf ./$*.o
 	@entry=$$($(NM) ./$*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    $(PRINTF) '%s\n' "ERROR: _start at 0x$$entry, expected 0x100"; \
@@ -279,122 +284,146 @@ $(SHOLE): shole.c
 
 hello.386: hello.bin $(MK386)
 	./$(MK386) ./hello.bin ./hello.386 0x100
+	rm -f ./hello.bin
 
 ################################################################################
 
 test211.386: test211.bin $(MK386)
 	./$(MK386) ./test211.bin ./test211.386 0x100
+	rm -f ./test211.bin
 
 ################################################################################
 
 stat.386: stat.bin $(MK386)
 	./$(MK386) ./stat.bin ./stat.386 0x100
+	rm -f ./stat.bin
 
 ################################################################################
 
 lrbc.386: lrbc.bin $(MK386)
 	./$(MK386) ./lrbc.bin ./lrbc.386 0x100
+	rm -f ./lrbc.bin
 
 ################################################################################
 
 iotest.386: iotest.bin $(MK386)
 	./$(MK386) ./iotest.bin ./iotest.386 0x100
+	rm -f ./iotest.bin
 
 ################################################################################
 
 delay.386: delay.bin $(MK386)
 	./$(MK386) ./delay.bin ./delay.386 0x100
+	rm -f ./delay.bin
 
 ################################################################################
 
 getsn.386: getsn.bin $(MK386)
 	./$(MK386) ./getsn.bin ./getsn.386 0x100
+	rm -f ./getsn.bin
 
 ################################################################################
 
 sync.386: sync.bin $(MK386)
 	./$(MK386) ./sync.bin ./sync.386 0x100
+	rm -f ./sync.bin
 
 ################################################################################
 
 tod.386: tod.bin $(MK386)
 	./$(MK386) ./tod.bin ./tod.386 0x100
+	rm -f ./tod.bin
 
 ################################################################################
 
 hd.386: hd.bin $(MK386)
 	./$(MK386) ./hd.bin ./hd.386 0x100
+	rm -f ./hd.bin
 
 ################################################################################
 
 od.386: od.bin $(MK386)
 	./$(MK386) ./od.bin ./od.386 0x100
+	rm -f ./od.bin
 
 ################################################################################
 
 ls.386: ls.bin $(MK386)
 	./$(MK386) ./ls.bin ./ls.386 0x100
+	rm -f ./ls.bin
 
 ################################################################################
 
 ver.386: ver.bin $(MK386)
 	./$(MK386) ./ver.bin ./ver.386 0x100
+	rm -f ./ver.bin
 
 ################################################################################
 
 reboot.386: reboot.bin $(MK386)
 	./$(MK386) ./reboot.bin ./reboot.386 0x100
+	rm -f ./reboot.bin
 
 ################################################################################
 
 touch.386: touch.bin $(MK386)
 	./$(MK386) ./touch.bin ./touch.386 0x100
+	rm -f ./touch.bin
 
 ################################################################################
 
 more.386: more.bin $(MK386)
 	./$(MK386) ./more.bin ./more.386 0x100
+	rm -f ./more.bin
 
 ################################################################################
 
 cls.386: cls.bin $(MK386)
 	./$(MK386) cls.bin cls.386 0x100
+	rm -f ./cls.bin
 
 ################################################################################
 
 rc.386: rc.bin $(MK386)
 	./$(MK386) ./rc.bin ./rc.386 0x100
+	rm -f ./rc.bin
 
 ################################################################################
 
 tsec.386: tsec.bin $(MK386)
 	./$(MK386) ./tsec.bin ./tsec.386 0x100
+	rm -f ./tsec.bin
 
 ################################################################################
 
 trunc.386: trunc.bin $(MK386)
 	./$(MK386) ./trunc.bin ./trunc.386 0x100
+	rm -f ./trunc.bin
 
 ################################################################################
 
 rm.386: rm.bin $(MK386)
 	./$(MK386) ./rm.bin ./rm.386 0x100
+	rm -f ./rm.bin
 
 ################################################################################
 
 printenv.386: printenv.bin $(MK386)
 	./$(MK386) ./printenv.bin ./printenv.386 0x100
+	rm -f ./printenv.bin
 
 ################################################################################
 
 pause.386: pause.bin $(MK386)
 	./$(MK386) ./pause.bin ./pause.386 0x100
+	rm -f ./pause.bin
 
 ################################################################################
 
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o ./vgaon.o ./conctl.c
-	$(LD) -m $(ELF_I386) -no-pie -T ./user.ld -o ./vgaon.elf ./vgaon.o
+	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
+		-o ./vgaon.elf ./vgaon.o
 	@entry=$$($(NM) ./vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: vgaon _start"; \
@@ -406,7 +435,8 @@ vgaon.bin: conctl.c user.ld
 
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o ./vgaoff.o ./conctl.c
-	$(LD) -m $(ELF_I386) -no-pie -T ./user.ld -o ./vgaoff.elf ./vgaoff.o
+	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
+		-o ./vgaoff.elf ./vgaoff.o
 	@entry=$$($(NM) ./vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: vgaoff _start"; \
@@ -418,7 +448,8 @@ vgaoff.bin: conctl.c user.ld
 
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o ./seron.o ./conctl.c
-	$(LD) -m $(ELF_I386) -no-pie -T ./user.ld -o ./seron.elf ./seron.o
+	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
+		-o ./seron.elf ./seron.o
 	@entry=$$($(NM) ./seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: seron _start"; \
@@ -430,7 +461,8 @@ seron.bin: conctl.c user.ld
 
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o ./seroff.o ./conctl.c
-	$(LD) -m $(ELF_I386) -no-pie -T ./user.ld -o ./seroff.elf ./seroff.o
+	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
+		-o ./seroff.elf ./seroff.o
 	@entry=$$($(NM) ./seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: seroff _start"; \
@@ -442,72 +474,86 @@ seroff.bin: conctl.c user.ld
 
 vgaon.386: vgaon.bin $(MK386)
 	./$(MK386) ./vgaon.bin ./vgaon.386 0x100
+	rm -f ./vgaon.bin
 
 ################################################################################
 
 vgaoff.386: vgaoff.bin $(MK386)
 	./$(MK386) ./vgaoff.bin ./vgaoff.386 0x100
+	rm -f ./vgaoff.bin
 
 ################################################################################
 
 seron.386: seron.bin $(MK386)
 	./$(MK386) ./seron.bin ./seron.386 0x100
+	rm -f ./seron.bin
 
 ################################################################################
 
 seroff.386: seroff.bin $(MK386)
 	./$(MK386) ./seroff.bin ./seroff.386 0x100
+	rm -f ./seroff.bin
 
 ################################################################################
 
 fparse.386: fparse.bin $(MK386)
 	./$(MK386) ./fparse.bin ./fparse.386 0x100
+	rm -f ./fparse.bin
 
 ################################################################################
 
 illegal.386: illegal.bin $(MK386)
 	./$(MK386) ./illegal.bin ./illegal.386 0x100
+	rm -f ./illegal.bin
 
 ################################################################################
 
 dumpfcb.386: dumpfcb.bin $(MK386)
 	./$(MK386) ./dumpfcb.bin ./dumpfcb.386 0x100
+	rm -f ./dumpfcb.bin
 
 ################################################################################
 
 dumpdir.386: dumpdir.bin $(MK386)
 	./$(MK386) ./dumpdir.bin ./dumpdir.386 0x100
+	rm -f dumpdir.bin
 
 ################################################################################
 
 mem.386: mem.bin $(MK386)
 	./$(MK386) ./mem.bin ./mem.386 0x100
+	rm -f ./mem.bin
 
 ################################################################################
 
 aclockvt.386: aclockvt.bin $(MK386)
 	./$(MK386) ./aclockvt.bin ./aclockvt.386 0x100
+	rm -f ./aclockvt.bin
 
 ################################################################################
 
 aclockdv.386: aclockdv.bin $(MK386)
 	./$(MK386) ./aclockdv.bin ./aclockdv.386 0x100
+	rm -f ./aclockdv.bin
 
 ################################################################################
 
 vgatext.386: vgatext.bin $(MK386)
 	./$(MK386) ./vgatext.bin ./vgatext.386 0x100
+	rm -f ./vgatext.bin
 
 ################################################################################
 
 ticks.386: ticks.bin $(MK386)
 	./$(MK386) ./ticks.bin ./ticks.386 0x100
+	rm -f ./ticks.bin
 
 ################################################################################
 
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o ./big.o ./big.c
-	$(LD) -m $(ELF_I386) -no-pie -T ./user.ld -o ./big.elf ./big.o
+	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
+		-o ./big.elf ./big.o
 	@entry=$$($(NM) ./big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: big _start"; \
@@ -526,6 +572,7 @@ big.bin: big.c user.ld
 
 big.386: big.bin $(MK386)
 	./$(MK386) ./big.bin ./big.386 0x100
+	rm -f ./big.bin
 
 ################################################################################
 
@@ -627,9 +674,8 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
 	$(SHOLE) /tmp/ramdisk.tmp BIG.386
-	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp 2> /dev/null \
-		| tail -3 | head -1 | /usr/bin/gawk '{ print "0x"a$$1 }' \
-		2> /dev/null)"); \
+	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp \
+		| tail -3 | head -1 | /usr/bin/gawk '{ print "0x"a$$1 }')"); \
 		RDS=$$(( (RDS / 1024) + 4 )); \
 		printf '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4))"; \
 		test "$$RDS" -lt "$(RAMDISK_KB)" || { \
@@ -673,12 +719,12 @@ pmode.o: pmode.c pmode.h
 ################################################################################
 
 pmode_asm.o: pmode.S
-	$(AS) $(ASFLAGS) -I. -o ./$@ ./$<
+	$(AS) $(ASFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
 
 ################################################################################
 
 mbentry.o: mbentry.S multiboot.h
-	$(AS) $(ASFLAGS) -I. -o ./$@ ./$<
+	$(AS) $(ASFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
 
 ################################################################################
 
@@ -700,7 +746,7 @@ bss.inc: $(TARGET)
 ################################################################################
 
 boot.bin: boot.S bss.inc
-	$(AS) -f bin -I. -o ./$@ ./$<
+	$(AS) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
 
 ################################################################################
 
@@ -710,7 +756,7 @@ os.bin: $(TARGET)
 ################################################################################
 
 $(TARGET): $(OBJS) linker.ld
-	$(LD) $(LDFLAGS) -o ./$@ ./$(OBJS)
+	$(LD) $(LMAP) $(LDFLAGS) -o ./$@ ./$(OBJS)
 ifndef DEBUG
 	$(STRIP) --strip-debug ./$(TARGET)
 endif
@@ -722,10 +768,14 @@ endif
 floppy.img: boot.bin os.bin
 	cat boot.bin os.bin > payload.bin
 	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440"
-	$(DD) if="payload.bin" of="$@" conv="notrunc"
+	$(DD) if="./payload.bin" of="$@" conv="notrunc"
+	@set -- "$$(wc -c < ./payload.bin)"; pbytes="$$1"; \
+	  if [ "$$pbytes" -gt 1474560 ]; then \
+	    $(PRINTF) '%s\n' "ERROR: payload.bin $$pbytes >= 1474560 maximum"; \
+	    exit 1; fi
 	@$(PRINTF) '*** floppy.img usage: %d bytes\n' \
-		"$$($(OD) -A x -t x2 ./floppy.img 2> /dev/null | tail -3 | head -1 | \
-			$(AWK) '{ print "0x"a$$1 }' 2> /dev/null)" || :
+		"$$($(OD) -A x -t x2 ./floppy.img | tail -3 | head -1 | \
+			$(AWK) '{ print "0x"a$$1 }')" || :
 
 ################################################################################
 
