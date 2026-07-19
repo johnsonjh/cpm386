@@ -166,7 +166,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 | `RM.386`       | UNIX `rm`‑like interactive file deletion utility                                                   |
 | `SEROFF.386`   | Disable serial console (BDOS 223)                                                                  |
 | `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
-| `STAT.386`     | Digital Research STAT (A port of Zilog CP/M‑Z8000 STAT v1.0C 01/03/84)                             |
+| `STAT.386`     | STAT (A port of Zilog CP/M‑Z8000 STAT v1.0C 01/03/84)                                              |
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
 | `TICKS.386`    | High‑resolution timer tests (BDOS 225, BDOS 226)                                                   |
