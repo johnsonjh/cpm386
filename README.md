@@ -165,6 +165,7 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 | `RM.386`       | UNIX `rm`‑like interactive file deletion utility                                                   |
 | `SEROFF.386`   | Disable serial console (BDOS 223)                                                                  |
 | `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
+| `STAT.386`     | Digital Research STAT (A port of Zilog CP/M‑Z8000 STAT v1.0C 01/03/84)                             |
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
 | `TICKS.386`    | High‑resolution timer tests (BDOS 225, BDOS 226)                                                   |
@@ -194,14 +195,14 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>50</th>
-                <th>19157</th>
-                <th>3537</th>
-                <th>3151</th>
-                <th>12469</th>
-                <th>2662</th>
-                <th>476068</th>
-                <th>7210</th>
+                <th>51</th>
+                <th>20941</th>
+                <th>3915</th>
+                <th>3319</th>
+                <th>13707</th>
+                <th>2839</th>
+                <th>511204</th>
+                <th>7861</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -215,13 +216,13 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>781</th>
-                <th>189</th>
-                <th>119</th>
-                <th>473</th>
+                <th>788</th>
+                <th>191</th>
+                <th>120</th>
+                <th>477</th>
                 <th>48</th>
-                <th>25344</th>
-                <th>468</th>
+                <th>25592</th>
+                <th>472</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -235,24 +236,24 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>278</th>
-                <th>40</th>
+                <th>281</th>
+                <th>41</th>
                 <th>0</th>
-                <th>238</th>
+                <th>240</th>
                 <th>0</th>
-                <th>12254</th>
-                <th>225</th>
+                <th>12381</th>
+                <th>226</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>70</th>
-                <th>22762</th>
-                <th>4160</th>
-                <th>4093</th>
-                <th>14509</th>
-                <th>2719</th>
-                <th>602399</th>
-                <th>9343</th>
+                <th>71</th>
+                <th>24556</th>
+                <th>4541</th>
+                <th>4262</th>
+                <th>15753</th>
+                <th>2896</th>
+                <th>637910</th>
+                <th>9999</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
