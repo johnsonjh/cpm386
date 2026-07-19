@@ -244,24 +244,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>382</th>
+                <th>383</th>
                 <th>51</th>
                 <th>0</th>
-                <th>331</th>
+                <th>332</th>
                 <th>0</th>
-                <th>16811</th>
-                <th>304</th>
+                <th>16904</th>
+                <th>305</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>72</th>
-                <th>24688</th>
+                <th>24689</th>
                 <th>4554</th>
                 <th>4263</th>
-                <th>15871</th>
+                <th>15872</th>
                 <th>2916</th>
-                <th>642271</th>
-                <th>10081</th>
+                <th>642364</th>
+                <th>10082</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
