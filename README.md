@@ -239,7 +239,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>108</th>
                 <th>422</th>
                 <th>0</th>
-                <th>13897</th>
+                <th>13909</th>
                 <th>409</th>
         </tr><tr>
                 <th>Markdown</th>
@@ -260,7 +260,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4266</th>
                 <th>15956</th>
                 <th>2925</th>
-                <th>645133</th>
+                <th>645145</th>
                 <th>10160</th>
         </tr></tfoot></table>
 <!-- scc-end -->
