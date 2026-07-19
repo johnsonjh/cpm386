@@ -735,7 +735,7 @@ drivestatus (void)
   printx (record_msg);
   printx ("s / Track");
   p_unl ((ULONG)DPB_OFS);
-  printx ("Reserved  Tracks");
+  printx ("Reserved Tracks");
   crlf ();
 }
 
