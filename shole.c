@@ -7,7 +7,7 @@
 
 /*****************************************************************************/
 
-/* patch_hole.c - punch sparse hole in a CP/M dirent map */
+/* shole.c - punch sparse hole in a CP/M dirent map */
 
 /*****************************************************************************/
 
@@ -101,7 +101,7 @@ main (int argc, char **argv)
   if (sz < 32)
     {
       fclose (f);
-      fprintf (stderr, "patch_hole: image too small\n");
+      fprintf (stderr, "shole: image too small\n");
 
       return 1;
     }
@@ -111,7 +111,7 @@ main (int argc, char **argv)
 
   if (!data || fread (data, 1, (size_t)sz, f) != (size_t)sz)
     {
-      fprintf (stderr, "patch_hole: read failed\n");
+      fprintf (stderr, "shole: read failed\n");
       free (data);
       fclose (f);
 
@@ -147,7 +147,7 @@ main (int argc, char **argv)
 
       if (ncnt < 3)
         {
-          printf ("patch_hole: %s only %d map bytes, skip\n", want, ncnt);
+          printf ("shole: %s only %d map bytes, skip\n", want, ncnt);
 
           continue;
         }
@@ -156,7 +156,7 @@ main (int argc, char **argv)
       old = data[i + 16 + target];
       data[i + 16 + target] = 0;
       patched = 1;
-      printf ("patch_hole: %s extent@dir %d cleared map[%d] was %d\n", want, i,
+      printf ("shole: %s extent@dir %d cleared map[%d] was %d\n", want, i,
               target, old);
 
       break; /* first matching extent only */
@@ -164,7 +164,7 @@ main (int argc, char **argv)
 
   if (!patched)
     {
-      fprintf (stderr, "patch_hole: %s not found\n", want);
+      fprintf (stderr, "shole: %s not found\n", want);
       free (data);
 
       return 1;
@@ -182,7 +182,7 @@ main (int argc, char **argv)
 
   if (fwrite (data, 1, (size_t)sz, f) != (size_t)sz)
     {
-      fprintf (stderr, "patch_hole: write failed\n");
+      fprintf (stderr, "shole: write failed\n");
       fclose (f);
       free (data);
 
