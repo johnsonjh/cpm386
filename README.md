@@ -11,13 +11,13 @@
 <!-- toc -->
 
 - [Overview](#overview)
+- [Hardware support](#hardware-support)
 - [CP/M compatibility](#cpm-compatibility)
 - [Screenshots](#screenshots)
 - [Build requirements](#build-requirements)
 - [Compilation](#compilation)
 - [QEMU testing](#qemu-testing)
   * [QEMU notes](#qemu-notes)
-- [Hardware support](#hardware-support)
 - [Included utilities](#included-utilities)
 - [Future plans](#future-plans)
 - [Code statistics](#code-statistics)
@@ -41,6 +41,12 @@
   and/or [COM1 serial](https://en.wikipedia.org/wiki/Serial_port)
   (9600/N/8/1, `0x3F8`) consoles.
 * **No floppy/hard disk/CD/USB/network/sound/other drivers** (**yet**).
+
+## Hardware support
+
+* Compatible with 386 (and later systems) with 1MB (or more) memory.
+* Systems using either PC BIOS or UEFI (with CSM) are supported.
+* VGA, 8042 PS/2, 8250/16450/16550 UART, and 8253/8254 PIT are supported.
 
 ## CP/M compatibility
 
@@ -126,12 +132,6 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 
 * Use `-display none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
-
-## Hardware support
-
-* Compatible with 386 (and later systems) with 1MB (or more) memory.
-* Systems using either PC BIOS or UEFI (with CSM) are supported.
-* VGA, 8042 PS/2, 8250/16450/16550 UART, and 8253/8254 PIT are supported.
 
 ## Included utilities
 
