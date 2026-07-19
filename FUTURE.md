@@ -62,10 +62,13 @@ this section as *wishlist* and not a *roadmap*!
   * less‑style pager
   * [6FORTH](https://github.com/johnsonjh/6FORTH) port
   * [`pc`](https://github.com/johnsonjh/pc) port
+  * [startrek](https://github.com/davidgiven/cpmish/blob/master/third_party/startrek/startrek.c)
+    port
   * UNIX `bc` port
   * UNIX‑style `cp` copy command that supports user areas, LRBC, etc.
   * CPUID‑type utility
-  * Compression tools (`lha`, `gzip`, `compress`, `zip`, etc.) w/LRBC support
+  * Compression tools (`arc`, `lha`, `gzip`, `compress`, `zip`, etc.)
+    w/LRBC support
   * [TPZASM](https://github.com/johnsonjh/tpzasm) port
   * [T3X/0](https://www.t3x.org/t3x/0/index_d.html)
   * Kermit and YAM ports (requires a proper IOBYTE implementation!)
