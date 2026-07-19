@@ -78,14 +78,18 @@ extern unsigned short bios_con_ser_ctl (unsigned short info);
 extern void bios_list (unsigned char victim);
 extern void bios_punch (unsigned char victim);
 extern unsigned char bios_reader (void);
+#if 0
 extern void bios_home (void);
+#endif
 extern void *bios_seldsk (unsigned char drive, unsigned char logged);
 extern void bios_settrk (unsigned short int track);
 extern void bios_setsec (unsigned short int sector);
 extern void bios_setdma (void *dmaaddress);
 extern unsigned short int bios_read (void);
 extern unsigned short int bios_write (unsigned short int typecode);
+#if 0
 extern unsigned short int bios_listst (void);
+#endif
 extern unsigned short int bios_sectran (unsigned short int sector,
                                         void *table);
 extern void *bios_getmrt (void);

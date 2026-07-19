@@ -542,7 +542,9 @@ void bios_list(unsigned char c) { (void)c; }
 void bios_punch(unsigned char c) { (void)c; }
 unsigned char bios_reader(void) { return 0x1A; } /* ^Z eof */
 
+#if 0
 void bios_home(void) { /* no-op for ram */ }
+#endif
 
 static unsigned short cur_trk = 0, cur_sec = 0;
 static void *cur_dma_ptr = 0;
@@ -631,10 +633,12 @@ unsigned short int bios_write(unsigned short int typecode) {
   return 0;
 }
 
+#if 0
 unsigned short int bios_listst(void)
 {
   return 0;
 }
+#endif
 
 unsigned short int bios_sectran(unsigned short int sec, void *table)
 {
@@ -865,10 +869,12 @@ void cpm386_init(void) {
  * It lives in .text.start and is placed immediately after the multiboot header.
  */
 
+# if 0
 int main(void)
 {
   return 0; /* not used */
 }
+# endif
 #endif
 
 /* --- stubs and helpers for link (swap/udiv from prior art, load stubs) --- */
@@ -891,7 +897,9 @@ UWORD udiv(LONG dividend, UWORD divisor, UWORD *remainder) {
   return (UWORD)(dividend / (LONG)divisor);
 }
 
+#if 0
 UWORD load68k(BYTE *info) { (void)info; return 3; /* load error */ }
+#endif
 
 /*
  * Minimal load_tbl stub so ccp.o (cmd_file) links for

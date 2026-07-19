@@ -113,8 +113,10 @@ BYTE   msg11[] = ".SUB file not found$";
 BYTE   msg12[] = "User # range is [0-15]$";
 BYTE   msg13[] = "Too many arguments: $";
 BYTE  lderr1[] = "Insufficient memory or bad file header$";
+#if 0
 BYTE  lderr2[] = "Read error on program load$";
 BYTE  lderr3[] = "Bad relocation information bits$";
+#endif
 BYTE  gonomsg[] = "No program$";
 
 /*****************************************************************************/
@@ -164,8 +166,10 @@ BYTE del[] =                    /* CP/M-68K set of delimeters   */
 UWORD bdos(WORD func, LONG parm);  /* 32-bit safe proto for ptr/word param */
 UWORD delim(BYTE *ch);
 UWORD fill_fcb(UWORD which_parm, BYTE *fcb);
+#if 0
 UWORD (*ldrpgm)(BYTE *); /* ptr to load func, inited? or stub */
 extern UWORD load68k();         /* this returns a word(1-3)     */
+#endif
 /*BYTE *scan_cmd();             // bare */
 UWORD strcmp(BYTE *s1, BYTE *s2);       /* this returns a word          */
 /*UWORD decode();                       // bare, use implicit + def */
