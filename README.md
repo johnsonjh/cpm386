@@ -188,7 +188,9 @@ this section as *wishlist* and not a *roadmap*!
   * Finish remaining unimplemented BDOS functions
   * Better keyboard support (Alt+nnn‑style 8-bit input, numeric keypad,
     function keys, arrow/motion keys, etc.)
+  * User‑defined configurable first‑class RAM disk (default to M:)
   * Drivers for floppy disk, hard disk, and parallel printer
+  * Disk caching
   * Drivers for networking (with CP/Net NDOS and generic packet interface)
   * DOS‑PLUS (enhanced VT52) compatible VGA console (with optional ADM3A mode)
   * Enhance filesystem with CP/M‑Plus parity (timestamps, passwords, etc.)
@@ -229,15 +231,19 @@ this section as *wishlist* and not a *roadmap*!
 * Software/ports needed:
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
   * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984)
+  * Digital Research HELP clone (VMS‑style HELP tool)
   * Memory test utility (writes and verifies the full TPA)
   * less‑style pager
+  * [6FORTH](https://github.com/johnsonjh/6FORTH) port
+  * [`pc`](https://github.com/johnsonjh/pc) port
+  * UNIX `bc` port
   * UNIX‑style `cp` copy command that supports user areas, LRBC, etc.
   * Compression tools (`lha`, `gzip`, `compress`, `zip`, etc.) w/LRBC support
   * [TPZASM](https://github.com/johnsonjh/tpzasm) port
   * [T3X/0](https://www.t3x.org/t3x/0/index_d.html)
   * Kermit and YAM ports (requires a proper IOBYTE implementation!)
   * Nice hex editor (supporting direct modification of the TPA)
-  * Editors! MINCE, uEmacs, `g`, `s`, `te`,
+  * Editors! MINCE, uEmacs, CALVIN, `g`, `s`, `te`,
     [VEDIT-PLUS](https://github.com/johnsonjh/VEDIT)?
   * [Ack](https://github.com/davidgiven/ack) CP/M‑386 target
   * More tools from
@@ -306,24 +312,24 @@ this section as *wishlist* and not a *roadmap*!
         </tr><tr>
                 <th>Markdown</th>
                 <th>1</th>
-                <th>351</th>
+                <th>357</th>
                 <th>47</th>
                 <th>0</th>
-                <th>304</th>
+                <th>310</th>
                 <th>0</th>
-                <th>15823</th>
-                <th>290</th>
+                <th>16098</th>
+                <th>296</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>71</th>
-                <th>24626</th>
+                <th>24632</th>
                 <th>4547</th>
                 <th>4262</th>
-                <th>15817</th>
+                <th>15823</th>
                 <th>2896</th>
-                <th>641352</th>
-                <th>10063</th>
+                <th>641627</th>
+                <th>10069</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
