@@ -181,8 +181,8 @@ detect_memory:
 
 ; ---- data (keep compact) ----
 boot_dl db 0
-bootmsg db 13,10,"CP/M-386",13,10,0
-errmsg  db "Fail",0
+bootmsg db 13,10,"CPMBOOT 0.1",13,10,13,10,0
+errmsg  db "FAILURE",0
 
 align 4
 gdt:
