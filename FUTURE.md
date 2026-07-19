@@ -33,7 +33,8 @@ this section as *wishlist* and not a *roadmap*!
   * Transparent Heath [HDOS](https://en.wikipedia.org/wiki/HDOS) 8080
     emulation for HDOS `ABS` programs
     ([HRUN](https://heathkit.garlanger.com/software/library/HUG/docs/HRUN_doc.pdf)
-    is prior art)
+    is prior art, also see this
+    [article](https://dl.acm.org/doi/pdf/10.1145/358061.358070?download=true))
 
 * CCP enhancements:
   * Move the CCP out of Ring 0 to Ring 2
