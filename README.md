@@ -19,7 +19,7 @@
   * [QEMU notes](#qemu-notes)
 - [Hardware support](#hardware-support)
 - [Included utilities](#included-utilities)
-- [Future](#future)
+- [Future plans](#future-plans)
 - [Code statistics](#code-statistics)
 - [License](#license)
 
@@ -179,80 +179,9 @@ qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
 | `VGAON.386`    | Enable VGA console (BDOS 222)                                                                      |
 | `VGATEXT.386`  | VGA direct access demo (BDOS 224)                                                                  |
 
-## Future
+## Future plans
 
-I hope to eventually implement the following features in **CP/M‑386**.  Treat
-this section as *wishlist* and not a *roadmap*!
-
-* OS enhancements:
-  * Finish remaining unimplemented BDOS functions
-  * Better keyboard support (Alt+nnn‑style 8-bit input, numeric keypad,
-    function keys, arrow/motion keys, etc.)
-  * User‑defined configurable first‑class RAM disk (default to M:)
-  * Drivers for floppy disk, hard disk, and parallel printer
-  * Disk caching
-  * Drivers for networking (with CP/Net NDOS and generic packet interface)
-  * DOS‑PLUS (enhanced VT52) compatible VGA console (with optional ADM3A mode)
-  * Enhance filesystem with CP/M‑Plus parity (timestamps, passwords, etc.)
-  * Extend user area support from 16 to 32 user areas per disk
-  * Extend direct video support for mode switching and framebuffer
-    (Doom port!)
-  * Support for non-PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)
-  * ZCPR TCAP‑like standard terminal capability database
-  * DOS‑PLUS / CP/M‑Plus style status line with user customization
-  * GSX graphics (mostly standard GSX‑stack of GDD, GIOS, GDOS, etc.)
-
-* Transparent emulation:
-  * Transparent CP/M‑80 Z80 emulation for CP/M‑80 `COM` programs
-  * Transparent CP/M‑86 execution environment for CP/M-86 `CMD` programs
-    (utilizing V86 mode to avoid emulation overhead)
-  * Transparent Heath [HDOS](https://en.wikipedia.org/wiki/HDOS) 8080
-    emulation for HDOS `ABS` programs
-    ([HRUN](https://heathkit.garlanger.com/software/library/HUG/docs/HRUN_doc.pdf)
-    is prior art)
-
-* CCP enhancements:
-  * Move the CCP out of Ring 0 to Ring 2
-  * Stackable execution of commands
-  * Command timing
-  * ZCPR ECP‑like search paths/named directories/aliases
-  * SET/UNSET commands to manage environment (`ENVIRON.DAT`) variables
-  * Command editing and recall (terminal and VGA console aware)
-  * ALIAS/UNALIAS internal commands
-  * Enhance SUBMIT:
-    * Allow nested SUBMIT scripts
-    * Allow suppressing SUBMIT command echoing (*i.e.*, `@` and `ECHO ON`/`OFF`)
-    * Allow early exit from SUBMIT scripts depending on return codes
-    * Refactor CCP to eliminate the `dirflag` global
-    * Eliminate SUBMIT temporary file usage and run completely from memory
-    * ZCPR+SUPERSUB‑style conditional control (`IF`/`ELSE`/`FI`, etc.)
-    * SUPERSUB‑style interactive user input for SUBMIT scripts
-
-* Software/ports needed:
-  * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
-  * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984)
-  * Digital Research HELP clone (VMS‑style HELP tool)
-  * Memory test utility (writes and verifies the full TPA)
-  * less‑style pager
-  * [6FORTH](https://github.com/johnsonjh/6FORTH) port
-  * [`pc`](https://github.com/johnsonjh/pc) port
-  * UNIX `bc` port
-  * UNIX‑style `cp` copy command that supports user areas, LRBC, etc.
-  * Compression tools (`lha`, `gzip`, `compress`, `zip`, etc.) w/LRBC support
-  * [TPZASM](https://github.com/johnsonjh/tpzasm) port
-  * [T3X/0](https://www.t3x.org/t3x/0/index_d.html)
-  * Kermit and YAM ports (requires a proper IOBYTE implementation!)
-  * Nice hex editor (supporting direct modification of the TPA)
-  * Editors! MINCE, uEmacs, CALVIN, `g`, `s`, `te`,
-    [VEDIT-PLUS](https://github.com/johnsonjh/VEDIT)?
-  * [Ack](https://github.com/davidgiven/ack) CP/M‑386 target
-  * More tools from
-    [tsupplis](https://github.com/tsupplis/cpm86-hacking)
-  * A native DDT‑like debugger
-  * A real assembler (most likely [NASM](https://nasm.us/))
-  * A real C standard library customized for CP/M‑386
-    (probably [newlib](https://sourceware.org/git/newlib-cygwin.git))
-  * A real CP/M‑386 native C compiler
+See [FUTURE.md](FUTURE.md).
 
 ## Code statistics
 
@@ -311,25 +240,25 @@ this section as *wishlist* and not a *roadmap*!
                 <th>409</th>
         </tr><tr>
                 <th>Markdown</th>
-                <th>1</th>
-                <th>357</th>
-                <th>47</th>
+                <th>2</th>
+                <th>376</th>
+                <th>50</th>
                 <th>0</th>
-                <th>310</th>
+                <th>326</th>
                 <th>0</th>
-                <th>16094</th>
-                <th>296</th>
+                <th>16550</th>
+                <th>300</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>71</th>
-                <th>24632</th>
-                <th>4547</th>
+                <th>72</th>
+                <th>24651</th>
+                <th>4550</th>
                 <th>4262</th>
-                <th>15823</th>
+                <th>15839</th>
                 <th>2896</th>
-                <th>641623</th>
-                <th>10069</th>
+                <th>642079</th>
+                <th>10073</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
