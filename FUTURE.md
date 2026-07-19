@@ -9,10 +9,11 @@ this section as *wishlist* and not a *roadmap*!
 
 * OS enhancements:
   * Finish remaining unimplemented BDOS functions
+  * Drivers for floppy disk, hard disk, and parallel printer
+  * PRNG (based on interrupt timer/PIT first, detect RDRAND/RDSEED later)
   * Better keyboard support (Alt+nnn‑style 8‑bit input, numeric keypad,
     function keys, arrow/motion keys, etc.)
   * User‑defined configurable first‑class RAM disk (default to M:)
-  * Drivers for floppy disk, hard disk, and parallel printer
   * Disk caching
   * Drivers for networking (with CP/Net NDOS and generic packet interface)
   * DOS‑PLUS (enhanced VT52) compatible VGA console (with optional ADM3A mode)
