@@ -58,7 +58,9 @@ this section as *wishlist* and not a *roadmap*!
   * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984)
   * Digital Research HELP clone (VMS‑style HELP tool)
   * Memory test utility (writes and verifies the full TPA)
-  * [wumpus](https://gitlab.com/esr/wumpus/-/raw/master/wumpus.c) port
+  * [wumpus](https://gitlab.com/esr/wumpus/-/raw/master/wumpus.c) or
+    [this one](https://codeberg.org/EtchedPixels/FUZIX/src/commit/c80213af16cd4c948e0afb3477fe5584762aa1a7/Applications/V7/games/wump.c)
+    port
   * less‑style pager
   * [6FORTH](https://github.com/johnsonjh/6FORTH) port
   * [`pc`](https://github.com/johnsonjh/pc) port

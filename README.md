@@ -122,18 +122,18 @@ make test
 kernel (recommended):
 
 ```sh
-qemu-system-i386 -m 1G -serial stdio -monitor none -kernel "cpm386.elf"
+qemu-system-i386 -m 2M -serial stdio -monitor none -kernel "cpm386.elf"
 ```
 
 Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
 
 ```sh
-qemu-system-i386 -m 1G -serial stdio -monitor none -fda "floppy.img"
+qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img"
 ```
 
 ### QEMU notes
 
-* Use `-display none` to disable VGA video (and use *only* serial console).
+* Use `-nographic -display none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
 
 ## Included utilities
@@ -244,24 +244,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>386</th>
+                <th>388</th>
                 <th>51</th>
                 <th>0</th>
-                <th>335</th>
+                <th>337</th>
                 <th>0</th>
-                <th>17021</th>
-                <th>308</th>
+                <th>17204</th>
+                <th>309</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>72</th>
-                <th>24789</th>
+                <th>24791</th>
                 <th>4567</th>
                 <th>4266</th>
-                <th>15956</th>
+                <th>15958</th>
                 <th>2925</th>
-                <th>645147</th>
-                <th>10160</th>
+                <th>645330</th>
+                <th>10161</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
