@@ -96,6 +96,13 @@ DD:=$(shell \
 
 ################################################################################
 
+OD:=$(shell \
+	command -v god 2> /dev/null || \
+	command -v od 2> /dev/null || \
+	$(PRINTF) '%s' "od")
+
+################################################################################
+
 W_NO_RETURN_MISMATCH:=$(shell \
 	$(CC) -Werror -Wno-return-mismatch \
 	-x c -c /dev/null -o /dev/null 2> /dev/null && \
@@ -230,6 +237,11 @@ all: $(TARGET) boot.bin os.bin floppy.img
 
 ################################################################################
 
+strip: $(TARGET) floppy.img
+	$(STRIP) -R '.shstrtab' -R '.strtab' -R '.symtab' "$(TARGET)" || :
+
+################################################################################
+
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o $*.o $<
 	$(LD) -m $(ELF_I386) -no-pie -T user.ld -o $*.elf $*.o
@@ -248,8 +260,8 @@ $(MK386): mk386.c
 
 ################################################################################
 
-PATCH_HOLE = ./patch_hole
-$(PATCH_HOLE): patch_hole.c
+SHOLE = ./shole
+$(SHOLE): shole.c
 	$(CC) $(OPTFLAGS) -o $@ $<
 
 ################################################################################
@@ -511,7 +523,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 		trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 \
 		seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 \
 		mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 delay.386 \
-		getsn.386 sync.386 test211.386 stat.386 $(PATCH_HOLE)
+		getsn.386 sync.386 test211.386 stat.386 $(SHOLE)
 	rm -f /tmp/ramdisk.tmp
 	rm -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
@@ -602,8 +614,17 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/VGAOFF.386 \
 	  /tmp/cpmd/VGAON.386 \
 	  /tmp/cpmd/VGATEXT.386 \
-	    0:
-	$(PATCH_HOLE) /tmp/ramdisk.tmp BIG.386 || true
+	  0:
+	$(SHOLE) /tmp/ramdisk.tmp BIG.386
+	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp 2> /dev/null \
+		| tail -3 | head -1 | /usr/bin/gawk '{ print "0x"a$$1 }' \
+		2> /dev/null)"); \
+		RDS=$$(( (RDS / 1024) + 4 )); \
+		printf '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4))"; \
+		test "$$RDS" -lt "$(RAMDISK_KB)" || { \
+		printf '%s\n' \
+			"*** ERROR: ramdisk too large for $(RAMDISK_KB) space reserved!"; \
+			exit 2; }
 	$(DD) if="/dev/zero" of="ramdisk.bin" bs="1024" count="$(RAMDISK_KB)"
 	$(DD) if="/tmp/ramdisk.tmp" of="ramdisk.bin" conv="notrunc"
 	rm -rf /tmp/ramdisk.tmp /tmp/cpmd
@@ -691,15 +712,15 @@ floppy.img: boot.bin os.bin
 	cat boot.bin os.bin > payload.bin
 	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440"
 	$(DD) if="payload.bin" of="$@" conv="notrunc"
-	$(PRINTF) '*** floppy.img usage: %d bytes\n' \
-		"$$(od -Ax -t x2 floppy.img 2> /dev/null | tail -3 | head -1 | \
+	@$(PRINTF) '*** floppy.img usage: %d bytes\n' \
+		"$$($(OD) -A x -t x2 floppy.img 2> /dev/null | tail -3 | head -1 | \
 			$(AWK) '{ print "0x"a$$1 }' 2> /dev/null)" || :
 
 
 ################################################################################
 
 clean distclean:
-	rm -f /*.o ./*.img /*.log ./*.bin ./*.386 $(MK386) $(PATCH_HOLE) $(TARGET)
+	rm -f /*.o ./*.img /*.log ./*.bin ./*.386 $(MK386) $(SHOLE) $(TARGET)
 
 ################################################################################
 

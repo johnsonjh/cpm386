@@ -18,7 +18,7 @@
 /NOTES.TXT
 /*.o
 /os.bin
-/patch_hole
+/shole
 /payload.bin
 /p*.md
 /ramdisk.bin
