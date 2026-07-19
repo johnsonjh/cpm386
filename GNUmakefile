@@ -496,8 +496,7 @@ big.bin: big.c user.ld
 	    exit 1; fi; \
 	  pad=$$(( $(BIG_IMG_SIZE) - stub )); \
 	  cp -f big_stub.bin big.bin; \
-	  $(DD) if="/dev/zero" bs="1" count="$$pad" status="none" 2> /dev/null | \
-	    tr '\0' '\220' >> big.bin
+	  $(DD) if="/dev/zero" bs="1" count="$$pad" | tr '\0' '\220' >> big.bin
 	rm -f big.o big.elf big_stub.bin
 
 ################################################################################
@@ -605,10 +604,8 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	    0:
 	$(PATCH_HOLE) /tmp/ramdisk.tmp BIG.386 || true
-	$(DD) if="/dev/zero" of="ramdisk.bin" bs="1024" count="$(RAMDISK_KB)" \
-		status="none" 2> /dev/null
-	$(DD) if="/tmp/ramdisk.tmp" of="ramdisk.bin" conv="notrunc" \
-		status="none" 2> /dev/null
+	$(DD) if="/dev/zero" of="ramdisk.bin" bs="1024" count="$(RAMDISK_KB)"
+	$(DD) if="/tmp/ramdisk.tmp" of="ramdisk.bin" conv="notrunc"
 	rm -rf /tmp/ramdisk.tmp /tmp/cpmd
 
 ################################################################################
@@ -692,10 +689,8 @@ endif
 
 floppy.img: boot.bin os.bin
 	cat boot.bin os.bin > payload.bin
-	$(DD) if="/dev/zero" of="$@" bs="512" count="2880" \
-		status="none" 2> /dev/null
-	$(DD) if="payload.bin" of="$@" conv="notrunc" \
-		status="none" 2> /dev/null
+	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440"
+	$(DD) if="payload.bin" of="$@" conv="notrunc"
 	$(PRINTF) '*** floppy.img usage: %d bytes\n' \
 		"$$(od -Ax -t x2 floppy.img 2> /dev/null | tail -3 | head -1 | \
 			$(AWK) '{ print "0x"a$$1 }' 2> /dev/null)" || :
@@ -703,29 +698,8 @@ floppy.img: boot.bin os.bin
 
 ################################################################################
 
-clean:
-	rm -f *.o $(TARGET) *.img *.log cpm386.bin test_bdos os.bin boot.bin \
-	      payload.bin bss.inc ramdisk.bin \
-	      hello.bin hello.386 lrbc.bin lrbc.386 iotest.bin iotest.386 \
-	      big.bin big.386 tod.bin tod.386 hd.bin hd.386 od.bin od.386 \
-	      ls.bin ls.386 ver.bin ver.386 reboot.bin reboot.386 \
-	      touch.bin touch.386 more.bin more.386 cls.bin cls.386 \
-	      rc.bin rc.386 tsec.bin tsec.386 trunc.bin trunc.386 \
-	      rm.bin rm.386 printenv.bin printenv.386 pause.bin pause.386 \
-	      vgaon.bin vgaon.386 vgaoff.bin vgaoff.386 \
-	      seron.bin seron.386 seroff.bin seroff.386 \
-	      fparse.bin fparse.386 illegal.bin illegal.386 \
-	      dumpfcb.bin dumpfcb.386 dumpdir.bin dumpdir.386 \
-	      mem.bin mem.386 aclockvt.bin aclockvt.386 \
-	      aclockdv.bin aclockdv.386 vgatext.bin vgatext.386 \
-	      ticks.bin ticks.386 \
-	      $(MK386) $(PATCH_HOLE)
-
-################################################################################
-
-run: floppy.img
-	timeout 5s qemu-system-i386 -nographic -serial stdio -monitor none \
-	  -drive if=floppy,format=raw,file=floppy.img -boot a || true
+clean distclean:
+	rm -f /*.o ./*.img /*.log ./*.bin ./*.386 $(MK386) $(PATCH_HOLE) $(TARGET)
 
 ################################################################################
 
@@ -777,7 +751,7 @@ scc-real: README.md
 
 ################################################################################
 
-.PHONY: all clean run test scc scc-real markdown-toc update-readme
+.PHONY: all clean distclean test scc scc-real markdown-toc update-readme
 
 ################################################################################
 
