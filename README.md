@@ -90,7 +90,7 @@
 
 ## Compilation
 
-Building **CP/M-386** is supported on **Linux**, **NetBSD**, **OpenBSD**, and
+Building **CP/M-386** is supported on **Linux**, **NetBSD**, **OpenBSD**,
 and **Haiku**:
 
 **GCC** build (default):
@@ -317,7 +317,7 @@ this section as *wishlist* and not a *roadmap*!
                 <th>0</th>
                 <th>310</th>
                 <th>0</th>
-                <th>16098</th>
+                <th>16094</th>
                 <th>296</th>
         </tr></tbody>
         <tfoot><tr>
@@ -328,7 +328,7 @@ this section as *wishlist* and not a *roadmap*!
                 <th>4262</th>
                 <th>15823</th>
                 <th>2896</th>
-                <th>641627</th>
+                <th>641623</th>
                 <th>10069</th>
         </tr></tfoot></table>
 <!-- scc-end -->
