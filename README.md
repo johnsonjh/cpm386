@@ -229,7 +229,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>124</th>
                 <th>561</th>
                 <th>69</th>
-                <th>28053</th>
+                <th>28055</th>
                 <th>550</th>
         </tr><tr>
                 <th>Assembly</th>
@@ -260,7 +260,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4266</th>
                 <th>15956</th>
                 <th>2925</th>
-                <th>645145</th>
+                <th>645147</th>
                 <th>10160</th>
         </tr></tfoot></table>
 <!-- scc-end -->
