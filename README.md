@@ -16,6 +16,7 @@
 - [Screenshots](#screenshots)
 - [Build requirements](#build-requirements)
 - [Compilation](#compilation)
+- [Build output](#build-output)
 - [QEMU testing](#qemu-testing)
 - [QEMU notes](#qemu-notes)
 - [Included utilities](#included-utilities)
@@ -117,16 +118,19 @@ make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
 make test CC="clang"
 ```
 
+* It is recommended to use **GCC** as **Clang**‑compiled i386 output is
+  larger than **GCC** at `-O2`.
+
+* Be sure to `make clean` if switching compilers or adjusting compiler flags.
+
+## Build output
+
 The build produces two primary artifacts:
 
 |         File | Description                            |
 |-------------:|:---------------------------------------|
 | `cpm386.elf` | Multiboot kernel image                 |
 | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
-
-* It is recommended to use **GCC** as **Clang**‑compiled i386 output is
-  larger than **GCC** at `-O2`.
-* Be sure to `make clean` if switching compilers or adjusting compiler flags.
 
 ## QEMU testing
 
@@ -256,24 +260,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>407</th>
-                <th>54</th>
+                <th>411</th>
+                <th>56</th>
                 <th>0</th>
-                <th>353</th>
+                <th>355</th>
                 <th>0</th>
-                <th>18197</th>
-                <th>326</th>
+                <th>18247</th>
+                <th>328</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25218</th>
-                <th>4608</th>
+                <th>25222</th>
+                <th>4610</th>
                 <th>4305</th>
-                <th>16305</th>
+                <th>16307</th>
                 <th>3107</th>
-                <th>660782</th>
-                <th>10269</th>
+                <th>660832</th>
+                <th>10271</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
