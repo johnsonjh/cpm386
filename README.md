@@ -51,24 +51,25 @@
 
 ## CP/M compatibility
 
-|            System | BDOS coverage |
-|------------------:|:--------------|
-| CP/M‑68K&nbsp;1.3 | **100%**      |
-| CP/M&nbsp;2.2     | **98%**       |
-| CP/M‑Plus         | **71%**       |
-| DOS‑Plus          | **62%**       |
-| MP/M&nbsp;2.1     | **50%**       |
+|                System | BDOS coverage |
+|----------------------:|:--------------|
+| **CP/M‑68K&nbsp;1.3** | **100%**      |
+| **CP/M&nbsp;2.2**     | **98%**       |
+| **CP/M‑Plus**         | **71%**       |
+| **DOS‑Plus**          | **62%**       |
+| **MP/M&nbsp;2.1**     | **50%**       |
 
-* The **CP/M‑386** BDOS is at full parity with CP/M‑68K&nbsp;1.3.
-* CP/M&nbsp;2.2 equivalence is lacking only
+* The **CP/M‑386** BDOS is at full parity with **CP/M‑68K&nbsp;1.3**.
+* **CP/M&nbsp;2.2** equivalence is lacking only
   [BDOS 27](https://www.seasip.info/Cpm/bdos.html#27) (which was deliberately
-  omitted from CP/M‑68K by Digital Research).
-* A large majority of the CP/M‑Plus (CP/M&nbsp;3) BDOS is also supported.
-* More than 60% of the DOS‑Plus additions have been implemented.
-* Approximately half of the MP/M extensions have been completed.
+  omitted from **CP/M‑68K** by Digital Research).
+* A large majority of the **CP/M‑Plus** (**CP/M&nbsp;3**) BDOS is also
+  supported.
+* More than 60% of the **DOS‑Plus** additions have been implemented.
+* Approximately half of the **MP/M** extensions have been completed.
   * The missing functionality is largely the multi‑user, multi‑tasking,
     message queuing, and process control calls that don't apply to a
-    single‑user CP/M implementation.
+    single‑user **CP/M** implementation.
 * Unique **CP/M‑386**‑specific BDOS extensions have been added to accommodate
   new features like direct video access and high‑resolution timing.
 
@@ -154,7 +155,7 @@ qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,f
 | `FPARSE.386`   | F_PARSE test ([BDOS 152](https://www.seasip.info/Cpm/bdos.html#152))                               |
 | `GETSN.386`    | Display serial number ([BDOS 107](https://www.seasip.info/Cpm/bdos.html#107))                      |
 | `HD.386`       | Hex dump utility                                                                                   |
-| `HELLO.386`    | Hello world! (the first CP/M‑386 program!)                                                         |
+| `HELLO.386`    | Hello world (the very first **CP/M‑386** program!)                                                 |
 | `ILLEGAL.386`  | Ring‑3 protection and exception handler test                                                       |
 | `IOTEST.386`   | File I/O BDOS tests                                                                                |
 | `LRBC.386`     | Query Last Record Byte Count                                                                       |
@@ -171,7 +172,7 @@ qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,f
 | `RM.386`       | UNIX `rm`‑like interactive file deletion utility                                                   |
 | `SEROFF.386`   | Disable serial console (BDOS 223)                                                                  |
 | `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
-| `STAT.386`     | STAT (A port of Zilog CP/M‑Z8000 STAT v1.0C 01/03/84)                                              |
+| `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C 01/03/84)                                          |
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
 | `TICKS.386`    | High‑resolution timer tests (BDOS 225, BDOS 226)                                                   |
@@ -246,23 +247,23 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>397</th>
+                <th>398</th>
                 <th>52</th>
                 <th>0</th>
-                <th>345</th>
+                <th>346</th>
                 <th>0</th>
-                <th>17704</th>
+                <th>17766</th>
                 <th>319</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>72</th>
-                <th>24826</th>
+                <th>24827</th>
                 <th>4578</th>
                 <th>4277</th>
-                <th>15971</th>
+                <th>15972</th>
                 <th>2934</th>
-                <th>647805</th>
+                <th>647867</th>
                 <th>10171</th>
         </tr></tfoot></table>
 <!-- scc-end -->
