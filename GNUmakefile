@@ -1,5 +1,5 @@
 ################################################################################
-# CP/M-386 - Makefile
+# CP/M-386 - BSDmakefile
 # Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
 # SPDX-License-Identifier: MIT
 # scspell-id: b1bb2880-826f-11f1-a5c2-80ee73e9b8e7
@@ -873,6 +873,7 @@ scc-real: README.md
 	"$${MAKE:-$(MAKE)}" clean
 	$(AWK) '/<!-- scc-start -->/ { \
 		print; system("scc \
+			--count-as-pattern \"BSDmakefile:Makefile:Makefile\" \
 			--exclude-file LICENSE,README.awk,log.pvs \
 			--exclude-file log.pvs,compile_commands.json \
 			--exclude-file REUSE.toml \
