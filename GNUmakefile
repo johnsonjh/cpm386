@@ -812,7 +812,7 @@ clean distclean:
 
 testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 	dskutil.o iosys.o ccp.o bringup.o
-	$(CC) -m32 $(OPTFLAGS) -I. -o ./$@ ./$^
+	$(CC) -m32 $(OPTFLAGS) -I. -o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB)
 
 ################################################################################
 

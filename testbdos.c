@@ -22,7 +22,7 @@
 #include "bdosinc.h"
 #include "bdosdef.h"
 #include "biosdef.h"
-#include "cpm_bringup.h" /* shared bring-up */
+#include "bringup.h" /* shared bring-up */
 
 /*****************************************************************************/
 
