@@ -4,7 +4,7 @@
 <!-- SPDX-License-Identifier: MIT -->
 <!-- scspell-id: 696e52ee-8276-11f1-b02c-80ee73e9b8e7 -->
 
-**CP/M‑386** is CP/M for 386 protected mode, derived from CP/M‑68K.
+**CP/M‑386** is **CP/M** for 386 protected mode, derived from **CP/M‑68K**.
 
 ---
 
@@ -252,7 +252,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>346</th>
                 <th>0</th>
-                <th>17766</th>
+                <th>17774</th>
                 <th>319</th>
         </tr></tbody>
         <tfoot><tr>
@@ -263,7 +263,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4277</th>
                 <th>15972</th>
                 <th>2934</th>
-                <th>647867</th>
+                <th>647875</th>
                 <th>10171</th>
         </tr></tfoot></table>
 <!-- scc-end -->
