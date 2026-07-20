@@ -132,14 +132,6 @@ crlf (void)
 /*****************************************************************************/
 
 static void
-newline (void) /* alias used like original new_ln */
-{
-  crlf ();
-}
-
-/*****************************************************************************/
-
-static void
 print (const char *s) /* crlf and THEN string */
 {
   crlf ();
@@ -286,7 +278,9 @@ static UWORD nfcbs;        /* total FCB extent count */
 static UWORD fcbn;         /* files collected so far */
 static UWORD fcbmax;       /* max files we can hold */
 static int error_free;     /* no duplicate block errors */
+#if 0
 static UWORD dcnt;         /* directory search result */
+#endif
 
 /*****************************************************************************/
 
@@ -1009,6 +1003,7 @@ name_eq_de (int idx, const UBYTE *de)
 
 /*****************************************************************************/
 
+#if 0
 /* Check if bpfcb (search pattern) matches dir entry de */
 static int
 pattern_match_de (const UBYTE *pat, const UBYTE *de)
@@ -1037,6 +1032,7 @@ pattern_match_de (const UBYTE *pat, const UBYTE *de)
 
   return 1;
 }
+#endif
 
 /*****************************************************************************/
 
