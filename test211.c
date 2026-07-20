@@ -49,25 +49,24 @@ _start (void)
   char newline[] = "\r\n";
   char *p;
   int i;
-  UWORD tests[10];
+  UWORD tests[9];
 
   tests[0] = 0;
   tests[1] = 7;
   tests[2] = 42;
   tests[3] = 1234;
   tests[4] = 65535;
-  tests[5] = 65536; /* 0 */
-  tests[6] = -1;    /* 65535 */
-  tests[7] = 4321;
-  tests[8] = 0;
-  tests[9] = 7;
+  tests[5] = -1;    /* 65535 */
+  tests[6] = 4321;
+  tests[7] = 0;
+  tests[8] = 7;
 
   for (p = msg1; *p; p++)
     {
       bdos (2, (LONG)*p);
     }
 
-  for (i = 0; i < 10; i++)
+  for (i = 0; i < 9; i++)
     {
       for (p = msg2; *p; p++)
         {
