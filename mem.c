@@ -209,8 +209,6 @@ _start (void)
   put_kb (free_prog);
   puts (" (TPA minus base page)\r\n");
 
-  puts ("\r\n");
-
   bdos (0, 0);
 }
 
