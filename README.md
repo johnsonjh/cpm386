@@ -79,10 +79,12 @@
 ## Screenshots
 
 <div style="display:flex; justify-content:center; align-items:center;">
- VGA:<a href=".img/VGA.png" style="flex:1; text-align:center;">
+  •&nbsp;VGA&nbsp;text&nbsp;console:
+  <a href=".img/VGA.png" style="flex:1; text-align:center;">
   <img src=".img/VGA.png" style="width:100%;">
  </a>
- Serial:<a href=".img/SER.png" style="flex:1; text-align:center;">
+  •&nbsp;Serial console:
+  <a href=".img/SER.png" style="flex:1; text-align:center;">
   <img src=".img/SER.png" style="width:100%;">
  </a>
 </div>
@@ -261,24 +263,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>412</th>
+                <th>414</th>
                 <th>56</th>
                 <th>0</th>
-                <th>356</th>
+                <th>358</th>
                 <th>0</th>
-                <th>18375</th>
-                <th>329</th>
+                <th>18443</th>
+                <th>331</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25223</th>
+                <th>25225</th>
                 <th>4610</th>
                 <th>4305</th>
-                <th>16308</th>
+                <th>16310</th>
                 <th>3107</th>
-                <th>660960</th>
-                <th>10272</th>
+                <th>661028</th>
+                <th>10274</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
