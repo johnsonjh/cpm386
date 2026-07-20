@@ -79,10 +79,10 @@
 ## Screenshots
 
 <div style="display:flex; justify-content:center; align-items:center;">
- <a href=".img/VGA.png" style="flex:1; text-align:center;">
+ VGA:<a href=".img/VGA.png" style="flex:1; text-align:center;">
   <img src=".img/VGA.png" style="width:100%;">
  </a>
- <a href=".img/SER.png" style="flex:1; text-align:center;">
+ Serial:<a href=".img/SER.png" style="flex:1; text-align:center;">
   <img src=".img/SER.png" style="width:100%;">
  </a>
 </div>
