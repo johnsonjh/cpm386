@@ -205,7 +205,7 @@ _start (void)
   puts (" bytes)\r\n");
 
   puts ("Program load:          TPA+0x100\r\n");
-  puts ("Approximate RAM free:  ");
+  puts ("Approximate free RAM:  ");
   put_kb (free_prog);
   puts (" (TPA minus base page)\r\n");
 
