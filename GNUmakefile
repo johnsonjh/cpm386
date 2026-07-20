@@ -303,9 +303,9 @@ BIG_IMG_SIZE:=71680
 
 ################################################################################
 
-# Truncate ramdisk image to 320K - messy/ but temporary for bringup
+# Truncate ramdisk image to 384K - messy/ but temporary for bringup
 # maximum size ~448 for now!
-RAMDISK_KB:=320
+RAMDISK_KB:=384
 
 ################################################################################
 
@@ -700,7 +700,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
 	fsck.cpm -f $(CPMFS) -n /tmp/ramdisk.tmp
-	./$(SHOLE) /tmp/ramdisk.tmp BIG.386
+	./$(SHOLE) -w /tmp/ramdisk.tmp BIG.386
 	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
 		$(GREP) -v '^*$$' | tail -2 | head -1 | \
 		$(AWK) '{ print "0x"a$$1 }')"); \
