@@ -99,8 +99,8 @@ The following dependencies are required to compile **CP/M‑386**:
 
 ## Compilation
 
-Building **CP/M‑386** is supported on **Linux**, **NetBSD**, **OpenBSD**,
-and **Haiku**:
+Building **CP/M‑386** is supported on current **Linux**, **NetBSD**,
+**OpenBSD**, and **Haiku**:
 
 **GCC** build (default):
 
@@ -249,7 +249,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>337</th>
                 <th>0</th>
-                <th>17204</th>
+                <th>17212</th>
                 <th>309</th>
         </tr></tbody>
         <tfoot><tr>
@@ -260,7 +260,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4269</th>
                 <th>15962</th>
                 <th>2925</th>
-                <th>645620</th>
+                <th>645628</th>
                 <th>10161</th>
         </tr></tfoot></table>
 <!-- scc-end -->
