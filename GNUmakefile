@@ -773,7 +773,10 @@ clean distclean:
 
 testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 	dskutil.o iosys.o ccp.o bringup.o
-	$(CC) -m32 $(OPTFLAGS) -I. -o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB)
+	$(CC) -m32 $(OPTFLAGS) -I. -o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB) \
+	-fmerge-all-constants -fno-asynchronous-unwind-tables \
+	-fno-builtin -fno-pic -fno-pie -fno-plt -fno-stack-protector \
+	-fno-tree-vectorize -fno-unwind-tables -fomit-frame-pointer
 
 ################################################################################
 
