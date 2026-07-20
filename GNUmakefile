@@ -142,6 +142,13 @@ WNO_UNUSED_COMMAND_LINE_ARGUMENT:=$(shell \
 
 ################################################################################
 
+FNO_STACK_CLASH_PROTECTION:=$(shell \
+	$(CC) -Werror -fno-stack-clash-protection \
+	-x c c /dev/null -o /dev/null 2> /dev/null && \
+	$(PRINTF) '%s' "-fno-stack-clash-protection")
+
+################################################################################
+
 OS=$(shell uname -s 2> /dev/null)
 
 ################################################################################
@@ -164,6 +171,7 @@ endif
 
 CFLAGS = \
 	$(DEBUGFLAGS) \
+	$(FNO_STACK_CLASH_PROTECTION) \
 	$(OPTFLAGS) \
 	$(W_NO_DEPRECATED_NON_PROTOTYPE) \
 	$(W_NO_RETURN_MISMATCH) \
@@ -186,7 +194,6 @@ CFLAGS = \
 	-fno-pic \
 	-fno-pie \
 	-fno-plt \
-	-fno-stack-clash-protection \
 	-fno-stack-protector \
 	-fno-tree-vectorize \
 	-fno-unwind-tables \
