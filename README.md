@@ -107,21 +107,27 @@ The following dependencies are required to compile **CP/M‑386**:
 
 Building **CP/M‑386** is supported on current **Linux**, **NetBSD**,
 **OpenBSD**, **FreeBSD**, and **Haiku**:
+[]()
 
+[]()
 * **GCC** build (recommended):
 
   ```sh
   make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
   make test
   ```
+[]()
 
+[]()
 * **Clang** build:
 
   ```sh
   make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
   make test CC="clang"
   ```
+[]()
 
+[]()
 * It is recommended to use **GCC** as **Clang**‑compiled i386 output is
   larger than **GCC** at `-O2`.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
