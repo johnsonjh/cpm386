@@ -55,6 +55,7 @@ this section as *wishlist* and not a *roadmap*!
 
 * Software/ports needed:
   * TRUNCATE utility to truncate a file and set the LRBC
+  * Extend MEM to breakdown system size into CBIOS, BDOS, and CCP individually.
   * Extend STAT to query and also set the LRBC
   * Extend LRBC program to set the LRBC
   * Extend LS to sort by size, ignore LRBC, and reverse sort order
