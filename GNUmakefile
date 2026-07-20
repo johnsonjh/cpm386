@@ -227,8 +227,7 @@ ASFLAGS = -f elf32
 
 ################################################################################
 
-LDFLAGS = -m $(ELF_I386) -no-pie -T linker.ld -nostdlib \
-	--gc-sections --print-gc-sections
+LDFLAGS = -m $(ELF_I386) -no-pie -T linker.ld -nostdlib --gc-sections
 
 ################################################################################
 
