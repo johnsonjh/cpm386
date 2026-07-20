@@ -14,7 +14,7 @@ ifndef DEBUG
  OPTFLAGS=-O2
 else
  DEBUGFLAGS=-DDEBUG
- LMAP=--print-map --cref
+ LMAP=-Wl,--print-map -Wl,--cref
  NASMDEBUG=-g
  OPTFLAGS=-Og -ggdb -fdata-sections -ffunction-sections
 endif
@@ -31,11 +31,12 @@ PRINTF:=$(shell \
 CC:=$(shell \
 	command -v gcc 2> /dev/null || \
 	command -v clang 2> /dev/null || \
+	command -v cc 2> /dev/null || \
 	$(PRINTF) '%s' "cc")
 
 ################################################################################
 
-AS:=$(shell \
+NASM:=$(shell \
 	command -v nasm 2> /dev/null || \
 	command -v nasm-segelf 2> /dev/null || \
 	$(PRINTF) '%s' "nasm")
@@ -47,16 +48,6 @@ NM:=$(shell \
 	command -v nm 2> /dev/null || \
 	command -v llvm-nm 2> /dev/null || \
 	$(PRINTF) '%s' "nm")
-
-################################################################################
-
-LD:=$(shell \
-	command -v gld 2> /dev/null || \
-	command -v ld.bfd 2> /dev/null || \
-	command -v ld.gold 2> /dev/null || \
-	command -v ld.lld 2> /dev/null || \
-	command -v ld > /dev/null || \
-	$(PRINTF) '%s' "ld")
 
 ################################################################################
 
@@ -195,7 +186,6 @@ CFLAGS = \
 	-fno-pie \
 	-fno-plt \
 	-fno-stack-protector \
-	-fno-tree-vectorize \
 	-fno-unwind-tables \
 	-fomit-frame-pointer \
 	-I. \
@@ -210,6 +200,7 @@ CFLAGS = \
 	-Wdouble-promotion \
 	-Wextra \
 	-Wformat-security \
+	-Wl,--build-id=none \
 	-Wno-implicit-function-declaration \
 	-Wno-implicit-int \
 	-Wno-incompatible-pointer-types \
@@ -223,11 +214,67 @@ CFLAGS = \
 
 ################################################################################
 
-ASFLAGS = -f elf32
+NASMFLAGS = -f elf32
 
 ################################################################################
 
-LDFLAGS = -m $(ELF_I386) -no-pie -T linker.ld -nostdlib --gc-sections
+LDFLAGS = -m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-no-pie -T linker.ld \
+	-Wl,--build-id=none -Wl,--gc-sections
+
+################################################################################
+
+# Detect if CC with current CFLAGS supports `-flto`
+ifndef NO_LTO
+ FLTO_WR:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
+  $(CC) $(CFLAGS) -flto .test.c -o .test.out > /dev/null 2>&1; \
+   echo $$?; rm -f .test.c .test.out > /dev/null 2>&1)
+ ifeq ($(FLTO_WR),0)
+  FLTO_OK:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
+   $(CC) $(CFLAGS) -Werror -flto .test.c -o .test.out > /dev/null 2>&1; \
+    echo $$?; rm -f .test.c .test.out > /dev/null 2>&1)
+  ifeq ($(FLTO_OK),0)
+   LTO_FLAGS:=-flto
+   # Detect if CC supports `-flto=auto`
+   AUTO_WR:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
+    $(CC) $(CFLAGS) -flto=auto .test.c -o .test.out > /dev/null 2>&1; \
+     echo $$?; rm -f .test.c .test.out > /dev/null 2>&1)
+   ifeq ($(AUTO_WR),0)
+    AUTO_OK:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
+     $(CC) $(CFLAGS) -Werror -flto=auto .test.c -o .test.out > /dev/null 2>&1; \
+      echo $$?; rm -f .test.c .test.out > /dev/null 2>&1)
+    ifeq ($(AUTO_OK),0)
+     LTO_FLAGS:=-flto=auto
+    endif
+   endif
+  endif
+ endif
+ ifeq ($(findstring -flto,$(CFLAGS)),)
+  CFLAGS+=$(LTO_FLAGS)
+ endif
+ ifeq ($(findstring -flto,$(LDFLAGS)),)
+  LDFLAGS+=$(LTO_FLAGS)
+ endif
+endif
+
+################################################################################
+
+# Solaris or illumos: Force `-flto=auto` to `-flto`
+ifneq "$(findstring SunOS,$(OS))" ""
+ CFLAGS := $(subst -flto=auto,-flto,$(CFLAGS))
+ LDFLAGS := $(subst -flto=auto,-flto,$(LDFLAGS))
+endif
+
+################################################################################
+
+# OS/400 with GCC: Disable LTO
+ifneq "$(findstring OS400,$(OS))" ""
+ ifneq "$(findstring gcc,$(CC))" ""
+  CFLAGS:=$(subst -flto=auto,-flto,$(CFLAGS))
+  CFLAGS:=$(subst -flto,,$(CFLAGS))
+  LDFLAGS:=$(subst -flto=auto,-flto,$(LDFLAGS))
+  LDFLAGS:=$(subst -flto,,$(LDFLAGS))
+ endif
+endif
 
 ################################################################################
 
@@ -281,8 +328,8 @@ strip: $(TARGET) floppy.img
 
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o ./$*.o ./$<
-	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
-		-o ./$*.elf ./$*.o
+	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./$*.elf ./$*.o
 	@entry=$$($(NM) ./$*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    $(PRINTF) '%s\n' "ERROR: _start at 0x$$entry, expected 0x100"; \
@@ -293,13 +340,13 @@ strip: $(TARGET) floppy.img
 ################################################################################
 
 $(MK386): mk386.c
-	$(CC) $(OPTFLAGS) -o ./$@ ./$<
+	$(CC) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
 
 ################################################################################
 
 SHOLE = shole
 $(SHOLE): shole.c
-	$(CC) $(OPTFLAGS) -o ./$@ ./$<
+	$(CC) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
 
 ################################################################################
 
@@ -420,8 +467,8 @@ pause.386: pause.bin $(MK386)
 
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o ./vgaon.o ./conctl.c
-	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
-		-o ./vgaon.elf ./vgaon.o
+	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./vgaon.elf ./vgaon.o
 	@entry=$$($(NM) ./vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: vgaon _start"; \
@@ -432,8 +479,8 @@ vgaon.bin: conctl.c user.ld
 
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o ./vgaoff.o ./conctl.c
-	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
-		-o ./vgaoff.elf ./vgaoff.o
+	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./vgaoff.elf ./vgaoff.o
 	@entry=$$($(NM) ./vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: vgaoff _start"; \
@@ -444,8 +491,8 @@ vgaoff.bin: conctl.c user.ld
 
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o ./seron.o ./conctl.c
-	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
-		-o ./seron.elf ./seron.o
+	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./seron.elf ./seron.o
 	@entry=$$($(NM) ./seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: seron _start"; \
@@ -456,8 +503,8 @@ seron.bin: conctl.c user.ld
 
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o ./seroff.o ./conctl.c
-	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
-		-o ./seroff.elf ./seroff.o
+	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./seroff.elf ./seroff.o
 	@entry=$$($(NM) ./seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: seroff _start"; \
@@ -533,8 +580,8 @@ ticks.386: ticks.bin $(MK386)
 
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o ./big.o ./big.c
-	$(LD) $(LMAP) -m $(ELF_I386) -no-pie -T ./user.ld \
-		-o ./big.elf ./big.o
+	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./big.elf ./big.o
 	@entry=$$($(NM) ./big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: big _start"; \
@@ -700,12 +747,12 @@ pmode.o: pmode.c pmode.h
 ################################################################################
 
 pmodeasm.o: pmode.s
-	$(AS) $(ASFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
+	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
 
 ################################################################################
 
 mbentry.o: mbentry.s mltiboot.h
-	$(AS) $(ASFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
+	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
 
 ################################################################################
 
@@ -727,7 +774,7 @@ bss.inc: $(TARGET)
 ################################################################################
 
 boot.bin: boot.s bss.inc
-	$(AS) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
+	$(NASM) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
 
 ################################################################################
 
@@ -737,7 +784,7 @@ os.bin: $(TARGET)
 ################################################################################
 
 $(TARGET): $(OBJS) linker.ld
-	$(LD) $(LMAP) $(LDFLAGS) -o ./$@ ./$(OBJS)
+	$(CC) $(LMAP) $(LDFLAGS) -o ./$@ ./$(OBJS)
 ifndef DEBUG
 	$(STRIP) --strip-debug ./$(TARGET)
 endif
@@ -770,10 +817,10 @@ clean distclean:
 
 testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 	dskutil.o iosys.o ccp.o bringup.o
-	$(CC) -m32 $(OPTFLAGS) -I. -o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB) \
-	-fmerge-all-constants -fno-asynchronous-unwind-tables \
-	-fno-builtin -fno-pic -fno-pie -fno-plt -fno-stack-protector \
-	-fno-tree-vectorize -fno-unwind-tables -fomit-frame-pointer
+	$(CC) -m32 $(LTO_FLAGS) $(OPTFLAGS) -Wl,--build-id=none -I. -o ./$@ ./$^ \
+	-DRAMDISK_KB=$(RAMDISK_KB) -Wl,--build-id=none -fmerge-all-constants \
+	-fno-asynchronous-unwind-tables -fno-builtin -fno-pic -fno-pie -fno-plt \
+	-fno-stack-protector -fno-unwind-tables -fomit-frame-pointer
 
 ################################################################################
 

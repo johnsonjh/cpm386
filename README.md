@@ -10,18 +10,18 @@
 
 <!-- toc -->
 
-- [Overview](#overview)
-- [Hardware support](#hardware-support)
-- [CP/M compatibility](#cpm-compatibility)
-- [Screenshots](#screenshots)
-- [Build requirements](#build-requirements)
-- [Compilation](#compilation)
+  * [Overview](#overview)
+  * [Hardware support](#hardware-support)
+  * [CP/M compatibility](#cpm-compatibility)
+  * [Screenshots](#screenshots)
+  * [Build requirements](#build-requirements)
+  * [Compilation](#compilation)
 - [QEMU testing](#qemu-testing)
-  * [QEMU notes](#qemu-notes)
-- [Included utilities](#included-utilities)
-- [Future plans](#future-plans)
-- [Code statistics](#code-statistics)
-- [License](#license)
+    + [QEMU notes](#qemu-notes)
+  * [Included utilities](#included-utilities)
+  * [Future plans](#future-plans)
+  * [Code statistics](#code-statistics)
+  * [License](#license)
 
 <!-- tocstop -->
 
@@ -53,13 +53,13 @@
 
 |            System | BDOS coverage |
 |------------------:|:--------------|
-| CP/M‑68K&nbsp;1.2 | **100%**      |
+| CP/M‑68K&nbsp;1.3 | **100%**      |
 | CP/M&nbsp;2.2     | **98%**       |
 | CP/M‑Plus         | **71%**       |
 | DOS‑Plus          | **62%**       |
 | MP/M&nbsp;2.1     | **50%**       |
 
-* The **CP/M‑386** BDOS is at full parity with CP/M‑68K&nbsp;1.2.
+* The **CP/M‑386** BDOS is at full parity with CP/M‑68K&nbsp;1.3.
 * CP/M&nbsp;2.2 equivalence is lacking only
   [BDOS 27](https://www.seasip.info/Cpm/bdos.html#27) (which was deliberately
   omitted from CP/M‑68K by Digital Research).
@@ -113,10 +113,12 @@ make test
 
 ```sh
 make -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
-make test
+make test CC="clang"
 ```
 
-## QEMU testing
+Be sure to `make clean` if switching compilers or adjusting compiler flags.
+
+# QEMU testing
 
 [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
 kernel (recommended):
@@ -204,13 +206,13 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>51</th>
-                <th>20964</th>
-                <th>3917</th>
-                <th>3320</th>
-                <th>13727</th>
-                <th>2843</th>
-                <th>511361</th>
-                <th>7866</th>
+                <th>20959</th>
+                <th>3915</th>
+                <th>3319</th>
+                <th>13725</th>
+                <th>2845</th>
+                <th>511195</th>
+                <th>7865</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -224,13 +226,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>869</th>
-                <th>213</th>
-                <th>129</th>
-                <th>527</th>
-                <th>70</th>
-                <th>27952</th>
-                <th>518</th>
+                <th>916</th>
+                <th>217</th>
+                <th>135</th>
+                <th>564</th>
+                <th>76</th>
+                <th>30095</th>
+                <th>552</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -244,24 +246,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>395</th>
-                <th>51</th>
+                <th>397</th>
+                <th>52</th>
                 <th>0</th>
-                <th>344</th>
+                <th>345</th>
                 <th>0</th>
-                <th>17619</th>
-                <th>316</th>
+                <th>17728</th>
+                <th>319</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>72</th>
-                <th>24782</th>
-                <th>4575</th>
-                <th>4272</th>
-                <th>15935</th>
-                <th>2926</th>
-                <th>645715</th>
-                <th>10135</th>
+                <th>24826</th>
+                <th>4578</th>
+                <th>4277</th>
+                <th>15971</th>
+                <th>2934</th>
+                <th>647801</th>
+                <th>10171</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
