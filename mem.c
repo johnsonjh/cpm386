@@ -156,7 +156,7 @@ _start (void)
   free_prog = (tpa_len > 0x100UL) ? (tpa_len - 0x100UL) : 0;
 
   puts ("\r\nCP/M-386 Memory Map\r\n");
-  puts ("-------------------\r\n\r\n");
+  puts (    "-------------------\r\n");
 
   /* Usable RAM is [0 .. TPA top); TPA is the transient region. */
   puts ("Usable RAM top:        ");
