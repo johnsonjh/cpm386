@@ -247,7 +247,11 @@ MK386 = mk386
 
 # 70 KiB image: multi-extent and >64 KiB
 BIG_IMG_SIZE = 71680
-RAMDISK_KB = 384
+
+################################################################################
+
+# Truncate ramdisk image to 256K - unsafe but temporary for bringup
+RAMDISK_KB = 256
 
 ################################################################################
 
