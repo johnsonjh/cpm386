@@ -257,9 +257,9 @@ BIG_IMG_SIZE:=71680
 
 ################################################################################
 
-# Truncate ramdisk image to 256K - messy/ but temporary for bringup
+# Truncate ramdisk image to 320K - messy/ but temporary for bringup
 # maximum size ~448 for now!
-RAMDISK_KB:=256
+RAMDISK_KB:=320
 
 ################################################################################
 
