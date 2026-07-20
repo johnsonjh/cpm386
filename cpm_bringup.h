@@ -30,7 +30,7 @@
 # ifdef RAMDISK_KB
 #  define RAMDISK_SIZE (RAMDISK_KB * 1024)
 # else
-#  define RAMDISK_SIZE (256 * 1024)
+#  error RAMDISK_KB undefined
 # endif
 
 /*****************************************************************************/

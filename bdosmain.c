@@ -45,7 +45,14 @@
 /*****************************************************************************/
 
 #include "platform.h" /* VGA text geometry for BDOS 224 */
-#include "cpm_bringup.h" /* RAMDISK_SIZE */
+
+/*****************************************************************************/
+
+# ifdef RAMDISK_KB
+#  define RAMDISK_SIZE (RAMDISK_KB * 1024)
+# else
+#  error RAMDISK_KB undefined
+# endif
 
 /*****************************************************************************/
 
