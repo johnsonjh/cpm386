@@ -15,11 +15,11 @@
  * Using in-memory RAM disk for initial FS.
  */
 
-#include "bdosinc.h"     /* UBYTE/WORD etc */
-#include "bdosdef.h"     /* for CPM386_HDR / loader core */
-#include "biosdef.h"     /* for bios_* decls/macros */
-#include "cpm_bringup.h" /* shared: ramdisk, dph0, cpm_bringup(), struct dpb/dph defs */
-#include "pmode.h"       /* ring-3 GDT/IDT/TSS + enter_ring3 */
+#include "bdosinc.h" /* UBYTE/WORD etc */
+#include "bdosdef.h" /* for CPM386_HDR / loader core */
+#include "biosdef.h" /* for bios_* decls/macros */
+#include "bringup.h" /* shared: ramdisk, dph0, cpm_bringup(), struct dpb/dph defs */
+#include "pmode.h"   /* ring-3 GDT/IDT/TSS + enter_ring3 */
 #include "absaddr.h"
 
 typedef unsigned char uint8_t;
