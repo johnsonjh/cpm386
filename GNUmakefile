@@ -263,6 +263,10 @@ RAMDISK_KB:=256
 
 ################################################################################
 
+CPMFS:=4mb-hd
+
+################################################################################
+
 .PHONY: all
 
 all: $(TARGET) boot.bin os.bin floppy.img
@@ -648,8 +652,8 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	cp -f ./vgaoff.386 /tmp/cpmd/VGAOFF.386
 	cp -f ./vgaon.386 /tmp/cpmd/VGAON.386
 	cp -f ./vgatext.386 /tmp/cpmd/VGATEXT.386
-	mkfs.cpm -f 4mb-hd /tmp/ramdisk.tmp
-	cpmcp -f 4mb-hd /tmp/ramdisk.tmp \
+	mkfs.cpm -f $(CPMFS) /tmp/ramdisk.tmp
+	cpmcp -f $(CPMFS) /tmp/ramdisk.tmp \
 	  /tmp/cpmd/ACLOCKDV.386 \
 	  /tmp/cpmd/ACLOCKVT.386 \
 	  /tmp/cpmd/BIG.386 \
@@ -692,10 +696,10 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/VGAON.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
-	fsck.cpm -f 4mb-hd -n /tmp/ramdisk.tmp
+	fsck.cpm -f $(CPMFS) -n /tmp/ramdisk.tmp
 	./$(SHOLE) /tmp/ramdisk.tmp BIG.386
 	# Expected: "Bad record count (extent=2, name="BIG.386", record count=128)"
-	fsck.cpm -f 4mb-hd -n /tmp/ramdisk.tmp || :
+	fsck.cpm -f $(CPMFS) -n /tmp/ramdisk.tmp || :
 	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
 		$(GREP) -v '^*$$' | tail -2 | head -1 | \
 		$(AWK) '{ print "0x"a$$1 }')"); \
