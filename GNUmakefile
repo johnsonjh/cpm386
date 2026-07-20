@@ -327,6 +327,15 @@ CPMFS:=4mb-hd
 .PHONY: all
 
 all: $(TARGET) boot.bin os.bin floppy.img
+	@tput bold 2> /dev/null || true; tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "Build completed successfully."
+	@tput sgr0 2> /dev/null || true
+ifeq "$(findstring gcc,$(CC))" ""
+	@tput bold 2> /dev/null || true; tput setaf 3 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' \
+		"NOTE: $(CC) was used to build but gcc is recommended!"
+	@tput sgr0 2> /dev/null || true
+endif
 
 ################################################################################
 
@@ -334,6 +343,9 @@ all: $(TARGET) boot.bin os.bin floppy.img
 
 strip: $(TARGET) floppy.img
 	$(STRIP) -R '.shstrtab' -R '.strtab' -R '.symtab' "./$(TARGET)" || :
+	@tput bold 2> /dev/null || true; tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "Strip completed successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -347,132 +359,210 @@ strip: $(TARGET) floppy.img
 	    $(NM) ./$*.elf | head -20; \
 	    exit 1; fi
 	$(OBJCOPY) -O binary ./$*.elf ./$@
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 $(MK386): mk386.c
 	$(CC) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 SHOLE = shole
 $(SHOLE): shole.c
 	$(CC) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 hello.386: hello.bin $(MK386)
 	./$(MK386) ./hello.bin ./hello.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 test211.386: test211.bin $(MK386)
 	./$(MK386) ./test211.bin ./test211.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 stat.386: stat.bin $(MK386)
 	./$(MK386) ./stat.bin ./stat.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 lrbc.386: lrbc.bin $(MK386)
 	./$(MK386) ./lrbc.bin ./lrbc.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 iotest.386: iotest.bin $(MK386)
 	./$(MK386) ./iotest.bin ./iotest.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 delay.386: delay.bin $(MK386)
 	./$(MK386) ./delay.bin ./delay.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 getsn.386: getsn.bin $(MK386)
 	./$(MK386) ./getsn.bin ./getsn.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 sync.386: sync.bin $(MK386)
 	./$(MK386) ./sync.bin ./sync.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 tod.386: tod.bin $(MK386)
 	./$(MK386) ./tod.bin ./tod.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 hd.386: hd.bin $(MK386)
 	./$(MK386) ./hd.bin ./hd.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 od.386: od.bin $(MK386)
 	./$(MK386) ./od.bin ./od.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 ls.386: ls.bin $(MK386)
 	./$(MK386) ./ls.bin ./ls.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 ver.386: ver.bin $(MK386)
 	./$(MK386) ./ver.bin ./ver.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 reboot.386: reboot.bin $(MK386)
 	./$(MK386) ./reboot.bin ./reboot.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 touch.386: touch.bin $(MK386)
 	./$(MK386) ./touch.bin ./touch.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 more.386: more.bin $(MK386)
 	./$(MK386) ./more.bin ./more.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 cls.386: cls.bin $(MK386)
 	./$(MK386) cls.bin cls.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 rc.386: rc.bin $(MK386)
 	./$(MK386) ./rc.bin ./rc.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 tsec.386: tsec.bin $(MK386)
 	./$(MK386) ./tsec.bin ./tsec.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 trunc.386: trunc.bin $(MK386)
 	./$(MK386) ./trunc.bin ./trunc.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 rm.386: rm.bin $(MK386)
 	./$(MK386) ./rm.bin ./rm.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 printenv.386: printenv.bin $(MK386)
 	./$(MK386) ./printenv.bin ./printenv.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 pause.386: pause.bin $(MK386)
 	./$(MK386) ./pause.bin ./pause.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -485,6 +575,9 @@ vgaon.bin: conctl.c user.ld
 	  $(PRINTF) '%s\n' "ERROR: vgaon _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./vgaon.elf ./$@
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -497,6 +590,9 @@ vgaoff.bin: conctl.c user.ld
 	  $(PRINTF) '%s\n' "ERROR: vgaoff _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./vgaoff.elf ./$@
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -509,6 +605,9 @@ seron.bin: conctl.c user.ld
 	  $(PRINTF) '%s\n' "ERROR: seron _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./seron.elf ./$@
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -521,46 +620,73 @@ seroff.bin: conctl.c user.ld
 	  $(PRINTF) '%s\n' "ERROR: seroff _start"; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./seroff.elf ./$@
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 vgaon.386: vgaon.bin $(MK386)
 	./$(MK386) ./vgaon.bin ./vgaon.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 vgaoff.386: vgaoff.bin $(MK386)
 	./$(MK386) ./vgaoff.bin ./vgaoff.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 seron.386: seron.bin $(MK386)
 	./$(MK386) ./seron.bin ./seron.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 seroff.386: seroff.bin $(MK386)
 	./$(MK386) ./seroff.bin ./seroff.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 fparse.386: fparse.bin $(MK386)
 	./$(MK386) ./fparse.bin ./fparse.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 illegal.386: illegal.bin $(MK386)
 	./$(MK386) ./illegal.bin ./illegal.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 dumpfcb.386: dumpfcb.bin $(MK386)
 	./$(MK386) ./dumpfcb.bin ./dumpfcb.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 dumpdir.386: dumpdir.bin $(MK386)
 	./$(MK386) ./dumpdir.bin ./dumpdir.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -571,21 +697,33 @@ mem.386: mem.bin $(MK386)
 
 aclockvt.386: aclockvt.bin $(MK386)
 	./$(MK386) ./aclockvt.bin ./aclockvt.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 aclockdv.386: aclockdv.bin $(MK386)
 	./$(MK386) ./aclockdv.bin ./aclockdv.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 vgatext.386: vgatext.bin $(MK386)
 	./$(MK386) ./vgatext.bin ./vgatext.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 ticks.386: ticks.bin $(MK386)
 	./$(MK386) ./ticks.bin ./ticks.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -606,11 +744,17 @@ big.bin: big.c user.ld
 	  cp -f ./big_stub.bin ./big.bin; \
 	  $(DD) if="/dev/zero" bs="1" count="$$pad" | \
 	    env LC_ALL=C $(TR) '\0' '\220' >> ./big.bin
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 big.386: big.bin $(MK386)
 	./$(MK386) ./big.bin ./big.386 0x100
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -725,46 +869,73 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	$(DD) if="/dev/zero" of="./ramdisk.bin" bs="1024" count="$(RAMDISK_KB)"
 	$(DD) if="/tmp/ramdisk.tmp" of="./ramdisk.bin" conv="notrunc"
 	rm -rf /tmp/ramdisk.tmp /tmp/cpmd
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 bringup.o: bringup.c ramdisk.bin bringup.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 bios.o: bios.c
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 rtc.o: rtc.c rtc.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 pit.o: pit.c pit.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 pmode.o: pmode.c pmode.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 pmodeasm.o: pmode.s
 	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 mbentry.o: mbentry.s mltiboot.h
 	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -782,16 +953,25 @@ bss.inc: $(TARGET)
 			bytes=$$((0x$$ke - 0x10000)); \
 			sec=$$(( (bytes + 511) / 512 + 2 )); \
 			$(PRINTF) '%s\n' "SECTORS_TO_LOAD equ $$sec" >> ./bss.inc
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 boot.bin: boot.s bss.inc
 	$(NASM) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
 os.bin: $(TARGET)
 	$(OBJCOPY) -O binary ./$(TARGET) ./$@
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -802,6 +982,9 @@ ifndef DEBUG
 endif
 	readelf -S ./$(TARGET) || :
 	$(SIZE) ./$(TARGET) || :
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -816,6 +999,9 @@ floppy.img: boot.bin os.bin
 	@$(PRINTF) '*** floppy.img usage: %d bytes\n' \
 		"$$($(OD) -A x -t x2 ./floppy.img | $(GREP) -v '^*$$' | \
 		tail -2 | head -1 | $(AWK) '{ print "0x"a$$1 }')" || :
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -824,6 +1010,9 @@ floppy.img: boot.bin os.bin
 clean distclean:
 	rm -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./testbdos \
 		./$(MK386) ./$(SHOLE) ./$(TARGET)
+	@tput bold 2> /dev/null || true; tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "Clean completed successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -833,6 +1022,9 @@ testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 	-DRAMDISK_KB=$(RAMDISK_KB) -Wl,--build-id=none -fmerge-all-constants \
 	-fno-asynchronous-unwind-tables -fno-builtin -fno-pic -fno-pie -fno-plt \
 	-fno-stack-protector -fno-unwind-tables -fomit-frame-pointer
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -840,6 +1032,9 @@ testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 
 test: testbdos
 	./testbdos
+	@tput bold 2> /dev/null || true; tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "Tests completed successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -848,6 +1043,9 @@ test: testbdos
 update-readme: README.md
 	"$${MAKE:-$(MAKE)}" markdown-toc
 	"$${MAKE:-$(MAKE)}" scc
+	@tput bold 2> /dev/null || true; tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "update-readme completed successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -855,6 +1053,9 @@ update-readme: README.md
 
 markdown-toc: README.md
 	markdown-toc -i ./README.md
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "markdown-toc completed successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -864,6 +1065,9 @@ scc: README.md
 	"$${MAKE:-$(MAKE)}" clean
 	"$${MAKE:-$(MAKE)}" scc-real
 	"$${MAKE:-$(MAKE)}" scc-real
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "scc completed successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 
@@ -886,6 +1090,9 @@ scc-real: README.md
 	mv -f ./README.awk ./README.md && \
 	$(EXPAND) ./README.md > ./README.out && \
 	mv -f ./README.out ./README.md
+	@tput setaf 2 2> /dev/null || true
+	@$(PRINTF) '%s\r\n' "scc-real completed successfully."
+	@tput sgr0 2> /dev/null || true
 
 ################################################################################
 

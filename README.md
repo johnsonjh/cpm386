@@ -101,21 +101,28 @@ The following dependencies are required to compile **CP/M‑386**:
 ## Compilation
 
 Building **CP/M‑386** is supported on current **Linux**, **NetBSD**,
-**OpenBSD**, and **Haiku**:
+**OpenBSD**, **FreeBSD**, and **Haiku**:
 
 **GCC** build (recommended):
 
 ```sh
-make -j "$(nproc 2> /dev/null || printf '%s' 1)"
+make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
 make test
 ```
 
 **Clang** build:
 
 ```sh
-make -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
+make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
 make test CC="clang"
 ```
+
+The build produces two primary artifacts:
+
+|         File | Description                            |
+|-------------:|:---------------------------------------|
+| `cpm386.elf` | Multiboot kernel image                 |
+| `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
 
 * It is recommended to use **GCC** instead of **Clang** at this time because
   the **Clang**‑compiled i386 output is much larger than **GCC** at `-O2`.
@@ -229,13 +236,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>969</th>
+                <th>1176</th>
                 <th>225</th>
                 <th>163</th>
-                <th>581</th>
-                <th>80</th>
-                <th>32084</th>
-                <th>569</th>
+                <th>788</th>
+                <th>223</th>
+                <th>40243</th>
+                <th>585</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -249,24 +256,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>400</th>
-                <th>52</th>
+                <th>407</th>
+                <th>54</th>
                 <th>0</th>
-                <th>348</th>
+                <th>353</th>
                 <th>0</th>
-                <th>17934</th>
-                <th>321</th>
+                <th>18245</th>
+                <th>326</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25005</th>
-                <th>4607</th>
+                <th>25219</th>
+                <th>4609</th>
                 <th>4305</th>
-                <th>16093</th>
-                <th>2963</th>
-                <th>652769</th>
-                <th>10247</th>
+                <th>16305</th>
+                <th>3106</th>
+                <th>661239</th>
+                <th>10268</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
