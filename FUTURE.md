@@ -54,8 +54,14 @@ this section as *wishlist* and not a *roadmap*!
     * SUPERSUB‑style interactive user input for SUBMIT scripts
 
 * Software/ports needed:
+  * TRUNCATE utility to truncate a file and set the LRBC
+  * Extend STAT to query and also set the LRBC
+  * Extend LRBC program to set the LRBC
+  * Extend LS to sort by size, ignore LRBC, and reverse sort order
+  * Extend HD and OD to ignore the LRBC if requested, and option to show
+    offsets
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
-  * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984)
+  * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984) +LRBC
   * Digital Research HELP clone (VMS‑style HELP tool)
   * Memory test utility (writes and verifies the full TPA)
   * [wumpus](https://gitlab.com/esr/wumpus/-/raw/master/wumpus.c) or
