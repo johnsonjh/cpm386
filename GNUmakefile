@@ -789,7 +789,8 @@ endif
 ################################################################################
 
 floppy.img: boot.bin os.bin
-	cat boot.bin os.bin > payload.bin
+	cat ./boot.bin ./os.bin > ./payload.bin
+	rm -f ./boot.bin ./os.bin
 	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440"
 	$(DD) if="./payload.bin" of="$@" conv="notrunc"
 	@set -- "$$(wc -c < ./payload.bin)"; pbytes="$$1"; \

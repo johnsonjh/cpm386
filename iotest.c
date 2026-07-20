@@ -153,8 +153,8 @@ _start (void)
   UWORD r;
   int i;
   unsigned long rec;
-  char banner[] = "\r\n=== IOTEST ===\r\n";
-  char done[] = "=== done fails=";
+  char banner[] = "\r\nIOTEST (BDOS I/O Test Suite)\r\n";
+  char done[] = "*** done fails=";
 
   fails = 0;
   puts (banner);

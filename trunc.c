@@ -156,7 +156,7 @@ _start (void)
   unsigned long sz;
 
   fails = 0;
-  puts ("\r\n=== TRUNC (40/99/37/98) ===\r\n");
+  puts ("\r\nTRUNC (BDOS 40/BDOS 99/BDOS 37/BDOS 98)\r\n");
 
   /* 98 clean disk - always succeeds here */
   r = bdos (98, 0);

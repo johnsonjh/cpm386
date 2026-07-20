@@ -682,7 +682,7 @@ main (void)
 {
   int ok = 1;
 
-  printf ("=== test_bdos: exercising real portable BDOS objects ===\n");
+  printf ("*** test_bdos: exercising real portable BDOS objects\n");
 
   /* console status (exercises _bdos + bios_const via conbdos) */
   UWORD r = _bdos (11, 0, 0);
@@ -775,7 +775,7 @@ main (void)
       ok = 0;
     }
 
-  /* === test group: 22 create + 30 set attr + 16 close (new clean dir slot) === */
+  /* test group: 22 create + 30 set attr + 16 close (new clean dir slot) */
   reset_mock_dir_writes ();
   /* prepare empty dir (e5) so create finds free slot; use name not conflicting with prior */
   {
@@ -903,10 +903,10 @@ main (void)
         }
     }
 
-  printf ("=== basic BDOS calls via real objects succeeded ===\n");
+  printf ("*** basic BDOS calls via real objects succeeded\n");
 
   /*
-   * === LRBC (DOS-PLUS last-record byte count) unit tests ===
+   * LRBC (DOS-PLUS last-record byte count) unit tests
    * See https://www.seasip.info/Cpm/bytelen.html.
    * I use DOS-PLUS (bytes used in last record; 0 means full/128),
    * not ISX (unused bytes) style.
@@ -1228,9 +1228,9 @@ main (void)
     }
   }
 
-  /* === loader core unit tests === */
+  /* loader core unit tests */
 
-  /* === (synthetic .386 buffers, no disk, drive shipped cpm386_load_from_buf) === */
+  /* (synthetic .386 buffers, no disk, drive shipped cpm386_load_from_buf) */
   {
     /* synthetic header load=0 size=4 entry=2 ; followed by 4 bytes of "image" */
     UBYTE fakefile[16];
@@ -1299,7 +1299,7 @@ main (void)
       }
   }
 
-  /* === streaming loader: multi-record image + allocation hole (status 1) === */
+  /* streaming loader: multi-record image + allocation hole (status 1) */
   {
     UBYTE tpa[512];
     UBYTE *ent = 0;
@@ -1525,12 +1525,12 @@ main (void)
 
   if (ok)
     {
-      printf ("=== test_bdos PASSED (real shipped portable objects "
+      printf ("*** test_bdos PASSED (real shipped portable objects "
               "linked+exercised)\n");
     }
   else
     {
-      printf ("=== test_bdos FAILED\n");
+      printf ("*** test_bdos FAILED\n");
     }
 
   fflush (stdout);
