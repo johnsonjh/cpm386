@@ -52,6 +52,8 @@
 
 ## CP/M compatibility
 
+**CP/M‑386** should be highly source‑compatible with other implementations:
+
 |                System | BDOS coverage |
 |----------------------:|:--------------|
 | **CP/M‑68K&nbsp;1.3** | **100%**      |
@@ -104,48 +106,47 @@ The following dependencies are required to compile **CP/M‑386**:
 Building **CP/M‑386** is supported on current **Linux**, **NetBSD**,
 **OpenBSD**, **FreeBSD**, and **Haiku**:
 
-**GCC** build (recommended):
+* **GCC** build (recommended):
 
-```sh
-make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
-make test
-```
+  ```sh
+  make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
+  make test
+  ```
 
-**Clang** build:
+* **Clang** build:
 
-```sh
-make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
-make test CC="clang"
-```
+  ```sh
+  make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
+  make test CC="clang"
+  ```
 
 * It is recommended to use **GCC** as **Clang**‑compiled i386 output is
   larger than **GCC** at `-O2`.
-
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 
 ## Build output
 
-The build produces two primary artifacts:
+* The build produces two primary artifacts:
 
-|         File | Description                            |
-|-------------:|:---------------------------------------|
-| `cpm386.elf` | Multiboot kernel image                 |
-| `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
+  |         File | Description                            |
+  |-------------:|:---------------------------------------|
+  | `cpm386.elf` | Multiboot kernel image                 |
+  | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
 
 ## QEMU testing
 
-[Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
-kernel (recommended):
+* [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
+  kernel (recommended):
 
-```sh
-qemu-system-i386 -m 2M -serial stdio -monitor none -kernel "cpm386.elf"
-```
+  ```sh
+  qemu-system-i386 -m 2M -serial stdio -monitor none -kernel "cpm386.elf"
+  ```
 
-Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
+* Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
 
-```sh
-qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img"
-```
+  ```sh
+  qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img"
+  ```
 
 ## QEMU notes
 
@@ -260,24 +261,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>411</th>
+                <th>412</th>
                 <th>56</th>
                 <th>0</th>
-                <th>355</th>
+                <th>356</th>
                 <th>0</th>
-                <th>18247</th>
-                <th>328</th>
+                <th>18375</th>
+                <th>329</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25222</th>
+                <th>25223</th>
                 <th>4610</th>
                 <th>4305</th>
-                <th>16307</th>
+                <th>16308</th>
                 <th>3107</th>
-                <th>660832</th>
-                <th>10271</th>
+                <th>660960</th>
+                <th>10272</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
