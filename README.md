@@ -10,18 +10,18 @@
 
 <!-- toc -->
 
-  * [Overview](#overview)
-  * [Hardware support](#hardware-support)
-  * [CP/M compatibility](#cpm-compatibility)
-  * [Screenshots](#screenshots)
-  * [Build requirements](#build-requirements)
-  * [Compilation](#compilation)
+- [Overview](#overview)
+- [Hardware support](#hardware-support)
+- [CP/M compatibility](#cpm-compatibility)
+- [Screenshots](#screenshots)
+- [Build requirements](#build-requirements)
+- [Compilation](#compilation)
 - [QEMU testing](#qemu-testing)
-    + [QEMU notes](#qemu-notes)
-  * [Included utilities](#included-utilities)
-  * [Future plans](#future-plans)
-  * [Code statistics](#code-statistics)
-  * [License](#license)
+- [QEMU notes](#qemu-notes)
+- [Included utilities](#included-utilities)
+- [Future plans](#future-plans)
+- [Code statistics](#code-statistics)
+- [License](#license)
 
 <!-- tocstop -->
 
@@ -118,7 +118,7 @@ make test CC="clang"
 
 Be sure to `make clean` if switching compilers or adjusting compiler flags.
 
-# QEMU testing
+## QEMU testing
 
 [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
 kernel (recommended):
@@ -133,7 +133,7 @@ Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
 qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img"
 ```
 
-### QEMU notes
+## QEMU notes
 
 * Use `-nographic -display none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
@@ -251,7 +251,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>345</th>
                 <th>0</th>
-                <th>17728</th>
+                <th>17704</th>
                 <th>319</th>
         </tr></tbody>
         <tfoot><tr>
@@ -262,7 +262,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4277</th>
                 <th>15971</th>
                 <th>2934</th>
-                <th>647829</th>
+                <th>647805</th>
                 <th>10171</th>
         </tr></tfoot></table>
 <!-- scc-end -->
