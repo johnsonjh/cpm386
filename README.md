@@ -103,7 +103,7 @@ The following dependencies are required to compile **CP/M‑386**:
 Building **CP/M‑386** is supported on current **Linux**, **NetBSD**,
 **OpenBSD**, and **Haiku**:
 
-**GCC** build (default):
+**GCC** build (recommended):
 
 ```sh
 make -j "$(nproc 2> /dev/null || printf '%s' 1)"
@@ -117,7 +117,9 @@ make -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
 make test CC="clang"
 ```
 
-Be sure to `make clean` if switching compilers or adjusting compiler flags.
+* It is recommended to use **GCC** instead of **Clang** at this time because
+  the **Clang**‑compiled i386 output is much larger than **GCC** at `-O2`.
+* Be sure to `make clean` if switching compilers or adjusting compiler flags.
 
 ## QEMU testing
 
@@ -227,13 +229,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>916</th>
-                <th>217</th>
-                <th>135</th>
-                <th>564</th>
-                <th>76</th>
-                <th>30126</th>
-                <th>552</th>
+                <th>924</th>
+                <th>219</th>
+                <th>136</th>
+                <th>569</th>
+                <th>78</th>
+                <th>30336</th>
+                <th>556</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -247,24 +249,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>398</th>
+                <th>400</th>
                 <th>52</th>
                 <th>0</th>
-                <th>346</th>
+                <th>348</th>
                 <th>0</th>
-                <th>17774</th>
-                <th>319</th>
+                <th>17934</th>
+                <th>322</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>72</th>
-                <th>24950</th>
-                <th>4599</th>
-                <th>4277</th>
-                <th>16074</th>
-                <th>2959</th>
-                <th>650651</th>
-                <th>10228</th>
+                <th>24960</th>
+                <th>4601</th>
+                <th>4278</th>
+                <th>16081</th>
+                <th>2961</th>
+                <th>651021</th>
+                <th>10235</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
