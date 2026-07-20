@@ -124,8 +124,8 @@ The build produces two primary artifacts:
 | `cpm386.elf` | Multiboot kernel image                 |
 | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
 
-* It is recommended to use **GCC** instead of **Clang** at this time because
-  the **Clang**‑compiled i386 output is much larger than **GCC** at `-O2`.
+* It is recommended to use **GCC** as **Clang**‑compiled i386 output is
+  larger than **GCC** at `-O2`.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 
 ## QEMU testing
@@ -261,7 +261,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>353</th>
                 <th>0</th>
-                <th>18245</th>
+                <th>18197</th>
                 <th>326</th>
         </tr></tbody>
         <tfoot><tr>
@@ -272,7 +272,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4305</th>
                 <th>16306</th>
                 <th>3107</th>
-                <th>660848</th>
+                <th>660800</th>
                 <th>10269</th>
         </tr></tfoot></table>
 <!-- scc-end -->
