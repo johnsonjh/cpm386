@@ -88,7 +88,7 @@
 The following dependencies are required to compile **CP/M‑386**:
 
 * [AWK](https://en.wikipedia.org/wiki/AWK)
-* [Cpmtools](https://www.moria.de/~michael/cpmtools/)
+* [Cpmtools](https://www.moria.de/~michael/cpmtools/files) (2.23+ recommended)
 * [GNU Binutils](https://www.gnu.org/software/binutils/)
 * [GNU Coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
@@ -224,13 +224,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>1</th>
-                <th>905</th>
+                <th>908</th>
                 <th>211</th>
-                <th>128</th>
-                <th>566</th>
-                <th>70</th>
-                <th>28474</th>
-                <th>557</th>
+                <th>129</th>
+                <th>568</th>
+                <th>71</th>
+                <th>28636</th>
+                <th>560</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -249,19 +249,19 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>337</th>
                 <th>0</th>
-                <th>17212</th>
+                <th>17237</th>
                 <th>309</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>72</th>
-                <th>24811</th>
+                <th>24814</th>
                 <th>4573</th>
-                <th>4271</th>
-                <th>15967</th>
-                <th>2926</th>
-                <th>645856</th>
-                <th>10167</th>
+                <th>4272</th>
+                <th>15969</th>
+                <th>2927</th>
+                <th>646043</th>
+                <th>10170</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
