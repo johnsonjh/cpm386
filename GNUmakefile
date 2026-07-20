@@ -247,7 +247,7 @@ MK386 = mk386
 
 # 70 KiB image: multi-extent and >64 KiB
 BIG_IMG_SIZE = 71680
-RAMDISK_KB = 256
+RAMDISK_KB = 384
 
 ################################################################################
 
