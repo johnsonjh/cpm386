@@ -168,7 +168,7 @@ _start (void)
   ramdisk_size = (unsigned long)bdos (227, 0) * 1024UL;
   kernel_size = base - ramdisk_size;
 
-  puts ("System / kernel:       ");
+  puts ("System CBIOS/BDOS/CCP: ");
   puthex32 (0);
   puts (" -> ");
   puthex32 (kernel_size);
@@ -178,7 +178,7 @@ _start (void)
 
   if (ramdisk_size > 0)
     {
-      puts ("Internal RAM Disk:     ");
+      puts ("Initial RAM Disk:      ");
       puthex32 (kernel_size);
       puts (" -> ");
       puthex32 (base);
@@ -205,7 +205,7 @@ _start (void)
   puts (" bytes)\r\n");
 
   puts ("Program load:          TPA+0x100\r\n");
-  puts ("Approx. free for .386: ");
+  puts ("Approximate RAM free:  ");
   put_kb (free_prog);
   puts (" (TPA minus base page)\r\n");
 
