@@ -79,11 +79,11 @@
 ## Screenshots
 
 <div style="display:flex; justify-content:center; align-items:center;">
-  •&nbsp;VGA&nbsp;text&nbsp;console:
+  <ul><li>VGA&nbsp;text&nbsp;console:</li></ul>
   <a href=".img/VGA.png" style="flex:1; text-align:center;">
   <img src=".img/VGA.png" style="width:100%;">
  </a>
-  •&nbsp;Serial console:
+  <ul><li>Serial&nbsp;console:</li></ul>
   <a href=".img/SER.png" style="flex:1; text-align:center;">
   <img src=".img/SER.png" style="width:100%;">
  </a>
@@ -268,7 +268,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>358</th>
                 <th>0</th>
-                <th>18443</th>
+                <th>18466</th>
                 <th>331</th>
         </tr></tbody>
         <tfoot><tr>
@@ -279,7 +279,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4305</th>
                 <th>16310</th>
                 <th>3107</th>
-                <th>661028</th>
+                <th>661051</th>
                 <th>10274</th>
         </tr></tfoot></table>
 <!-- scc-end -->
