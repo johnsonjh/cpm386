@@ -801,7 +801,8 @@ floppy.img: boot.bin os.bin
 .PHONY: clean distclean
 
 clean distclean:
-	rm -f /*.o ./*.img /*.log ./*.bin ./*.386 ./$(MK386) ./$(SHOLE) ./$(TARGET)
+	rm -f ./*.o ./*.img /*.log ./*.bin ./*.386 \
+		./$(MK386) ./$(SHOLE) ./$(TARGET)
 
 ################################################################################
 
