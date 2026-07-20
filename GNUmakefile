@@ -218,7 +218,7 @@ NASMFLAGS = -f elf32
 
 ################################################################################
 
-LDFLAGS = -m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-no-pie -T linker.ld \
+LDFLAGS = -m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-no-pie -Wl,-T,linker.ld \
 	-Wl,--build-id=none -Wl,--gc-sections
 
 ################################################################################
@@ -329,7 +329,7 @@ strip: $(TARGET) floppy.img
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o ./$*.o ./$<
 	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./$*.elf ./$*.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./$*.elf ./$*.o
 	@entry=$$($(NM) ./$*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    $(PRINTF) '%s\n' "ERROR: _start at 0x$$entry, expected 0x100"; \
@@ -468,7 +468,7 @@ pause.386: pause.bin $(MK386)
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o ./vgaon.o ./conctl.c
 	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./vgaon.elf ./vgaon.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaon.elf ./vgaon.o
 	@entry=$$($(NM) ./vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: vgaon _start"; \
@@ -480,7 +480,7 @@ vgaon.bin: conctl.c user.ld
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o ./vgaoff.o ./conctl.c
 	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./vgaoff.elf ./vgaoff.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaoff.elf ./vgaoff.o
 	@entry=$$($(NM) ./vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: vgaoff _start"; \
@@ -492,7 +492,7 @@ vgaoff.bin: conctl.c user.ld
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o ./seron.o ./conctl.c
 	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./seron.elf ./seron.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seron.elf ./seron.o
 	@entry=$$($(NM) ./seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: seron _start"; \
@@ -504,7 +504,7 @@ seron.bin: conctl.c user.ld
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o ./seroff.o ./conctl.c
 	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./seroff.elf ./seroff.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seroff.elf ./seroff.o
 	@entry=$$($(NM) ./seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: seroff _start"; \
@@ -581,7 +581,7 @@ ticks.386: ticks.bin $(MK386)
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o ./big.o ./big.c
 	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -T ./user.ld -o ./big.elf ./big.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./big.elf ./big.o
 	@entry=$$($(NM) ./big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	  $(PRINTF) '%s\n' "ERROR: big _start"; \
