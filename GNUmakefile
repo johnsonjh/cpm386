@@ -112,6 +112,13 @@ GREP:=$(shell \
 
 ################################################################################
 
+TR:=$(shell \
+	command -v gtr 2> /dev/null || \
+	command -v tr 2> /dev/null || \
+	$(PRINTF) '%s' "tr")
+
+################################################################################
+
 W_NO_RETURN_MISMATCH:=$(shell \
 	$(CC) -Werror -Wno-return-mismatch \
 	-x c -c /dev/null -o /dev/null 2> /dev/null && \
@@ -593,7 +600,8 @@ big.bin: big.c user.ld
 	    exit 1; fi; \
 	  pad=$$(( $(BIG_IMG_SIZE) - stub )); \
 	  cp -f ./big_stub.bin ./big.bin; \
-	  $(DD) if="/dev/zero" bs="1" count="$$pad" | tr '\0' '\220' >> ./big.bin
+	  $(DD) if="/dev/zero" bs="1" count="$$pad" | \
+	    env LC_ALL=C $(TR) '\0' '\220' >> ./big.bin
 
 ################################################################################
 

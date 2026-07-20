@@ -234,8 +234,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>136</th>
                 <th>569</th>
                 <th>78</th>
-                <th>30336</th>
-                <th>556</th>
+                <th>30335</th>
+                <th>557</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -265,8 +265,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>4278</th>
                 <th>16081</th>
                 <th>2961</th>
-                <th>651021</th>
-                <th>10235</th>
+                <th>651020</th>
+                <th>10236</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
