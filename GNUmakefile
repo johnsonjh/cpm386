@@ -699,7 +699,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 		$(PRINTF) '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4))"; \
 		test "$$RDS" -lt "$(RAMDISK_KB)" || { \
 		$(PRINTF) '%s\n' \
-			"*** ERROR: ramdisk too large for $(RAMDISK_KB) space reserved!"; \
+			"*** ERROR: ramdisk too large for $(RAMDISK_KB)K space reserved"; \
 			exit 2; }
 	$(DD) if="/dev/zero" of="./ramdisk.bin" bs="1024" count="$(RAMDISK_KB)"
 	$(DD) if="/tmp/ramdisk.tmp" of="./ramdisk.bin" conv="notrunc"
