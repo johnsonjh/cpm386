@@ -358,7 +358,7 @@ UWORD cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx,
 /*
  * dirscan() callback: invoked for each directory entry.
  * Return non-zero to report a match (see dskutil.c parms bits).
- * Matches the K&R definitions of openfile/create/delete/… (fcbp, dirp, index).
+ * Matches the K&R definitions of openfile/create/delete/ (fcbp, dirp, index).
  */
 typedef BOOLEAN (*DIRSCAN_FN) (UBYTE *fcbp, UBYTE *dirp, WORD dirindx);
 

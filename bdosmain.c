@@ -377,7 +377,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     /*
      * BDOS 37 (DRV_RESET): DE = bitmap of drives to reset
-     * (bit0=A: … bit15=P:).  Logs them off and clears software R/O
+     * (bit0=A: ... bit15=P:).  Logs them off and clears software R/O
      * so the next select rebuilds the allocation vector from the dir.
      */
 
@@ -657,7 +657,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     /*
      * BDOS 224 (CON_VIDEO): direct VGA text map for ring-3.
-     * DE -> struct cpm_vga_text (TPA-relative).  Fills sel/cols/rows/…
+     * DE -> struct cpm_vga_text (TPA-relative).  Fills sel/cols/rows/...
      * AX = selector|RPL3 on success, 0xFFFF if platform has no text map
      * (see platform.h CPM386_HAS_VGA_TEXT).
      */

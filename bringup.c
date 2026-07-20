@@ -51,7 +51,7 @@ static UBYTE csv[64];
 
 /*
  * Word-mode alloc (dsm>255) to match cpmtools 4mb-hd directory maps.
- * alv bit vector: (dsm+1+7)/8 ≈ 256 bytes for dsm=2047
+ * alv bit vector: (dsm+1+7)/8 ~= 256 bytes for dsm=2047
  */
 
 static UBYTE alv[256];

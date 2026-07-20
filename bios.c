@@ -279,7 +279,7 @@ static unsigned char kbd_map_shift[128] = {
 };
 
 /*
- * -1 = no ASCII pending.  Scancodes that are not mapped (breaks, shift, …)
+ * -1 = no ASCII pending.  Scancodes that are not mapped (breaks, shift, ...)
  * must not make bios_const() true - otherwise conbrk() calls bios_conin()
  * which used to spin until a real key arrived (looked like "press Enter
  * to continue" during HD/OD dumps)

@@ -370,7 +370,7 @@ fault_handler_c (struct fault_frame *f)
   fault_puts (fault_name (f->vec));
   fault_puts (")\r\n");
 
-  /* CS:EIP and error code — DOS/4GW header style */
+  /* CS:EIP and error code - DOS/4GW header style */
   fault_puts ("CS:EIP ");
   fault_puthex (f->cs, 4);
   fault_puts (":");
@@ -386,7 +386,7 @@ fault_handler_c (struct fault_frame *f)
 
   fault_puts ("\r\n");
 
-  /* General registers — four per line */
+  /* General registers - four per line */
   fault_put_pair ("EAX=", f->eax);
   fault_put_pair (" EBX=", f->ebx);
   fault_put_pair (" ECX=", f->ecx);
