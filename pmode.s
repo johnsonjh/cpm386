@@ -5,7 +5,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; pmode.S - ring-3 entry/exit and BDOS int 0x30 trampoline
+; pmode.s - ring-3 entry/exit and BDOS int 0x30 trampoline
 
 bits 32
 

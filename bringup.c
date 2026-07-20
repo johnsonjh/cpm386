@@ -20,7 +20,7 @@
 
 #include "bdosinc.h"
 #include "biosdef.h"
-#include "cpm_bringup.h" /* brings the dpb/dph structs and externs */
+#include "bringup.h" /* brings the dpb/dph structs and externs */
 
 /*****************************************************************************/
 

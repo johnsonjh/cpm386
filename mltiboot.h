@@ -7,7 +7,7 @@
 
 /*****************************************************************************/
 
-/* multiboot.h - minimal multiboot definitions for CP/M-386 */
+/* mltiboot.h - minimal multiboot definitions for CP/M-386 */
 
 /*****************************************************************************/
 

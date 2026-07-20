@@ -235,12 +235,12 @@ LDFLAGS = -m $(ELF_I386) -no-pie -T linker.ld -nostdlib \
 BDOS_OBJS = bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil.o iosys.o
 CCP_OBJ = ccp.o
 BIOS_OBJ = bios.o
-BRINGUP_OBJ = cpm_bringup.o
-PMODE_OBJS = pmode.o pmode_asm.o
+BRINGUP_OBJ = bringup.o
+PMODE_OBJS = pmode.o pmodeasm.o
 RTC_OBJ = rtc.o
 PIT_OBJ = pit.o
 OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
-	$(RTC_OBJ) $(PIT_OBJ) mbentry.o multiboot.o
+	$(RTC_OBJ) $(PIT_OBJ) mbentry.o mltiboot.o
 
 ################################################################################
 
@@ -707,7 +707,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 
 ################################################################################
 
-cpm_bringup.o: cpm_bringup.c ramdisk.bin cpm_bringup.h
+bringup.o: bringup.c ramdisk.bin bringup.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 
 ################################################################################
@@ -737,12 +737,12 @@ pmode.o: pmode.c pmode.h
 
 ################################################################################
 
-pmode_asm.o: pmode.S
+pmode_asm.o: pmode.s
 	$(AS) $(ASFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
 
 ################################################################################
 
-mbentry.o: mbentry.S multiboot.h
+mbentry.o: mbentry.s mltiboot.h
 	$(AS) $(ASFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
 
 ################################################################################
@@ -764,7 +764,7 @@ bss.inc: $(TARGET)
 
 ################################################################################
 
-boot.bin: boot.S bss.inc
+boot.bin: boot.s bss.inc
 	$(AS) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
 
 ################################################################################
@@ -805,16 +805,16 @@ clean distclean:
 
 ################################################################################
 
-test_bdos: test_bdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
-	dskutil.o iosys.o ccp.o cpm_bringup.o
+testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
+	dskutil.o iosys.o ccp.o bringup.o
 	$(CC) -m32 $(OPTFLAGS) -I. -o ./$@ ./$^
 
 ################################################################################
 
 .PHONY: test
 
-test: test_bdos
-	./test_bdos
+test: testbdos
+	./testbdos
 
 ################################################################################
 

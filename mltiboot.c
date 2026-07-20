@@ -7,14 +7,14 @@
 
 /*****************************************************************************/
 
-/* multiboot.c - multiboot support for CP/M-386 */
+/* mltiboot.c - multiboot support for CP/M-386 */
 
 /*****************************************************************************/
 
 #include "absaddr.h"
 #include "bdosinc.h"
 #include "biosdef.h"
-#include "multiboot.h"
+#include "mltiboot.h"
 
 /*****************************************************************************/
 

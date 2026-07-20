@@ -5,7 +5,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; boot.S - 16-bit floppy boot for CP/M-386
+; boot.s - 16-bit floppy boot for CP/M-386
 ; BIOS loads this at 0000:7C00 with DL = boot drive.
 ; Loads os.bin (LBA 1..) into linear 0x10000, enters protected mode, jumps to kernel.
 ;

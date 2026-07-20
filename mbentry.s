@@ -5,7 +5,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; mbentry.S - Multiboot 1 header + entry point for cpm386.elf
+; mbentry.s - Multiboot 1 header + entry point for cpm386.elf
 
 bits 32
 
