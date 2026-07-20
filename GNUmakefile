@@ -766,7 +766,7 @@ floppy.img: boot.bin os.bin
 .PHONY: clean distclean
 
 clean distclean:
-	rm -f ./*.o ./*.img /*.log ./*.bin ./*.386 ./testbdos \
+	rm -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./testbdos \
 		./$(MK386) ./$(SHOLE) ./$(TARGET)
 
 ################################################################################
