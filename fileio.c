@@ -56,7 +56,7 @@ EXTERN void     clraloc(WORD);
 EXTERN void     setaloc(WORD);
 EXTERN WORD     swap(WORD);
 EXTERN UWORD    dir_wr(WORD);
-EXTERN void     tmp_sel(UBYTE *);
+EXTERN void     tmp_sel(REG struct tempstr *temptr);
 EXTERN UWORD    calcext(UBYTE *);
 EXTERN UWORD    udiv(LONG, UWORD, UWORD *);
 
