@@ -372,8 +372,8 @@ BIG_IMG_SIZE:=71680
 
 ################################################################################
 
-# Truncate ramdisk image to 384K - messy/ but temporary for bringup
-# maximum size ~448 for now!
+# Truncate initial ramdisk image to 384K (messy but OK temporary for bringup)
+# maximum size that can be set is 448 (for now!)
 RAMDISK_KB:=384
 
 ################################################################################
@@ -415,8 +415,10 @@ strip: all
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./$*.elf ./$*.o
 	@entry=$$($(NM) ./$*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
+	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	    $(PRINTF) '%s\n' "ERROR: _start at 0x$$entry, expected 0x100"; \
 	    $(NM) ./$*.elf | head -20; \
+	    tput sgr0 2> /dev/null || :; \
 	    exit 1; fi
 	$(OBJCOPY) -O binary ./$*.elf ./$@
 	@tput setaf 2 2> /dev/null || :
@@ -632,7 +634,9 @@ vgaon.bin: conctl.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaon.elf ./vgaon.o
 	@entry=$$($(NM) ./vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
+	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	  $(PRINTF) '%s\n' "ERROR: vgaon _start"; \
+	  tput sgr0 2> /dev/null || :; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./vgaon.elf ./$@
 	@tput setaf 2 2> /dev/null || :
@@ -647,7 +651,9 @@ vgaoff.bin: conctl.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaoff.elf ./vgaoff.o
 	@entry=$$($(NM) ./vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
+	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	  $(PRINTF) '%s\n' "ERROR: vgaoff _start"; \
+	  tput sgr0 2> /dev/null || :; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./vgaoff.elf ./$@
 	@tput setaf 2 2> /dev/null || :
@@ -662,7 +668,9 @@ seron.bin: conctl.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seron.elf ./seron.o
 	@entry=$$($(NM) ./seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
+	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	  $(PRINTF) '%s\n' "ERROR: seron _start"; \
+	  tput sgr0 2> /dev/null || :; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./seron.elf ./$@
 	@tput setaf 2 2> /dev/null || :
@@ -677,7 +685,9 @@ seroff.bin: conctl.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seroff.elf ./seroff.o
 	@entry=$$($(NM) ./seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
+	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	  $(PRINTF) '%s\n' "ERROR: seroff _start"; \
+	  tput sgr0 2> /dev/null || :; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./seroff.elf ./$@
 	@tput setaf 2 2> /dev/null || :
@@ -793,12 +803,16 @@ big.bin: big.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./big.elf ./big.o
 	@entry=$$($(NM) ./big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
+	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	  $(PRINTF) '%s\n' "ERROR: big _start"; \
+	  tput sgr0 2> /dev/null || :; \
 	  exit 1; fi
 	$(OBJCOPY) -O binary ./big.elf ./big_stub.bin
 	@stub=$$(wc -c < ./big_stub.bin); \
 	  if [ "$$stub" -ge $(BIG_IMG_SIZE) ]; then \
+	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	    $(PRINTF) '%s\n' "ERROR: big stub $$stub >= $(BIG_IMG_SIZE)"; \
+	    tput sgr0 2> /dev/null || :; \
 	    exit 1; fi; \
 	  pad=$$(( $(BIG_IMG_SIZE) - stub )); \
 	  $(CP) -f ./big_stub.bin ./big.bin; \
@@ -917,15 +931,19 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  0:
 	fsck.cpm -f $(CPMFS) -n /tmp/ramdisk.tmp
 	./$(SHOLE) -w /tmp/ramdisk.tmp BIG.386
-	cpmls -f $(CPMFS) -i -l -u /tmp/ramdisk.tmp
+	cpmls -f $(CPMFS) -d /tmp/ramdisk.tmp
 	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
 		$(GREP) -v '^*$$' | tail -2 | head -1 | \
 		$(AWK) '{ print "0x"a$$1 }')"); \
 		RDS=$$(( (RDS / 1024) + 4 )); \
+		tput setaf 6 2> /dev/null || :; \
 		$(PRINTF) '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4 ))"; \
+		tput sgr0 2> /dev/null || :; \
 		test "$$RDS" -lt "$(RAMDISK_KB)" || { \
+		tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 		$(PRINTF) '%s\n' \
 			"*** ERROR: ramdisk too large for $(RAMDISK_KB)K space reserved"; \
+			tput sgr0 2> /dev/null || :; \
 			exit 2; }
 	$(DD) if="/dev/zero" of="./ramdisk.bin" bs="1024" count="$(RAMDISK_KB)"
 	$(DD) if="/tmp/ramdisk.tmp" of="./ramdisk.bin" conv="notrunc"
@@ -1060,11 +1078,15 @@ floppy.img: boot.bin os.bin
 	$(DD) if="./payload.bin" of="$@" conv="notrunc"
 	@set -- "$$(wc -c < ./payload.bin)"; pbytes="$$1"; \
 	  if [ "$$pbytes" -gt 1474560 ]; then \
+	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	    $(PRINTF) '%s\n' "ERROR: payload.bin $$pbytes >= 1474560 maximum"; \
+	    tput sgr0 2> /dev/null || :; \
 	    exit 1; fi
+	@tput setaf 6 2> /dev/null || :
 	@$(PRINTF) '*** floppy.img usage: %d bytes\n' \
 		"$$($(OD) -A x -t x2 ./floppy.img | $(GREP) -v '^*$$' | \
 		tail -2 | head -1 | $(AWK) '{ print "0x"a$$1 }')" || :
+	@tput sgr0 2> /dev/null || :
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
