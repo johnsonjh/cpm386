@@ -652,9 +652,9 @@ unsigned short int bios_sectran(unsigned short int sec, void *table)
 
 void bios_setup_basepage(const void *fcb1, const void *fcb2, const char *tail)
 {
-  mrt_t *mrt = bios_getmrt();
-  UBYTE *tpa = (UBYTE *)mrt->base;
-  unsigned long tpa_len = mrt->length;
+  mrt_t *lmrt = bios_getmrt();
+  UBYTE *tpa = (UBYTE *)lmrt->base;
+  unsigned long tpa_len = lmrt->length;
   int i;
   unsigned tlen = 0;
 
@@ -808,8 +808,8 @@ void cpm386_init(void) {
 
   /* Install user TPA segments, TSS, and int 0x30 BDOS gate before any load. */
   {
-    mrt_t *mrt = bios_getmrt();
-    pmode_init((unsigned long)mrt->base, (unsigned long)mrt->length);
+    mrt_t *lmrt = bios_getmrt();
+    pmode_init((unsigned long)lmrt->base, (unsigned long)lmrt->length);
   }
 
   cpm_bringup(); /* shared bring-up (ramdisk/dph + bdosinit + select A) */
@@ -1007,7 +1007,7 @@ static UWORD pgm_enter(unsigned long entry_off)
 
 UWORD pgmld(UBYTE *infop, UBYTE *dmaadr) {
   (void)dmaadr;
-  mrt_t *mrt;
+  mrt_t *lmrt;
   UBYTE *tpa_base;
   unsigned long tpa_len;
   UBYTE *entry = 0;
@@ -1016,9 +1016,9 @@ UWORD pgmld(UBYTE *infop, UBYTE *dmaadr) {
   int j;
 
   /* get TPA from BIOS mrt (same as bgetseg) */
-  mrt = bios_getmrt();
-  tpa_base = (UBYTE *)mrt->base;
-  tpa_len = mrt->length;
+  lmrt = bios_getmrt();
+  tpa_base = (UBYTE *)lmrt->base;
+  tpa_len = lmrt->length;
 
   /* Clean FCB for sequential load (fresh cur_rec / dskmap; multi-extent
    * crossing is handled inside BDOS read + new_ext). */

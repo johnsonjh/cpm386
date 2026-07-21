@@ -238,8 +238,7 @@ BYTE *p;          /* pointer to error message                  */
 /* Read-only File Error Routine */
 /********************************/
 
-ro_err (fcbp, dirindx) /*  File R/O error  */
-
+UWORD ro_err (fcbp, dirindx) /*  File R/O error  */
 REG struct fcb *fcbp;
 WORD dirindx;
 {
@@ -298,7 +297,7 @@ WORD dirindx;
  *  error entry point    *
  ************************/
 
-error (errnum)
+UWORD error (errnum)
     /* Print error message, do appropriate response */
 
     UWORD errnum; /* error number */
@@ -342,7 +341,7 @@ struct setexc_struct
   BYTE *oldvec;
 };
 
-setexc (epbp)
+UWORD setexc (epbp)
     /* Set Exception Vector */
     REG struct setexc_struct *epbp;
 

@@ -1525,15 +1525,15 @@ REG BYTE *cmd;
                                                                                 "Return code $";
                                                                         BYTE digs[6];
                                                                         WORD ni = 0;
-                                                                        UWORD n = prc;
+                                                                        UWORD n2 = prc;
                                                                         bdos(PRINT_STRING,
                                                                              rcmsg);
-                                                                        while (n &&
+                                                                        while (n2 &&
                                                                                ni < 6) {
                                                                                 digs[ni++] =
                                                                                     (BYTE)('0' +
-                                                                                           (n % 10));
-                                                                                n /= 10;
+                                                                                           (n2 % 10));
+                                                                                n2 /= 10;
                                                                         }
                                                                         while (ni > 0)
                                                                                 bdos(CONSOLE_OUTPUT,
