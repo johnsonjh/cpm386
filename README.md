@@ -112,7 +112,8 @@ Building **CP/M‑386** is supported on current releases of **NetBSD**,
 
 The following are the minimum versions of Linux distributions that have been
 verified to build **CP/M‑386** successfully: CentOS Stream 9, Fedora 36,
-Debian 12, Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4
+Debian 12, Ubuntu 18.04 (with `gcc-16` from `ppa:ubuntu-toolchain-r/test`),
+Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 []()
 
 []()
@@ -259,7 +260,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>172</th>
                 <th>859</th>
                 <th>284</th>
-                <th>43393</th>
+                <th>43401</th>
                 <th>634</th>
         </tr><tr>
                 <th>Assembly</th>
@@ -274,24 +275,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>425</th>
+                <th>426</th>
                 <th>57</th>
                 <th>0</th>
-                <th>368</th>
+                <th>369</th>
                 <th>0</th>
-                <th>18786</th>
-                <th>336</th>
+                <th>18852</th>
+                <th>337</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25334</th>
+                <th>25335</th>
                 <th>4628</th>
                 <th>4315</th>
-                <th>16391</th>
+                <th>16392</th>
                 <th>3167</th>
-                <th>665017</th>
-                <th>10329</th>
+                <th>665091</th>
+                <th>10330</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
