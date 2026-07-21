@@ -11,12 +11,15 @@ $(.TARGETS): all
 ################################################################################
 
 all:
+	@tput bold 2> /dev/null || :
+	@tput setaf 1 2> /dev/null || :
 	@command -v gmake > /dev/null 2>&1 && { printf '\r\n%s\r\n\r\n' \
 	 "ERROR: BSD make is unsupported; use gmake ($$(command -v gmake))" \
 	  >&2; }
 	@command -v gmake > /dev/null 2>&1 || { printf '\r\n%s\r\n\r\n' \
 	 "ERROR: BSD make is unsupported; you must install GNU make (gmake)." \
 	  >&2; }
+	@tput sgr0 2> /dev/null || :
 	@false > /dev/null 2>&1
 
 ################################################################################
