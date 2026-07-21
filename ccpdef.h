@@ -81,7 +81,8 @@
 #define         ULONG   unsigned long
 #define         GET_MEM_REG 18
 #define         ZERO    0
-#define         NULL    '\0'
+/*#define       NULL    ((void *)0)*/
+#define         NULL    '\0' /* XXX */
 #define         TRUE    1
 #define         FALSE   0
 #define         NO_READ 255
