@@ -38,6 +38,7 @@ this section as *wishlist* and not a *roadmap*!
 
 * CCP enhancements:
   * Move the CCP out of Ring 0 to Ring 2
+  * Command/file completion
   * Stackable execution of commands
   * Command timing
   * ZCPR ECP‑like search paths/named directories/aliases
