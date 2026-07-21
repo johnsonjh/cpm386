@@ -1,5 +1,5 @@
 ################################################################################
-# CP/M-386 - GNUmakefile
+# CP/M-386 - BSDmakefile
 # Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
 # SPDX-License-Identifier: MIT
 # scspell-id: 5f418f92-8475-11f1-88c0-80ee73e9b8e7

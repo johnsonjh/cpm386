@@ -62,6 +62,8 @@
 | **DOS‑Plus**          | **62%**       |
 | **MP/M&nbsp;2.1**     | **50%**       |
 
+The system currently reports **BDOS 2.2** to applications.
+
 * The **CP/M‑386** BDOS is at full parity with **CP/M‑68K&nbsp;1.3**.
 * **CP/M&nbsp;2.2** equivalence is lacking only
   [BDOS 27](https://www.seasip.info/Cpm/bdos.html#27) (which was deliberately
@@ -269,24 +271,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>414</th>
-                <th>56</th>
+                <th>422</th>
+                <th>57</th>
                 <th>0</th>
-                <th>358</th>
+                <th>365</th>
                 <th>0</th>
-                <th>18448</th>
-                <th>331</th>
+                <th>18538</th>
+                <th>332</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25225</th>
-                <th>4610</th>
+                <th>25233</th>
+                <th>4611</th>
                 <th>4305</th>
-                <th>16310</th>
+                <th>16317</th>
                 <th>3107</th>
-                <th>661033</th>
-                <th>10274</th>
+                <th>661123</th>
+                <th>10275</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
