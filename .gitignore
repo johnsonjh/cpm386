@@ -9,7 +9,12 @@
 /*-core
 /*.core
 /core-*
+/cscope.out
 /*.elf
+/GPATH
+/GRTAGS
+/GTAGS
+/HTML
 /*.img
 /*.log
 /mk386
@@ -22,6 +27,8 @@
 /RES*.md
 /RES*.txt
 /shole
+/tags
+/TAGS
 /.test.*
 /testbdos
 /T*.md
