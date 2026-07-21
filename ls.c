@@ -354,23 +354,52 @@ cmp_name (const struct fileent *a, const struct fileent *b)
 /*****************************************************************************/
 
 static void
-sort_files (int order)
+sort_files (int sort_by, int reverse, int ignore_lrbc)
 {
   int i, j;
   struct fileent t;
 
-  if (!order)
+  if (!sort_by && !reverse)
     {
       return;
+    }
+
+  if (!sort_by && reverse)
+    {
+      sort_by = 1;
     }
 
   for (i = 0; i < nfiles; i++)
     {
       for (j = i + 1; j < nfiles; j++)
         {
-          int c = cmp_name (&files[i], &files[j]);
+          int c = 0;
 
-          if ((order > 0 && c > 0) || (order < 0 && c < 0))
+          if (sort_by == 2)
+            {
+              unsigned long sa = exact_size (files[i].records,
+                                             ignore_lrbc ? 0 : files[i].lrbc);
+              unsigned long sb = exact_size (files[j].records,
+                                             ignore_lrbc ? 0 : files[j].lrbc);
+              if (sa > sb)
+                {
+                  c = 1;
+                }
+              else if (sa < sb)
+                {
+                  c = -1;
+                }
+              else
+                {
+                  c = cmp_name (&files[i], &files[j]);
+                }
+            }
+          else
+            {
+              c = cmp_name (&files[i], &files[j]);
+            }
+
+          if ((!reverse && c > 0) || (reverse && c < 0))
             {
               t = files[i];
               files[i] = files[j];
@@ -477,13 +506,15 @@ getch_wait (void)
 static void
 help (void)
 {
-  puts ("Usage: LS [-h] [-a] [-p] [-s|-r] [-l|-b] [filespec]\r\n");
+  puts ("Usage: LS [-h] [-a] [-p] [-s|-z] [-r] [-i] [-l|-b] [filespec]\r\n");
   puts ("  -h  help\r\n");
   puts ("  -a  all files (including system)\r\n");
   puts ("  -p  pause each screen\r\n");
-  puts ("  -s  sort A-Z\r\n");
-  puts ("  -r  sort Z-A\r\n");
-  puts ("  -l  long listing (exact size via LRBC)\r\n");
+  puts ("  -s  sort by name\r\n");
+  puts ("  -z  sort by size\r\n");
+  puts ("  -r  reverse sort order\r\n");
+  puts ("  -i  ignore Last Record Byte Count\r\n");
+  puts ("  -l  long listing\r\n");
   puts ("  -b  bare names only\r\n");
 }
 
@@ -624,7 +655,7 @@ _start (void)
   char tail[128];
   unsigned tlen, i;
   int flag_all = 0, flag_mode = 0, flag_pause = 0;
-  int sort_order = 0;
+  int sort_by = 0, reverse_sort = 0, ignore_lrbc = 0;
   int user, drive;
   unsigned block_size = 2048;
   int word_mode = 0;
@@ -678,12 +709,22 @@ _start (void)
                   break;
 
                 case 'S':
-                  sort_order = 1;
+                  sort_by = 1;
+
+                  break;
+
+                case 'Z':
+                  sort_by = 2;
 
                   break;
 
                 case 'R':
-                  sort_order = -1;
+                  reverse_sort = 1;
+
+                  break;
+
+                case 'I':
+                  ignore_lrbc = 1;
 
                   break;
 
@@ -785,7 +826,7 @@ _start (void)
       r = bdos (18, 0);
     }
 
-  sort_files (sort_order);
+  sort_files (sort_by, reverse_sort, ignore_lrbc);
 
   if (flag_mode != 2)
     {
@@ -827,7 +868,7 @@ _start (void)
             }
         }
 
-      exact = exact_size (f->records, f->lrbc);
+      exact = exact_size (f->records, ignore_lrbc ? 0 : f->lrbc);
       exact_k = (exact + 1023UL) / 1024UL;
       alloc_k = (f->blocks * (unsigned long)block_size) / 1024UL;
       all_exact += exact;
