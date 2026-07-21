@@ -123,17 +123,72 @@ _start (void)
   UWORD r;
   UBYTE lrbc;
   unsigned long records, bytes_alloc, bytes_exact;
-  int i;
+  int i, has_value = 0, new_lrbc = 0;
 
   puts ("\r\nLRBC (Last Record Byte Count)\r\n");
 
   /* Need a filename in the default FCB (from CCP base-page setup) */
   if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
     {
-      puts ("Usage: LRBC filename\r\n");
+      puts ("Usage: LRBC filename [value]\r\n");
 
       bdos (0, 0);
     }
+
+  {
+    unsigned char *p = CMD_TAIL + 1;
+    int len = CMD_TAIL[0];
+
+    if (len > 126)
+      {
+        len = 126;
+      }
+
+    while (len > 0 && *p == ' ')
+      {
+        p++;
+        len--;
+      }
+
+    while (len > 0 && *p != ' ')
+      {
+        p++;
+        len--;
+      }
+
+    while (len > 0 && *p == ' ')
+      {
+        p++;
+        len--;
+      }
+
+    if (len > 0)
+      {
+        int parsed = 0;
+
+        while (len > 0 && *p >= '0' && *p <= '9')
+          {
+            new_lrbc = new_lrbc * 10 + (*p - '0');
+            p++;
+            len--;
+            parsed = 1;
+          }
+
+        while (len > 0 && *p == ' ')
+          {
+            p++;
+            len--;
+          }
+
+        if (len > 0 || !parsed || new_lrbc > 128)
+          {
+            puts ("Invalid LRBC value (must be 0-128)\r\n");
+            bdos (0, 0);
+          }
+
+        has_value = 1;
+      }
+  }
 
   /* Copy default FCB; open with cur_rec=0xFF to fetch LRBC into FCB+32 */
   for (i = 0; i < 36; i++)
@@ -166,8 +221,26 @@ _start (void)
   records = ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
             | (unsigned long)fcb[35];
 
+  if (has_value)
+    {
+      for (i = 0; i < 36; i++)
+        {
+          fcb[i] = DEF_FCB[i];
+        }
+
+      fcb[6] |= 0x80;
+      fcb[32] = (UBYTE)new_lrbc;
+      r = bdos (30, (LONG)(unsigned long)fcb);
+
+      if (r == 255)
+        {
+          puts ("Error setting LRBC\r\n");
+          bdos (0, 0);
+        }
+    }
+
   bytes_alloc = records * 128UL;
-  bytes_exact = exact_size (records, lrbc);
+  bytes_exact = exact_size (records, has_value ? (UBYTE)new_lrbc : lrbc);
 
   puts ("File: ");
 
@@ -198,6 +271,13 @@ _start (void)
 
   puts ("LRBC (DOS-PLUS, bytes used in last rec): ");
   putu ((unsigned long)lrbc);
+
+  if (has_value)
+    {
+      puts (" -> ");
+      putu ((unsigned long)new_lrbc);
+    }
+
   puts ("\r\n");
 
   puts ("Exact size (bytes): ");
