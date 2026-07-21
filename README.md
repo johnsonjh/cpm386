@@ -251,13 +251,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1177</th>
-                <th>225</th>
-                <th>163</th>
-                <th>789</th>
-                <th>224</th>
-                <th>39852</th>
-                <th>586</th>
+                <th>1241</th>
+                <th>241</th>
+                <th>171</th>
+                <th>829</th>
+                <th>248</th>
+                <th>41999</th>
+                <th>618</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -282,13 +282,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25233</th>
-                <th>4611</th>
-                <th>4305</th>
-                <th>16317</th>
-                <th>3107</th>
-                <th>661123</th>
-                <th>10275</th>
+                <th>25297</th>
+                <th>4627</th>
+                <th>4313</th>
+                <th>16357</th>
+                <th>3131</th>
+                <th>663270</th>
+                <th>10307</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

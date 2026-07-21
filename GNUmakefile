@@ -78,6 +78,27 @@ SIZE:=$(shell \
 
 ################################################################################
 
+CP:=$(shell \
+	command -v gcp 2> /dev/null || \
+	command -v cp 2> /dev/null || \
+	$(PRINTF) '%s' "cp")
+
+################################################################################
+
+MV:=$(shell \
+	command -v gmv 2> /dev/null || \
+	command -v mv 2> /dev/null || \
+	$(PRINTF) '%s' "mv")
+
+################################################################################
+
+RM:=$(shell \
+	command -v grm 2> /dev/null || \
+	command -v rm 2> /dev/null || \
+	$(PRINTF) '%s' "rm")
+
+################################################################################
+
 AWK:=$(shell \
 	command -v gawk 2> /dev/null || \
 	command -v mawk 2> /dev/null || \
@@ -120,6 +141,41 @@ TR:=$(shell \
 	command -v gtr 2> /dev/null || \
 	command -v tr 2> /dev/null || \
 	$(PRINTF) '%s' "tr")
+
+################################################################################
+
+GOBJ=$(shell $(OBJCOPY) --version 2>&1 | $(GREP) '^GNU objcopy' || :)
+ifneq "$(findstring objcopy,$(GOBJ))" ""
+ OBJCOPY+= -v
+endif
+
+################################################################################
+
+GSTR=$(shell $(STRIP) --version 2>&1 | $(GREP) '^GNU strip' || :)
+ifneq "$(findstring strip,$(GSTR))" ""
+ STRIP+= -v
+endif
+
+################################################################################
+
+GCP=$(shell $(CP) --version 2>&1 | $(GREP) 'GNU coreutils' || :)
+ifneq "$(findstring coreutils,$(GCP))" ""
+ CP+= -v
+endif
+
+################################################################################
+
+GMV=$(shell $(MV) --version 2>&1 | $(GREP) 'GNU coreutils' || :)
+ifneq "$(findstring coreutils,$(GMV))" ""
+ MV+= -v
+endif
+
+################################################################################
+
+GRM=$(shell $(RM) --version 2>&1 | $(GREP) 'GNU coreutils' || :)
+ifneq "$(findstring coreutils,$(GRM))" ""
+ RM+= -v
+endif
 
 ################################################################################
 
@@ -238,21 +294,21 @@ LDFLAGS = -m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-no-pie -Wl,-T,linker.ld \
 ifndef NO_LTO
  FLTO_WR:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
   $(CC) $(CFLAGS) -flto .test.c -o .test.out > /dev/null 2>&1; \
-   echo $$?; rm -f .test.c .test.out > /dev/null 2>&1)
+   echo $$?; $(RM) -f .test.c .test.out > /dev/null 2>&1)
  ifeq ($(FLTO_WR),0)
   FLTO_OK:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
    $(CC) $(CFLAGS) -Werror -flto .test.c -o .test.out > /dev/null 2>&1; \
-    echo $$?; rm -f .test.c .test.out > /dev/null 2>&1)
+    echo $$?; $(RM) -f .test.c .test.out > /dev/null 2>&1)
   ifeq ($(FLTO_OK),0)
    LTO_FLAGS:=-flto
    # Detect if CC supports `-flto=auto`
    AUTO_WR:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
     $(CC) $(CFLAGS) -flto=auto .test.c -o .test.out > /dev/null 2>&1; \
-     echo $$?; rm -f .test.c .test.out > /dev/null 2>&1)
+     echo $$?; $(RM) -f .test.c .test.out > /dev/null 2>&1)
    ifeq ($(AUTO_WR),0)
     AUTO_OK:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
      $(CC) $(CFLAGS) -Werror -flto=auto .test.c -o .test.out > /dev/null 2>&1; \
-      echo $$?; rm -f .test.c .test.out > /dev/null 2>&1)
+      echo $$?; $(RM) -f .test.c .test.out > /dev/null 2>&1)
     ifeq ($(AUTO_OK),0)
      LTO_FLAGS:=-flto=auto
     endif
@@ -341,8 +397,10 @@ endif
 
 .PHONY: strip
 
-strip: $(TARGET) floppy.img
-	$(STRIP) -R '.shstrtab' -R '.strtab' -R '.symtab' "./$(TARGET)" || :
+strip: all
+	@ls -l "./$(TARGET)" 2> /dev/null || :
+	$(STRIP) -R '.strtab' -R '.symtab' "./$(TARGET)" 2> /dev/null || :
+	@ls -l "./$(TARGET)" 2> /dev/null || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Strip completed successfully."
 	@tput sgr0 2> /dev/null || :
@@ -741,7 +799,7 @@ big.bin: big.c user.ld
 	    $(PRINTF) '%s\n' "ERROR: big stub $$stub >= $(BIG_IMG_SIZE)"; \
 	    exit 1; fi; \
 	  pad=$$(( $(BIG_IMG_SIZE) - stub )); \
-	  cp -f ./big_stub.bin ./big.bin; \
+	  $(CP) -f ./big_stub.bin ./big.bin; \
 	  $(DD) if="/dev/zero" bs="1" count="$$pad" | \
 	    env LC_ALL=C $(TR) '\0' '\220' >> ./big.bin
 	@tput setaf 2 2> /dev/null || :
@@ -764,8 +822,8 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 		seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 \
 		mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 delay.386 \
 		getsn.386 sync.386 test211.386 stat.386 $(SHOLE)
-	rm -f /tmp/ramdisk.tmp
-	rm -rf /tmp/cpmd
+	$(RM) -f /tmp/ramdisk.tmp
+	$(RM) -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
 	$(PRINTF) 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' \
 		> /tmp/cpmd/README.TXT
@@ -774,43 +832,43 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from program still existing in TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
 		> /tmp/cpmd/DEMO.SUB
 	$(PRINTF) 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
-	cp -f ./aclockdv.386 /tmp/cpmd/ACLOCKDV.386
-	cp -f ./aclockvt.386 /tmp/cpmd/ACLOCKVT.386
-	cp -f ./big.386 /tmp/cpmd/BIG.386
-	cp -f ./cls.386 /tmp/cpmd/CLS.386
-	cp -f ./delay.386 /tmp/cpmd/DELAY.386
-	cp -f ./dumpdir.386 /tmp/cpmd/DUMPDIR.386
-	cp -f ./dumpfcb.386 /tmp/cpmd/DUMPFCB.386
-	cp -f ./fparse.386 /tmp/cpmd/FPARSE.386
-	cp -f ./getsn.386 /tmp/cpmd/GETSN.386
-	cp -f ./hd.386 /tmp/cpmd/HD.386
-	cp -f ./hello.386 /tmp/cpmd/HELLO.386
-	cp -f ./illegal.386 /tmp/cpmd/ILLEGAL.386
-	cp -f ./iotest.386 /tmp/cpmd/IOTEST.386
-	cp -f ./lrbc.386 /tmp/cpmd/LRBC.386
-	cp -f ./ls.386 /tmp/cpmd/LS.386
-	cp -f ./mem.386 /tmp/cpmd/MEM.386
-	cp -f ./more.386 /tmp/cpmd/MORE.386
-	cp -f ./od.386 /tmp/cpmd/OD.386
-	cp -f ./pause.386 /tmp/cpmd/PAUSE.386
-	cp -f ./printenv.386 /tmp/cpmd/PRINTENV.386
-	cp -f ./rc.386 /tmp/cpmd/RC.386
-	cp -f ./reboot.386 /tmp/cpmd/REBOOT.386
-	cp -f ./rm.386 /tmp/cpmd/RM.386
-	cp -f ./seroff.386 /tmp/cpmd/SEROFF.386
-	cp -f ./seron.386 /tmp/cpmd/SERON.386
-	cp -f ./stat.386 /tmp/cpmd/STAT.386
-	cp -f ./sync.386 /tmp/cpmd/SYNC.386
-	cp -f ./test211.386 /tmp/cpmd/TEST211.386
-	cp -f ./ticks.386 /tmp/cpmd/TICKS.386
-	cp -f ./tod.386 /tmp/cpmd/TOD.386
-	cp -f ./touch.386 /tmp/cpmd/TOUCH.386
-	cp -f ./trunc.386 /tmp/cpmd/TRUNC.386
-	cp -f ./tsec.386 /tmp/cpmd/TSEC.386
-	cp -f ./ver.386 /tmp/cpmd/VER.386
-	cp -f ./vgaoff.386 /tmp/cpmd/VGAOFF.386
-	cp -f ./vgaon.386 /tmp/cpmd/VGAON.386
-	cp -f ./vgatext.386 /tmp/cpmd/VGATEXT.386
+	$(CP) -f ./aclockdv.386 /tmp/cpmd/ACLOCKDV.386
+	$(CP) -f ./aclockvt.386 /tmp/cpmd/ACLOCKVT.386
+	$(CP) -f ./big.386 /tmp/cpmd/BIG.386
+	$(CP) -f ./cls.386 /tmp/cpmd/CLS.386
+	$(CP) -f ./delay.386 /tmp/cpmd/DELAY.386
+	$(CP) -f ./dumpdir.386 /tmp/cpmd/DUMPDIR.386
+	$(CP) -f ./dumpfcb.386 /tmp/cpmd/DUMPFCB.386
+	$(CP) -f ./fparse.386 /tmp/cpmd/FPARSE.386
+	$(CP) -f ./getsn.386 /tmp/cpmd/GETSN.386
+	$(CP) -f ./hd.386 /tmp/cpmd/HD.386
+	$(CP) -f ./hello.386 /tmp/cpmd/HELLO.386
+	$(CP) -f ./illegal.386 /tmp/cpmd/ILLEGAL.386
+	$(CP) -f ./iotest.386 /tmp/cpmd/IOTEST.386
+	$(CP) -f ./lrbc.386 /tmp/cpmd/LRBC.386
+	$(CP) -f ./ls.386 /tmp/cpmd/LS.386
+	$(CP) -f ./mem.386 /tmp/cpmd/MEM.386
+	$(CP) -f ./more.386 /tmp/cpmd/MORE.386
+	$(CP) -f ./od.386 /tmp/cpmd/OD.386
+	$(CP) -f ./pause.386 /tmp/cpmd/PAUSE.386
+	$(CP) -f ./printenv.386 /tmp/cpmd/PRINTENV.386
+	$(CP) -f ./rc.386 /tmp/cpmd/RC.386
+	$(CP) -f ./reboot.386 /tmp/cpmd/REBOOT.386
+	$(CP) -f ./rm.386 /tmp/cpmd/RM.386
+	$(CP) -f ./seroff.386 /tmp/cpmd/SEROFF.386
+	$(CP) -f ./seron.386 /tmp/cpmd/SERON.386
+	$(CP) -f ./stat.386 /tmp/cpmd/STAT.386
+	$(CP) -f ./sync.386 /tmp/cpmd/SYNC.386
+	$(CP) -f ./test211.386 /tmp/cpmd/TEST211.386
+	$(CP) -f ./ticks.386 /tmp/cpmd/TICKS.386
+	$(CP) -f ./tod.386 /tmp/cpmd/TOD.386
+	$(CP) -f ./touch.386 /tmp/cpmd/TOUCH.386
+	$(CP) -f ./trunc.386 /tmp/cpmd/TRUNC.386
+	$(CP) -f ./tsec.386 /tmp/cpmd/TSEC.386
+	$(CP) -f ./ver.386 /tmp/cpmd/VER.386
+	$(CP) -f ./vgaoff.386 /tmp/cpmd/VGAOFF.386
+	$(CP) -f ./vgaon.386 /tmp/cpmd/VGAON.386
+	$(CP) -f ./vgatext.386 /tmp/cpmd/VGATEXT.386
 	mkfs.cpm -f $(CPMFS) /tmp/ramdisk.tmp
 	cpmcp -f $(CPMFS) /tmp/ramdisk.tmp \
 	  /tmp/cpmd/ACLOCKDV.386 \
@@ -857,18 +915,19 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  0:
 	fsck.cpm -f $(CPMFS) -n /tmp/ramdisk.tmp
 	./$(SHOLE) -w /tmp/ramdisk.tmp BIG.386
+	cpmls -f $(CPMFS) -i -l -u /tmp/ramdisk.tmp
 	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
 		$(GREP) -v '^*$$' | tail -2 | head -1 | \
 		$(AWK) '{ print "0x"a$$1 }')"); \
 		RDS=$$(( (RDS / 1024) + 4 )); \
-		$(PRINTF) '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4))"; \
+		$(PRINTF) '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4 ))"; \
 		test "$$RDS" -lt "$(RAMDISK_KB)" || { \
 		$(PRINTF) '%s\n' \
 			"*** ERROR: ramdisk too large for $(RAMDISK_KB)K space reserved"; \
 			exit 2; }
 	$(DD) if="/dev/zero" of="./ramdisk.bin" bs="1024" count="$(RAMDISK_KB)"
 	$(DD) if="/tmp/ramdisk.tmp" of="./ramdisk.bin" conv="notrunc"
-	rm -rf /tmp/ramdisk.tmp /tmp/cpmd
+	$(RM) -rf /tmp/ramdisk.tmp /tmp/cpmd
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -940,6 +999,8 @@ mbentry.o: mbentry.s mltiboot.h
 ################################################################################
 
 bss.inc: $(TARGET)
+	$(NM) ./$(TARGET) 2>&1 | $(GREP) -q "no symbols" 2> /dev/null && { \
+		$(RM) -f ./$(TARGET) && "$${MAKE:-$(MAKE)}" $(TARGET); } || :
 	$(NM) ./$(TARGET) | \
 		$(AWK) '/__bss_start/ { print "bss_start equ 0x" $$1 }' > ./bss.inc
 	$(NM) ./$(TARGET) | \
@@ -960,6 +1021,8 @@ bss.inc: $(TARGET)
 ################################################################################
 
 boot.bin: boot.s bss.inc
+	$(NM) ./$(TARGET) 2>&1 | $(GREP) -q "no symbols" 2> /dev/null && { \
+		$(RM) -f ./$(TARGET) && "$${MAKE:-$(MAKE)}" $(TARGET); } || :
 	$(NASM) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -990,6 +1053,7 @@ endif
 
 floppy.img: boot.bin os.bin
 	cat ./boot.bin ./os.bin > ./payload.bin
+	$(PRINTF) '\x1a' >> ./payload.bin
 	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440"
 	$(DD) if="./payload.bin" of="$@" conv="notrunc"
 	@set -- "$$(wc -c < ./payload.bin)"; pbytes="$$1"; \
@@ -1008,7 +1072,7 @@ floppy.img: boot.bin os.bin
 .PHONY: clean distclean
 
 clean distclean:
-	rm -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./testbdos \
+	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./testbdos \
 		./$(MK386) ./$(SHOLE) ./$(TARGET)
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
@@ -1088,9 +1152,9 @@ scc-real: README.md
 			skip=1; next } \
 		skip && /<!-- scc-end -->/ { skip=0; next } \
 		!skip' ./README.md > ./README.awk && \
-	mv -f ./README.awk ./README.md && \
+	$(MV) -f ./README.awk ./README.md && \
 	$(EXPAND) ./README.md > ./README.out && \
-	mv -f ./README.out ./README.md
+	$(MV) -f ./README.out ./README.md
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "scc-real completed successfully."
 	@tput sgr0 2> /dev/null || :
