@@ -59,7 +59,6 @@ this section as *wishlist* and not a *roadmap*!
   * Extend MEM to breakdown system size into CBIOS, BDOS, and CCP individually.
   * Extend STAT to query and also set the LRBC
   * Extend LRBC program to set the LRBC
-  * Extend LS to sort by size, ignore LRBC, and reverse sort order
   * Extend HD and OD to ignore the LRBC if requested, and option to show
     offsets
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
