@@ -130,8 +130,7 @@ Building **CP/M‑386** is supported on current **Linux**, **NetBSD**,
 []()
 
 []()
-* It is recommended to use **GCC** as **Clang**‑compiled i386 output is
-  larger than **GCC** at `-O2`.
+* It is recommended to use **GCC** as **Clang**‑compiled i386 code is larger.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 
 ## Build output
@@ -251,13 +250,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1268</th>
-                <th>241</th>
-                <th>171</th>
-                <th>856</th>
-                <th>283</th>
-                <th>43256</th>
-                <th>631</th>
+                <th>1274</th>
+                <th>243</th>
+                <th>172</th>
+                <th>859</th>
+                <th>284</th>
+                <th>43405</th>
+                <th>634</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -271,24 +270,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>422</th>
-                <th>57</th>
+                <th>420</th>
+                <th>56</th>
                 <th>0</th>
-                <th>365</th>
+                <th>364</th>
                 <th>0</th>
-                <th>18538</th>
+                <th>18511</th>
                 <th>332</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25324</th>
-                <th>4626</th>
-                <th>4314</th>
-                <th>16384</th>
-                <th>3166</th>
-                <th>664606</th>
-                <th>10321</th>
+                <th>25328</th>
+                <th>4627</th>
+                <th>4315</th>
+                <th>16386</th>
+                <th>3167</th>
+                <th>664728</th>
+                <th>10324</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
@@ -296,7 +295,6 @@ See [FUTURE.md](FUTURE.md).
 
 * **CP/M‑386** is distributed under the terms of the permissive
   [MIT&nbsp;License](LICENSE).
-
 * Bryan W. Sparks of DRDOS,&nbsp;Inc. dba DeviceLogics&nbsp;LLC, successor
   in interest to Digital&nbsp;Research,&nbsp;Inc.’s CP/M assets, explicitly
   grants an unlimited authorization to use, distribute, modify, enhance, and

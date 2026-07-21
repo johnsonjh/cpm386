@@ -13,6 +13,10 @@ export MAKE=$(shell printf '%s'\
 
 ################################################################################
 
+CSTD:=-std=gnu89
+
+################################################################################
+
 ifndef DEBUG
  DEBUGFLAGS=-DNDEBUG
  LMAP=
@@ -230,6 +234,7 @@ endif
 ################################################################################
 
 CFLAGS = \
+	$(CSTD) \
 	$(DEBUGFLAGS) \
 	$(FNO_STACK_CLASH_PROTECTION) \
 	$(OPTFLAGS) \
@@ -391,7 +396,7 @@ all: $(TARGET) boot.bin os.bin floppy.img
 ifeq "$(findstring gcc,$(CC))" ""
 	@tput bold 2> /dev/null || :; tput setaf 3 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' \
-		"NOTE: $(CC) was used to build but gcc is recommended!"
+		"NOTE: $(CC) was used for this invocation but gcc is recommended!"
 	@tput sgr0 2> /dev/null || :
 endif
 
@@ -428,7 +433,7 @@ strip: all
 ################################################################################
 
 $(MK386): mk386.c
-	$(CC) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
+	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -437,7 +442,7 @@ $(MK386): mk386.c
 
 SHOLE = shole
 $(SHOLE): shole.c
-	$(CC) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
+	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1107,10 +1112,11 @@ clean distclean:
 
 testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 	dskutil.o iosys.o ccp.o bringup.o
-	$(CC) -m32 $(LTO_FLAGS) $(OPTFLAGS) -Wl,--build-id=none -I. -o ./$@ ./$^ \
-	-DRAMDISK_KB=$(RAMDISK_KB) -Wl,--build-id=none -fmerge-all-constants \
-	-fno-asynchronous-unwind-tables -fno-builtin -fno-pic -fno-pie -fno-plt \
-	-fno-stack-protector -fno-unwind-tables -fomit-frame-pointer
+	$(CC) $(CSTD) -m32 $(LTO_FLAGS) $(OPTFLAGS) -Wl,--build-id=none -I. \
+	-o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB) -Wl,--build-id=none \
+	-fmerge-all-constants -fno-asynchronous-unwind-tables -fno-builtin \
+	-fno-pic -fno-pie -fno-plt -fno-stack-protector -fno-unwind-tables \
+	-fomit-frame-pointer
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
