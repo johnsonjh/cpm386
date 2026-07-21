@@ -804,8 +804,9 @@ main (void)
   {
     long lsum = 0;
     long *p = (long *)dph0.dbufp;
+    int k;
 
-    for (int k = 0; k < 32; k++)
+    for (k = 0; k < 32; k++)
       {
         lsum += p[k];
       }
