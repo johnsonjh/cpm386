@@ -107,8 +107,13 @@ The following dependencies are required to compile **CP/M‑386**:
 
 ## Compilation
 
-Building **CP/M‑386** is supported on current **Linux**, **NetBSD**,
-**OpenBSD**, **FreeBSD**, and **Haiku**:
+Building **CP/M‑386** is supported on current supported versions of
+**NetBSD**, **OpenBSD**, **FreeBSD**, **Haiku**, and recent **Linux**
+distributions.
+
+The following are the minimum versions of Linux distributions that have been
+verified to build **CP/M‑386** successfully: CentOS Stream 9, Fedora 36,
+Debian 12, Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4
 []()
 
 []()
@@ -230,13 +235,13 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>51</th>
-                <th>21079</th>
+                <th>21080</th>
                 <th>3934</th>
                 <th>3319</th>
-                <th>13826</th>
+                <th>13827</th>
                 <th>2870</th>
-                <th>513981</th>
-                <th>7922</th>
+                <th>514007</th>
+                <th>7923</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -255,7 +260,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>172</th>
                 <th>859</th>
                 <th>284</th>
-                <th>43405</th>
+                <th>43393</th>
                 <th>634</th>
         </tr><tr>
                 <th>Assembly</th>
@@ -270,24 +275,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>421</th>
-                <th>56</th>
+                <th>426</th>
+                <th>57</th>
                 <th>0</th>
-                <th>365</th>
+                <th>369</th>
                 <th>0</th>
-                <th>18539</th>
-                <th>333</th>
+                <th>18796</th>
+                <th>337</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>73</th>
-                <th>25329</th>
-                <th>4627</th>
+                <th>25335</th>
+                <th>4628</th>
                 <th>4315</th>
-                <th>16387</th>
+                <th>16392</th>
                 <th>3167</th>
-                <th>664756</th>
-                <th>10325</th>
+                <th>665027</th>
+                <th>10330</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

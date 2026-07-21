@@ -292,7 +292,7 @@ NASMFLAGS = -f elf32
 
 ################################################################################
 
-LDFLAGS = -m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-no-pie -Wl,-T,linker.ld \
+LDFLAGS = -m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-T,linker.ld \
 	-Wl,--build-id=none -Wl,--gc-sections
 
 ################################################################################
