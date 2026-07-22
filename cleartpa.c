@@ -182,6 +182,14 @@ _start (void)
 
   unsigned long total_k
       = ((end_addr1 - start_addr1) + (end_addr2 - start_addr2)) / 1024;
+
+  if (total_k > 3668279)
+    {
+      puts ("ERROR: CLEARTPA only supports TPA size of 3668279K or less.\r\n");
+
+      bdos (0, 0);
+    }
+
   puts ("Clearing: ");
   putu (total_k);
   puts ("K\r\n");
