@@ -114,7 +114,8 @@ _start (void)
 {
   struct tpa_req t;
   unsigned long esp;
-  unsigned long start_addr, end_addr, i;
+  unsigned long i;
+  /* unsigned long start_addr, end_addr; */
   int verify = 0;
   char *tail = (char *)CMD_TAIL;
   int tail_len = tail[0];
@@ -148,7 +149,7 @@ _start (void)
   t.high = 0;
   bdos (BDOS_TPA, (LONG)(unsigned long)&t);
 
-  unsigned long tpa_len = t.high - t.low;
+  /* unsigned long tpa_len = t.high - t.low; */
 
   unsigned long start_addr1 = (unsigned long)&_end;
   start_addr1 = (start_addr1 + 3) & ~3;
