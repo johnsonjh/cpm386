@@ -1015,7 +1015,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
 	./$(SHOLE) -w /tmp/ramdisk.tmp BIG.386
-	cpmls -f $(CPMFS) -d /tmp/ramdisk.tmp
+	cpmls -f $(CPMFS) -d /tmp/ramdisk.tmp || :
 	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
 		$(GREP) -v '^*$$' | tail -2 | head -1 | \
 		$(AWK) '{ print "0x"a$$1 }')"); \
