@@ -208,14 +208,14 @@ W_NO_UNUSED_COMMAND_LINE_ARGUMENT:=$(shell \
 
 F_NO_STACK_CLASH_PROTECTION:=$(shell \
 	$(CC) -Werror -fno-stack-clash-protection \
-	-x c c /dev/null -o /dev/null 2> /dev/null && \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
 	$(PRINTF) '%s' "-fno-stack-clash-protection")
 
 ################################################################################
 
 F_NO_CF_PROTECTION:=$(shell \
 	$(CC) -Werror -fcf-protection=none \
-	-x c c /dev/null -o /dev/null 2> /dev/null && \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
 	$(PRINTF) '%s' "-fcf-protection=none")
 
 ################################################################################
