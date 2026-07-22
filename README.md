@@ -22,6 +22,7 @@
 - [Included utilities](#included-utilities)
 - [Future plans](#future-plans)
 - [Code statistics](#code-statistics)
+- [Mirrors](#mirrors)
 - [License](#license)
 
 <!-- tocstop -->
@@ -277,13 +278,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>439</th>
-                <th>57</th>
+                <th>446</th>
+                <th>59</th>
                 <th>0</th>
-                <th>382</th>
+                <th>387</th>
                 <th>0</th>
-                <th>19513</th>
-                <th>346</th>
+                <th>19735</th>
+                <th>351</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -298,15 +299,21 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>76</th>
-                <th>26294</th>
-                <th>4784</th>
+                <th>26301</th>
+                <th>4786</th>
                 <th>4366</th>
-                <th>17144</th>
+                <th>17149</th>
                 <th>3402</th>
-                <th>687830</th>
-                <th>10660</th>
+                <th>688052</th>
+                <th>10665</th>
         </tr></tfoot></table>
 <!-- scc-end -->
+
+## Mirrors
+
+* The canonical home of this software is
+  [`https://gitlab.com/johnsonjh/cpm386`](https://gitlab.com/johnsonjh/cpm386),
+  with a mirror on [GitHub](https://github.com/johnsonjh/cpm386).
 
 ## License
 
