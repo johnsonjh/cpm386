@@ -904,7 +904,7 @@ UBYTE dsknum;           /* disk number to get free space of */
     REG UWORD   *alvec;
     REG UWORD   bitmask;
     REG UWORD   alvword;
-    REG WORD    i;
+    REG UWORD   i;
         LONG    temp;           /*sw For DMA Odd problem        */
     BSETUP
 
