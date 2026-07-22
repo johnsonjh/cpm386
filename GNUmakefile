@@ -214,9 +214,9 @@ F_NO_STACK_CLASH_PROTECTION:=$(shell \
 ################################################################################
 
 F_NO_CF_PROTECTION:=$(shell \
-	$(CC) -Werror -fno-cf-protection \
+	$(CC) -Werror -fcf-protection=none \
 	-x c c /dev/null -o /dev/null 2> /dev/null && \
-	$(PRINTF) '%s' "-fno-cf-protection")
+	$(PRINTF) '%s' "-fcf-protection=none")
 
 ################################################################################
 
