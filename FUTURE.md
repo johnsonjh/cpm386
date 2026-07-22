@@ -55,6 +55,9 @@ this section as *wishlist* and not a *roadmap*!
     * SUPERSUB‑style interactive user input for SUBMIT scripts
 
 * Software/ports needed:
+  * Add SAVE program to write TPA to disk, and to optionally add a `.386`
+    executable header.  SAVE should be able to take a range to save, as well
+    as the ability to autodetect a range (`CLEARTPA` could be useful here).
   * Fix bug with CLEARTPA w/TPA >3.4GB and show progress during clear/verify.
   * TRUNCATE utility to truncate a file and set the LRBC
   * Extend MEM to breakdown system size into CBIOS, BDOS, and CCP individually.
