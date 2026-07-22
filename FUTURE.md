@@ -58,8 +58,6 @@ this section as *wishlist* and not a *roadmap*!
   * TRUNCATE utility to truncate a file and set the LRBC
   * Extend MEM to breakdown system size into CBIOS, BDOS, and CCP individually.
   * Extend STAT to query and also set the LRBC
-  * Extend HD and OD to ignore the LRBC if requested, and option to show
-    offsets
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
   * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984) +LRBC
   * Digital Research HELP clone (VMS‑style HELP tool)
