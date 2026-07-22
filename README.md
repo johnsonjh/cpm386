@@ -174,6 +174,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 | `ACLOCKDV.386` | [aclock](https://github.com/tenox7/aclock) (VGA console version)                                   |
 | `ACLOCKVT.386` | [aclock](https://github.com/tenox7/aclock) (ANSI terminal version)                                 |
 | `BIG.386`      | Multi‑extent loading test executable                                                               |
+| `CLEARTPA.386` | Clears (zeros) and optionally verifies the TPA                                                     |
 | `CLS.386`      | Clear screen (BDOS 221)                                                                            |
 | `DELAY.386`    | Delay test ([BDOS 141](https://www.seasip.info/Cpm/bdos.html#141))                                 |
 | `DEMO.SUB`     | SUBMIT demonstration                                                                               |
@@ -234,14 +235,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>51</th>
-                <th>21080</th>
-                <th>3934</th>
-                <th>3319</th>
-                <th>13827</th>
-                <th>2870</th>
-                <th>514007</th>
-                <th>7923</th>
+                <th>52</th>
+                <th>21777</th>
+                <th>4044</th>
+                <th>3362</th>
+                <th>14371</th>
+                <th>3098</th>
+                <th>530256</th>
+                <th>8119</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -250,18 +251,18 @@ See [FUTURE.md](FUTURE.md).
                 <th>716</th>
                 <th>915</th>
                 <th>13</th>
-                <th>74922</th>
+                <th>74936</th>
                 <th>1075</th>
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1274</th>
-                <th>243</th>
-                <th>172</th>
-                <th>859</th>
-                <th>284</th>
-                <th>43401</th>
-                <th>634</th>
+                <th>1318</th>
+                <th>245</th>
+                <th>173</th>
+                <th>900</th>
+                <th>286</th>
+                <th>43941</th>
+                <th>672</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -275,24 +276,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>426</th>
+                <th>424</th>
                 <th>57</th>
                 <th>0</th>
-                <th>369</th>
+                <th>367</th>
                 <th>0</th>
-                <th>18852</th>
-                <th>337</th>
+                <th>18858</th>
+                <th>335</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>73</th>
-                <th>25335</th>
-                <th>4628</th>
-                <th>4315</th>
-                <th>16392</th>
-                <th>3167</th>
-                <th>665091</th>
-                <th>10330</th>
+                <th>74</th>
+                <th>26074</th>
+                <th>4740</th>
+                <th>4359</th>
+                <th>16975</th>
+                <th>3397</th>
+                <th>681900</th>
+                <th>10562</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

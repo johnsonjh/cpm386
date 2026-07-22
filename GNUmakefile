@@ -625,6 +625,14 @@ printenv.386: printenv.bin $(MK386)
 
 ################################################################################
 
+cleartpa.386: cleartpa.bin $(MK386)
+	./$(MK386) ./cleartpa.bin ./cleartpa.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 pause.386: pause.bin $(MK386)
 	./$(MK386) ./pause.bin ./pause.386 0x100
 	@tput setaf 2 2> /dev/null || :
@@ -837,12 +845,46 @@ big.386: big.bin $(MK386)
 
 ################################################################################
 
-ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
-		ls.386 ver.386 reboot.386 touch.386 more.386 cls.386 rc.386 tsec.386 \
-		trunc.386 rm.386 printenv.386 pause.386 vgaon.386 vgaoff.386 \
-		seron.386 seroff.386 fparse.386 illegal.386 dumpfcb.386 dumpdir.386 \
-		mem.386 aclockvt.386 aclockdv.386 vgatext.386 ticks.386 delay.386 \
-		getsn.386 sync.386 test211.386 stat.386 $(SHOLE)
+ramdisk.bin: \
+			$(SHOLE) \
+			aclockdv.386 \
+			aclockvt.386 \
+			big.386 \
+			cleartpa.386 \
+			cls.386 \
+			delay.386 \
+			dumpdir.386 \
+			dumpfcb.386 \
+			fparse.386 \
+			getsn.386 \
+			hd.386 \
+			hello.386 \
+			illegal.386 \
+			iotest.386 \
+			lrbc.386 \
+			ls.386 \
+			mem.386 \
+			more.386 \
+			od.386 \
+			pause.386 \
+			printenv.386 \
+			rc.386 \
+			reboot.386 \
+			rm.386 \
+			seroff.386 \
+			seron.386 \
+			stat.386 \
+			sync.386 \
+			test211.386 \
+			ticks.386 \
+			tod.386 \
+			touch.386 \
+			trunc.386 \
+			tsec.386 \
+			ver.386 \
+			vgaoff.386 \
+			vgaon.386 \
+			vgatext.386
 	$(RM) -f /tmp/ramdisk.tmp
 	$(RM) -rf /tmp/cpmd
 	mkdir -p /tmp/cpmd
@@ -872,6 +914,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	$(CP) -f ./more.386 /tmp/cpmd/MORE.386
 	$(CP) -f ./od.386 /tmp/cpmd/OD.386
 	$(CP) -f ./pause.386 /tmp/cpmd/PAUSE.386
+	$(CP) -f ./cleartpa.386 /tmp/cpmd/CLEARTPA.386
 	$(CP) -f ./printenv.386 /tmp/cpmd/PRINTENV.386
 	$(CP) -f ./rc.386 /tmp/cpmd/RC.386
 	$(CP) -f ./reboot.386 /tmp/cpmd/REBOOT.386
@@ -896,6 +939,7 @@ ramdisk.bin: hello.386 lrbc.386 iotest.386 big.386 tod.386 hd.386 od.386 \
 	  /tmp/cpmd/ACLOCKVT.386 \
 	  /tmp/cpmd/BIG.386 \
 	  /tmp/cpmd/CLS.386 \
+	  /tmp/cpmd/CLEARTPA.386 \
 	  /tmp/cpmd/DELAY.386 \
 	  /tmp/cpmd/DEMO.SUB \
 	  /tmp/cpmd/DUMPDIR.386 \
