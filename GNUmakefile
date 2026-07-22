@@ -199,17 +199,24 @@ W_NO_DEPRECATED_NON_PROTOTYPE:=$(shell \
 
 ################################################################################
 
-WNO_UNUSED_COMMAND_LINE_ARGUMENT:=$(shell \
+W_NO_UNUSED_COMMAND_LINE_ARGUMENT:=$(shell \
 	$(CC) -Werror -Wno-unused-command-line-argument \
 	-x c -c /dev/null -o /dev/null 2> /dev/null && \
 	$(PRINTF) '%s' "-Wno-unused-command-line-argument")
 
 ################################################################################
 
-FNO_STACK_CLASH_PROTECTION:=$(shell \
+F_NO_STACK_CLASH_PROTECTION:=$(shell \
 	$(CC) -Werror -fno-stack-clash-protection \
 	-x c c /dev/null -o /dev/null 2> /dev/null && \
 	$(PRINTF) '%s' "-fno-stack-clash-protection")
+
+################################################################################
+
+F_NO_CF_PROTECTION:=$(shell \
+	$(CC) -Werror -fno-cf-protection \
+	-x c c /dev/null -o /dev/null 2> /dev/null && \
+	$(PRINTF) '%s' "-fno-cf-protection")
 
 ################################################################################
 
@@ -236,11 +243,12 @@ endif
 CFLAGS = \
 	$(CSTD) \
 	$(DEBUGFLAGS) \
-	$(FNO_STACK_CLASH_PROTECTION) \
+	$(F_NO_CF_PROTECTION) \
+	$(F_NO_STACK_CLASH_PROTECTION) \
 	$(OPTFLAGS) \
 	$(W_NO_DEPRECATED_NON_PROTOTYPE) \
 	$(W_NO_RETURN_MISMATCH) \
-	$(WNO_UNUSED_COMMAND_LINE_ARGUMENT) \
+	$(W_NO_UNUSED_COMMAND_LINE_ARGUMENT) \
 	-D__cpm386 \
 	-D__cpm386__ \
 	-Dcpm386 \
