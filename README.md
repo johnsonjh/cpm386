@@ -256,13 +256,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1318</th>
+                <th>1319</th>
                 <th>245</th>
                 <th>173</th>
-                <th>900</th>
+                <th>901</th>
                 <th>286</th>
-                <th>43941</th>
-                <th>672</th>
+                <th>43998</th>
+                <th>673</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -276,24 +276,34 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>427</th>
+                <th>437</th>
                 <th>57</th>
                 <th>0</th>
-                <th>370</th>
+                <th>380</th>
                 <th>0</th>
-                <th>19085</th>
-                <th>338</th>
+                <th>19372</th>
+                <th>344</th>
+        </tr><tr>
+                <th>Linker&nbsp;Script</th>
+                <th>2</th>
+                <th>159</th>
+                <th>31</th>
+                <th>0</th>
+                <th>128</th>
+                <th>0</th>
+                <th>3855</th>
+                <th>79</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>74</th>
-                <th>26085</th>
-                <th>4743</th>
+                <th>76</th>
+                <th>26255</th>
+                <th>4774</th>
                 <th>4359</th>
-                <th>16983</th>
+                <th>17122</th>
                 <th>3398</th>
-                <th>682266</th>
-                <th>10568</th>
+                <th>686465</th>
+                <th>10642</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

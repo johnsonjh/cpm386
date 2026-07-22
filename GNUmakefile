@@ -1217,6 +1217,7 @@ scc-real: README.md
 	$(AWK) '/<!-- scc-start -->/ { \
 		print; system("scc \
 			--count-as-pattern \"BSDmakefile:Makefile:Makefile\" \
+			--count-as-pattern \"*.ld:Linker&nbsp;Script:Text\" \
 			--exclude-file LICENSE,README.awk,log.pvs \
 			--exclude-file log.pvs,compile_commands.json \
 			--exclude-file REUSE.toml \
