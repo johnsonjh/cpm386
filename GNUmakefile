@@ -1168,7 +1168,7 @@ testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 	-o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB) -Wl,--build-id=none \
 	-fmerge-all-constants -fno-asynchronous-unwind-tables -fno-builtin \
 	-fno-pic -fno-pie -fno-plt -fno-stack-protector -fno-unwind-tables \
-	-fomit-frame-pointer
+	-fomit-frame-pointer $(TEST_FLAGS)
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
