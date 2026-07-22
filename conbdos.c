@@ -313,6 +313,7 @@ REG struct conbuf *p;
     REG UBYTE ch;
     REG UWORD i;
     UWORD stcol;
+    UWORD retlen;
 #ifdef  NFG                     /*sw This didn't work for SUBMIT files...*/
     REG UWORD j;
     REG UBYTE *q;
@@ -389,7 +390,8 @@ REG struct conbuf *p;
         {
             conout('#');
             newline(stcol);
-            for (i=0; i < UBWORD(p->retlen); i++)
+            retlen = UBWORD(p->retlen);
+            for (i=0; i < retlen; i++)
                     cookdout( p->cbuf[i] );
         }
 
