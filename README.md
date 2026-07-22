@@ -236,13 +236,13 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>52</th>
-                <th>21777</th>
-                <th>4044</th>
+                <th>21785</th>
+                <th>4047</th>
                 <th>3362</th>
-                <th>14371</th>
-                <th>3098</th>
-                <th>530256</th>
-                <th>8120</th>
+                <th>14376</th>
+                <th>3099</th>
+                <th>530395</th>
+                <th>8122</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -287,13 +287,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>74</th>
-                <th>26074</th>
-                <th>4740</th>
+                <th>26082</th>
+                <th>4743</th>
                 <th>4359</th>
-                <th>16975</th>
-                <th>3397</th>
-                <th>681900</th>
-                <th>10563</th>
+                <th>16980</th>
+                <th>3398</th>
+                <th>682039</th>
+                <th>10565</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
