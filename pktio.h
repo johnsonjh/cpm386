@@ -48,7 +48,7 @@ struct iopb
                      /* taken together form int device number */
   LONG devadr;       /* item nmbr on device to start xfer at  */
                      /* note -- item is sector for disks,     */
-		     /*         byte for char devs            */
+                     /*         byte for char devs            */
   UWORD xferlen;     /* number items to transfer              */
   UBYTE *xferadr;    /* memory address to xfer to/from        */
   struct dph *infop; /* pointer to disk parameter header      */

@@ -56,8 +56,7 @@ _start (void)
     bdos (2, (LONG)(unsigned char)*m++);
 
   { /* Touch a byte near the end of a 70KB image so the pad is real. */
-    volatile unsigned char *p
-	= (volatile unsigned char *)0x100;
+    volatile unsigned char *p = (volatile unsigned char *)0x100;
     /* image padded to 0x100 + 71680; last page marker at 0x100+71679 */
     volatile unsigned char *end
         = (volatile unsigned char *)(0x100 + 71680 - 1);
