@@ -19,12 +19,12 @@ CSTD:=-std=gnu89
 
 ifndef DEBUG
  DEBUGFLAGS=-DNDEBUG
- LMAP=
+ LDEXTRA=
  NASMDEBUG=
  OPTFLAGS=-O2
 else
  DEBUGFLAGS=-DDEBUG
- LMAP=-Wl,--print-map -Wl,--cref
+ LDEXTRA=-Wl,--print-map -Wl,--cref
  NASMDEBUG=-g
  OPTFLAGS=-Og -ggdb -fdata-sections -ffunction-sections
 endif
@@ -241,6 +241,10 @@ PIPE:=$(shell \
 
 ################################################################################
 
+LDEXTRA+= $(W_NO_UNUSED_COMMAND_LINE_ARGUMENT)
+
+################################################################################
+
 OS=$(shell uname -s 2> /dev/null)
 
 ################################################################################
@@ -448,7 +452,7 @@ strip: all
 
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o ./$*.o ./$<
-	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./$*.elf ./$*.o
 	@entry=$$($(NM) ./$*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
@@ -675,7 +679,7 @@ pause.386: pause.bin $(MK386)
 
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o ./vgaon.o ./conctl.c
-	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaon.elf ./vgaon.o
 	@entry=$$($(NM) ./vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
@@ -692,7 +696,7 @@ vgaon.bin: conctl.c user.ld
 
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o ./vgaoff.o ./conctl.c
-	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaoff.elf ./vgaoff.o
 	@entry=$$($(NM) ./vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
@@ -709,7 +713,7 @@ vgaoff.bin: conctl.c user.ld
 
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o ./seron.o ./conctl.c
-	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seron.elf ./seron.o
 	@entry=$$($(NM) ./seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
@@ -726,7 +730,7 @@ seron.bin: conctl.c user.ld
 
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o ./seroff.o ./conctl.c
-	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seroff.elf ./seroff.o
 	@entry=$$($(NM) ./seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
@@ -844,7 +848,7 @@ ticks.386: ticks.bin $(MK386)
 
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o ./big.o ./big.c
-	$(CC) $(LMAP) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
+	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./big.elf ./big.o
 	@entry=$$($(NM) ./big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
@@ -1140,7 +1144,7 @@ os.bin: $(TARGET)
 ################################################################################
 
 $(TARGET): $(OBJS) linker.ld
-	$(CC) $(LMAP) $(LDFLAGS) -o ./$@ ./$(OBJS)
+	$(CC) $(LDEXTRA) $(LDFLAGS) -o ./$@ ./$(OBJS)
 ifndef DEBUG
 	$(STRIP) --strip-debug ./$(TARGET)
 endif
