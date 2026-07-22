@@ -1014,7 +1014,6 @@ ramdisk.bin: \
 	  /tmp/cpmd/VGAON.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
-	fsck.cpm -f $(CPMFS) -n /tmp/ramdisk.tmp
 	./$(SHOLE) -w /tmp/ramdisk.tmp BIG.386
 	cpmls -f $(CPMFS) -d /tmp/ramdisk.tmp
 	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
