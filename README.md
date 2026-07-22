@@ -137,6 +137,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 []()
 * It is recommended to use **GCC** as **Clang**‑compiled i386 code is larger.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
+* 32‑bit support libraries are required to run the test suite (`make test`).
 
 ## Build output
 
@@ -276,13 +277,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>437</th>
+                <th>438</th>
                 <th>57</th>
                 <th>0</th>
-                <th>380</th>
+                <th>381</th>
                 <th>0</th>
-                <th>19359</th>
-                <th>344</th>
+                <th>19438</th>
+                <th>345</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -297,13 +298,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>76</th>
-                <th>26263</th>
+                <th>26264</th>
                 <th>4776</th>
                 <th>4360</th>
-                <th>17127</th>
+                <th>17128</th>
                 <th>3399</th>
-                <th>686723</th>
-                <th>10645</th>
+                <th>686802</th>
+                <th>10646</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
