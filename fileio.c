@@ -46,17 +46,6 @@
 
 #include "pktio.h"              /* Packet I/O definitions */
 
-/**************/
-
-struct tempstr /* must match bdosmain.c */
-{
-  UBYTE tempdisk;
-  BOOLEAN reselect;
-  struct fcb *fptr;
-};
-
-/**************/
-
 /* declare external fucntions (updated for gcc arg checking) */
 
 /* dirscan: bdosdef.h: UWORD dirscan(DIRSCAN_FN, UBYTE *, UWORD) */
