@@ -58,7 +58,7 @@
 |                System | BDOS coverage |
 |----------------------:|:--------------|
 | **CP/M‑68K&nbsp;1.3** | **100%**      |
-| **CP/M&nbsp;2.2**     | **98%**       |
+| **CP/M&nbsp;2.2**     | **98%**†      |
 | **CP/M‑Plus**         | **71%**       |
 | **DOS‑Plus**          | **62%**       |
 | **MP/M&nbsp;2.1**     | **50%**       |
@@ -66,7 +66,7 @@
 The system currently reports **BDOS 2.2** to applications.
 
 * The **CP/M‑386** BDOS is at full parity with **CP/M‑68K&nbsp;1.3**.
-* **CP/M&nbsp;2.2** equivalence is lacking only
+* †**CP/M&nbsp;2.2** equivalence is lacking only
   [BDOS 27](https://www.seasip.info/Cpm/bdos.html#27) (which was deliberately
   omitted from **CP/M‑68K** by Digital Research).
 * A large majority of the **CP/M‑Plus** (**CP/M&nbsp;3**) BDOS is also
@@ -283,7 +283,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>387</th>
                 <th>0</th>
-                <th>19735</th>
+                <th>19740</th>
                 <th>351</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -304,7 +304,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4366</th>
                 <th>17149</th>
                 <th>3402</th>
-                <th>688018</th>
+                <th>688023</th>
                 <th>10666</th>
         </tr></tfoot></table>
 <!-- scc-end -->
