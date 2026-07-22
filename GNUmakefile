@@ -220,6 +220,27 @@ F_NO_CF_PROTECTION:=$(shell \
 
 ################################################################################
 
+F_COLOR_DIAGNOSTICS:=$(shell \
+	$(CC) -Werror -fcolor-diagnostics \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
+	$(PRINTF) '%s' "-fcolor-diagnostics")
+
+################################################################################
+
+F_DIAGNOSTICS_COLOR:=$(shell \
+	$(CC) -Werror -fdiagnostics-color=always \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
+	$(PRINTF) '%s' "-fdiagnostics-color=always")
+
+################################################################################
+
+PIPE:=$(shell \
+	$(CC) -Werror -pipe \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
+	$(PRINTF) '%s' "-pipe")
+
+################################################################################
+
 OS=$(shell uname -s 2> /dev/null)
 
 ################################################################################
@@ -243,9 +264,12 @@ endif
 CFLAGS = \
 	$(CSTD) \
 	$(DEBUGFLAGS) \
+	$(F_COLOR_DIAGNOSTICS) \
+	$(F_DIAGNOSTICS_COLOR) \
 	$(F_NO_CF_PROTECTION) \
 	$(F_NO_STACK_CLASH_PROTECTION) \
 	$(OPTFLAGS) \
+	$(PIPE) \
 	$(W_NO_DEPRECATED_NON_PROTOTYPE) \
 	$(W_NO_RETURN_MISMATCH) \
 	$(W_NO_UNUSED_COMMAND_LINE_ARGUMENT) \
