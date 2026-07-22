@@ -60,6 +60,7 @@ this section as *wishlist* and not a *roadmap*!
     as the ability to autodetect a range (`CLEARTPA` could be useful here).
   * Fix bug with CLEARTPA w/TPA >3.4GB and show progress during clear/verify.
   * TRUNCATE utility to truncate a file and set the LRBC
+  * Extend HD and OD with  `-p` (pager) option to pause after each screen.
   * Extend MEM to breakdown system size into CBIOS, BDOS, and CCP individually.
   * Extend STAT to query and also set the LRBC
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
