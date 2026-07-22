@@ -49,6 +49,7 @@ SECTIONS
     .bss : {
         *(.bss*)
         *(COMMON)
+        _end = .;
     } :data
 
     /DISCARD/ : {
