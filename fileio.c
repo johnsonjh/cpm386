@@ -46,7 +46,7 @@
 
 #include "pktio.h"              /* Packet I/O definitions */
 
-/* declare external fucntions (updated for gcc arg checking) */
+/* declare external functions (updated for gcc arg checking) */
 
 /* dirscan: bdosdef.h: UWORD dirscan(DIRSCAN_FN, UBYTE *, UWORD) */
 EXTERN UWORD    error(WORD);
@@ -660,10 +660,10 @@ REG struct fcb *fcbp;           /* pointer to fcb for file to set ran rec */
 }
 
 
-/**********************************/
-/* fsize is a funtion for dirscan */
-/* passed from getsize            */
-/**********************************/
+/***********************************/
+/* fsize is a function for dirscan */
+/* passed from getsize             */
+/***********************************/
 
 BOOLEAN fsize(fcbp, dirp, dirindx)
 

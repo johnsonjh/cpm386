@@ -58,7 +58,7 @@
 \*--------------------------------------------------------------*/
 struct _cmd_tbl
 {
-        BYTE    *ident;         /* command identifer field      */
+        BYTE    *ident;         /* command identifier field     */
         UWORD   cmd_code;       /* command code field           */
 };
 
@@ -153,7 +153,7 @@ BYTE autorom;                   /* needed for ROM system autost */
 BYTE dma[DMA_LEN+3];            /* 128 byte dma buffer          */
 BYTE parm[MAX_ARGS][ARG_LEN];   /* cmd argument array           */
 BYTE *chainp;                   /*sw -> User-specified command  */
-BYTE del[] =                    /* CP/M-68K set of delimeters   */
+BYTE del[] =                    /* CP/M-68K set of delimiters   */
 {'>','<','.',',','=','[',']',';','|','&','/','(',')','+','-','\\'};
                                 /********************************/
 
@@ -228,7 +228,7 @@ REG BYTE *s1,*s2;
                                 /********************************/
 VOID copy_cmd(com_index)        /*  Save the command which      */
                                 /*  started a submit file       */
-                                /*  Parameter substituion will  */
+                                /*  Parameter substitution will */
                                 /*  need this command tail.     */
                                 /*  The buffer save_sub is used */
                                 /*  to store the command.       */
@@ -334,7 +334,7 @@ REG BYTE *cmd;
                 return(-1);
         /*****************************************************/
         /* Check for Wildcard Filenames                      */
-        /* Check Filename for a Delimeter                    */
+        /* Check Filename for a Delimiter                    */
         /*****************************************************/
         if(fill_fcb(0,cmdfcb) > 0)
                 return(-1);
@@ -488,7 +488,7 @@ REG BYTE *cmd;                          /************************/
 
                                         /************************/
 UWORD delim(ch)                         /* check ch to see      */
-                                        /* if it's a delimeter  */
+                                        /* if it's a delimiter  */
                                         /************************/
 REG BYTE *ch;
 {
@@ -540,7 +540,7 @@ REG BYTE  *fcb;
 
         /*******************************************/
         /* extract drivecode,filename and filetype */
-        /*       from parmeter blk                 */
+        /*       from parameter blk                */
         /*******************************************/
 
         if(dirflag)
@@ -550,7 +550,7 @@ REG BYTE  *fcb;
 
         index = ZERO;
         ptr = fcb;
-        if(parm[which_parm][index] == NULL) /* no parmemters  */
+        if(parm[which_parm][index] == NULL) /* no parameters  */
         {
                 ptr++;
                 for(j = 1;j <= 11;j++)

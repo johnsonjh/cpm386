@@ -147,7 +147,7 @@ REG WORD secnum;
 
 UBYTE dchksum()
 /* Compute checksum over one directory sector */
-/* Note that this implementation is dependant on the representation */
+/* Note that this implementation is dependent on the representation */
 /*   of a LONG and is therefore not very portable.  But it's fast   */
 {
     REG LONG    *p;             /* local temp variables */
