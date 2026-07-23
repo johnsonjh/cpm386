@@ -48,7 +48,7 @@ bdos (WORD func, LONG info)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   const char *m = "\r\nBIG.386: loaded OK (>64K, multi-extent)\r\n";
 
@@ -58,7 +58,7 @@ _start (void)
   { /* Touch a byte near the end of a 70KB image so the pad is real. */
     volatile unsigned char *p = (volatile unsigned char *)0x100;
     /* image padded to 0x100 + 71680; last page marker at 0x100+71679 */
-    volatile unsigned char *end
+    volatile const unsigned char *end
         = (volatile unsigned char *)(0x100 + 71680 - 1);
     (void)p;
 

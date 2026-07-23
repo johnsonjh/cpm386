@@ -137,7 +137,7 @@ wait_key (void)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_vga_text vi;
   UWORD r;

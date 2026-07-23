@@ -113,7 +113,7 @@ ticks_add32 (struct cpm_ticks *t, ULONG delta)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_ticks t;
   UWORD r;

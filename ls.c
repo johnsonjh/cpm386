@@ -647,7 +647,7 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   UBYTE dma[128];

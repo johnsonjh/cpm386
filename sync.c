@@ -51,7 +51,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UWORD res;
 

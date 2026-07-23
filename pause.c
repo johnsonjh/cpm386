@@ -83,7 +83,7 @@ clear_line (void)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   int c;
 

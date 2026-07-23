@@ -447,7 +447,7 @@ done_file:
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UWORD ver;
   int drive, user;

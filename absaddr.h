@@ -13,7 +13,7 @@
 /*****************************************************************************/
 
 static inline void *
-abs_ptr (unsigned long addr)
+abs_ptr (unsigned long addr) /*cppcheck-suppress unusedFunction*/
 {
   void *p = (void *)addr;
 

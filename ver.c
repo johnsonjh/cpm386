@@ -126,7 +126,7 @@ print_os_product_ver (void)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UWORD ver = bdos (12, 0);
   UBYTE ah = (UBYTE)((ver >> 8) & 0xff);

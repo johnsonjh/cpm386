@@ -377,7 +377,7 @@ fill_del_fcb (UBYTE *fcb, const struct ent *e)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   UBYTE dma[128];
@@ -501,7 +501,7 @@ _start (void)
 
   while (r != 255)
     {
-      UBYTE *de = dma + (r * 32);
+      UBYTE const *de = dma + (r * 32);
 
       if (de[0] == (UBYTE)user)
         {
@@ -519,7 +519,7 @@ _start (void)
 
   for (i = 0; i < (unsigned)nents; i++)
     {
-      struct ent *e = &ents[i];
+      struct ent const *e = &ents[i];
       UBYTE dfcb[36];
       int do_del = 1;
 

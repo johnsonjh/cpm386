@@ -35,6 +35,7 @@ struct cpm_vga_text
 
 /* ES:offset store of one text cell (char|attr<<8) */
 static inline void
+/*cppcheck-suppress unusedFunction*/
 vga_es_store16 (unsigned short sel, unsigned off, unsigned short cell)
 {
   __asm__ volatile ("movw %0, %%es\n\t"
@@ -48,6 +49,7 @@ vga_es_store16 (unsigned short sel, unsigned off, unsigned short cell)
 
 /* ES:offset load of one text cell. */
 static inline unsigned short
+/*cppcheck-suppress unusedFunction*/
 vga_es_load16 (unsigned short sel, unsigned off)
 {
   unsigned short cell;
@@ -57,6 +59,7 @@ vga_es_load16 (unsigned short sel, unsigned off)
                     : "=r"(cell)
                     : "r"(sel), "r"(off)
                     : "memory");
+
   return cell;
 }
 

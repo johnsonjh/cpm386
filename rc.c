@@ -126,7 +126,6 @@ parse_u (unsigned *out)
   unsigned n = 0, i, tlen;
   char tail[128];
   const char *p;
-  int any = 0;
 
   /* Prefer command tail (allows multi-digit without FCB 8-char limit) */
   tlen = CMD_TAIL[0];
@@ -161,6 +160,8 @@ parse_u (unsigned *out)
 
   if (*p >= '0' && *p <= '9')
     {
+      int any = 0;
+
       while (*p >= '0' && *p <= '9')
         {
           n = n * 10u + (unsigned)(*p - '0');
@@ -195,7 +196,7 @@ parse_u (unsigned *out)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /* cppcheck-suppress unusedFunction*/
 {
   unsigned code;
   int r = parse_u (&code);

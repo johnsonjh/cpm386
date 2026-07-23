@@ -126,7 +126,7 @@ put_kb (unsigned long bytes)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct tpa_req t;
   unsigned long base, top, tpa_len, free_prog, ramdisk_size, kernel_size;

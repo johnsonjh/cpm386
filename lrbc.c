@@ -117,7 +117,7 @@ exact_size (unsigned long records, UBYTE lrbc)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   UWORD r;
@@ -136,7 +136,7 @@ _start (void)
     }
 
   {
-    unsigned char *p = CMD_TAIL + 1;
+    unsigned char const *p = CMD_TAIL + 1;
     int len = CMD_TAIL[0];
 
     if (len > 126)

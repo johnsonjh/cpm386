@@ -110,14 +110,14 @@ void _start (void) __attribute__ ((section (".text._start")));
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct tpa_req t;
   unsigned long esp;
   unsigned long i;
   /* unsigned long start_addr, end_addr; */
   int verify = 0;
-  char *tail = (char *)CMD_TAIL;
+  const char *tail = (char *)CMD_TAIL;
   int tail_len = tail[0];
 
   /* parse args */

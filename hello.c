@@ -42,7 +42,7 @@ bdos (WORD func, LONG info)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   /* frame-relative locals: correct after load at any TPA base */
   char msg1[] = "\r\nRing-3 loader test: Hello from TPA+0x100!\r\n";

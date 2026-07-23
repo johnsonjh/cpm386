@@ -117,7 +117,7 @@ from_bcd (UBYTE v)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_datetime bin, bcd;
   UWORD r;

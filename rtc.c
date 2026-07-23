@@ -140,7 +140,6 @@ rtc_days_to_ymd (unsigned short days, unsigned *y, unsigned *m, unsigned *d)
 {
   unsigned yy = 1978;
   unsigned rem = days;
-  unsigned dim;
 
   for (;;)
     {
@@ -160,6 +159,7 @@ rtc_days_to_ymd (unsigned short days, unsigned *y, unsigned *m, unsigned *d)
 
   for (;;)
     {
+      unsigned dim;
       dim = mdays_n[*m - 1];
 
       if (*m == 2 && is_leap (yy))

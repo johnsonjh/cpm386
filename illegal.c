@@ -61,7 +61,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   unsigned char junk;
 

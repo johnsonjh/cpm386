@@ -31,10 +31,6 @@ void _start (void) __attribute__ ((section (".text._start")));
 
 /*****************************************************************************/
 
-#define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
-
-/*****************************************************************************/
-
 void _start (void) __attribute__ ((section (".text._start")));
 
 /*****************************************************************************/
@@ -103,7 +99,7 @@ iter_to_char (int iter, int max_iter)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   const LONG SCALE = 1L << 14;   /* reduced to avoid 32-bit overflow */
 

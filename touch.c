@@ -47,7 +47,7 @@ bdos (WORD func, LONG info)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   UWORD r;

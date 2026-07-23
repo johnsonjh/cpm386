@@ -52,9 +52,9 @@ puts (const char *s)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
-  char msg1[] = "Serial Number: ";
+  const char msg1[] = "Serial Number: ";
   char sn[7];
 
   sn[0] = '?';

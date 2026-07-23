@@ -43,7 +43,7 @@ bdos (WORD func, LONG info)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   bdos (BDOS_CLS, 0);
 

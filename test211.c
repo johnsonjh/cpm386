@@ -42,7 +42,7 @@ bdos (WORD func, LONG info)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   char msg1[] = "\r\nTesting BDOS 211 (Print decimal number):\r\n";
   char msg2[] = " -> ";
