@@ -103,7 +103,8 @@ mb_init_from_multiboot (void *mbi_ptr)
 
   if (top <= tpa_base || top == 0xFFFFFFFFU)
     {
-      /* For huge memory just use the computed base and bios_getmrt will expand
+      /*
+       * For huge memory just use the computed base and bios_getmrt will expand
        */
       if (top == 0xFFFFFFFFU)
         {
