@@ -37,6 +37,7 @@ this section as *wishlist* and not a *roadmap*!
     [article](https://dl.acm.org/doi/pdf/10.1145/358061.358070?download=true))
 
 * CCP enhancements:
+  * Allow "/" in file names (*e.g*, "CP/M.TXT", "SYS/STAT.H")
   * Move the CCP out of Ring 0 to Ring 2
   * Command/file completion
   * Stackable execution of commands
@@ -55,6 +56,10 @@ this section as *wishlist* and not a *roadmap*!
     * SUPERSUB‑style interactive user input for SUBMIT scripts
 
 * Software/ports needed:
+  * Add return status to all software ports
+  * Extend VER to allow changing the reported BDOS version
+  * Add help to the TOUCH command
+  * Expand LS, RM, and TOUCH to process multiple names
   * Add SAVE program to write TPA to disk, and to optionally add a `.386`
     executable header.  SAVE should be able to take a range to save, as well
     as the ability to autodetect a range (`CLEARTPA` could be useful here).
