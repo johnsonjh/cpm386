@@ -581,6 +581,14 @@ ls.386: ls.bin $(MK386)
 
 ################################################################################
 
+mandel.386: mandel.bin $(MK386)
+	./$(MK386) ./mandel.bin ./mandel.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 ver.386: ver.bin $(MK386)
 	./$(MK386) ./ver.bin ./ver.386 0x100
 	@tput setaf 2 2> /dev/null || :
@@ -899,6 +907,7 @@ ramdisk.bin: \
 			iotest.386 \
 			lrbc.386 \
 			ls.386 \
+			mandel.386 \
 			mem.386 \
 			more.386 \
 			od.386 \
@@ -946,6 +955,7 @@ ramdisk.bin: \
 	$(CP) -f ./iotest.386 /tmp/cpmd/IOTEST.386
 	$(CP) -f ./lrbc.386 /tmp/cpmd/LRBC.386
 	$(CP) -f ./ls.386 /tmp/cpmd/LS.386
+	$(CP) -f ./mandel.386 /tmp/cpmd/MANDEL.386
 	$(CP) -f ./mem.386 /tmp/cpmd/MEM.386
 	$(CP) -f ./more.386 /tmp/cpmd/MORE.386
 	$(CP) -f ./od.386 /tmp/cpmd/OD.386
@@ -989,6 +999,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/IOTEST.386 \
 	  /tmp/cpmd/LRBC.386 \
 	  /tmp/cpmd/LS.386 \
+	  /tmp/cpmd/MANDEL.386 \
 	  /tmp/cpmd/MEM.386 \
 	  /tmp/cpmd/MORE.386 \
 	  /tmp/cpmd/OD.386 \

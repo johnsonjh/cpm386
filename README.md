@@ -191,6 +191,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 | `IOTEST.386`   | File I/O BDOS tests                                                                                |
 | `LRBC.386`     | Query Last Record Byte Count                                                                       |
 | `LS.386`       | List files (with sizes)                                                                            |
+| `MANDEL.386`   | Draw a Mandelbrot fractal (terminal version)                                                       |
 | `MEM.386`      | Memory map utility (BDOS 227)                                                                      |
 | `MORE.386`     | UNIX `more`‑style pager                                                                            |
 | `OD.386`       | Octal dump utility                                                                                 |
@@ -237,14 +238,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>52</th>
-                <th>21788</th>
-                <th>4047</th>
-                <th>3364</th>
-                <th>14377</th>
-                <th>3099</th>
-                <th>530470</th>
-                <th>8125</th>
+                <th>53</th>
+                <th>21967</th>
+                <th>4094</th>
+                <th>3398</th>
+                <th>14475</th>
+                <th>3108</th>
+                <th>534505</th>
+                <th>8169</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -258,13 +259,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1353</th>
-                <th>255</th>
-                <th>178</th>
-                <th>920</th>
-                <th>290</th>
-                <th>45113</th>
-                <th>687</th>
+                <th>1364</th>
+                <th>257</th>
+                <th>179</th>
+                <th>928</th>
+                <th>292</th>
+                <th>45467</th>
+                <th>692</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -278,13 +279,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>451</th>
+                <th>454</th>
                 <th>59</th>
                 <th>0</th>
-                <th>392</th>
+                <th>395</th>
                 <th>0</th>
-                <th>20047</th>
-                <th>356</th>
+                <th>20300</th>
+                <th>359</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -298,14 +299,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>76</th>
-                <th>26306</th>
-                <th>4786</th>
-                <th>4366</th>
-                <th>17154</th>
-                <th>3402</th>
-                <th>688330</th>
-                <th>10671</th>
+                <th>77</th>
+                <th>26499</th>
+                <th>4835</th>
+                <th>4401</th>
+                <th>17263</th>
+                <th>3413</th>
+                <th>692972</th>
+                <th>10723</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
