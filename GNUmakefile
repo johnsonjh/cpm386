@@ -220,6 +220,13 @@ F_NO_CF_PROTECTION:=$(shell \
 
 ################################################################################
 
+F_NO_SHORT_ENUMS:=$(shell \
+	$(CC) -Werror -fno-short-enums \
+	-x c -c /dev/null -o /dev/null 2> /dev/null && \
+	$(PRINTF) '%s' "-fno-short-enums")
+
+################################################################################
+
 F_COLOR_DIAGNOSTICS:=$(shell \
 	$(CC) -Werror -fcolor-diagnostics \
 	-x c -c /dev/null -o /dev/null 2> /dev/null && \
@@ -271,6 +278,7 @@ CFLAGS = \
 	$(F_COLOR_DIAGNOSTICS) \
 	$(F_DIAGNOSTICS_COLOR) \
 	$(F_NO_CF_PROTECTION) \
+	$(F_NO_SHORT_ENUMS) \
 	$(F_NO_STACK_CLASH_PROTECTION) \
 	$(OPTFLAGS) \
 	$(PIPE) \
@@ -1202,7 +1210,7 @@ floppy.img: boot.bin os.bin
 
 clean distclean:
 	$(RM) -f ./*.o ./*.elf ./*.img ./*.inc /*.log ./*.bin ./*.386 ./testbdos \
-		./$(MK386) ./$(SHOLE) ./$(TARGET)
+		./*.su ./*.ci ./$(MK386) ./$(SHOLE) ./$(TARGET)
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Clean completed successfully."

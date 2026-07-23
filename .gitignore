@@ -6,6 +6,7 @@
 /*.386
 /*.bin
 /bss.inc
+/*.ci
 /*-core
 /*.core
 /core-*
@@ -28,6 +29,7 @@
 /RES*.txt
 /shole
 /staging
+/*.su
 /tags
 /TAGS
 /.test.*
