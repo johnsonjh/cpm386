@@ -56,8 +56,8 @@ this section as *wishlist* and not a *roadmap*!
     * SUPERSUB‑style interactive user input for SUBMIT scripts
 
 * Software/ports needed:
-  * Extend MANDEL to support arbitrary resolution via command tail
-  * VGA framebuffer version of MANDEL supporting many resolutions
+  * Extend MANDEL and JULIA to support arbitrary resolution via command tail
+  * VGA framebuffer version of MANDEL and JULIA supporting many resolutions
   * Add return status to all software ports
   * Extend VER to allow changing the reported BDOS version
   * Add help to the TOUCH command

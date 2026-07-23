@@ -589,6 +589,14 @@ mandel.386: mandel.bin $(MK386)
 
 ################################################################################
 
+julia.386: julia.bin $(MK386)
+	./$(MK386) ./julia.bin ./julia.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 ver.386: ver.bin $(MK386)
 	./$(MK386) ./ver.bin ./ver.386 0x100
 	@tput setaf 2 2> /dev/null || :
@@ -905,6 +913,7 @@ ramdisk.bin: \
 			hello.386 \
 			illegal.386 \
 			iotest.386 \
+			julia.386 \
 			lrbc.386 \
 			ls.386 \
 			mandel.386 \
@@ -953,6 +962,7 @@ ramdisk.bin: \
 	$(CP) -f ./hello.386 /tmp/cpmd/HELLO.386
 	$(CP) -f ./illegal.386 /tmp/cpmd/ILLEGAL.386
 	$(CP) -f ./iotest.386 /tmp/cpmd/IOTEST.386
+	$(CP) -f ./julia.386 /tmp/cpmd/JULIA.386
 	$(CP) -f ./lrbc.386 /tmp/cpmd/LRBC.386
 	$(CP) -f ./ls.386 /tmp/cpmd/LS.386
 	$(CP) -f ./mandel.386 /tmp/cpmd/MANDEL.386
@@ -997,6 +1007,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/HELLO.386 \
 	  /tmp/cpmd/ILLEGAL.386 \
 	  /tmp/cpmd/IOTEST.386 \
+	  /tmp/cpmd/JULIA.386 \
 	  /tmp/cpmd/LRBC.386 \
 	  /tmp/cpmd/LS.386 \
 	  /tmp/cpmd/MANDEL.386 \
@@ -1031,7 +1042,7 @@ ramdisk.bin: \
 		$(AWK) '{ print "0x"a$$1 }')"); \
 		RDS=$$(( (RDS / 1024) + 4 )); \
 		tput setaf 6 2> /dev/null || :; \
-		$(PRINTF) '*** ramdisk.tmp usage: ~%s KB\n' "$$(( RDS - 4 ))"; \
+		$(PRINTF) '*** ramdisk.tmp usage: ~%s KiB\n' "$$(( RDS - 4 ))"; \
 		tput sgr0 2> /dev/null || :; \
 		test "$$RDS" -lt "$(RAMDISK_KB)" || { \
 		tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
@@ -1177,9 +1188,9 @@ floppy.img: boot.bin os.bin
 	    tput sgr0 2> /dev/null || :; \
 	    exit 1; fi
 	@tput setaf 6 2> /dev/null || :
-	@$(PRINTF) '*** floppy.img usage: %d bytes\n' \
-		"$$($(OD) -A x -t x2 ./floppy.img | $(GREP) -v '^*$$' | \
-		tail -2 | head -1 | $(AWK) '{ print "0x"a$$1 }')" || :
+	@$(PRINTF) '*** floppy.img usage: ~%d KiB\n' \
+		$$(("$$($(OD) -A x -t x2 ./floppy.img | $(GREP) -v '^*$$' | \
+		tail -2 | head -1 | $(AWK) '{ print "0x"a$$1 }')" / 1024)) || :
 	@tput sgr0 2> /dev/null || :
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
