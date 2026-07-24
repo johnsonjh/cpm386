@@ -82,17 +82,17 @@ The system currently reports **BDOS 2.2** to applications.
 ## Screenshots
 
 <div style="display:flex; flex-wrap:wrap; justify-content:center;">
- <a href="1.png" style="flex:1 0 50%; text-align:center; padding:10px;">
-  <img src="1.png" style="width:100%; box-shadow:0 0 8px #0003;">
+ <a href=".img/1.png" style="flex:1 0 50%; text-align:center; padding:10px;">
+  <img src=".img/1.png" style="width:100%; box-shadow:0 0 8px #0003;">
  </a>
- <a href="2.png" style="flex:1 0 50%; text-align:center; padding:10px;">
-  <img src="2.png" style="width:100%; box-shadow:0 0 8px #0003;">
+ <a href=".img/2.png" style="flex:1 0 50%; text-align:center; padding:10px;">
+  <img src=".img/2.png" style="width:100%; box-shadow:0 0 8px #0003;">
  </a>
- <a href="3.png" style="flex:1 0 50%; text-align:center; padding:10px;">
-  <img src="3.png" style="width:100%; box-shadow:0 0 8px #0003;">
+ <a href=".img/3.png" style="flex:1 0 50%; text-align:center; padding:10px;">
+  <img src=".img/3.png" style="width:100%; box-shadow:0 0 8px #0003;">
  </a>
- <a href="4.png" style="flex:1 0 50%; text-align:center; padding:10px;">
-  <img src="4.png" style="width:100%; box-shadow:0 0 8px #0003;">
+ <a href=".img/4.png" style="flex:1 0 50%; text-align:center; padding:10px;">
+  <img src=".img/4.png" style="width:100%; box-shadow:0 0 8px #0003;">
  </a>
 </div>
 
@@ -289,7 +289,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>400</th>
                 <th>0</th>
-                <th>20717</th>
+                <th>20757</th>
                 <th>362</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -310,7 +310,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4439</th>
                 <th>17377</th>
                 <th>3425</th>
-                <th>699037</th>
+                <th>699077</th>
                 <th>10750</th>
         </tr></tfoot></table>
 <!-- scc-end -->
