@@ -81,14 +81,18 @@ The system currently reports **BDOS 2.2** to applications.
 
 ## Screenshots
 
-<div style="display:flex; justify-content:center; align-items:center;">
-  •&nbsp;VGA&nbsp;text&nbsp;console:
-  <a href=".img/VGA.png" style="flex:1; text-align:center;">
-  <img src=".img/VGA.png" style="width:100%;">
+<div style="display:flex; flex-wrap:wrap; justify-content:center;">
+ <a href="1.png" style="flex:1 0 50%; text-align:center; padding:10px;">
+  <img src="1.png" style="width:100%; box-shadow:0 0 8px #0003;">
  </a>
-  •&nbsp;Serial&nbsp;console:
-  <a href=".img/SER.png" style="flex:1; text-align:center;">
-  <img src=".img/SER.png" style="width:100%;">
+ <a href="2.png" style="flex:1 0 50%; text-align:center; padding:10px;">
+  <img src="2.png" style="width:100%; box-shadow:0 0 8px #0003;">
+ </a>
+ <a href="3.png" style="flex:1 0 50%; text-align:center; padding:10px;">
+  <img src="3.png" style="width:100%; box-shadow:0 0 8px #0003;">
+ </a>
+ <a href="4.png" style="flex:1 0 50%; text-align:center; padding:10px;">
+  <img src="4.png" style="width:100%; box-shadow:0 0 8px #0003;">
  </a>
 </div>
 
@@ -280,13 +284,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>455</th>
+                <th>459</th>
                 <th>59</th>
                 <th>0</th>
-                <th>396</th>
+                <th>400</th>
                 <th>0</th>
-                <th>20440</th>
-                <th>360</th>
+                <th>20717</th>
+                <th>362</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -301,13 +305,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>78</th>
-                <th>26697</th>
+                <th>26701</th>
                 <th>4885</th>
                 <th>4439</th>
-                <th>17373</th>
+                <th>17377</th>
                 <th>3425</th>
-                <th>698760</th>
-                <th>10748</th>
+                <th>699037</th>
+                <th>10750</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
