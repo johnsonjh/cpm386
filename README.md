@@ -84,8 +84,8 @@ The system currently reports **BDOS 2.2** to applications.
 <table style="width:100%; border-collapse:collapse;">
  <tr>
   <td style="width:50%; padding:10px; text-align:center;">
-   <a href=".img/1.png">
-    <img src=".img/1.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="1">
+   <a href=".img/4.png">
+    <img src=".img/4.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="1">
    </a>
   </td>
   <td style="width:50%; padding:10px; text-align:center;">
@@ -101,8 +101,8 @@ The system currently reports **BDOS 2.2** to applications.
    </a>
   </td>
   <td style="width:50%; padding:10px; text-align:center;">
-   <a href=".img/4.png">
-    <img src=".img/4.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="4">
+   <a href=".img/1.png">
+    <img src=".img/1.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="4">
    </a>
   </td>
  </tr>
