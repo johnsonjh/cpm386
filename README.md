@@ -297,13 +297,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>472</th>
+                <th>473</th>
                 <th>60</th>
                 <th>0</th>
-                <th>412</th>
+                <th>413</th>
                 <th>0</th>
-                <th>20876</th>
-                <th>366</th>
+                <th>20909</th>
+                <th>367</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -318,13 +318,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>78</th>
-                <th>26714</th>
+                <th>26715</th>
                 <th>4886</th>
                 <th>4439</th>
-                <th>17389</th>
+                <th>17390</th>
                 <th>3425</th>
-                <th>699196</th>
-                <th>10754</th>
+                <th>699229</th>
+                <th>10755</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

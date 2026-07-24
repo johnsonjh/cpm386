@@ -61,6 +61,7 @@ this section as *wishlist* and not a *roadmap*!
   * Add return status to all software ports
   * Extend VER to allow changing the reported BDOS version
   * Add help to the TOUCH command
+  * Expand LS to show timestamps
   * Expand LS, RM, and TOUCH to process multiple names
   * Add SAVE program to write TPA to disk, and to optionally add a `.386`
     executable header.  SAVE should be able to take a range to save, as well
