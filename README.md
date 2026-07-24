@@ -81,20 +81,33 @@ The system currently reports **BDOS 2.2** to applications.
 
 ## Screenshots
 
-<div style="display:flex; flex-wrap:wrap; justify-content:center;">
- <a href=".img/1.png" style="flex:1 0 50%; text-align:center; padding:10px;">
-  <img src=".img/1.png" style="width:100%; box-shadow:0 0 8px #0003;">
- </a>
- <a href=".img/2.png" style="flex:1 0 50%; text-align:center; padding:10px;">
-  <img src=".img/2.png" style="width:100%; box-shadow:0 0 8px #0003;">
- </a>
- <a href=".img/3.png" style="flex:1 0 50%; text-align:center; padding:10px;">
-  <img src=".img/3.png" style="width:100%; box-shadow:0 0 8px #0003;">
- </a>
- <a href=".img/4.png" style="flex:1 0 50%; text-align:center; padding:10px;">
-  <img src=".img/4.png" style="width:100%; box-shadow:0 0 8px #0003;">
- </a>
-</div>
+<table style="width:100%; border-collapse:collapse;">
+ <tr>
+  <td style="width:50%; padding:10px; text-align:center;">
+   <a href=".img/1.png">
+    <img src=".img/1.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="1">
+   </a>
+  </td>
+  <td style="width:50%; padding:10px; text-align:center;">
+   <a href=".img/2.png">
+    <img src=".img/2.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="2">
+   </a>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:50%; padding:10px; text-align:center;">
+   <a href=".img/3.png">
+    <img src=".img/3.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="3">
+   </a>
+  </td>
+  <td style="width:50%; padding:10px; text-align:center;">
+   <a href=".img/4.png">
+    <img src=".img/4.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="4">
+   </a>
+  </td>
+ </tr>
+</table>
+
 
 ## Build requirements
 
