@@ -107,6 +107,7 @@ RM:=$(shell \
 
 AWK:=$(shell \
 	command -v gawk 2> /dev/null || \
+	command -v goawk 2> /dev/null || \
 	command -v mawk 2> /dev/null || \
 	command -v nawk 2> /dev/null || \
 	command -v oawk 2> /dev/null || \
