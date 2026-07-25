@@ -25,7 +25,11 @@ typedef unsigned char UBYTE;
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
+
+/*****************************************************************************/
+
 #define MAX_FILES 128
+#define MAX_PATS 8
 
 /*****************************************************************************/
 
@@ -506,7 +510,8 @@ getch_wait (void)
 static void
 help (void)
 {
-  puts ("Usage: LS [-h] [-a] [-p] [-s|-z] [-r] [-i] [-l|-b] [filespec]\r\n");
+  puts ("Usage: LS [-h] [-a] [-p] [-s|-z] [-r] [-i] [-l|-b]");
+  puts (" [filespec ...]\r\n");
   puts ("  -h  help\r\n");
   puts ("  -a  all files (including system)\r\n");
   puts ("  -p  pause each screen\r\n");
@@ -646,6 +651,39 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 
 /*****************************************************************************/
 
+static void
+search_pattern (UBYTE *fcb, UBYTE *dma, int user, int word_mode)
+{
+  UWORD r;
+
+  bdos (26, (LONG)(unsigned long)dma);
+
+  if (fcb[0])
+    {
+      bdos (14, (LONG)(fcb[0] - 1));
+    }
+
+  fcb[12] = '?'; /* all extents */
+  fcb[14] = '?'; /* all modules */
+
+  r = bdos (17, (LONG)(unsigned long)fcb);
+
+  while (r != 255)
+    {
+      UBYTE *de = dma + (r * 32);
+
+      /* current user only (search may return other users with ?) */
+      if (de[0] == (UBYTE)user)
+        {
+          add_dirent (de, word_mode);
+        }
+
+      r = bdos (18, 0);
+    }
+}
+
+/*****************************************************************************/
+
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
@@ -662,7 +700,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   unsigned long all_exact = 0, all_alloc_k = 0;
   int count = 0, ctr = 0, process = 1;
   UWORD r;
-  char *pat = 0;
+  char *pats[MAX_PATS];
+  int npats = 0;
 
   /* Parse command tail */
   tlen = CMD_TAIL[0];
@@ -758,31 +797,25 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           continue;
         }
 
-      pat = &tail[i];
-      break;
-    }
-
-  /* Build search FCB */
-  if (pat && *pat && *pat != '\r')
-    {
-      pattern_to_fcb (fcb, pat);
-    }
-  else if (DEF_FCB[1] != ' ' && DEF_FCB[1] != '?' && DEF_FCB[1] != 0)
-    {
-      for (i = 0; i < 36; i++)
+      if (npats < MAX_PATS)
         {
-          fcb[i] = DEF_FCB[i];
+          pats[npats++] = &tail[i];
         }
 
-      /* if type blank, any type */
-      if (fcb[9] == ' ' && fcb[10] == ' ' && fcb[11] == ' ')
+      while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
         {
-          fcb[9] = fcb[10] = fcb[11] = '?';
+          i++;
         }
-    }
-  else
-    {
-      pattern_to_fcb (fcb, "*.*");
+
+      if (tail[i])
+        {
+          tail[i++] = 0;
+        }
+
+      while (tail[i] == ' ' || tail[i] == '\t')
+        {
+          i++;
+        }
     }
 
   user = (int)bdos (32, 0xFF);
@@ -798,32 +831,54 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     word_mode = (dsm > 255) ? 1 : 0;
   }
 
-  /* Collect directory entries - extent '?' so all extents of multi-extent
-   * files are returned (needed for correct record totals + last LRBC). */
+  /*
+   * Collect directory entries - extent '?' so all extents of multi-extent
+   * files are returned (needed for correct record totals + last LRBC).
+   */
+
   nfiles = 0;
-  bdos (26, (LONG)(unsigned long)dma);
 
-  if (fcb[0])
+  if (npats == 0)
     {
-      bdos (14, (LONG)(fcb[0] - 1));
-      drive = fcb[0] - 1;
-    }
-
-  fcb[12] = '?'; /* all extents */
-  fcb[14] = '?'; /* all modules */
-  r = bdos (17, (LONG)(unsigned long)fcb);
-
-  while (r != 255)
-    {
-      UBYTE *de = dma + (r * 32);
-
-      /* current user only (search may return other users with ?) */
-      if (de[0] == (UBYTE)user)
+      if (DEF_FCB[1] != ' ' && DEF_FCB[1] != '?' && DEF_FCB[1] != 0)
         {
-          add_dirent (de, word_mode);
+          for (i = 0; i < 36; i++)
+            {
+              fcb[i] = DEF_FCB[i];
+            }
+
+          if (fcb[9] == ' ' && fcb[10] == ' ' && fcb[11] == ' ')
+            {
+              fcb[9] = fcb[10] = fcb[11] = '?';
+            }
+        }
+      else
+        {
+          pattern_to_fcb (fcb, "*.*");
         }
 
-      r = bdos (18, 0);
+      if (fcb[0])
+        {
+          drive = fcb[0] - 1;
+        }
+
+      search_pattern (fcb, dma, user, word_mode);
+    }
+  else
+    {
+      int p;
+
+      for (p = 0; p < npats; p++)
+        {
+          pattern_to_fcb (fcb, pats[p]);
+
+          if (fcb[0])
+            {
+              drive = fcb[0] - 1;
+            }
+
+          search_pattern (fcb, dma, user, word_mode);
+        }
     }
 
   sort_files (sort_by, reverse_sort, ignore_lrbc);
@@ -932,6 +987,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           if (flag_pause)
             {
               int d, wt = 1;
+
               puts ("[More]");
 
               while (wt)
