@@ -24,6 +24,7 @@ typedef unsigned char UBYTE;
 
 #define BDOS_INT 0x30
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
+#define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
 /*****************************************************************************/
 
@@ -41,7 +42,140 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
+}
+
+/*****************************************************************************/
+
+static void
+putch (char c)
+{
+  bdos (2, (LONG)(unsigned char)c);
+}
+
+/*****************************************************************************/
+
+static void
+puts (const char *s)
+{
+  while (*s)
+    {
+      putch (*s++);
+    }
+}
+
+/*****************************************************************************/
+
+static void
+set_fcb (UBYTE *fcb, const char *name)
+{
+  int i, j = 1;
+
+  for (i = 0; i < 36; i++)
+    {
+      fcb[i] = 0;
+    }
+
+  for (i = 1; i <= 11; i++)
+    {
+      fcb[i] = ' ';
+    }
+
+  if (name[0] && name[1] == ':')
+    {
+      char c = name[0];
+
+      if (c >= 'a' && c <= 'z')
+        {
+          c -= 32;
+        }
+
+      fcb[0] = (UBYTE)(c - 'A' + 1);
+      name += 2;
+    }
+
+  while (*name && *name != '.' && *name != ' ' && *name != '\t'
+         && *name != '\r')
+    {
+      char c = *name++;
+
+      if (c >= 'a' && c <= 'z')
+        {
+          c -= 32;
+        }
+
+      if (j <= 8)
+        {
+          fcb[j++] = (UBYTE)c;
+        }
+    }
+
+  if (*name == '.')
+    {
+      name++;
+      j = 9;
+
+      while (*name && *name != ' ' && *name != '\t' && *name != '\r')
+        {
+          char c = *name++;
+
+          if (c >= 'a' && c <= 'z')
+            {
+              c -= 32;
+            }
+
+          if (j <= 11)
+            {
+              fcb[j++] = (UBYTE)c;
+            }
+        }
+    }
+}
+
+/*****************************************************************************/
+
+static void
+touch_one (const char *name)
+{
+  UBYTE fcb[36];
+  UWORD r;
+
+  set_fcb (fcb, name);
+
+  fcb[12] = 0; /* extent */
+  fcb[14] = 0; /* s2 */
+  fcb[32] = 0;
+
+  r = bdos (15, (LONG)(unsigned long)fcb);
+
+  if (r <= 3)
+    {
+      bdos (16, (LONG)(unsigned long)fcb); /* close */
+
+      return;
+    }
+
+  set_fcb (fcb, name);
+
+  fcb[12] = 0;
+  fcb[13] = 0; /* s1 */
+  fcb[14] = 0;
+  fcb[15] = 0; /* rc */
+  fcb[32] = 0;
+
+  r = bdos (22, (LONG)(unsigned long)fcb);
+
+  if (r <= 3)
+    {
+      bdos (16, (LONG)(unsigned long)fcb);
+    }
+  else
+    {
+      puts ("Cannot create ");
+      puts (name);
+      puts ("\r\n");
+    }
 }
 
 /*****************************************************************************/
@@ -49,50 +183,140 @@ bdos (WORD func, LONG info)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
-  UWORD r;
-  int i;
+  char tail[128];
+  int tlen, i;
+  int opt_h = 0;
+  int nfiles = 0;
 
-  /* Need a filename in the default FCB */
-  if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
+  tlen = CMD_TAIL[0];
+
+  if (tlen > 126)
     {
-      bdos (0, 0);
+      tlen = 126;
     }
 
-  for (i = 0; i < 36; i++)
+  for (i = 0; i < tlen; i++)
     {
-      fcb[i] = DEF_FCB[i];
+      tail[i] = (char)CMD_TAIL[1 + i];
     }
 
-  fcb[12] = 0; /* extent */
-  fcb[14] = 0; /* s2 */
-  fcb[32] = 0;
+  tail[tlen] = 0;
 
-  /* Already there? leave it */
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  i = 0;
 
-  if (r <= 3)
+  while (tail[i] == ' ' || tail[i] == '\t')
     {
-      bdos (16, (LONG)(unsigned long)fcb); /* close */
-      bdos (0, 0);
+      i++;
+    }
+  while (tail[i])
+    {
+      if (tail[i] == '-' || tail[i] == '/')
+        {
+          i++;
+
+          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+            {
+              char c = tail[i++];
+
+              if (c >= 'A' && c <= 'Z')
+                {
+                  c += 32;
+                }
+
+              if (c == 'h')
+                {
+                  opt_h = 1;
+                }
+              else
+                {
+                  opt_h = 1;
+                }
+            }
+        }
+      else
+        {
+          char *fn = &tail[i];
+
+          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+            {
+              i++;
+            }
+
+          if (tail[i])
+            {
+              tail[i++] = 0;
+            }
+
+          if (!opt_h)
+            {
+              touch_one (fn);
+              nfiles++;
+            }
+
+          while (tail[i] == ' ' || tail[i] == '\t')
+            {
+              i++;
+            }
+
+          continue;
+        }
+
+      while (tail[i] == ' ' || tail[i] == '\t')
+        {
+          i++;
+        }
     }
 
-  /* Create empty file (no data records) */
-  for (i = 0; i < 36; i++)
+  if (opt_h || nfiles == 0)
     {
-      fcb[i] = DEF_FCB[i];
-    }
+      if (nfiles == 0)
+        {
+          if (DEF_FCB[1] != ' ' && DEF_FCB[1] != 0)
+            {
+              UBYTE fcb[36];
+              UWORD r;
 
-  fcb[12] = 0;
-  fcb[13] = 0; /* s1 / LRBC */
-  fcb[14] = 0;
-  fcb[15] = 0; /* rc */
-  fcb[32] = 0;
-  r = bdos (22, (LONG)(unsigned long)fcb);
+              for (i = 0; i < 36; i++)
+                {
+                  fcb[i] = DEF_FCB[i];
+                }
 
-  if (r <= 3)
-    {
-      bdos (16, (LONG)(unsigned long)fcb);
+              fcb[12] = 0;
+              fcb[14] = 0;
+              fcb[32] = 0;
+
+              r = bdos (15, (LONG)(unsigned long)fcb);
+
+              if (r <= 3)
+                {
+                  bdos (16, (LONG)(unsigned long)fcb);
+                  bdos (0, 0);
+                }
+
+              for (i = 0; i < 36; i++)
+                {
+                  fcb[i] = DEF_FCB[i];
+                }
+
+              fcb[12] = 0;
+              fcb[13] = 0;
+              fcb[14] = 0;
+              fcb[15] = 0;
+              fcb[32] = 0;
+
+              r = bdos (22, (LONG)(unsigned long)fcb);
+
+              if (r <= 3)
+                {
+                  bdos (16, (LONG)(unsigned long)fcb);
+                }
+
+              bdos (0, 0);
+            }
+        }
+
+      puts ("Usage: TOUCH [-h] filename [filename ...]\r\n");
+      puts ("  -h  help\r\n");
     }
 
   bdos (0, 0);
