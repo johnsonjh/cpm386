@@ -20,6 +20,7 @@
 - [QEMU testing](#qemu-testing)
 - [QEMU notes](#qemu-notes)
 - [Included utilities](#included-utilities)
+- [Contributing](#contributing)
 - [Future plans](#future-plans)
 - [Code statistics](#code-statistics)
 - [Mirrors](#mirrors)
@@ -235,6 +236,20 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 | `VGAON.386`    | Enable VGA console (BDOS 222)                                                                      |
 | `VGATEXT.386`  | VGA direct access demo (BDOS 224)                                                                  |
 
+## Contributing
+
+* Do **not** open pull requests with large amounts of LLM‑generated code.
+  These will almost certainly be immediately rejected.
+
+* There is currently **no** AI‑generated code in the repository, as this
+  project is intended to be as much of a learning experience for me as
+  it is a useful OS port.
+
+* Usage of AI (artificial intelligence) tools by contributors is currently
+  permitted, subject to the same terms and conditions as the
+  [LLVM AI Tool Use Policy](https://llvm.org/docs/AIToolPolicy.html), but
+  this permission may be withdrawn at any time and without notice.
+
 ## Future plans
 
 See [FUTURE.md](FUTURE.md).
@@ -297,13 +312,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>473</th>
-                <th>60</th>
+                <th>488</th>
+                <th>64</th>
                 <th>0</th>
-                <th>413</th>
+                <th>424</th>
                 <th>0</th>
-                <th>20909</th>
-                <th>367</th>
+                <th>21541</th>
+                <th>378</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -318,13 +333,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>78</th>
-                <th>26708</th>
-                <th>4882</th>
+                <th>26723</th>
+                <th>4886</th>
                 <th>4437</th>
-                <th>17389</th>
+                <th>17400</th>
                 <th>3426</th>
-                <th>698975</th>
-                <th>10756</th>
+                <th>699607</th>
+                <th>10767</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
