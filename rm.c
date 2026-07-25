@@ -12,7 +12,7 @@
 /*****************************************************************************/
 
 /*
- * Usage: RM [-h] | [-a][-i][-f] filespec
+ * Usage: RM [-h] | [-a][-i][-f] filespec [filespec ...]
  *
  *   -a  include system files
  *   -i  confirm each delete (Y/N)
@@ -38,6 +38,7 @@ typedef unsigned char UBYTE;
 #define DEF_FCB ((UBYTE *)abs_ptr (0x5C))
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 #define MAX_NAMES 64
+#define MAX_PATS 8
 
 /*****************************************************************************/
 
@@ -55,6 +56,7 @@ bdos (WORD func, LONG info)
                     : "a"((unsigned)func), "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
 
@@ -120,7 +122,7 @@ getch_wait (void)
 static void
 help (void)
 {
-  puts ("Usage: RM [-h]|[-a][-i][-f] filespec\r\n");
+  puts ("Usage: RM [-h]|[-a][-i][-f] filespec [filespec ...]\r\n");
   puts ("  -a  include system files\r\n");
   puts ("  -i  confirm each file\r\n");
   puts ("  -f  force delete of R/O files\r\n");
@@ -376,6 +378,38 @@ fill_del_fcb (UBYTE *fcb, const struct ent *e)
 
 /*****************************************************************************/
 
+static void
+search_pattern (UBYTE *fcb, UBYTE *dma, int user)
+{
+  UWORD r;
+
+  bdos (26, (LONG)(unsigned long)dma);
+
+  if (fcb[0])
+    {
+      bdos (14, (LONG)(fcb[0] - 1));
+    }
+
+  fcb[12] = '?';
+  fcb[14] = '?';
+
+  r = bdos (17, (LONG)(unsigned long)fcb);
+
+  while (r != 255)
+    {
+      UBYTE const *de = dma + (r * 32);
+
+      if (de[0] == (UBYTE)user)
+        {
+          add_ent (de);
+        }
+
+      r = bdos (18, 0);
+    }
+}
+
+/*****************************************************************************/
+
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
@@ -384,7 +418,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   char tail[128];
   unsigned tlen, i;
   int flag_all = 0, flag_ask = 0, flag_force = 0;
-  char *pat = 0;
+  char *pats[MAX_PATS];
+  int npats = 0;
   UWORD r;
   int user;
 
@@ -442,8 +477,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   break;
 
                 default:
-                  help ();
                   puts ("ERROR: Wrong parameters\r\n");
+                  help ();
+
                   bdos (0, 0);
                 }
             }
@@ -455,18 +491,37 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           continue;
         }
 
-      pat = &tail[i];
+      if (npats < MAX_PATS)
+        {
+          pats[npats++] = &tail[i];
+        }
 
-      break;
+      while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+        {
+          i++;
+        }
+
+      if (tail[i])
+        {
+          tail[i++] = 0;
+        }
+
+      while (tail[i] == ' ' || tail[i] == '\t')
+        {
+          i++;
+        }
     }
 
-  if (!pat || !*pat || *pat == '\r')
+  user = (int)bdos (32, 0xFF);
+  nents = 0;
+
+  if (npats == 0)
     {
       /* fall back to default FCB from CCP */
       if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
         {
-          help ();
           puts ("ERROR: No filespec\r\n");
+          help ();
 
           bdos (0, 0);
         }
@@ -480,35 +535,18 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         {
           fcb[9] = fcb[10] = fcb[11] = '?';
         }
+
+      search_pattern (fcb, dma, user);
     }
   else
     {
-      pattern_to_fcb (fcb, pat);
-    }
+      int p;
 
-  user = (int)bdos (32, 0xFF);
-  nents = 0;
-  bdos (26, (LONG)(unsigned long)dma);
-
-  if (fcb[0])
-    {
-      bdos (14, (LONG)(fcb[0] - 1));
-    }
-
-  fcb[12] = '?';
-  fcb[14] = '?';
-  r = bdos (17, (LONG)(unsigned long)fcb);
-
-  while (r != 255)
-    {
-      UBYTE const *de = dma + (r * 32);
-
-      if (de[0] == (UBYTE)user)
+      for (p = 0; p < npats; p++)
         {
-          add_ent (de);
+          pattern_to_fcb (fcb, pats[p]);
+          search_pattern (fcb, dma, user);
         }
-
-      r = bdos (18, 0);
     }
 
   if (nents == 0)
@@ -584,6 +622,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         {
           /* clear R/O attribute then delete */
           dfcb[9] = (UBYTE)(e->name[0] & 0x7f); /* rebuild clean */
+
           {
             int j;
 
