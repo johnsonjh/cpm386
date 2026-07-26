@@ -821,6 +821,7 @@ void cpm386_init(void) {
   extern char *copyr1;
   extern char *copyr2;
 
+  bdos(9, (LONG)"\r                                        \r$");
   bdos(9, (LONG)copyrt);
   bdos(9, (LONG)"\r\n$");
   bdos(9, (LONG)copyr1);
