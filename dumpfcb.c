@@ -442,7 +442,7 @@ parse_help (void)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   int i;

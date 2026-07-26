@@ -138,7 +138,7 @@ set_ran (UBYTE *fcb, unsigned long rec)
 /*****************************************************************************/
 
 static unsigned long
-get_ran (UBYTE *fcb)
+get_ran (const UBYTE *fcb)
 {
   return ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
          | (unsigned long)fcb[35];
@@ -147,7 +147,7 @@ get_ran (UBYTE *fcb)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   UBYTE dma[128];

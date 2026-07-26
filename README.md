@@ -278,8 +278,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>3509</th>
                 <th>16344</th>
                 <th>3660</th>
-                <th>584177</th>
-                <th>8583</th>
+                <th>584398</th>
+                <th>8582</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -339,8 +339,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>4517</th>
                 <th>19180</th>
                 <th>3971</th>
-                <th>744928</th>
-                <th>11168</th>
+                <th>745149</th>
+                <th>11167</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

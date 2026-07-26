@@ -193,7 +193,7 @@ clear_more (void)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   UBYTE dma[128];

@@ -368,14 +368,14 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   UBYTE dma[128];
   char tail[128];
   unsigned tlen, i;
   int flag_all = 0;
-  char *pat = 0;
+  const char *pat = 0;
   UWORD r;
   int user, count = 0;
 
@@ -484,7 +484,7 @@ _start (void)
 
   while (r != 255)
     {
-      UBYTE *de = dma + (r * 32);
+      const UBYTE *de = dma + (r * 32);
 
       if (de[0] != 0xE5 && (flag_all || de[0] == (UBYTE)user))
         {

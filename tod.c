@@ -347,16 +347,16 @@ exit_ccp (void)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_datetime dt;
-  UBYTE *tail = CMD_TAIL;
+  const UBYTE *tail = CMD_TAIL;
   char arg[128];
   unsigned tlen;
   unsigned i;
   /* Original: default shows once and quits; P enables continuous update. */
   int continuous = 0;
-  char nl[] = "\r\n";
+  const char nl[] = "\r\n";
 
   /* Copy command tail (length at 0x80) */
   tlen = tail[0];
@@ -416,7 +416,7 @@ _start (void)
     {
       if (bdos (BDOS_GET_TOD, (LONG)(unsigned long)&dt) != 0)
         {
-          char e[] = "RTC read failed\r\n";
+          const char e[] = "RTC read failed\r\n";
           puts (e);
 
           exit_ccp ();
