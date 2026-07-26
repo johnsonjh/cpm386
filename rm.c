@@ -122,10 +122,11 @@ getch_wait (void)
 static void
 help (void)
 {
-  puts ("Usage: RM [-h]|[-a][-i][-f] filespec [filespec ...]\r\n");
+  puts ("Usage: RM [-h] [-a] [-i] [-f] filespec [filespec ...]\r\n");
   puts ("  -a  include system files\r\n");
-  puts ("  -i  confirm each file\r\n");
   puts ("  -f  force delete of R/O files\r\n");
+  puts ("  -h  show this help text\r\n");
+  puts ("  -i  confirm each file\r\n");
 }
 
 /*****************************************************************************/

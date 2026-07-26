@@ -377,7 +377,7 @@ static const char devr[]
 /* Messages */
 static const char readonly[] = "Read Only (RO)";
 static const char readwrite[] = "Read Write (RW)";
-static const char entries[] = "  Directory Entries";
+static const char entries[] = " Directory Entries";
 static const char filename[] = "d:filename.typ";
 static const char use_str[] = "Use: STAT ";
 static const char invalid[] = "Invalid Assignment";
@@ -712,7 +712,7 @@ drivestatus (void)
   printx (record_msg);
   printx (" Capacity");
   p_unl (space);
-  printx ("Kilobyte Drive  Capacity");
+  printx ("Kilobyte Drive Capacity");
   p_unl ((ULONG)DPB_DRM + 1);
   printx ("32 Byte");
   printx (entries);
@@ -901,8 +901,6 @@ values (void)
 {
   int j, k;
 
-  printx ("STAT 2.2");
-  crlf ();
   print ("File Status   : ");
   printx (filename);
   printx (" [SIZE]");
@@ -1754,8 +1752,6 @@ _start (void)
     {
       getfile ();
     }
-
-  crlf ();
 
   bdos (0, 0);
 }

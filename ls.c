@@ -512,15 +512,15 @@ help (void)
 {
   puts ("Usage: LS [-h] [-a] [-p] [-s|-z] [-r] [-i] [-l|-b]");
   puts (" [filespec ...]\r\n");
-  puts ("  -h  help\r\n");
   puts ("  -a  all files (including system)\r\n");
-  puts ("  -p  pause each screen\r\n");
-  puts ("  -s  sort by name\r\n");
-  puts ("  -z  sort by size\r\n");
-  puts ("  -r  reverse sort order\r\n");
+  puts ("  -b  bare names only\r\n");
+  puts ("  -h  show this help text\r\n");
   puts ("  -i  ignore Last Record Byte Count\r\n");
   puts ("  -l  long listing\r\n");
-  puts ("  -b  bare names only\r\n");
+  puts ("  -p  pause each screen\r\n");
+  puts ("  -r  reverse sort order\r\n");
+  puts ("  -s  sort by name\r\n");
+  puts ("  -z  sort by size\r\n");
 }
 
 /*****************************************************************************/
