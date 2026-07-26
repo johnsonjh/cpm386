@@ -229,7 +229,8 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 | `TICKS.386`    | High‑resolution timer tests (BDOS 225, BDOS 226)                                                   |
 | `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104), [BDOS 105](https://www.seasip.info/Cpm/bdos.html#105)) |
 | `TOUCH.386`    | Create an empty file                                                                               |
-| `TRUNC.386`    | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
+| `TRUNCATE.386` | File truncation utility                                                                            |
+| `TRUNCTST.386` | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
 | `TSEC.386`     | Get date and time ([BDOS 155](https://www.seasip.info/Cpm/bdos.html#155))                          |
 | `VER.386`      | Display OS version ([BDOS 163](https://www.seasip.info/Cpm/bdos.html#163))                         |
 | `VGAOFF.386`   | Disable VGA console (BDOS 222)                                                                     |
@@ -271,14 +272,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>54</th>
-                <th>23713</th>
-                <th>4452</th>
-                <th>3464</th>
-                <th>15797</th>
-                <th>3476</th>
-                <th>569396</th>
-                <th>8433</th>
+                <th>55</th>
+                <th>24461</th>
+                <th>4605</th>
+                <th>3509</th>
+                <th>16347</th>
+                <th>3660</th>
+                <th>584186</th>
+                <th>8582</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -292,13 +293,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1384</th>
-                <th>261</th>
-                <th>181</th>
-                <th>942</th>
-                <th>296</th>
-                <th>46157</th>
-                <th>702</th>
+                <th>1395</th>
+                <th>263</th>
+                <th>182</th>
+                <th>950</th>
+                <th>298</th>
+                <th>46527</th>
+                <th>707</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>3</th>
@@ -317,8 +318,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>421</th>
                 <th>0</th>
-                <th>21355</th>
-                <th>375</th>
+                <th>21418</th>
+                <th>374</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -332,14 +333,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>78</th>
-                <th>28299</th>
-                <th>5203</th>
-                <th>4471</th>
-                <th>18625</th>
-                <th>3785</th>
-                <th>729720</th>
-                <th>11014</th>
+                <th>79</th>
+                <th>29058</th>
+                <th>5358</th>
+                <th>4517</th>
+                <th>19183</th>
+                <th>3971</th>
+                <th>744943</th>
+                <th>11167</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

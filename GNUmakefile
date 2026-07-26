@@ -670,6 +670,14 @@ trunctst.386: trunctst.bin $(MK386)
 
 ################################################################################
 
+truncate.386: truncate.bin $(MK386)
+	./$(MK386) ./truncate.bin ./truncate.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 rm.386: rm.bin $(MK386)
 	./$(MK386) ./rm.bin ./rm.386 0x100
 	@tput setaf 2 2> /dev/null || :
@@ -942,6 +950,7 @@ ramdisk.bin: \
 			ticks.386 \
 			tod.386 \
 			touch.386 \
+			truncate.386 \
 			trunctst.386 \
 			tsec.386 \
 			ver.386 \
@@ -992,6 +1001,7 @@ ramdisk.bin: \
 	$(CP) -f ./ticks.386 /tmp/cpmd/TICKS.386
 	$(CP) -f ./tod.386 /tmp/cpmd/TOD.386
 	$(CP) -f ./touch.386 /tmp/cpmd/TOUCH.386
+	$(CP) -f ./truncate.386 /tmp/cpmd/TRUNCATE.386
 	$(CP) -f ./trunctst.386 /tmp/cpmd/TRUNCTST.386
 	$(CP) -f ./tsec.386 /tmp/cpmd/TSEC.386
 	$(CP) -f ./ver.386 /tmp/cpmd/VER.386
@@ -1038,6 +1048,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/TICKS.386 \
 	  /tmp/cpmd/TOD.386 \
 	  /tmp/cpmd/TOUCH.386 \
+	  /tmp/cpmd/TRUNCATE.386 \
 	  /tmp/cpmd/TRUNCTST.386 \
 	  /tmp/cpmd/TSEC.386 \
 	  /tmp/cpmd/VER.386 \
