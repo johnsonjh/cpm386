@@ -247,11 +247,9 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 * Do **not** open pull requests with large amounts of LLM‑generated code.
   These will be immediately rejected.
-
 * There is currently **no** AI‑generated code in the repository, as this
   project is intended to be as much of a learning experience for me as
   it is a useful OS port.
-
 * Usage of AI (artificial intelligence) tools by contributors is currently
   permitted, subject to the same terms and conditions as the
   [LLVM AI Tool Use Policy](https://llvm.org/docs/AIToolPolicy.html), but
@@ -279,12 +277,12 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>55</th>
-                <th>24668</th>
-                <th>4670</th>
-                <th>3509</th>
-                <th>16489</th>
+                <th>24672</th>
+                <th>4672</th>
+                <th>3510</th>
+                <th>16490</th>
                 <th>3664</th>
-                <th>587014</th>
+                <th>587154</th>
                 <th>8525</th>
         </tr><tr>
                 <th>C Header</th>
@@ -319,12 +317,12 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>491</th>
-                <th>64</th>
+                <th>489</th>
+                <th>62</th>
                 <th>0</th>
                 <th>427</th>
                 <th>0</th>
-                <th>21839</th>
+                <th>21837</th>
                 <th>380</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -340,12 +338,12 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>79</th>
-                <th>29271</th>
+                <th>29273</th>
                 <th>5423</th>
-                <th>4517</th>
-                <th>19331</th>
+                <th>4518</th>
+                <th>19332</th>
                 <th>3975</th>
-                <th>748192</th>
+                <th>748330</th>
                 <th>11116</th>
         </tr></tfoot></table>
 <!-- scc-end -->
