@@ -60,20 +60,14 @@ this section as *wishlist* and not a *roadmap*!
   * VGA framebuffer version of MANDEL and JULIA supporting many resolutions
   * Add return status to all software ports
   * Extend VER to allow changing the reported BDOS version
-  * Add help to the TOUCH command
   * Expand LS to show timestamps
-  * Expand LS, RM, and TOUCH to process multiple names
   * Add SAVE program to write TPA to disk, and to optionally add a `.386`
     executable header.  SAVE should be able to take a range to save, as well
     as the ability to autodetect a range (`CLEARTPA` could be useful here).
   * Fix bug with CLEARTPA w/TPA >3.4GB and show progress during clear/verify.
   * TRUNCATE utility to truncate a file and set the LRBC
-  * Extend HD and OD with  `-p` (pager) option to pause after each screen,
-    `-b N` to specify width manually (in bytes), `-e` to decode text as EBCDIC
-    rather than ASCII (same as https://gitlab.com/esr/hexd), `-a` to replace
-    completely null lines with `*`, `-d` to show offset in decimal instead of
-    hex/octal (implies `-o`), `-u` to show hex with upper case letters, `-l N`
-    to stop after N bytes dumped, `-s N` to to seek N bytes before dumping.
+  * Extend HD and OD with `-e` to decode text as EBCDIC rather than ASCII
+    (same as https://gitlab.com/esr/hexd).
   * Extend MEM to breakdown system size into CBIOS, BDOS, and CCP individually.
   * Extend STAT to query and also set the LRBC
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
