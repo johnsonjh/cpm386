@@ -551,7 +551,7 @@ _start (void)
   int i;
   char tail[128];
   int tlen = CMD_TAIL[0];
-  char *filename = 0;
+  const char *filename = 0;
 
   if (tlen > 126)
     {

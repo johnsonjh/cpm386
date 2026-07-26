@@ -153,8 +153,8 @@ _start (void)
   UWORD r;
   int i;
   unsigned long rec;
-  char banner[] = "\r\nIOTEST (BDOS I/O Test Suite)\r\n";
-  char done[] = "*** done fails=";
+  const char banner[] = "\r\nIOTEST (BDOS I/O Test Suite)\r\n";
+  const char done[] = "*** done fails=";
 
   fails = 0;
   puts (banner);
@@ -230,7 +230,7 @@ _start (void)
 
   if (r <= 3)
     {
-      UBYTE *de = dma + (r * 32);
+      const UBYTE *de = dma + (r * 32);
       result (de[1] == 'I' && de[2] == 'O' && de[9] == 'D', 'S');
     }
   else

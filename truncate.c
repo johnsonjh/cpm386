@@ -393,8 +393,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   int opt_f_set = 0;
   UBYTE fill_byte = 0x1A; /* default fill byte */
   int use_lrbc = 0; /* 1 = truncate at existing LRBC */
-  char *filename = 0;
-  char *length_str = 0;
+  const char *filename = 0;
+  const char *length_str = 0;
   int i;
   char tail[128];
   int tlen;

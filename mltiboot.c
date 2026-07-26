@@ -33,7 +33,7 @@
 void
 mb_init_from_multiboot (void *mbi_ptr)
 {
-  struct multiboot_info *mbi = (struct multiboot_info *)mbi_ptr;
+  const struct multiboot_info *mbi = (struct multiboot_info *)mbi_ptr;
   uint64_t top = 0;
 
   /* Basic mem info */
@@ -53,7 +53,7 @@ mb_init_from_multiboot (void *mbi_ptr)
 
       while (p < end)
         {
-          struct multiboot_mmap_entry *e
+          const struct multiboot_mmap_entry *e
               = (struct multiboot_mmap_entry *)(uintptr_t)p;
           if (e->size == 0)
             {

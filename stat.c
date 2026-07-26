@@ -610,7 +610,7 @@ count_free (void)
   bdos (26, (LONG)(unsigned long)dma); /* set DMA */
   bdos (46, (LONG)cdisk);
   {
-    UBYTE *p = dma;
+    const UBYTE *p = dma;
     free_recs = (ULONG)p[0] | ((ULONG)p[1] << 8) | ((ULONG)p[2] << 16);
   }
 
@@ -850,7 +850,7 @@ userstatus (void)
 
   while (r != 255)
     {
-      UBYTE *de = &dma[(r & 3) * 32];
+      const UBYTE *de = &dma[(r & 3) * 32];
       int u = de[0] & 0xff;
 
       if (u < 16 && u != 0xe5)
@@ -1376,7 +1376,7 @@ getfile (void)
 
   while (r != 255)
     {
-      UBYTE *de = &dma[(r & 3) * 32];
+      const UBYTE *de = &dma[(r & 3) * 32];
       int u = de[0] & 0xff;
 
       /* Skip deleted, XFCBs (drive >= 0x20) */

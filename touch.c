@@ -235,7 +235,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         }
       else
         {
-          char *fn = &tail[i];
+          const char *fn = &tail[i];
 
           while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
             {
