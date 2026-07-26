@@ -169,6 +169,7 @@ _start (void)
   if (r == 0xFFFF)
     {
       puts ("INVALID\r\n");
+
       bdos (0, 0);
     }
 

@@ -154,6 +154,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (r == 0xFFFF || vi.sel == 0)
     {
       puts ("VGATEXT: no user video map on this platform\r\n");
+
       bdos (0, 0);
     }
 

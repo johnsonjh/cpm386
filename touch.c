@@ -290,6 +290,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               if (r <= 3)
                 {
                   bdos (16, (LONG)(unsigned long)fcb);
+
                   bdos (0, 0);
                 }
 

@@ -451,6 +451,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (parse_help ())
     {
       help ();
+
       bdos (0, 0);
     }
 
@@ -463,6 +464,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       dump_fcb (DEF_FCB, "FCB1 at TPA+0x5C (first 16 bytes)", 0);
       dump_fcb (DEF_FCB + 0x10, "FCB2 at TPA+0x6C (first 16 bytes)", 0);
+
       bdos (0, 0);
     }
 
@@ -481,6 +483,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       puts ("File not found (dumping FCB as passed)\r\n");
       dump_fcb (fcb, "FCB before open", 1);
+
       bdos (0, 0);
     }
 

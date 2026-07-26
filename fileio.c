@@ -752,8 +752,10 @@ LONG group_base;
         k = i >> shift;
         off = (UWORD)((i & ((1u << shift) - 1)) << bsh);
         abs_start = group_base + ((LONG)k << 7) + (LONG)off;
+
         if (abs_start < trunc_nrecs)
             continue;
+
         if ((GBL.parmp)->dsm < 256) {
             blk = UBWORD(dirp->dskmap.small[i]);
             if (blk)

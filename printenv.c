@@ -356,6 +356,7 @@ dump_env_file (void)
                   var[vi] = 0;
                   ai = 0;
                   st = 3;
+
                   continue;
                 }
 
@@ -363,6 +364,7 @@ dump_env_file (void)
                 {
                   var[vi] = 0;
                   st = 2;
+
                   continue;
                 }
 
@@ -455,6 +457,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (want_help ())
     {
       help ();
+
       bdos (0, 0);
     }
 

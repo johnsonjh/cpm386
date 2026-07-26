@@ -260,6 +260,7 @@ _start (void)
   if (r == 0xFFFF || vi.sel == 0)
     {
       puts ("ACLOCKDV: no user VGA text map\r\n");
+
       bdos (0, 0);
     }
 

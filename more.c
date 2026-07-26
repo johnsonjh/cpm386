@@ -211,6 +211,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (parse_tail_help ())
     {
       help ();
+
       bdos (0, 0);
     }
 
@@ -218,6 +219,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       help ();
       puts ("ERR: No file specified\r\n");
+
       bdos (0, 0);
     }
 
@@ -230,6 +232,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (r > 3)
     {
       puts ("ERR: File not found\r\n");
+
       bdos (0, 0);
     }
 

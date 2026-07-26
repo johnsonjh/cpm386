@@ -667,6 +667,7 @@ REG UWORD attrib;
                 {
                         dir_index = bdos(SEARCH_NEXT, 0);
                         save = (32 * dir_index) + 1;
+
                         continue;
                 }
                 if(((attrib) && (dma[save+9] & 0x80)) ||
@@ -685,6 +686,7 @@ REG UWORD attrib;
                                 exist = TRUE;
                                 dir_index = bdos(SEARCH_NEXT, 0);
                                 save = (32 * dir_index) + 1;
+
                                 continue;
                         }
                 dir_index = (32 * dir_index) + 1;

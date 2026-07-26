@@ -176,6 +176,7 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
       if (c == '.')
         {
           in_type = 1;
+
           continue;
         }
 
@@ -412,6 +413,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               if (c == 'H')
                 {
                   help ();
+
                   bdos (0, 0);
                 }
 

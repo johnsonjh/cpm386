@@ -653,6 +653,7 @@ _start (void)
                   else
                     {
                       puts ("Invalid -b value (1-64)\r\n");
+
                       bdos (0, 0);
                     }
 
@@ -686,6 +687,7 @@ _start (void)
                   else
                     {
                       puts ("Invalid -l value\r\n");
+
                       bdos (0, 0);
                     }
 
@@ -719,6 +721,7 @@ _start (void)
                   else
                     {
                       puts ("Invalid -s value\r\n");
+
                       bdos (0, 0);
                     }
 
@@ -852,6 +855,7 @@ _start (void)
             {
               puts ("Seek past end of file\r\n");
               bdos (16, (LONG)(unsigned long)fcb);
+
               bdos (0, 0);
             }
 
@@ -867,6 +871,7 @@ _start (void)
             {
               puts ("Seek past end of file\r\n");
               bdos (16, (LONG)(unsigned long)fcb);
+
               bdos (0, 0);
             }
 

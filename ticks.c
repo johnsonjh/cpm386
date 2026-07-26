@@ -126,6 +126,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (r == 0xFFFF)
     {
       puts ("GET_TICKS failed\r\n");
+
       bdos (0, 0);
     }
 
@@ -147,6 +148,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     if (r == 0xFFFF)
       {
         puts ("SLEEP_UNTIL failed\r\n");
+
         bdos (0, 0);
       }
   }
@@ -173,6 +175,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   puts ("\r\ndone\r\n");
+
   bdos (0, 0);
 }
 

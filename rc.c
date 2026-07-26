@@ -210,6 +210,7 @@ _start (void) /* cppcheck-suppress unusedFunction*/
     {
       /* Set and exit - CCP will print if nonzero */
       bdos (BDOS_PCODE, (LONG)(UWORD)code);
+
       bdos (0, 0);
     }
 

@@ -102,11 +102,13 @@ conbrk()
     do
     {
         ch = bconin();
+
         if ( ch == ctrlc )
             warmboot(2);            /*sw from (1) */
 
         if ( ch == ctrls ) {
             stop = TRUE;            /* XOFF / Ctrl-S: pause output */
+
             continue;
         }
 
@@ -115,13 +117,16 @@ conbrk()
             if ( ch == ctrlp )
                 GBL.lstecho = !GBL.lstecho;
             stop = FALSE;
+
             continue;
         }
 
         if ( ch == ctrlq )
             continue;               /* lone Ctrl-Q: ignore */
+
         if ( ch == ctrlp ) {
             GBL.lstecho = !GBL.lstecho;
+
             continue;
         }
 

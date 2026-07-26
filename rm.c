@@ -458,6 +458,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                 {
                 case 'H':
                   help ();
+
                   bdos (0, 0);
 
                   break;
@@ -553,6 +554,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (nents == 0)
     {
       puts ("No file found\r\n");
+
       bdos (0, 0);
     }
 
@@ -607,6 +609,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               if (c == 3)
                 {
                   puts ("\r      \r^C       \r\n");
+
                   bdos (0, 0);
                 }
             }

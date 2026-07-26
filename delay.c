@@ -60,12 +60,15 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   int i;
 
   puts (msg1);
+
   for (i = 0; i < 3; i++)
     {
       bdos (141, 60); /* 60Hz/60 ticks == 1 second */
       puts (msg2);
     }
+
   puts (msg3);
+
   bdos (0, 0);
 
   for (;;)

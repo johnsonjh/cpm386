@@ -183,6 +183,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         if (len > 0 || !parsed || new_lrbc > 128)
           {
             puts ("Invalid LRBC value (must be 0-128)\r\n");
+
             bdos (0, 0);
           }
 
@@ -205,6 +206,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (r > 3)
     {
       puts ("File not found\r\n");
+
       bdos (0, 0);
     }
 
@@ -235,6 +237,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       if (r == 255)
         {
           puts ("Error setting LRBC\r\n");
+
           bdos (0, 0);
         }
     }

@@ -737,6 +737,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                 {
                 case 'H':
                   help ();
+
                   bdos (0, 0);
 
                   break;
