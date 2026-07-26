@@ -26,6 +26,10 @@
 
 /*****************************************************************************/
 
+extern UWORD _bdos (WORD func, UWORD info, UBYTE *infop);
+
+/*****************************************************************************/
+
 /* also bdos wrapper if used, 32-bit safe, matches bios.c */
 UWORD
 bdos (WORD func, LONG info)
