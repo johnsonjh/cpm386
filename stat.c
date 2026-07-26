@@ -1674,8 +1674,6 @@ _start (void)
 {
   int tail_len, i;
 
-  printx ("CP/M-386 STAT v0.1 BETA\r\n");
-
   bpfcb = DEF_FCB;
   buff = CMD_TAIL;
 
