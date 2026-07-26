@@ -670,7 +670,7 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user, int word_mode)
 
   while (r != 255)
     {
-      UBYTE *de = dma + (r * 32);
+      const UBYTE *de = dma + (r * 32);
 
       /* current user only (search may return other users with ?) */
       if (de[0] == (UBYTE)user)

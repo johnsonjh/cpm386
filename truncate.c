@@ -224,7 +224,7 @@ set_ran (UBYTE *fcb, unsigned long rec)
 /*****************************************************************************/
 
 static unsigned long
-get_ran (UBYTE *fcb)
+get_ran (const UBYTE *fcb)
 {
   return ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
          | (unsigned long)fcb[35];
@@ -383,7 +383,6 @@ void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
-  UBYTE dma[128];
   UWORD r;
   UBYTE lrbc;
   unsigned long records, file_bytes;
@@ -458,7 +457,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                     }
 
                   {
-                    char *fval = &tail[i];
+                    const char *fval = &tail[i];
                     UBYTE parsed_byte;
 
                     if (!parse_hex_byte (fval, &parsed_byte))
@@ -644,6 +643,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   if (new_records > 0 && new_lrbc != 0)
     {
+      UBYTE dma[128];
+
       set_fcb (fcb, filename);
       fcb[12] = 0;
       fcb[14] = 0;
