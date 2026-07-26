@@ -240,7 +240,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 ## Contributing
 
 * Do **not** open pull requests with large amounts of LLM‑generated code.
-  These will almost certainly be immediately rejected.
+  These will be immediately rejected.
 
 * There is currently **no** AI‑generated code in the repository, as this
   project is intended to be as much of a learning experience for me as
@@ -318,7 +318,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>421</th>
                 <th>0</th>
-                <th>21418</th>
+                <th>21401</th>
                 <th>374</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -339,7 +339,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4517</th>
                 <th>19183</th>
                 <th>3971</th>
-                <th>744943</th>
+                <th>744926</th>
                 <th>11167</th>
         </tr></tfoot></table>
 <!-- scc-end -->
