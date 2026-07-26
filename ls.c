@@ -699,7 +699,6 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   int word_mode = 0;
   unsigned long all_exact = 0, all_alloc_k = 0;
   int count = 0, ctr = 0, process = 1;
-  UWORD r;
   char *pats[MAX_PATS];
   int npats = 0;
 
