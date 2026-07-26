@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 
 /*****************************************************************************/
 
@@ -29,13 +30,23 @@ static UWORD
 bdos (WORD func, LONG info)
 {
   UWORD ret;
+
   __asm__ volatile ("int %2"
                     : "=a"(ret)
-                    : "a"((unsigned)func), "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                    : "a"((unsigned)func),
+                      "i"(BDOS_INT),
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
+}
+
+/*****************************************************************************/
+
+static void
+putch (char c)
+{
+  bdos (2, (LONG)c);
 }
 
 /*****************************************************************************/
@@ -45,7 +56,34 @@ puts (const char *s)
 {
   while (*s)
     {
-      bdos (2, (LONG)*s++);
+      putch (*s++);
+    }
+}
+
+/*****************************************************************************/
+
+static void
+puthex48 (const unsigned char *sn)
+{
+  static const char hex[] = "0123456789ABCDEF";
+  int i;
+
+  for (i = 0; i < 3; ++i)
+    {
+      unsigned char c = sn[i];
+
+      putch (hex[(c >> 4) & 0xF]);
+      putch (hex[c & 0xF]);
+    }
+
+  putch ('-');
+
+  for (i = 3; i < 6; ++i)
+    {
+      unsigned char c = sn[i];
+
+      putch (hex[(c >> 4) & 0xF]);
+      putch (hex[c & 0xF]);
     }
 }
 
@@ -55,20 +93,45 @@ void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
   const char msg1[] = "Serial Number: ";
-  char sn[7];
+  unsigned char sn[6];
+  int printable = 1;
+  int i;
 
-  sn[0] = '?';
-  sn[1] = '?';
-  sn[2] = '?';
-  sn[3] = '?';
-  sn[4] = '?';
-  sn[5] = '?';
-  sn[6] = '\0';
+  for (i = 0; i < 6; ++i)
+    {
+      sn[i] = '?';
+    }
 
   bdos (107, (LONG)sn);
 
+  for (i = 0; i < 6; ++i)
+    {
+      if (sn[i] < 0x20 || sn[i] > 0x7E)
+        {
+          printable = 0;
+
+          break;
+        }
+    }
+
   puts (msg1);
-  puts (sn);
+
+  if (printable)
+    {
+      for (i = 0; i < 6; ++i)
+        {
+          putch (sn[i]);
+        }
+
+      puts (" (");
+      puthex48 (sn);
+      puts (")");
+    }
+  else
+    {
+      puthex48 (sn);
+    }
+
   puts ("\r\n");
 
   bdos (0, 0);
