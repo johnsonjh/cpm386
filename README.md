@@ -324,12 +324,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>427</th>
                 <th>0</th>
-                <th>21402</th>
-                <th>374</th>
-                <th>21402</th>
-                <th>375</th>
                 <th>21825</th>
-                <th>381</th>
+                <th>380</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -343,31 +339,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-<<<<<<< HEAD
                 <th>79</th>
-                <th>29097</th>
+                <th>29103</th>
                 <th>5400</th>
                 <th>4517</th>
-                <th>19180</th>
+                <th>19186</th>
                 <th>3971</th>
-                <th>745260</th>
-                <th>11166</th>
-                <th>80</th>
-                <th>29605</th>
-                <th>5497</th>
-                <th>4554</th>
-                <th>19554</th>
-                <th>4089</th>
-                <th>755845</th>
-                <th>11356</th>
-                <th>80</th>
-                <th>29611</th>
-                <th>5497</th>
-                <th>4554</th>
-                <th>19560</th>
-                <th>4089</th>
-                <th>756268</th>
-                <th>11362</th>
+                <th>745683</th>
+                <th>11172</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
