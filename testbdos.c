@@ -1526,8 +1526,7 @@ main (void)
 
   if (ok)
     {
-      printf ("*** test_bdos PASSED (real shipped portable objects "
-              "linked+exercised)\n");
+      printf ("*** test_bdos PASSED\n");
     }
   else
     {
