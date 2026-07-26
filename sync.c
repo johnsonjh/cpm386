@@ -31,9 +31,11 @@ bdos (WORD func, LONG info)
   UWORD ret;
   __asm__ volatile ("int %2"
                     : "=a"(ret)
-                    : "a"((unsigned)func), "i"(BDOS_INT),
+                    : "a"((unsigned)func),
+                      "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
+
   return ret;
 }
 

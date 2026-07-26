@@ -33,7 +33,7 @@ typedef unsigned char UBYTE;
 
 struct cpm_datetime
 {
-  UWORD days;
+  UWORD days; /*cppcheck-suppress unusedStructMember*/
   UBYTE hour;
   UBYTE min;
   UBYTE sec;
@@ -52,7 +52,8 @@ bdos (WORD func, LONG info)
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
-                    : "a"((unsigned)func), "i"(BDOS_INT),
+                    : "a"((unsigned)func),
+                      "i"(BDOS_INT),
                       "d"((unsigned long)info)
                     : "memory", "cc");
 
@@ -247,7 +248,7 @@ draw_seconds (int n)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_vga_text vi;
   struct cpm_datetime dt;
