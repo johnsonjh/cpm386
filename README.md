@@ -126,8 +126,8 @@ The following dependencies are required to compile **CP/M‑386**:
 
 ## Compilation
 
-Building **CP/M‑386** is supported on current releases of **NetBSD**,
-**FreeBSD**, **Haiku**, and recent **Linux** distributions.
+Building **CP/M‑386** is supported on the current release of **NetBSD**,
+**Haiku**, and recent **Linux** distributions.
 
 The following are the minimum versions of Linux distributions that have been
 verified to build **CP/M‑386** successfully: CentOS Stream 9, Fedora 36,
@@ -313,13 +313,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>495</th>
+                <th>485</th>
                 <th>64</th>
                 <th>0</th>
-                <th>431</th>
+                <th>421</th>
                 <th>0</th>
-                <th>21688</th>
-                <th>380</th>
+                <th>21402</th>
+                <th>374</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -330,27 +330,17 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>3855</th>
                 <th>79</th>
-        </tr><tr>
-                <th>Plain Text</th>
-                <th>1</th>
-                <th>78</th>
-                <th>0</th>
-                <th>0</th>
-                <th>78</th>
-                <th>0</th>
-                <th>7926</th>
-                <th>69</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>80</th>
-                <th>29185</th>
+                <th>79</th>
+                <th>29097</th>
                 <th>5400</th>
                 <th>4517</th>
-                <th>19268</th>
+                <th>19180</th>
                 <th>3971</th>
-                <th>753472</th>
-                <th>11236</th>
+                <th>745260</th>
+                <th>11166</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
