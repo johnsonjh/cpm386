@@ -126,8 +126,8 @@ The following dependencies are required to compile **CP/M‑386**:
 
 ## Compilation
 
-Building **CP/M‑386** is supported on the current release of **NetBSD**,
-**FreeBSD**, **Haiku**, and recent **Linux** distributions.
+Building **CP/M‑386** is supported on current releases of **NetBSD** and
+**FreeBSD**<sup>‡</sup>, and most recent **Linux** distributions.
 
 The following are the minimum versions of Linux distributions that have been
 verified to build **CP/M‑386** successfully: CentOS Stream 9, Fedora 36,
@@ -157,7 +157,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 * It is recommended to use **GCC** as **Clang**‑compiled i386 code is larger.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 * 32‑bit support libraries are required to run the test suite (`make test`).
-* **NB**: At the time of writing, **FreeBSD** is shipping non-functional
+* <sup>‡</sup>At the time of writing, **FreeBSD** is shipping non-functional
   `cpmtools2` packages with broken `mkfs.cpm` functionality.  To successfully
   build on **FreeBSD**, you *must* rebuild `cpmtools` and ensure it is **not**
   linked with `libdsk`.  If you receive a `Disc rejected by driver` error on
@@ -324,7 +324,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>427</th>
                 <th>0</th>
-                <th>21825</th>
+                <th>21839</th>
                 <th>380</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -345,7 +345,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4517</th>
                 <th>19185</th>
                 <th>3971</th>
-                <th>745617</th>
+                <th>745631</th>
                 <th>11171</th>
         </tr></tfoot></table>
 <!-- scc-end -->
