@@ -65,15 +65,12 @@ this section as *wishlist* and not a *roadmap*!
     executable header.  SAVE should be able to take a range to save, as well
     as the ability to autodetect a range (`CLEARTPA` could be useful here).
   * Fix bug with CLEARTPA w/TPA >3.4GB and show progress during clear/verify.
-  * TRUNCATE utility to truncate a file and set the LRBC
   * Extend HD and OD with `-e` to decode text as EBCDIC rather than ASCII
     (same as https://gitlab.com/esr/hexd).
-  * Extend MEM to breakdown system size into CBIOS, BDOS, and CCP individually.
   * Extend STAT to query and also set the LRBC
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
   * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984) +LRBC
   * Digital Research HELP clone (VMS‑style HELP tool)
-  * Memory test utility (writes and verifies the full TPA)
   * [wumpus](https://gitlab.com/esr/wumpus/-/raw/master/wumpus.c) or
     [this one](https://codeberg.org/EtchedPixels/FUZIX/src/commit/c80213af16cd4c948e0afb3477fe5584762aa1a7/Applications/V7/games/wump.c)
     port

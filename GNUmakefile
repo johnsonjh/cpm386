@@ -662,8 +662,8 @@ tsec.386: tsec.bin $(MK386)
 
 ################################################################################
 
-trunc.386: trunc.bin $(MK386)
-	./$(MK386) ./trunc.bin ./trunc.386 0x100
+trunctst.386: trunctst.bin $(MK386)
+	./$(MK386) ./trunctst.bin ./trunctst.386 0x100
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -942,7 +942,7 @@ ramdisk.bin: \
 			ticks.386 \
 			tod.386 \
 			touch.386 \
-			trunc.386 \
+			trunctst.386 \
 			tsec.386 \
 			ver.386 \
 			vgaoff.386 \
@@ -955,7 +955,7 @@ ramdisk.bin: \
 		> /tmp/cpmd/README.TXT
 	$(PRINTF) '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
 		> /tmp/cpmd/ENV.DAT
-	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNC\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from program still existing in TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
+	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNCTST\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from program still existing in TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
 		> /tmp/cpmd/DEMO.SUB
 	$(PRINTF) 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
 	$(CP) -f ./aclockdv.386 /tmp/cpmd/ACLOCKDV.386
@@ -992,7 +992,7 @@ ramdisk.bin: \
 	$(CP) -f ./ticks.386 /tmp/cpmd/TICKS.386
 	$(CP) -f ./tod.386 /tmp/cpmd/TOD.386
 	$(CP) -f ./touch.386 /tmp/cpmd/TOUCH.386
-	$(CP) -f ./trunc.386 /tmp/cpmd/TRUNC.386
+	$(CP) -f ./trunctst.386 /tmp/cpmd/TRUNCTST.386
 	$(CP) -f ./tsec.386 /tmp/cpmd/TSEC.386
 	$(CP) -f ./ver.386 /tmp/cpmd/VER.386
 	$(CP) -f ./vgaoff.386 /tmp/cpmd/VGAOFF.386
@@ -1038,7 +1038,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/TICKS.386 \
 	  /tmp/cpmd/TOD.386 \
 	  /tmp/cpmd/TOUCH.386 \
-	  /tmp/cpmd/TRUNC.386 \
+	  /tmp/cpmd/TRUNCTST.386 \
 	  /tmp/cpmd/TSEC.386 \
 	  /tmp/cpmd/VER.386 \
 	  /tmp/cpmd/VGAOFF.386 \
