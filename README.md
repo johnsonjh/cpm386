@@ -208,7 +208,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 | `ILLEGAL.386`  | Ring‑3 protection and exception handler test                                                       |
 | `IOTEST.386`   | File I/O BDOS tests                                                                                |
 | `JULIA.386`    | Draw a Julia set fractal (terminal version)                                                        |
-| `LRBC.386`     | Query Last Record Byte Count                                                                       |
+| `LRBC.386`     | Query and/or set Last Record Byte Count                                                                       |
 | `LS.386`       | List files (with sizes)                                                                            |
 | `MANDEL.386`   | Draw a Mandelbrot set fractal (terminal version)                                                   |
 | `MEM.386`      | Memory map utility (BDOS 227)                                                                      |
@@ -229,7 +229,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 | `TICKS.386`    | High‑resolution timer tests (BDOS 225, BDOS 226)                                                   |
 | `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104), [BDOS 105](https://www.seasip.info/Cpm/bdos.html#105)) |
 | `TOUCH.386`    | Create an empty file                                                                               |
-| `TRUNCATE.386` | File truncation utility                                                                            |
+| `TRUNCATE.386` | File truncation utility (LRBC aware)                                                               |
 | `TRUNCTST.386` | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
 | `TSEC.386`     | Get date and time ([BDOS 155](https://www.seasip.info/Cpm/bdos.html#155))                          |
 | `VER.386`      | Display OS version ([BDOS 163](https://www.seasip.info/Cpm/bdos.html#163))                         |
@@ -318,7 +318,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>421</th>
                 <th>0</th>
-                <th>21401</th>
+                <th>21412</th>
                 <th>374</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -339,7 +339,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4517</th>
                 <th>19180</th>
                 <th>3971</th>
-                <th>744894</th>
+                <th>744905</th>
                 <th>11165</th>
         </tr></tfoot></table>
 <!-- scc-end -->
