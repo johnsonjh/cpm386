@@ -751,18 +751,18 @@ _start (void)
   if (opt_h || !filename || !*filename)
     {
       puts ("Usage: HD [options] filename\r\n");
+      puts ("  -a      collapse null lines with \"*\"\r\n");
+      puts ("  -b N    bytes per line (1-64)\r\n");
+      puts ("  -d      use decimal offsets (implies -o)\r\n");
       puts ("  -h      show this help text\r\n");
       puts ("  -i      ignore Last Record Byte Count\r\n");
-      puts ("  -o      prefix line with offset\r\n");
-      puts ("  -w      write output to FILENAME.HEX\r\n");
-      puts ("  -n      disable ASCII display\r\n");
-      puts ("  -p      pause after each screen\r\n");
-      puts ("  -b N    bytes per line (1-64)\r\n");
-      puts ("  -a      collapse null lines with \"*\"\r\n");
-      puts ("  -d      use decimal offsets (implies -o)\r\n");
-      puts ("  -u      upper case hex characters\r\n");
       puts ("  -l N    stop dump after N bytes\r\n");
+      puts ("  -n      disable ASCII display\r\n");
+      puts ("  -o      prefix line with offset\r\n");
+      puts ("  -p      pause after each screen\r\n");
       puts ("  -s N    seek N bytes before dumping\r\n");
+      puts ("  -u      upper case hex characters\r\n");
+      puts ("  -w      write output to FILENAME.HEX\r\n");
 
       bdos (0, 0);
     }
