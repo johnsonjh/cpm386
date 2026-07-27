@@ -22,7 +22,7 @@
 /*****************************************************************************/
 
 #ifndef BDOSDEF_H
-#define BDOSDEF_H
+# define BDOSDEF_H
 
 /*****************************************************************************/
 
@@ -48,27 +48,27 @@
 
 /*****************************************************************************/
 
-#define snglthrd TRUE
+# define snglthrd TRUE
 /* TRUE for single-thread environment */
 /* FALSE to create based structure for re-entrant model */
-#if snglthrd
-# define GBL gbls
+# if snglthrd
+#  define GBL gbls
 /* In single thread case, GBL just names the structure */
-# define BSETUP EXTERN struct stvars gbls;
+#  define BSETUP EXTERN struct stvars gbls;
 /* and BSETUP defines the extern structure */
-#endif /* if snglthrd */
+# endif /* if snglthrd */
 
 /*****************************************************************************/
 
-#if !snglthrd
-# define GBL (*statep)
+# if !snglthrd
+#  define GBL (*statep)
 /* If multi-task, state vars are based */
-# define BSETUP              \
-  REG struct stvars *statep; \
-  statep = &gbls;
+#  define BSETUP              \
+   REG struct stvars *statep; \
+   statep = &gbls;
 /* set up pointer to state variables */
 /* This is intended as an example to show the intent */
-#endif /* if !snglthrd */
+# endif /* if !snglthrd */
 
 /*****************************************************************************/
 
@@ -81,8 +81,8 @@
  * file system.  For the single thread model, they are null routines.
  */
 
-#define LOCK   /**/
-#define UNLOCK /**/
+# define LOCK   /**/
+# define UNLOCK /**/
 
 /*****************************************************************************/
 
@@ -95,7 +95,7 @@
 
 /*****************************************************************************/
 
-#define VERSION 0x2022 /* BDOS version (func 12): type 0x20, BDOS 2.2 */
+# define VERSION 0x2022 /* BDOS version (func 12): type 0x20, BDOS 2.2 */
 
 /*****************************************************************************/
 
@@ -105,7 +105,7 @@
  * CP/M-386 0.1 => 0x2001.
  */
 
-#define OSVER_CPM386 0x2001
+# define OSVER_CPM386 0x2001
 
 /*****************************************************************************/
 
@@ -114,12 +114,12 @@
  * h/m/s are binary on CP/M-386 (CP/M Plus uses BCD).
  */
 
-#define BDOS_SET_DATE_TIME 104 /* T_SET     - seasip BDOS 104              */
-#define BDOS_GET_DATE_TIME 105 /* T_GET     - seasip BDOS 105 (binary hms) */
-#define BDOS_P_CODE 108        /* P_CODE    - get/put program return code  */
-#define BDOS_F_PARSE 152       /* F_PARSE   - parse ASCII filename to FCB  */
-#define BDOS_T_SECONDS 155     /* T_SECONDS - MP/M get date/time, BCD hms  */
-#define BDOS_S_OSVER 163       /* S_OSVER   - user-visible OS version      */
+# define BDOS_SET_DATE_TIME 104 /* T_SET     - seasip BDOS 104              */
+# define BDOS_GET_DATE_TIME 105 /* T_GET     - seasip BDOS 105 (binary hms) */
+# define BDOS_P_CODE 108        /* P_CODE    - get/put program return code  */
+# define BDOS_F_PARSE 152       /* F_PARSE   - parse ASCII filename to FCB  */
+# define BDOS_T_SECONDS 155     /* T_SECONDS - MP/M get date/time, BCD hms  */
+# define BDOS_S_OSVER 163       /* S_OSVER   - user-visible OS version      */
 
 /*****************************************************************************/
 
@@ -128,13 +128,13 @@
  * MP/M / Concurrent range (also avoiding P2DOS 200/201, DOS+ 210+).
  */
 
-#define BDOS_SYSTEM_REBOOT 220 /* machine reboot (REBOOT.386)        */
-#define BDOS_CON_CLEAR 221     /* clear serial ANSI + VGA (CLS.386)  */
-#define BDOS_CON_VGA 222       /* get/set VGA console enable         */
-#define BDOS_CON_SER 223       /* get/set serial console enable      */
-#define BDOS_CON_VIDEO 224     /* map info for direct VGA text (sel) */
-#define BDOS_GET_TICKS 225     /* high-res 64-bit tick counter       */
-#define BDOS_SLEEP_UNTIL 226   /* busy-wait until absolute tick      */
+# define BDOS_SYSTEM_REBOOT 220 /* machine reboot (REBOOT.386)        */
+# define BDOS_CON_CLEAR 221     /* clear serial ANSI + VGA (CLS.386)  */
+# define BDOS_CON_VGA 222       /* get/set VGA console enable         */
+# define BDOS_CON_SER 223       /* get/set serial console enable      */
+# define BDOS_CON_VIDEO 224     /* map info for direct VGA text (sel) */
+# define BDOS_GET_TICKS 225     /* high-res 64-bit tick counter       */
+# define BDOS_SLEEP_UNTIL 226   /* busy-wait until absolute tick      */
 
 /*****************************************************************************/
 
@@ -174,9 +174,9 @@ struct cpm_ticks
 
 /*****************************************************************************/
 
-#define robit 0    /* read-only bit in file type field of fcb */
-#define arbit 2    /* archive bit in file type field of fcb   */
-#define SECLEN 128 /* length of a CP/M sector                 */
+# define robit 0    /* read-only bit in file type field of fcb */
+# define arbit 2    /* archive bit in file type field of fcb   */
+# define SECLEN 128 /* length of a CP/M sector                 */
 
 /*****************************************************************************/
 
@@ -265,7 +265,7 @@ struct dph /* disk parameter header */
 /*****************************************************************************/
 
 /* Declaration of structure containing "global" state variables */
-#define TBUFSIZ 126 /*sw # typed-ahead characters */
+# define TBUFSIZ 126 /*sw # typed-ahead characters */
 struct stvars
 {
   UBYTE kbchar;           /* keyboard type-ahead buffer count        */

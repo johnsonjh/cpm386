@@ -8,7 +8,7 @@
 /*****************************************************************************/
 
 #ifdef RLI
-#include "diverge.h"
+# include "diverge.h"
 #endif
 
 /********************************************************
@@ -41,21 +41,21 @@
 #include "biosdef.h"
 
 
-#define   ctrlc  0x03
-#define   ctrle  0x05
-#define   ctrlp  0x10
-#define   ctrlq  0x11
-#define   ctrlr  0x12
-#define   ctrls  0x13
-#define   ctrlu  0x15
-#define   ctrlx  0x18
+#define ctrlc 0x03
+#define ctrle 0x05
+#define ctrlp 0x10
+#define ctrlq 0x11
+#define ctrlr 0x12
+#define ctrls 0x13
+#define ctrlu 0x15
+#define ctrlx 0x18
 
-#define   cr      0x0d
-#define   lf      0x0a
-#define   tab     0x09
-#define   rub     0x7f
-#define   bs      0x08
-#define   space   0x20
+#define cr 0x0d
+#define lf 0x0a
+#define tab 0x09
+#define rub 0x7f
+#define bs 0x08
+#define space 0x20
 
 
 EXTERN  void warmboot(WORD);    /* External function definition */

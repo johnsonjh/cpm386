@@ -48,11 +48,11 @@
 
 /*****************************************************************************/
 
-# ifdef RAMDISK_KB
-#  define RAMDISK_SIZE (RAMDISK_KB * 1024)
-# else
-#  error RAMDISK_KB undefined
-# endif
+#ifdef RAMDISK_KB
+# define RAMDISK_SIZE (RAMDISK_KB * 1024)
+#else
+# error RAMDISK_KB undefined
+#endif
 
 /*****************************************************************************/
 

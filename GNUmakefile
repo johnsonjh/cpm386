@@ -1243,6 +1243,16 @@ testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 
 ################################################################################
 
+.PHONY: lint
+
+lint:
+	cppi -ac ./*.[ch]
+	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "Lint completed successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 .PHONY: test
 
 test: testbdos

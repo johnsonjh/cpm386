@@ -95,12 +95,12 @@
 #define last_dsk cpm_last_dsk
 #define lderr1 cpm_lderr1
 #if 0
-#define lderr2 cpm_lderr2
-#define lderr3 cpm_lderr3
+# define lderr2 cpm_lderr2
+# define lderr3 cpm_lderr3
 #endif
 #define lderror cpm_lderror
 #if 0
-#define load68k cpm_load68k
+# define load68k cpm_load68k
 #endif
 #define load_tbl cpm_load_tbl
 #define load_try cpm_load_try
