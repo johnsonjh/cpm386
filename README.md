@@ -122,10 +122,11 @@ The following dependencies are required to compile **CP/M‑386**:
 * [GNU Make](https://www.gnu.org/software/make/)
 * [NASM](https://nasm.us/)
 * [QEMU](https://www.qemu.org) (needed only for testing)
+[]()
 
-* <sup>🞶</sup> Be sure to use `cpmtools` version **2.23** or later (**2.24**
-  recommended); older versions may *appear* to work but have several
-  known bugs.
+[]()
+<sup>🞶</sup> Be sure to use `cpmtools` version **2.23** or later (**2.24**
+recommended); older versions may *appear* to work but have several known bugs.
 
 ## Compilation
 
