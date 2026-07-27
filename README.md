@@ -115,7 +115,7 @@ The system currently reports **BDOS 2.2** to applications.
 The following dependencies are required to compile **CP/M‑386**:
 
 * [AWK](https://en.wikipedia.org/wiki/AWK)
-* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)
+* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>\*</sup>
 * [GNU Binutils](https://www.gnu.org/software/binutils/)
 * [GNU Coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
@@ -123,8 +123,9 @@ The following dependencies are required to compile **CP/M‑386**:
 * [NASM](https://nasm.us/)
 * [QEMU](https://www.qemu.org) (needed only for testing)
 
-> **&#9432;** Be sure to use `cpmtools` version **2.23** or later!<br>
-> ☞ Older versions may *appear* to work but have several known bugs.
+* <sup>\*</sup> Be sure to use `cpmtools` version **2.23** or later (**2.24**
+  recommended); older versions may *appear* to work but have several
+  known bugs.
 
 ## Compilation
 
@@ -319,13 +320,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>491</th>
+                <th>492</th>
                 <th>62</th>
                 <th>0</th>
-                <th>429</th>
+                <th>430</th>
                 <th>0</th>
-                <th>21959</th>
-                <th>382</th>
+                <th>21991</th>
+                <th>383</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -340,13 +341,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>79</th>
-                <th>29275</th>
+                <th>29276</th>
                 <th>5423</th>
                 <th>4518</th>
-                <th>19334</th>
+                <th>19335</th>
                 <th>3975</th>
-                <th>748452</th>
-                <th>11118</th>
+                <th>748484</th>
+                <th>11119</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
