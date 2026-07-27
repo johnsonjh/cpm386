@@ -12,15 +12,11 @@ variables:
 ###############################################################################
 
 before_script:
-  - |
-    #
-    echo -e "section_start:`date +%s`:Pre-setup_section[collapsed=true]\r\e[0K\033[0;36mPre-setup ...\033[0m" || true
   - dnf -y upgrade --allowerasing
   - dnf -y install dnf-utils git rpmconf --allowerasing
   - rpmconf -au use_maintainer || true
   - git fetch origin
   - git checkout -B "$CI_COMMIT_REF_NAME" "origin/$CI_COMMIT_REF_NAME"
-  - echo -e "section_end:`date +%s`:Pre-setup_section\r\e[0K" || true
 
 ###############################################################################
 
@@ -31,7 +27,7 @@ pages:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - export TZ=UTC
-    - dnf -y install advancecomp binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 make nasm pigz zip --allowerasing
+    - dnf -y install advancecomp binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 libatomic libatomic.i686 make nasm pigz zip --allowerasing
     - rpmconf -au use_maintainer || true
     - make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
     - make test

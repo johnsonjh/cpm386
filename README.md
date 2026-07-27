@@ -326,7 +326,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>441</th>
                 <th>0</th>
-                <th>22248</th>
+                <th>22247</th>
                 <th>391</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -341,24 +341,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
-                <th>48</th>
+                <th>44</th>
                 <th>6</th>
-                <th>10</th>
-                <th>32</th>
+                <th>9</th>
+                <th>29</th>
                 <th>0</th>
-                <th>1610</th>
-                <th>39</th>
+                <th>1435</th>
+                <th>35</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>80</th>
-                <th>29335</th>
+                <th>29331</th>
                 <th>5429</th>
-                <th>4528</th>
-                <th>19378</th>
+                <th>4527</th>
+                <th>19375</th>
                 <th>3975</th>
-                <th>750351</th>
-                <th>11164</th>
+                <th>750175</th>
+                <th>11160</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
