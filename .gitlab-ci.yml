@@ -35,6 +35,7 @@ pages:
     - |
       #
       echo -e "section_start:`date +%s`:Setup_section[collapsed=true]\r\e[0K\033[0;36mSetup ...\033[0m" || true
+    - export TERM=xterm-color
     - export TZ=UTC
     - export LC_ALL=C
     - dnf -y install advancecomp binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 libatomic.x86_64 libatomic.i686 make nasm pigz zip --allowerasing
