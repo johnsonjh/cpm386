@@ -12,6 +12,7 @@
 /core-*
 /cscope.out
 /*.elf
+/.envrc
 /GPATH
 /GRTAGS
 /GTAGS
