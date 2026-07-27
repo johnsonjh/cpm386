@@ -1,0 +1,48 @@
+###############################################################################
+# .gitlab-ci.yml
+# Copyright (c) 2026 Jeffrey H. Johnson
+# SPDX-License-Identifier: MIT
+# scspell-id: 97ccabb4-89f0-11f1-b031-80ee73e9b8e7
+###############################################################################
+
+variables:
+  GIT_STRATEGY: clone
+  GIT_DEPTH: 0
+
+###############################################################################
+
+before_script:
+  - |
+    #
+    echo -e "section_start:`date +%s`:Pre-setup_section[collapsed=true]\r\e[0K\033[0;36mPre-setup ...\033[0m" || true
+  - dnf -y upgrade --allowerasing
+  - dnf -y install dnf-utils git rpmconf --allowerasing
+  - rpmconf -au use_maintainer || true
+  - git fetch origin
+  - git checkout -B "$CI_COMMIT_REF_NAME" "origin/$CI_COMMIT_REF_NAME"
+  - echo -e "section_end:`date +%s`:Pre-setup_section\r\e[0K" || true
+
+###############################################################################
+
+pages:
+  stage: deploy
+  image: quay.io/fedora/fedora:rawhide
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - export TZ=UTC
+    - dnf -y install advancecomp binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 make nasm pigz zip --allowerasing
+    - rpmconf -au use_maintainer || true
+    - make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
+    - make test
+    - mkdir -p public
+    - cp cpm386.elf floppy.img public
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - public
+  retry: 2
+  timeout: 60 minutes
+  interruptible: false
+
+###############################################################################
