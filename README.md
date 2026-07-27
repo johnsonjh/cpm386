@@ -116,7 +116,7 @@ The system currently reports **BDOS 2.2** to applications.
 The following dependencies are required to compile **CP/M‑386**:
 
 * [AWK](https://en.wikipedia.org/wiki/AWK)
-* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>🞶</sup>
+* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>*</sup>
 * [GNU Binutils](https://www.gnu.org/software/binutils/)
 * [GNU Coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
@@ -126,7 +126,7 @@ The following dependencies are required to compile **CP/M‑386**:
 []()
 
 []()
-<sup>🞶</sup>Be sure to use `cpmtools` version **2.23** or later.  Older
+<sup>*</sup>Be sure to use `cpmtools` version **2.23** or later.  Older
 versions may *appear* to work but have several known bugs.
 
 ## Downloads
@@ -334,7 +334,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>447</th>
                 <th>0</th>
-                <th>22472</th>
+                <th>22466</th>
                 <th>395</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -365,7 +365,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4534</th>
                 <th>19416</th>
                 <th>3978</th>
-                <th>751425</th>
+                <th>751419</th>
                 <th>11197</th>
         </tr></tfoot></table>
 <!-- scc-end -->
