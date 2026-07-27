@@ -27,6 +27,8 @@ before_script:
 pages:
   stage: deploy
   image: quay.io/fedora/fedora:rawhide
+  tags:
+    - cpm386
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:

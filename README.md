@@ -15,6 +15,7 @@
 - [CP/M compatibility](#cpm-compatibility)
 - [Screenshots](#screenshots)
 - [Build requirements](#build-requirements)
+- [Downloads](#downloads)
 - [Compilation](#compilation)
 - [Build output](#build-output)
 - [QEMU testing](#qemu-testing)
@@ -121,12 +122,19 @@ The following dependencies are required to compile **CP/M‑386**:
 * [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
 * [GNU Make](https://www.gnu.org/software/make/)
 * [NASM](https://nasm.us/)
-* [QEMU](https://www.qemu.org) (needed only for testing)
+* [QEMU](https://www.qemu.org) (required only for testing)
 []()
 
 []()
 <sup>🞶</sup> Be sure to use `cpmtools` version **2.23** or later.  Older
 versions may *appear* to work but have several known bugs.
+
+## Downloads
+
+* Download the
+[current **CP/M‑386** build](https://johnsonjh.gitlab.io/cpm386/cpm386.zip).
+* View the
+[GitLab CI/CD](https://gitlab.com/johnsonjh/cpm386/-/pipelines/latest) logs.
 
 ## Compilation
 
@@ -321,13 +329,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>503</th>
-                <th>62</th>
+                <th>511</th>
+                <th>64</th>
                 <th>0</th>
-                <th>441</th>
+                <th>447</th>
                 <th>0</th>
-                <th>22248</th>
-                <th>390</th>
+                <th>22473</th>
+                <th>396</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -341,24 +349,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
-                <th>81</th>
+                <th>83</th>
                 <th>6</th>
                 <th>15</th>
-                <th>60</th>
+                <th>62</th>
                 <th>0</th>
-                <th>3141</th>
-                <th>63</th>
+                <th>3162</th>
+                <th>65</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>80</th>
-                <th>29368</th>
-                <th>5429</th>
+                <th>29378</th>
+                <th>5431</th>
                 <th>4533</th>
-                <th>19406</th>
+                <th>19414</th>
                 <th>3975</th>
-                <th>751882</th>
-                <th>11187</th>
+                <th>752128</th>
+                <th>11195</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
