@@ -115,7 +115,7 @@ The system currently reports **BDOS 2.2** to applications.
 The following dependencies are required to compile **CP/M‑386**:
 
 * [AWK](https://en.wikipedia.org/wiki/AWK)
-* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>✲</sup>
+* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)
 * [GNU Binutils](https://www.gnu.org/software/binutils/)
 * [GNU Coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
@@ -123,7 +123,7 @@ The following dependencies are required to compile **CP/M‑386**:
 * [NASM](https://nasm.us/)
 * [QEMU](https://www.qemu.org) (needed only for testing)
 
-> **&#9432;** <sup>✲</sup>Be sure to use `cpmtools` version **2.23** or later!
+> **&#9432;** Be sure to use `cpmtools` version **2.23** or later!<br>
 > ☞ Older versions may *appear* to work but have several known bugs.
 
 ## Compilation
@@ -324,7 +324,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>429</th>
                 <th>0</th>
-                <th>21983</th>
+                <th>21959</th>
                 <th>382</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -345,7 +345,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4518</th>
                 <th>19334</th>
                 <th>3975</th>
-                <th>748476</th>
+                <th>748452</th>
                 <th>11118</th>
         </tr></tfoot></table>
 <!-- scc-end -->
