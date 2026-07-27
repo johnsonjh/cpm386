@@ -12,11 +12,15 @@ variables:
 ###############################################################################
 
 before_script:
+  - |
+    #
+    echo -e "section_start:`date +%s`:Pre-setup_section[collapsed=true]\r\e[0K\033[0;36mPre-setup ...\033[0m" || true
   - dnf -y upgrade --allowerasing
   - dnf -y install dnf-utils git rpmconf --allowerasing
   - rpmconf -au use_maintainer || true
   - git fetch origin
   - git checkout -B "$CI_COMMIT_REF_NAME" "origin/$CI_COMMIT_REF_NAME"
+  - echo -e "section_end:`date +%s`:Pre-setup_section\r\e[0K" || true
 
 ###############################################################################
 
@@ -26,13 +30,46 @@ pages:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
+    - |
+      #
+      echo -e "section_start:`date +%s`:Setup_section[collapsed=true]\r\e[0K\033[0;36mPre-setup ...\033[0m" || true
     - export TZ=UTC
+    - export LC_ALL=C
     - dnf -y install advancecomp binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 libatomic.x86_64 libatomic.i686 make nasm pigz zip --allowerasing
     - rpmconf -au use_maintainer || true
+    - echo -e "section_end:`date +%s`:Setup_section\r\e[0K" || true
+    - |
+      #
+      echo -e "section_start:`date +%s`:Version_section[collapsed=true]\r\e[0K\033[0;36mTool versions ...\033[0m" || true
+    - gcc --version 2>&1 | head -1 || true
+    - ld --version 2>&1 | head -1 || true
+    - tr --version 2>&1 | head -1 || true
+    - gawk --version 2>&1 | head -1 || true
+    - make --version 2>&1 | head -1 || true
+    - nasm --version 2>&1 | head -1 || true
+    - echo -e "section_end:`date +%s`:Version_section\r\e[0K" || true
+    - |
+      #
+      echo -e "section_start:`date +%s`:Build_section[collapsed=true]\r\e[0K\033[0;36mCP/M-386 build ...\033[0m" || true
     - make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
+    - echo -e "section_end:`date +%s`:Build_section\r\e[0K" || true
+    - |
+      #
+      echo -e "section_start:`date +%s`:Test_section[collapsed=true]\r\e[0K\033[0;36mCP/M-386 test ...\033[0m" || true
     - make test
-    - mkdir -p public
-    - cp cpm386.elf floppy.img public
+    - echo -e "section_end:`date +%s`:Test_section\r\e[0K" || true
+    - |
+      #
+      echo -e "section_start:`date +%s`:Deploy_section[collapsed=true]\r\e[0K\033[0;36mDeploy ...\033[0m" || true
+    - mkdir -p public/cpm386
+    - mv -f cpm386.elf floppy.img public/cpm386
+    - cd public
+    - zip -0 -X -D -j "cpm386.zip" public/cpm386.elf public/floppy.img
+    - ls -la cpm386.zip
+    - advzip -z4 cpm386.zip
+    - ls -la cpm386.zip
+    - rm -r -f ./cpm386
+    - echo -e "section_end:`date +%s`:Deploy_section\r\e[0K" || true
   artifacts:
     expire_in: 1 day
     paths:
