@@ -126,7 +126,7 @@ The following dependencies are required to compile **CP/M‑386**:
 []()
 
 []()
-<sup>🞶</sup> Be sure to use `cpmtools` version **2.23** or later.  Older
+<sup>🞶</sup>Be sure to use `cpmtools` version **2.23** or later.  Older
 versions may *appear* to work but have several known bugs.
 
 ## Downloads
@@ -334,7 +334,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>447</th>
                 <th>0</th>
-                <th>22473</th>
+                <th>22472</th>
                 <th>396</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -365,7 +365,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4533</th>
                 <th>19414</th>
                 <th>3975</th>
-                <th>752124</th>
+                <th>752123</th>
                 <th>11195</th>
         </tr></tfoot></table>
 <!-- scc-end -->
