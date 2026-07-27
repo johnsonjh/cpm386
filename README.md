@@ -125,8 +125,8 @@ The following dependencies are required to compile **CP/M‑386**:
 []()
 
 []()
-<sup>🞶</sup> Be sure to use `cpmtools` version **2.23** or later (**2.24**
-recommended); older versions may *appear* to work but have several known bugs.
+<sup>🞶</sup> Be sure to use `cpmtools` version **2.23** or later.  Older
+versions may *appear* to work but have several known bugs.
 
 ## Compilation
 
@@ -321,13 +321,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>492</th>
+                <th>493</th>
                 <th>62</th>
                 <th>0</th>
-                <th>430</th>
+                <th>431</th>
                 <th>0</th>
-                <th>21991</th>
-                <th>383</th>
+                <th>21977</th>
+                <th>382</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -342,13 +342,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>79</th>
-                <th>29276</th>
+                <th>29277</th>
                 <th>5423</th>
                 <th>4518</th>
-                <th>19335</th>
+                <th>19336</th>
                 <th>3975</th>
-                <th>748484</th>
-                <th>11119</th>
+                <th>748470</th>
+                <th>11118</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
