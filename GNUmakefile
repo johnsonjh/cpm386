@@ -298,7 +298,6 @@ CFLAGS = \
 	-D__I386__ \
 	-DRAMDISK_KB=$(RAMDISK_KB) \
 	-ffreestanding \
-	-fmerge-all-constants \
 	-fno-asynchronous-unwind-tables \
 	-fno-builtin \
 	-fno-pic \
@@ -1234,9 +1233,8 @@ testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 	dskutil.o iosys.o ccp.o bringup.o
 	$(CC) $(CSTD) -m32 $(LTO_FLAGS) $(OPTFLAGS) -Wl,--build-id=none -I. \
 	-o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB) -Wl,--build-id=none \
-	-fmerge-all-constants -fno-asynchronous-unwind-tables -fno-builtin \
-	-fno-pic -fno-pie -fno-plt -fno-stack-protector -fno-unwind-tables \
-	-fomit-frame-pointer $(TEST_FLAGS)
+	-fno-asynchronous-unwind-tables -fno-builtin -fno-pic -fno-pie -fno-plt \
+	-fno-stack-protector -fno-unwind-tables -fomit-frame-pointer $(TEST_FLAGS)
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
