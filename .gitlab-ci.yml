@@ -27,7 +27,7 @@ pages:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - export TZ=UTC
-    - dnf -y install advancecomp binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 libatomic libatomic.i686 make nasm pigz zip --allowerasing
+    - dnf -y install advancecomp binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 libatomic.x86_64 libatomic.i686 make nasm pigz zip --allowerasing
     - rpmconf -au use_maintainer || true
     - make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
     - make test
