@@ -34,7 +34,7 @@ pages:
   script:
     - |
       #
-      echo -e "section_start:`date +%s`:Setup_section[collapsed=true]\r\e[0K\033[0;36mPre-setup ...\033[0m" || true
+      echo -e "section_start:`date +%s`:Setup_section[collapsed=true]\r\e[0K\033[0;36mSetup ...\033[0m" || true
     - export TZ=UTC
     - export LC_ALL=C
     - dnf -y install advancecomp binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 libatomic.x86_64 libatomic.i686 make nasm pigz zip --allowerasing
@@ -66,7 +66,7 @@ pages:
     - mkdir -p public/cpm386
     - mv -f cpm386.elf floppy.img public/cpm386
     - cd public
-    - zip -0 -X -D -j "cpm386.zip" public/cpm386.elf public/floppy.img
+    - zip -0 -X -D -j "cpm386.zip" cpm386/cpm386.elf cpm386/floppy.img
     - ls -la cpm386.zip
     - advzip -z4 cpm386.zip
     - ls -la cpm386.zip
