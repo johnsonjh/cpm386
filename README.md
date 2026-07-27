@@ -115,7 +115,7 @@ The system currently reports **BDOS 2.2** to applications.
 The following dependencies are required to compile **CP/M‑386**:
 
 * [AWK](https://en.wikipedia.org/wiki/AWK)
-* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>\*</sup>
+* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>🞶</sup>
 * [GNU Binutils](https://www.gnu.org/software/binutils/)
 * [GNU Coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
@@ -123,7 +123,7 @@ The following dependencies are required to compile **CP/M‑386**:
 * [NASM](https://nasm.us/)
 * [QEMU](https://www.qemu.org) (needed only for testing)
 
-* <sup>\*</sup> Be sure to use `cpmtools` version **2.23** or later (**2.24**
+* <sup>🞶</sup> Be sure to use `cpmtools` version **2.23** or later (**2.24**
   recommended); older versions may *appear* to work but have several
   known bugs.
 
