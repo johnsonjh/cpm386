@@ -289,13 +289,13 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>55</th>
-                <th>24672</th>
+                <th>24673</th>
                 <th>4672</th>
                 <th>3510</th>
-                <th>16490</th>
+                <th>16491</th>
                 <th>3664</th>
-                <th>587154</th>
-                <th>8525</th>
+                <th>587213</th>
+                <th>8526</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -349,24 +349,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
-                <th>83</th>
+                <th>84</th>
                 <th>6</th>
                 <th>15</th>
-                <th>62</th>
+                <th>63</th>
                 <th>0</th>
-                <th>3158</th>
-                <th>65</th>
+                <th>3188</th>
+                <th>66</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>80</th>
-                <th>29378</th>
+                <th>29380</th>
                 <th>5431</th>
                 <th>4533</th>
-                <th>19414</th>
+                <th>19416</th>
                 <th>3975</th>
-                <th>752123</th>
-                <th>11195</th>
+                <th>752212</th>
+                <th>11197</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
