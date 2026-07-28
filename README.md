@@ -202,7 +202,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 ## QEMU notes
 
-* Use `-nographic -display none` to disable VGA video (and use *only* serial console).
+* Use `-nographic -display none -vga none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
 
 ## Included utilities
@@ -334,7 +334,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>447</th>
                 <th>0</th>
-                <th>22475</th>
+                <th>22485</th>
                 <th>396</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -365,7 +365,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4572</th>
                 <th>19571</th>
                 <th>3981</th>
-                <th>757414</th>
+                <th>757424</th>
                 <th>11269</th>
         </tr></tfoot></table>
 <!-- scc-end -->
