@@ -849,6 +849,9 @@ dumpdir.386: dumpdir.bin $(MK386)
 
 mem.386: mem.bin $(MK386)
 	./$(MK386) ./mem.bin ./mem.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
 
 ################################################################################
 
