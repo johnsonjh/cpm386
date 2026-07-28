@@ -291,13 +291,13 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>55</th>
-                <th>24861</th>
+                <th>24862</th>
                 <th>4723</th>
-                <th>3512</th>
+                <th>3513</th>
                 <th>16626</th>
                 <th>3668</th>
-                <th>590917</th>
-                <th>8561</th>
+                <th>590924</th>
+                <th>8562</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>15</th>
@@ -326,7 +326,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>154</th>
                 <th>550</th>
                 <th>0</th>
-                <th>18734</th>
+                <th>18722</th>
                 <th>464</th>
         </tr><tr>
                 <th>Markdown</th>
@@ -337,17 +337,17 @@ See [FUTURE.md](FUTURE.md).
                 <th>449</th>
                 <th>0</th>
                 <th>22622</th>
-                <th>398</th>
+                <th>397</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
-                <th>159</th>
-                <th>31</th>
+                <th>169</th>
+                <th>34</th>
                 <th>0</th>
-                <th>128</th>
+                <th>135</th>
                 <th>0</th>
-                <th>3855</th>
-                <th>79</th>
+                <th>3923</th>
+                <th>82</th>
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
@@ -362,13 +362,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>82</th>
-                <th>29826</th>
-                <th>5550</th>
-                <th>4584</th>
-                <th>19692</th>
+                <th>29837</th>
+                <th>5553</th>
+                <th>4585</th>
+                <th>19699</th>
                 <th>3981</th>
-                <th>760861</th>
-                <th>11295</th>
+                <th>760924</th>
+                <th>11296</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

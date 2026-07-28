@@ -114,7 +114,8 @@ mb_init_from_multiboot (void *mbi_ptr) /*cppcheck-suppress unusedFunction*/
   *LEGACY_MEMTOP = (uint32_t)top;
 
   /*
-   * Choose TPA base like the boot.S logic: after kernel + small stack reserve
+   * Choose TPA base like the bootload logic:
+   * after kernel + small stack reserve
    */
 
   extern char __kernel_end [];

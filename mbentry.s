@@ -26,7 +26,7 @@ _start:
     cmp eax, 0x2BADB002
     je .multiboot_path
 
-    ; --- Legacy path (called by boot.S real-mode loader) ---
+    ; --- Legacy path (called by stage 1 real-mode boot loader) ---
     ; The loader has already:
     ;   - switched to protected mode
     ;   - set up GDT + segments
@@ -53,7 +53,7 @@ _start:
     ; Temporary early stack (BSS not zeroed yet, so use this static area)
     mov esp, early_stack_top
 
-    ; Zero BSS (same job boot.S used to do for us)
+    ; Zero BSS (same job the boot loader used to do for us)
     extern __bss_start
     extern __bss_end
     mov edi, __bss_start
@@ -110,7 +110,7 @@ align 16
     resb 8192
 early_stack_top:
 
-; flat 32-bit GDT (code 0x08, data 0x10) identical layout to boot.S
+; flat 32-bit GDT (code 0x08, data 0x10)
 section .data
 align 4
 gdt:

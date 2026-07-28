@@ -32,17 +32,24 @@ PHDRS
 
 SECTIONS
 {
-    . = 0x10000;  /* 64k for easy 16-bit real mode load + multiboot low load addr */
+    . = 0x10000;  /* 64k for easy 16-bit real mode
+                   * load + multiboot low load addr */
 
-    /* multiboot header must appear within the first 8KB of the loaded image.
-     * placed first so it sits at the start of the first PT_LOAD. */
+    /*
+     * multiboot header must appear within the first 8KB of the loaded image.
+     * placed first so it sits at the start of the first PT_LOAD
+     */
+
     .multiboot ALIGN(4) :
     {
         KEEP(*(.multiboot))
     } :text
 
-    /* real _start code follows the header. boot.S must call the
-     * actual kernel_entry symbol (generated via nm), not hardcoded 0x10000. */
+    /*
+     * real _start code follows the header. The boot loader must call the
+     * actual kernel_entry symbol (generated via nm), not hardcoded 0x10000.
+     */
+
     .text.start ALIGN(4) :
     {
         *(.text.start)
@@ -74,9 +81,12 @@ SECTIONS
         __bss_end = .;
     } :data
 
-    /* Writable RAM disk AFTER all kernel data. TPA starts past this.
+    /*
+     * Writable RAM disk AFTER all kernel data. TPA starts past this.
      * Block N is at physical offset N*blocksize into this array; if the
-     * array were placed inside .rodata, writes would clobber kernel data. */
+     * array were placed inside .rodata, writes would clobber kernel data.
+     */
+
     .ramdisk ALIGN(16) :
     {
         *(.ramdisk)
