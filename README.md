@@ -197,7 +197,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 * Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
 
   ```sh
-  qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img"
+  qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img" -boot a
   ```
 
 ## QEMU notes
@@ -324,7 +324,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>143</th>
                 <th>550</th>
                 <th>0</th>
-                <th>18314</th>
+                <th>18311</th>
                 <th>464</th>
         </tr><tr>
                 <th>Markdown</th>
@@ -334,7 +334,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>447</th>
                 <th>0</th>
-                <th>22467</th>
+                <th>22475</th>
                 <th>396</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -365,7 +365,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4572</th>
                 <th>19571</th>
                 <th>3981</th>
-                <th>757409</th>
+                <th>757414</th>
                 <th>11269</th>
         </tr></tfoot></table>
 <!-- scc-end -->

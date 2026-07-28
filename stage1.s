@@ -106,7 +106,7 @@ print:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 boot_dl db 0
-bootmsg db 13,10,"CP/M-386 stage 1 loader 0.1 (", BUILDDATE, ")",13,10,"Loading stage 2 ... ",0
+bootmsg db 13,10,"CP/M-386 stage 1 loader 0.1 (", BUILDDATE, ")",13,10,"Loading stage 2: ",0
 errmsg  db "failed!",13,10,13,10,"CP/M-386 stage 1 boot failure, system halted!",13,10,13,10,0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
