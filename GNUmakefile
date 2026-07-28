@@ -84,13 +84,6 @@ STRIP:=$(shell \
 
 ################################################################################
 
-SIZE:=$(shell \
-	command -v size 2> /dev/null || \
-	command -v llvm-size 2> /dev/null || \
-	$(PRINTF) '%s' "size")
-
-################################################################################
-
 CP:=$(shell \
 	command -v gcp 2> /dev/null || \
 	command -v cp 2> /dev/null || \
@@ -1207,11 +1200,6 @@ os.bin: $(TARGET)
 
 $(TARGET): $(OBJS) linker.ld
 	$(CC) $(LDEXTRA) $(LDFLAGS) -o ./$@ ./$(OBJS)
-ifndef DEBUG
-	$(STRIP) --strip-debug ./$(TARGET)
-endif
-	readelf -S ./$(TARGET) || :
-	$(SIZE) ./$(TARGET) || :
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
