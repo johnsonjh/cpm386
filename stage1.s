@@ -111,6 +111,11 @@ errmsg  db "failed!",13,10,13,10,"CP/M-386 stage 1 boot failure, system halted!"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+%assign CODE_SIZE ($ - $$)
+%warning info: Stage 1 code size is CODE_SIZE bytes
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 times 510 - ($ - $$) db 0
 dw 0xaa55
 

@@ -1140,7 +1140,7 @@ pmode.o: pmode.c pmode.h
 ################################################################################
 
 pmodeasm.o: pmode.s
-	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
+	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -l ./${@:.o=.lst} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1148,7 +1148,7 @@ pmodeasm.o: pmode.s
 ################################################################################
 
 mbentry.o: mbentry.s mltiboot.h
-	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -o ./$@ ./$<
+	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -l ./${@:.o=.lst} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1178,7 +1178,8 @@ bss.inc: $(TARGET)
 ################################################################################
 
 stage1.bin: stage1.s layout.inc
-	$(NASM) $(NASMFLAGS2) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
+	$(NASM) $(NASMFLAGS2) $(NASMDEBUG) -f bin \
+		-I. -l ./${@:.bin=.lst} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1188,7 +1189,8 @@ stage1.bin: stage1.s layout.inc
 stage2.bin: stage2.s layout.inc bss.inc
 	$(NM) ./$(TARGET) 2>&1 | $(GREP) -q "no symbols" 2> /dev/null && { \
 		$(RM) -f ./$(TARGET) && "$${MAKE:-$(MAKE)}" $(TARGET); } || :
-	$(NASM) $(NASMFLAGS2) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
+	$(NASM) $(NASMFLAGS2) $(NASMDEBUG) -f bin \
+		-I. -l ./${@:.bin=.lst} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1241,7 +1243,7 @@ floppy.img: stage1.bin stage2.bin os.bin
 .PHONY: clean distclean
 
 clean distclean:
-	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 \
+	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./*.lst \
 		./bss.inc ./testbdos ./*.su ./*.ci ./$(MK386) ./$(SHOLE) ./$(TARGET)
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
