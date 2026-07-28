@@ -31,7 +31,7 @@
 /*****************************************************************************/
 
 void
-mb_init_from_multiboot (void *mbi_ptr)
+mb_init_from_multiboot (void *mbi_ptr) /*cppcheck-suppress unusedFunction*/
 {
   const struct multiboot_info *mbi = (struct multiboot_info *)mbi_ptr;
   uint64_t top = 0;
@@ -39,8 +39,16 @@ mb_init_from_multiboot (void *mbi_ptr)
   /* Basic mem info */
   if (mbi && (mbi->flags & (1U << 0)))
     {
-      /* mem_lower + mem_upper */
-      top = 0x100000ULL + ((uint64_t)mbi->mem_upper * 1024ULL);
+      if (mbi->mem_upper > 0)
+        {
+          /* mem_lower + mem_upper, starts at 1MB */
+          top = 0x100000ULL + ((uint64_t)mbi->mem_upper * 1024ULL);
+        }
+      else
+        {
+          /* Only low memory exists */
+          top = (uint64_t)mbi->mem_lower * 1024ULL;
+        }
     }
 
   /* Full memory map if present (bit 6) - required for 4G */
@@ -49,7 +57,8 @@ mb_init_from_multiboot (void *mbi_ptr)
     {
       uint32_t p = mbi->mmap_addr;
       uint32_t end = p + mbi->mmap_length;
-      uint64_t mmap_top = 0;
+      uint64_t run_top = 0;
+      int have_run = 0;
 
       while (p < end)
         {
@@ -60,21 +69,33 @@ mb_init_from_multiboot (void *mbi_ptr)
               break;
             }
 
-          if (e->type == 1)
-            { /* available RAM */
-              uint64_t eend = e->addr + e->len;
-              if (eend > mmap_top)
+          uint64_t eend = e->addr + e->len;
+
+          if (!have_run)
+            {
+              if (e->type == 1 && eend > 0x100000ULL)
                 {
-                  mmap_top = eend;
+                  run_top = eend;
+                  have_run = 1;
                 }
+            }
+          else
+            {
+              uint64_t ebase = e->addr;
+
+              if (ebase != run_top || e->type != 1)
+                {
+                  break;
+                }
+              run_top = eend;
             }
 
           p += e->size + sizeof (uint32_t);
         }
 
-      if (mmap_top > 0)
+      if (have_run)
         {
-          top = mmap_top;
+          top = run_top;
         }
     }
 
@@ -101,15 +122,11 @@ mb_init_from_multiboot (void *mbi_ptr)
   uint32_t stack_res = 0x4000;
   uint32_t tpa_base = k_end + stack_res + 0x1000;
 
-  if (top <= tpa_base || top == 0xFFFFFFFFU)
+  if (top != 0xFFFFFFFFULL && (uint64_t)tpa_base + 0x1000ULL > top)
     {
-      /*
-       * For huge memory just use the computed base and bios_getmrt will expand
-       */
-      if (top == 0xFFFFFFFFU)
-        {
-          tpa_base = k_end + stack_res + 0x1000;
-        }
+      tpa_base = (top > (uint64_t)k_end + 0x1000ULL)
+                      ? (uint32_t)top - 0x1000
+                      : k_end;
     }
 
   *LEGACY_TPA_BASE = tpa_base;
