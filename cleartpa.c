@@ -12,8 +12,6 @@
 
 /*****************************************************************************/
 
-/*****************************************************************************/
-
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
@@ -130,7 +128,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
             {
               puts ("Usage: CLEARTPA [-h] [-v]\r\n");
               puts ("  -h   Show this help\r\n");
-              puts ("  -v   Verify the TPA after zeroing\r\n");
+              puts ("  -v   Verify the TPA after clearing\r\n");
 
               bdos (0, 0);
             }
@@ -150,8 +148,6 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   t.high = 0;
   bdos (BDOS_TPA, (LONG)(unsigned long)&t);
 
-  /* unsigned long tpa_len = t.high - t.low; */
-
   unsigned long start_addr1 = (unsigned long)&_end;
   start_addr1 = (start_addr1 + 3) & ~3;
   unsigned long end_addr1 = esp - 16384;
@@ -159,12 +155,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   if (end_addr1 > t.high)
     {
-      end_addr1 = t.high; /* was: tpa_len */
+      end_addr1 = t.high;
     }
 
   if (start_addr1 < t.low)
     {
-      start_addr1 = t.low; /* be safe about the floor too */
+      start_addr1 = t.low;
     }
 
   if (start_addr1 > end_addr1)
@@ -174,8 +170,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   unsigned long start_addr2 = esp + 16384;
   start_addr2 = (start_addr2 + 3) & ~3;
-  unsigned long end_addr2 = t.high; /* was: tpa_len */
+  unsigned long end_addr2 = t.high;
   end_addr2 &= ~3;
+
+  if (start_addr2 < t.low)
+    {
+      start_addr2 = t.low;
+    }
 
   if (start_addr2 > end_addr2)
     {
@@ -184,13 +185,6 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   unsigned long total_k
       = ((end_addr1 - start_addr1) + (end_addr2 - start_addr2)) / 1024;
-
-  if (total_k > 3668279)
-    {
-      puts ("ERROR: CLEARTPA only supports TPA size of 3668279K or less.\r\n");
-
-      bdos (0, 0);
-    }
 
   puts ("Clearing: ");
   putu (total_k);
