@@ -52,7 +52,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* frame-relative locals: correct after load at any TPA base */
   const char msg1 [] = "\r\nRing-3 loader test: Hello from TPA+0x100!\r\n";
   const char msg2 [] = "Exiting via int 0x30 BDOS(0)...\r\n";
-  char *p;
+  const char *p;
 
   for (p = msg1; *p; p++)
     {
