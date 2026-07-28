@@ -65,7 +65,8 @@ this section as *wishlist* and not a *roadmap*!
     executable header.  SAVE should be able to take a range to save, as well
     as the ability to autodetect a range (`CLEARTPA` could be useful here).
   * Fix bug with CLEARTPA w/TPA >3.4GB and show progress during clear/verify.
-  * Extend HD and OD with `-e` to decode text as EBCDIC rather than ASCII
+  * Extend HD and OD `-w` option to use LRBC when writing `.HEX`/`.OCT` files
+    and with `-e` option to decode text as EBCDIC rather than ASCII
     (same as https://gitlab.com/esr/hexd).
   * Extend STAT to query and also set the LRBC
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
