@@ -23,8 +23,7 @@
  |      last modified:  10/29/82                                |
  |      -------------                                           |
  |                                                              |
- |      (c) COPYRIGHT   Digital Research 1982                   |
- |      all rights reserved                                     |
+ |      (c) COPYRIGHT   Digital Research, Inc. 1982             |
  |                                                              |
 \*--------------------------------------------------------------*/
 

@@ -39,8 +39,7 @@
  |      last modified:  03/17/84 sw     St. Patrick's Day!!!    |
  |      -------------   Chain hack      --------------------    |
  |                                                              |
- |      (c) COPYRIGHT  Digital Research 1983, 1984              |
- |                     all rights reserved                      |
+ |      (c) COPYRIGHT  Digital Research, Inc. 1983, 1984        |
  |                                                              |
 \*--------------------------------------------------------------*/
 
