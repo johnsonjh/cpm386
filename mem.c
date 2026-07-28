@@ -41,7 +41,10 @@ struct tpa_req
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -58,7 +61,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -137,7 +140,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   t.low = 0;
   t.high = 0;
 
-  bdos (BDOS_TPA, (LONG)(unsigned long)&t);
+  (void)bdos (BDOS_TPA, (LONG)(unsigned long)&t);
 
   base = t.low;
   top = t.high;
@@ -210,7 +213,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   put_kb (free_prog);
   puts (" (TPA minus base page)\r\n");
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

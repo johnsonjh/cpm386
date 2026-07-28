@@ -28,7 +28,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -45,7 +48,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -64,7 +67,7 @@ puts (const char *s)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  unsigned char junk;
+  unsigned char junk = (unsigned char)&_start;
 
   puts ("\r\nring-3 protection test\r\n");
   puts ("Expect a CPU exception message!\r\n");
@@ -76,7 +79,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   puts ("ERROR: privileged IN did not fault - protection is broken!\r\n");
   (void)junk;
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

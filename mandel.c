@@ -34,7 +34,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -51,7 +54,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(UBYTE)c);
+  (void)bdos (2, (LONG)(UBYTE)c);
 }
 
 /*****************************************************************************/
@@ -149,7 +152,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       putnl ();
     }
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

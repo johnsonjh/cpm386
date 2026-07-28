@@ -38,7 +38,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -55,7 +58,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -454,7 +457,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                       puts ("ERROR: -f requires a");
                       puts (" value (e.g. -f 0x1A)\r\n");
 
-                      bdos (0, 0);
+                      (void)bdos (0, 0);
                     }
 
                   {
@@ -466,7 +469,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                         puts ("ERROR: Invalid fill byte format\r\n");
                         puts ("Expected: -f 0xNN (e.g., \"-f 0x1A\")\r\n");
 
-                        bdos (0, 0);
+                        (void)bdos (0, 0);
                       }
 
                     fill_byte = parsed_byte;
@@ -487,7 +490,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   puts ("\r\n");
                   help ();
 
-                  bdos (0, 0);
+                  (void)bdos (0, 0);
                 }
             }
         }
@@ -525,7 +528,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       help ();
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   if (str_eq_ci (length_str, "LRBC"))
@@ -546,17 +549,17 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts (filename);
       puts ("\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   lrbc = fcb[32];
   fcb[32] = 0; /* reset before I/O */
 
-  bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(unsigned long)fcb);
   records = get_ran (fcb);
   file_bytes = exact_size (records, lrbc);
 
-  bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(unsigned long)fcb);
 
   if (use_lrbc)
     {
@@ -564,7 +567,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         {
           puts ("File is empty, nothing to truncate!\r\n");
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
 
       trunc_bytes = file_bytes;
@@ -580,7 +583,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           puts (length_str);
           puts ("\r\n");
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
 
       if (length_str[nlen] && length_str[nlen] != ' '
@@ -590,7 +593,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           puts (length_str);
           puts ("\r\n");
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
 
       if (trunc_bytes > file_bytes)
@@ -601,7 +604,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           putu (file_bytes);
           puts ("\r\n");
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
     }
 
@@ -638,7 +641,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           putu ((unsigned long)r);
           puts (")\r\n");
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
     }
 
@@ -657,10 +660,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         {
           puts ("ERROR: Cannot reopen file\r\n");
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
 
-      bdos (26, (LONG)(unsigned long)dma);
+      (void)bdos (26, (LONG)(unsigned long)dma);
 
       set_ran (fcb, new_records - 1);
       r = bdos (33, (LONG)(unsigned long)fcb);
@@ -686,13 +689,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           puts ("ERROR: Write failed (BDOS 34 returned ");
           putu ((unsigned long)r);
           puts (")\r\n");
-          bdos (16, (LONG)(unsigned long)fcb);
+          (void)bdos (16, (LONG)(unsigned long)fcb);
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
 
-      bdos (16, (LONG)(unsigned long)fcb);
-    }
+      (void)bdos (16, (LONG)(unsigned long)fcb);
+    } /*LINTED E_NOP_IF_STMT*/
   else if (new_records > 0 && new_lrbc == 0)
     {
       ;
@@ -707,7 +710,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       puts ("ERROR: Failed to set LRBC\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   puts ("Truncated ");
@@ -728,7 +731,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   puts ("\r\n");
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

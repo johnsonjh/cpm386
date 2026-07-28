@@ -35,7 +35,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -52,7 +55,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -213,7 +216,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       help ();
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
@@ -221,7 +224,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       help ();
       puts ("ERR: No file specified\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   fill_from_def_fcb (fcb);
@@ -234,13 +237,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       puts ("ERR: File not found\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   lrbc = fcb[32];
   fcb[32] = 0;
 
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
 
   /* Read ahead one record so LRBC can trim the last */
   for (;;)
@@ -405,9 +408,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
 done:
-  bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(unsigned long)fcb);
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

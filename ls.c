@@ -40,7 +40,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -57,7 +60,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -454,6 +457,7 @@ print_name (const struct fileent *f, int pack)
       putch (f->typ[i] & 0x7f);
     }
 
+  /*LINTED E_NOP_IF_STMT*/
   if (!pack)
     {
       /* pad name.typ to fixed 12 visible columns roughly */
@@ -658,11 +662,11 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user, int word_mode)
 {
   UWORD r;
 
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
 
   if (fcb[0])
     {
-      bdos (14, (LONG)(fcb[0] - 1));
+      (void)bdos (14, (LONG)(fcb[0] - 1));
     }
 
   fcb[12] = '?'; /* all extents */
@@ -740,7 +744,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                 case 'H':
                   help ();
 
-                  bdos (0, 0);
+                  (void)bdos (0, 0);
 
                   break;
 
@@ -788,7 +792,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   help ();
                   puts ("ERR: Wrong parameters\r\n");
 
-                  bdos (0, 0);
+                  (void)bdos (0, 0);
                 }
             }
           while (tail[i] == ' ' || tail[i] == '\t')
@@ -824,7 +828,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   drive = (int)bdos (25, 0);
 
   /* DPB for block size / word map mode */
-  bdos (31, (LONG)(unsigned long)dpb);
+  (void)bdos (31, (LONG)(unsigned long)dpb);
   /* dpb: spt@0, bsh@2, blm@3, exm@4, dum@5, dsm@6 */
   {
     UBYTE bsh = dpb[2];
@@ -1039,7 +1043,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts ("K alloc\r\n");
     }
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

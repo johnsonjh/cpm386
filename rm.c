@@ -49,7 +49,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -66,7 +69,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -385,11 +388,11 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user)
 {
   UWORD r;
 
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
 
   if (fcb[0])
     {
-      bdos (14, (LONG)(fcb[0] - 1));
+      (void)bdos (14, (LONG)(fcb[0] - 1));
     }
 
   fcb[12] = '?';
@@ -460,7 +463,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                 case 'H':
                   help ();
 
-                  bdos (0, 0);
+                  (void)bdos (0, 0);
 
                   break;
 
@@ -483,7 +486,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   puts ("ERROR: Wrong parameters\r\n");
                   help ();
 
-                  bdos (0, 0);
+                  (void)bdos (0, 0);
                 }
             }
           while (tail[i] == ' ' || tail[i] == '\t')
@@ -526,7 +529,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           puts ("ERROR: No filespec\r\n");
           help ();
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
 
       for (i = 0; i < 36; i++)
@@ -556,7 +559,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       puts ("No file found\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   for (i = 0; i < (unsigned)nents; i++)
@@ -611,7 +614,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                 {
                   puts ("\r      \r^C       \r\n");
 
-                  bdos (0, 0);
+                  (void)bdos (0, 0);
                 }
             }
         }
@@ -637,7 +640,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               }
           }
 
-          bdos (30, (LONG)(unsigned long)dfcb); /* set attrs clear high bits */
+          /* set attrs clear high bits */
+          (void)bdos (30, (LONG)(unsigned long)dfcb);
         }
 
       r = bdos (19, (LONG)(unsigned long)dfcb);
@@ -652,7 +656,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         }
     }
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

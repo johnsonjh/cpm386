@@ -29,7 +29,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -46,7 +49,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -170,7 +173,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   /* Create TRUNC.DAT */
   fill_name (fcb, "TRUNC   ", "DAT");
-  bdos (19, (LONG)(unsigned long)fcb); /* delete if present */
+  (void)bdos (19, (LONG)(unsigned long)fcb); /* delete if present */
   fill_name (fcb, "TRUNC   ", "DAT");
   r = bdos (22, (LONG)(unsigned long)fcb);
   result (r <= 3, "make");
@@ -179,7 +182,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   r = bdos (15, (LONG)(unsigned long)fcb);
   result (r <= 3, "open");
 
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
 
   /* Sequential write 10 records (0..9) */
   for (i = 0; i < 10; i++)
@@ -201,11 +204,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   result (i == 10, "seq write 10");
-  bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(unsigned long)fcb);
 
   /* Size should be 10 */
   fill_name (fcb, "TRUNC   ", "DAT");
-  bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(unsigned long)fcb);
   sz = get_ran (fcb);
   result (sz == 10, "size 10");
 
@@ -216,7 +219,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   result (r <= 3, "trunc 4");
 
   fill_name (fcb, "TRUNC   ", "DAT");
-  bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(unsigned long)fcb);
   sz = get_ran (fcb);
   result (sz == 4, "size now 4");
 
@@ -229,7 +232,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* Read remaining records */
   fill_name (fcb, "TRUNC   ", "DAT");
   r = bdos (15, (LONG)(unsigned long)fcb);
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
   {
     int ok = 1;
 
@@ -248,7 +251,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     result (ok && r == 1, "read 4 + EOF");
   }
 
-  bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(unsigned long)fcb);
 
   /*
    * BDOS 40 WRITEZF: write random rec 32 (new block + zero-fill).
@@ -316,7 +319,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     result (z, "zf mid@33 zero");
   }
 
-  bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(unsigned long)fcb);
 
   /* Truncate sparse file back to 2 records */
   fill_name (fcb, "TRUNC   ", "DAT");
@@ -324,7 +327,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   r = bdos (99, (LONG)(unsigned long)fcb);
   result (r <= 3, "trunc sparse->2");
   fill_name (fcb, "TRUNC   ", "DAT");
-  bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(unsigned long)fcb);
   sz = get_ran (fcb);
   result (sz == 2, "size 2 after sparse trunc");
 
@@ -334,10 +337,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   if (fails)
     {
-      bdos (108, (LONG)fails); /* non-zero P_CODE for CCP */
+      (void)bdos (108, (LONG)fails); /* non-zero P_CODE for CCP */
     }
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

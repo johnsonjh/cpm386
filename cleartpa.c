@@ -45,7 +45,10 @@ struct tpa_req
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -62,7 +65,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -130,7 +133,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               puts ("  -h   Show this help\r\n");
               puts ("  -v   Verify the TPA after clearing\r\n");
 
-              bdos (0, 0);
+              (void)bdos (0, 0);
             }
 
           if (tail[i + 1] == 'v' || tail[i + 1] == 'V')
@@ -146,7 +149,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   t._pad = 0;
   t.low = 0;
   t.high = 0;
-  bdos (BDOS_TPA, (LONG)(unsigned long)&t);
+  (void)bdos (BDOS_TPA, (LONG)(unsigned long)&t);
 
   unsigned long start_addr1 = (unsigned long)&_end;
   start_addr1 = (start_addr1 + 3) & ~3;
@@ -242,7 +245,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts ("Success!\r\n");
     }
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

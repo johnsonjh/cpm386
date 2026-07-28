@@ -35,7 +35,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -52,7 +55,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -152,7 +155,7 @@ touch_one (const char *name)
 
   if (r <= 3)
     {
-      bdos (16, (LONG)(unsigned long)fcb); /* close */
+      (void)bdos (16, (LONG)(unsigned long)fcb); /* close */
 
       return;
     }
@@ -169,7 +172,7 @@ touch_one (const char *name)
 
   if (r <= 3)
     {
-      bdos (16, (LONG)(unsigned long)fcb);
+      (void)bdos (16, (LONG)(unsigned long)fcb);
     }
   else
     {
@@ -244,7 +247,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   puts ("'\r\n");
                   usage ();
 
-                  bdos (0, 0);
+                  (void)bdos (0, 0);
                 }
             }
         }
@@ -304,9 +307,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
               if (r <= 3)
                 {
-                  bdos (16, (LONG)(unsigned long)fcb);
+                  (void)bdos (16, (LONG)(unsigned long)fcb);
 
-                  bdos (0, 0);
+                  (void)bdos (0, 0);
                 }
 
               for (i = 0; i < 36; i++)
@@ -324,17 +327,17 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
               if (r <= 3)
                 {
-                  bdos (16, (LONG)(unsigned long)fcb);
+                  (void)bdos (16, (LONG)(unsigned long)fcb);
                 }
 
-              bdos (0, 0);
+              (void)bdos (0, 0);
             }
         }
 
       usage ();
     }
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

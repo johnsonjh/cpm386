@@ -17,6 +17,7 @@ abs_ptr (unsigned long addr) /*cppcheck-suppress unusedFunction*/
 {
   void *p = (void *)addr;
 
+  /*LINTED E_ASM_UNUSED_PARAM*/
   __asm__ ("" : "+r"(p));
 
   return p;

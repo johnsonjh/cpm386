@@ -39,7 +39,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -56,7 +59,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -133,7 +136,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       puts ("Usage: LRBC filename [value]\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   {
@@ -185,7 +188,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           {
             puts ("Invalid LRBC value (must be 0-128)\r\n");
 
-            bdos (0, 0);
+            (void)bdos (0, 0);
           }
 
         has_value = 1;
@@ -208,7 +211,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       puts ("File not found\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   /* After open with 0xFF: cur_rec and s1 hold DOS-PLUS LRBC */
@@ -220,7 +223,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
    * (CP/M-68K packing: ran0 = bits16-23, ran1 = 8-15, ran2 = 0-7).
    */
 
-  bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(unsigned long)fcb);
   records = ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
             | (unsigned long)fcb[35];
 
@@ -239,7 +242,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         {
           puts ("Error setting LRBC\r\n");
 
-          bdos (0, 0);
+          (void)bdos (0, 0);
         }
     }
 
@@ -288,7 +291,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   putu (bytes_exact);
   puts ("\r\n");
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

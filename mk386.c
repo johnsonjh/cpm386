@@ -45,7 +45,8 @@ main (int argc, char **argv)
 
   if (argc < 3)
     {
-      fprintf (stderr, "usage: %s in.bin out.386 [load_off]\n", argv[0]);
+      (void)fprintf (stderr, "usage: %s in.bin out.386 [load_off]\n", argv[0]);
+
       return 1;
     }
 
@@ -69,7 +70,7 @@ main (int argc, char **argv)
   if (fseek (f, 0, SEEK_END) != 0)
     {
       perror ("fseek");
-      fclose (f);
+      (void)fclose (f);
 
       return 1;
     }
@@ -78,7 +79,7 @@ main (int argc, char **argv)
 
   if (sz < 0)
     {
-      fclose (f);
+      (void)fclose (f);
 
       return 1;
     }
@@ -88,14 +89,14 @@ main (int argc, char **argv)
 
   if (!buf || (sz && fread (buf, 1, (size_t)sz, f) != (size_t)sz))
     {
-      fprintf (stderr, "read failed\n");
+      (void)fprintf (stderr, "read failed\n");
       free (buf);
-      fclose (f);
+      (void)fclose (f);
 
       return 1;
     }
 
-  fclose (f);
+  (void)fclose (f);
 
   /*
    * Image may contain leading zeros if linked at 0x100 (file starts at 0).
@@ -122,14 +123,14 @@ main (int argc, char **argv)
   if (fwrite (hdr, 4, 3, f) != 3
       || (sz && fwrite (buf, 1, (size_t)sz, f) != (size_t)sz))
     {
-      fprintf (stderr, "write failed\n");
-      fclose (f);
+      (void)fprintf (stderr, "write failed\n");
+      (void)fclose (f);
       free (buf);
 
       return 1;
     }
 
-  fclose (f);
+  (void)fclose (f);
   free (buf);
 
   return 0;

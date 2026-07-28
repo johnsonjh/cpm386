@@ -50,7 +50,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -69,7 +72,7 @@ putch (char c)
 {
   if (!opt_w)
     {
-      bdos (2, (LONG)(unsigned char)c);
+      (void)bdos (2, (LONG)(unsigned char)c);
 
       return;
     }
@@ -77,8 +80,8 @@ putch (char c)
   out_dma[out_col++] = c;
   if (out_col == 128)
     {
-      bdos (26, (LONG)(unsigned long)out_dma);
-      bdos (21, (LONG)(unsigned long)out_fcb);
+      (void)bdos (26, (LONG)(unsigned long)out_dma);
+      (void)bdos (21, (LONG)(unsigned long)out_fcb);
       out_col = 0;
     }
 }
@@ -97,11 +100,11 @@ out_flush_close (void)
               out_dma[out_col++] = 26;
             }
 
-          bdos (26, (LONG)(unsigned long)out_dma);
-          bdos (21, (LONG)(unsigned long)out_fcb);
+          (void)bdos (26, (LONG)(unsigned long)out_dma);
+          (void)bdos (21, (LONG)(unsigned long)out_fcb);
         }
 
-      bdos (16, (LONG)(unsigned long)out_fcb);
+      (void)bdos (16, (LONG)(unsigned long)out_fcb);
     }
 }
 
@@ -308,7 +311,7 @@ line_flush (void)
   puts (line);
   putch ('\r');
   putch ('\n');
-  pager_check ();
+  (void)pager_check ();
   line_clear ();
 }
 
@@ -655,7 +658,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                     {
                       puts ("Invalid -b value (1-64)\r\n");
 
-                      bdos (0, 0);
+                      (void)bdos (0, 0);
                     }
 
                   break;
@@ -689,7 +692,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                     {
                       puts ("Invalid -l value\r\n");
 
-                      bdos (0, 0);
+                      (void)bdos (0, 0);
                     }
 
                   break;
@@ -723,7 +726,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                     {
                       puts ("Invalid -s value\r\n");
 
-                      bdos (0, 0);
+                      (void)bdos (0, 0);
                     }
 
                   break;
@@ -768,7 +771,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts ("  -u      upper case hex characters\r\n");
       puts ("  -w      write output to FILENAME.HEX\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   set_fcb (fcb, filename);
@@ -783,7 +786,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       puts ("File not found\r\n");
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   lrbc = fcb[32]; /* DOS-PLUS bytes used in last record (0 = full) */
@@ -807,7 +810,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       out_fcb[12] = out_fcb[13] = out_fcb[14] = out_fcb[15] = 0;
       out_fcb[32] = 0;
 
-      bdos (19, (LONG)(unsigned long)out_fcb);
+      (void)bdos (19, (LONG)(unsigned long)out_fcb);
 
       r = bdos (22, (LONG)(unsigned long)out_fcb);
 
@@ -840,7 +843,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   ascii_start = hex_start + bytes_per_line * 3;
 
   col = 0;
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
 
   /* -s, seek past N bytes */
   if (opt_s > 0)
@@ -855,9 +858,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           if (r != 0)
             {
               puts ("Seek past end of file\r\n");
-              bdos (16, (LONG)(unsigned long)fcb);
+              (void)bdos (16, (LONG)(unsigned long)fcb);
 
-              bdos (0, 0);
+              (void)bdos (0, 0);
             }
 
           to_skip -= 128;
@@ -871,9 +874,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           if (r != 0)
             {
               puts ("Seek past end of file\r\n");
-              bdos (16, (LONG)(unsigned long)fcb);
+              (void)bdos (16, (LONG)(unsigned long)fcb);
 
-              bdos (0, 0);
+              (void)bdos (0, 0);
             }
 
           file_offset += to_skip;
@@ -1026,9 +1029,9 @@ finish:
   hexdump_end ();
   out_flush_close ();
 
-  bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(unsigned long)fcb);
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/

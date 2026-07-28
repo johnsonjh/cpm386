@@ -29,7 +29,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -46,7 +49,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -162,7 +165,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   /* C = CREATE */
   fill_name (fcb, "IOWORK  ", "DAT");
-  bdos (19, (LONG)(unsigned long)fcb);
+  (void)bdos (19, (LONG)(unsigned long)fcb);
   fill_name (fcb, "IOWORK  ", "DAT");
   r = bdos (22, (LONG)(unsigned long)fcb);
   result (r <= 3, 'C');
@@ -173,7 +176,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   result (r <= 3, 'O');
 
   /* W = sequential WRITE x5 */
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
 
   for (rec = 0; rec < 5; rec++)
     {
@@ -200,7 +203,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* R = sequential READ x5 + EOF */
   fill_name (fcb, "IOWORK  ", "DAT");
   r = bdos (15, (LONG)(unsigned long)fcb);
-  bdos (26, (LONG)(unsigned long)dma2);
+  (void)bdos (26, (LONG)(unsigned long)dma2);
 
   for (rec = 0; rec < 5; rec++)
     {
@@ -222,11 +225,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       result (0, 'R');
     }
 
-  bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(unsigned long)fcb);
 
   /* S = SEARCH first for IOWORK.DAT */
   fill_name (fcb, "IOWORK  ", "DAT");
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
   /*cppcheck-suppress redundantAssignment */
   r = bdos (17, (LONG)(unsigned long)fcb);
 
@@ -257,7 +260,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* P = write random (record 2), Q = read random back */
   fill_name (fcb, "IOWORK  ", "DAT");
   r = bdos (15, (LONG)(unsigned long)fcb);
-  bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(unsigned long)dma);
 
   for (i = 0; i < 128; i++)
     {
@@ -320,14 +323,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   r = bdos (33, (LONG)(unsigned long)fcb);
   result (r == 0 && dma[0] == 'Z', 'Z');
 
-  bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(unsigned long)fcb);
 
   puts (done);
   putu (fails);
   putch ('\r');
   putch ('\n');
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 
   for (;;)
     {

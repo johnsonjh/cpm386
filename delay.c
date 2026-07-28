@@ -28,7 +28,11 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
+
   __asm__ volatile ("int %2"
                     : "=a"(ret)
                     : "a"((unsigned)func),
@@ -46,7 +50,7 @@ puts (const char *s)
 {
   while (*s)
     {
-      bdos (2, (LONG)*s++);
+      (void)bdos (2, (LONG)*s++);
     }
 }
 
@@ -64,13 +68,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < 3; i++)
     {
-      bdos (141, 60); /* 60Hz/60 ticks == 1 second */
+      (void)bdos (141, 60); /* 60Hz/60 ticks == 1 second */
       puts (msg2);
     }
 
   puts (msg3);
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 
   for (;;)
     {

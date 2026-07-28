@@ -49,16 +49,16 @@ pad_field (char *dst, int width, const char *src, int srclen)
 static void
 usage (const char *prog)
 {
-  fprintf (stderr,
-           "usage: %s [-b blocksize] [-w | -B] image name.typ\n"
-           "  -b blocksize   image block size in bytes (default 2048);\n"
-           "                 used to auto-detect map entry width when\n"
-           "                 neither -w nor -B is given\n"
-           "  -w             force 16-bit (word) allocation-map entries\n"
-           "                 (8 slots in the 16-byte map)\n"
-           "  -B             force 8-bit (byte) allocation-map entries\n"
-           "                 (16 slots in the 16-byte map)\n",
-           prog);
+  (void)fprintf (stderr,
+                 "usage: %s [-b blocksize] [-w | -B] image name.typ\n"
+                 "  -b blocksize   image block size in bytes (default 2048);\n"
+                 "                 used to auto-detect map entry width when\n"
+                 "                 neither -w nor -B is given\n"
+                 "  -w             force 16-bit (word) allocation-map entries\n"
+                 "                 (8 slots in the 16-byte map)\n"
+                 "  -B             force 8-bit (byte) allocation-map entries\n"
+                 "                 (16 slots in the 16-byte map)\n",
+                 prog);
 }
 
 /*****************************************************************************/
@@ -88,7 +88,7 @@ main (int argc, char **argv)
         {
           if (ai + 1 >= argc)
             {
-              fprintf (stderr, "shole: -b requires an argument\n");
+              (void)fprintf (stderr, "shole: -b requires an argument\n");
               usage (argv[0]);
 
               return 1;
@@ -98,8 +98,8 @@ main (int argc, char **argv)
 
           if (blocksize <= 0)
             {
-              fprintf (stderr, "shole: invalid blocksize '%s'\n",
-                        argv[ai + 1]);
+              (void)fprintf (stderr, "shole: invalid blocksize '%s'\n",
+                             argv[ai + 1]);
 
               return 1;
             }
@@ -124,7 +124,7 @@ main (int argc, char **argv)
         }
       else
         {
-          fprintf (stderr, "shole: unknown option '%s'\n", argv[ai]);
+          (void)fprintf (stderr, "shole: unknown option '%s'\n", argv[ai]);
           usage (argv[0]);
 
           return 1;
@@ -133,7 +133,7 @@ main (int argc, char **argv)
 
   if (force_word && force_byte)
     {
-      fprintf (stderr, "shole: -w and -B are mutually exclusive\n");
+      (void)fprintf (stderr, "shole: -w and -B are mutually exclusive\n");
 
       return 1;
     }
@@ -173,7 +173,7 @@ main (int argc, char **argv)
   if (fseek (f, 0, SEEK_END) != 0)
     {
       perror ("fseek");
-      fclose (f);
+      (void)fclose (f);
 
       return 1;
     }
@@ -182,8 +182,8 @@ main (int argc, char **argv)
 
   if (sz < 32)
     {
-      fclose (f);
-      fprintf (stderr, "shole: image too small\n");
+      (void)fclose (f);
+      (void)fprintf (stderr, "shole: image too small\n");
 
       return 1;
     }
@@ -193,14 +193,14 @@ main (int argc, char **argv)
 
   if (!data || fread (data, 1, (size_t)sz, f) != (size_t)sz)
     {
-      fprintf (stderr, "shole: read failed\n");
+      (void)fprintf (stderr, "shole: read failed\n");
       free (data);
-      fclose (f);
+      (void)fclose (f);
 
       return 1;
     }
 
-  fclose (f);
+  (void)fclose (f);
 
   if (force_word)
     {
@@ -258,7 +258,7 @@ main (int argc, char **argv)
 
       if (ncnt < 3)
         {
-          printf ("shole: %s only %d map entries, skip\n", want, ncnt);
+          (void)printf ("shole: %s only %d map entries, skip\n", want, ncnt);
 
           continue;
         }
@@ -279,15 +279,15 @@ main (int argc, char **argv)
         }
 
       patched = 1;
-      printf ("shole: %s extent@dir %d cleared map[%d] (%s) was %d\n", want,
-              i, target, word_mode ? "word" : "byte", old);
+      (void)printf ("shole: %s extent@dir %d cleared map[%d] (%s) was %d\n",
+                    want, i, target, word_mode ? "word" : "byte", old);
 
       break; /* first matching extent only */
     }
 
   if (!patched)
     {
-      fprintf (stderr, "shole: %s not found\n", want);
+      (void)fprintf (stderr, "shole: %s not found\n", want);
       free (data);
 
       return 1;
@@ -305,14 +305,14 @@ main (int argc, char **argv)
 
   if (fwrite (data, 1, (size_t)sz, f) != (size_t)sz)
     {
-      fprintf (stderr, "shole: write failed\n");
-      fclose (f);
+      (void)fprintf (stderr, "shole: write failed\n");
+      (void)fclose (f);
       free (data);
 
       return 1;
     }
 
-  fclose (f);
+  (void)fclose (f);
   free (data);
 
   return 0;

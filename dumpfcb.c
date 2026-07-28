@@ -44,7 +44,10 @@ void _start (void) __attribute__ ((section (".text._start")));
 static UWORD
 bdos (WORD func, LONG info)
 {
-  UWORD ret;
+  UWORD ret = 0;
+
+  (void)func;
+  (void)info;
 
   __asm__ volatile ("int %2"
                     : "=a"(ret)
@@ -61,7 +64,7 @@ bdos (WORD func, LONG info)
 static void
 putch (char c)
 {
-  bdos (2, (LONG)(unsigned char)c);
+  (void)bdos (2, (LONG)(unsigned char)c);
 }
 
 /*****************************************************************************/
@@ -454,7 +457,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       help ();
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   /*
@@ -467,7 +470,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       dump_fcb (DEF_FCB, "FCB1 at TPA+0x5C (first 16 bytes)", 0);
       dump_fcb (DEF_FCB + 0x10, "FCB2 at TPA+0x6C (first 16 bytes)", 0);
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   for (i = 0; i < 36; i++)
@@ -486,7 +489,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts ("File not found (dumping FCB as passed)\r\n");
       dump_fcb (fcb, "FCB before open", 1);
 
-      bdos (0, 0);
+      (void)bdos (0, 0);
     }
 
   puts ("Open OK (dir index ");
@@ -494,7 +497,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   puts (")\r\n");
   dump_fcb (fcb, "FCB after open (cur_rec may hold LRBC if was 0xFF)", 1);
 
-  bdos (0, 0);
+  (void)bdos (0, 0);
 }
 
 /*****************************************************************************/
