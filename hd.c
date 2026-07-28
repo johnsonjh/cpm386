@@ -530,7 +530,7 @@ parse_num (const char *s, int *len)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
 

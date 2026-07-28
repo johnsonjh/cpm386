@@ -104,14 +104,13 @@ store_le32 (UBYTE *p, unsigned long v)
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
-  /* Stack locals - same pattern as HD/OD/LS (known good with BDOS ptrs) */
   char line[96];
-  UBYTE fcb[36];
+  UBYTE fcb[36] = { 0 };
   UBYTE pfcb[8];
   UWORD r, osv;
-  unsigned tlen, i, j;
+  unsigned int tlen, i;
   char *src;
 
   tlen = CMD_TAIL[0];
@@ -123,6 +122,8 @@ _start (void)
 
   if (tlen > 0)
     {
+      unsigned int j;
+
       for (i = 0; i < tlen; i++)
         {
           line[i] = (char)CMD_TAIL[1 + i];

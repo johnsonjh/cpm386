@@ -263,7 +263,6 @@ static void
 dump_dirent (const UBYTE *de, unsigned dir_index)
 {
   int i;
-  UWORD w;
 
   puts ("---- dirent @ search index ");
   putu (dir_index);
@@ -358,7 +357,8 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
 
   for (i = 0; i < 8; i++)
     {
-      w = (UWORD)de[16 + i * 2] | ((UWORD)de[17 + i * 2] << 8);
+      UWORD w = (UWORD)de[16 + i * 2] | ((UWORD)de[17 + i * 2] << 8);
+
       putch (' ');
       puthex2 ((w >> 8) & 0xFF);
       puthex2 (w & 0xFF);

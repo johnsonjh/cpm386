@@ -146,11 +146,11 @@ set_ran (UBYTE *fcb, unsigned long rec)
 }
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
   UBYTE fcb[36];
   UBYTE dma[128];
-  UBYTE dma2[128];
+  UBYTE dma2[128]; /*cppcheck-suppress unassignedVariable*/
   UWORD r;
   int i;
   unsigned long rec;
@@ -227,6 +227,7 @@ _start (void)
   /* S = SEARCH first for IOWORK.DAT */
   fill_name (fcb, "IOWORK  ", "DAT");
   bdos (26, (LONG)(unsigned long)dma);
+  /*cppcheck-suppress redundantAssignment */
   r = bdos (17, (LONG)(unsigned long)fcb);
 
   if (r <= 3)
@@ -265,6 +266,7 @@ _start (void)
 
   dma[0] = 'X';
   set_ran (fcb, 2);
+  /*cppcheck-suppress redundantAssignment */
   r = bdos (34, (LONG)(unsigned long)fcb);
   result (r == 0, 'P');
 
@@ -314,6 +316,7 @@ _start (void)
     }
 
   set_ran (fcb, 40);
+  /*cppcheck-suppress redundantAssignment */
   r = bdos (33, (LONG)(unsigned long)fcb);
   result (r == 0 && dma[0] == 'Z', 'Z');
 

@@ -243,6 +243,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           }
       }
 
+    /*cppcheck-suppress redundantAssignment*/
     r = bdos (20, (LONG)(unsigned long)fcb);
     result (ok && r == 1, "read 4 + EOF");
   }
@@ -266,6 +267,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   dma[0] = 'Z';
   set_ran (fcb, 32);
+  /*cppcheck-suppress redundantAssignment*/
   r = bdos (40, (LONG)(unsigned long)fcb);
   result (r == 0, "40 writezf@32");
 

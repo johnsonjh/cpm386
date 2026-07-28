@@ -528,14 +528,12 @@ parse_assign (void)
 static int
 match (const char *va, int vl)
 {
-  int sync, j, k;
-  int found;
-
-  j = 0;
+  int sync, k;
+  int j = 0;
 
   for (sync = 1; sync <= vl; sync++)
     {
-      found = TRUE;
+      int found = TRUE;
 
       for (k = 0; k < T_SIZE;)
         {
@@ -1138,13 +1136,12 @@ allocate_blks (const UBYTE *de)
 static void
 sort_files (void)
 {
-  int i, j;
-  struct fileent tmp;
+  int i;
 
   for (i = 1; i < (int)fcbn; i++)
     {
-      tmp = files[i];
-      j = i - 1;
+      struct fileent tmp = files[i];
+      int j = i - 1;
 
       while (j >= 0)
         {
@@ -1671,17 +1668,16 @@ error:
 /*****************************************************************************/
 
 void
-_start (void)
+_start (void) /*cppcheck-suppress unusedFunction*/
 {
-  int tail_len, i;
-
   bpfcb = DEF_FCB;
   buff = CMD_TAIL;
 
   /* make a local copy of the command tail, scan() modifies it */
   {
     static UBYTE cmd_copy[128];
-    tail_len = buff[0];
+    int tail_len = buff[0];
+    int i;
 
     if (tail_len > 126)
       {

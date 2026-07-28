@@ -148,7 +148,6 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 {
   int i;
   unsigned char c;
-  unsigned long ran;
 
   puts ("\r\n");
 
@@ -302,6 +301,8 @@ dump_fcb (const UBYTE *f, const char *title, int full)
     }
   else
     {
+      unsigned long ran;
+
       /* +16..31 allocation map */
       puts ("+10     dskmap    ");
 

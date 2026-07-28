@@ -255,7 +255,7 @@ add_dirent (const UBYTE *de, int word_mode)
 {
   int i, idx = -1;
   UBYTE ex = de[12];
-  UBYTE s1 = de[13];
+  UBYTE s1 = de[13]; /*cppcheck-suppress variableScope*/
   UBYTE s2 = de[14];
   UBYTE rc = de[15];
 
@@ -362,7 +362,6 @@ static void
 sort_files (int sort_by, int reverse, int ignore_lrbc)
 {
   int i, j;
-  struct fileent t;
 
   if (!sort_by && !reverse)
     {
@@ -386,6 +385,7 @@ sort_files (int sort_by, int reverse, int ignore_lrbc)
                                              ignore_lrbc ? 0 : files[i].lrbc);
               unsigned long sb = exact_size (files[j].records,
                                              ignore_lrbc ? 0 : files[j].lrbc);
+
               if (sa > sb)
                 {
                   c = 1;
@@ -406,7 +406,8 @@ sort_files (int sort_by, int reverse, int ignore_lrbc)
 
           if ((!reverse && c > 0) || (reverse && c < 0))
             {
-              t = files[i];
+              struct fileent t = files[i];
+
               files[i] = files[j];
               files[j] = t;
             }
@@ -987,13 +988,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
           if (flag_pause)
             {
-              int d, wt = 1;
+              int wt = 1;
 
               puts ("[More]");
 
               while (wt)
                 {
-                  d = getch_wait ();
+                  int d = getch_wait ();
 
                   switch (d)
                     {

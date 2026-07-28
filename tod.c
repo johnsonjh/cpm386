@@ -142,7 +142,7 @@ ymd_to_days (unsigned y, unsigned m, unsigned d)
 static void
 days_to_ymd (UWORD days, unsigned *y, unsigned *m, unsigned *d)
 {
-  unsigned yy = 1978, rem = days, dim;
+  unsigned int yy = 1978, rem = days;
 
   for (;;)
     {
@@ -162,7 +162,7 @@ days_to_ymd (UWORD days, unsigned *y, unsigned *m, unsigned *d)
 
   for (;;)
     {
-      dim = mdays[*m - 1];
+      unsigned int dim = mdays[*m - 1];
 
       if (*m == 2 && is_leap (yy))
         {
@@ -323,12 +323,11 @@ usage (void)
 static void
 eat_stop_key (void)
 {
-  int c;
   int n = 0;
 
   while (bdos (11, 0) != 0 && n++ < 3)
     {
-      c = (int)bdos (6, 0xFF) & 0xff;
+      int c = (int)bdos (6, 0xFF) & 0xff;
 
       if (c != '\r' && c != '\n' && c != 0)
         {

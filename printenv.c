@@ -222,7 +222,7 @@ static void
 dump_env_file (void)
 {
   UBYTE fcb[36];
-  UBYTE dma[128];
+  UBYTE dma[128]; /*cppcheck-suppress unassignedVariable*/
   UBYTE lrbc = 0;
   UBYTE prev[128];
   int have = 0;
