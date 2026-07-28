@@ -15,6 +15,7 @@ typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
+typedef unsigned long ULONG;
 
 /*****************************************************************************/
 
@@ -50,7 +51,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -128,7 +129,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   UWORD r;
 
   puts ("BDOS 105 (binary hms):\r\n");
-  r = bdos (BDOS_105, (LONG)(unsigned long)&bin);
+  r = bdos (BDOS_105, (LONG)(ULONG)&bin);
 
   if (r)
     {
@@ -148,7 +149,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   puts ("BDOS 155 (BCD hms):\r\n");
-  r = bdos (BDOS_155, (LONG)(unsigned long)&bcd);
+  r = bdos (BDOS_155, (LONG)(ULONG)&bcd);
 
   if (r)
     {

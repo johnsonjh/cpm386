@@ -26,6 +26,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -58,7 +59,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -388,7 +389,7 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user)
 {
   UWORD r;
 
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(ULONG)dma);
 
   if (fcb[0])
     {
@@ -398,7 +399,7 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user)
   fcb[12] = '?';
   fcb[14] = '?';
 
-  r = bdos (17, (LONG)(unsigned long)fcb);
+  r = bdos (17, (LONG)(ULONG)fcb);
 
   while (r != 255)
     {
@@ -641,10 +642,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           }
 
           /* set attrs clear high bits */
-          (void)bdos (30, (LONG)(unsigned long)dfcb);
+          (void)bdos (30, (LONG)(ULONG)dfcb);
         }
 
-      r = bdos (19, (LONG)(unsigned long)dfcb);
+      r = bdos (19, (LONG)(ULONG)dfcb);
 
       if (r == 255)
         {

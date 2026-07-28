@@ -30,6 +30,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -61,7 +62,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -89,7 +90,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 static void
-putu (unsigned long n)
+putu (ULONG n)
 {
   char b[12];
   int i = 0;
@@ -223,7 +224,7 @@ _start (void) /* cppcheck-suppress unusedFunction*/
   {
     UWORD cur = bdos (BDOS_PCODE, (LONG)0xFFFF);
     puts ("Current return code: ");
-    putu ((unsigned long)cur);
+    putu ((ULONG)cur);
     puts ("\r\n");
   }
 

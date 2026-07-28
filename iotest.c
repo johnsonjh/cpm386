@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -38,7 +39,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -66,7 +67,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 static void
-putu (unsigned long n)
+putu (ULONG n)
 {
   char buf[12];
   int i = 0;
@@ -141,7 +142,7 @@ fill_name (UBYTE *fcb, const char *name8, const char *typ3)
 
 /* CP/M-68K random record: ran0=bits16-23, ran1=8-15, ran2=0-7 */
 static void
-set_ran (UBYTE *fcb, unsigned long rec)
+set_ran (UBYTE *fcb, ULONG rec)
 {
   fcb[33] = (UBYTE)((rec >> 16) & 0xff);
   fcb[34] = (UBYTE)((rec >> 8) & 0xff);
@@ -156,7 +157,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   UBYTE dma2[128]; /*cppcheck-suppress unassignedVariable*/
   UWORD r;
   int i;
-  unsigned long rec;
+  ULONG rec;
   const char banner[] = "\r\nIOTEST (BDOS I/O Test Suite)\r\n";
   const char done[] = "*** done fails=";
 
@@ -165,18 +166,18 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   /* C = CREATE */
   fill_name (fcb, "IOWORK  ", "DAT");
-  (void)bdos (19, (LONG)(unsigned long)fcb);
+  (void)bdos (19, (LONG)(ULONG)fcb);
   fill_name (fcb, "IOWORK  ", "DAT");
-  r = bdos (22, (LONG)(unsigned long)fcb);
+  r = bdos (22, (LONG)(ULONG)fcb);
   result (r <= 3, 'C');
 
   /* O = OPEN */
   fill_name (fcb, "IOWORK  ", "DAT");
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
   result (r <= 3, 'O');
 
   /* W = sequential WRITE x5 */
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(ULONG)dma);
 
   for (rec = 0; rec < 5; rec++)
     {
@@ -186,7 +187,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         }
 
       dma[0] = (UBYTE)('0' + rec);
-      r = bdos (21, (LONG)(unsigned long)fcb);
+      r = bdos (21, (LONG)(ULONG)fcb);
 
       if (r != 0)
         {
@@ -197,17 +198,17 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   result (rec == 5, 'W');
 
   /* L = cLose */
-  r = bdos (16, (LONG)(unsigned long)fcb);
+  r = bdos (16, (LONG)(ULONG)fcb);
   result (r <= 3, 'L');
 
   /* R = sequential READ x5 + EOF */
   fill_name (fcb, "IOWORK  ", "DAT");
-  r = bdos (15, (LONG)(unsigned long)fcb);
-  (void)bdos (26, (LONG)(unsigned long)dma2);
+  r = bdos (15, (LONG)(ULONG)fcb);
+  (void)bdos (26, (LONG)(ULONG)dma2);
 
   for (rec = 0; rec < 5; rec++)
     {
-      r = bdos (20, (LONG)(unsigned long)fcb);
+      r = bdos (20, (LONG)(ULONG)fcb);
 
       if (r != 0 || dma2[0] != (UBYTE)('0' + rec))
         {
@@ -217,7 +218,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   if (rec == 5)
     {
-      r = bdos (20, (LONG)(unsigned long)fcb);
+      r = bdos (20, (LONG)(ULONG)fcb);
       result (r == 1, 'R');
     }
   else
@@ -225,13 +226,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       result (0, 'R');
     }
 
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 
   /* S = SEARCH first for IOWORK.DAT */
   fill_name (fcb, "IOWORK  ", "DAT");
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(ULONG)dma);
   /*cppcheck-suppress redundantAssignment */
-  r = bdos (17, (LONG)(unsigned long)fcb);
+  r = bdos (17, (LONG)(ULONG)fcb);
 
   if (r <= 3)
     {
@@ -245,7 +246,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   /* N = search Next (wild) at least one match */
   fill_name (fcb, "????????", "???");
-  r = bdos (17, (LONG)(unsigned long)fcb);
+  r = bdos (17, (LONG)(ULONG)fcb);
   {
     int n = 0;
 
@@ -259,8 +260,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   /* P = write random (record 2), Q = read random back */
   fill_name (fcb, "IOWORK  ", "DAT");
-  r = bdos (15, (LONG)(unsigned long)fcb);
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  r = bdos (15, (LONG)(ULONG)fcb);
+  (void)bdos (26, (LONG)(ULONG)dma);
 
   for (i = 0; i < 128; i++)
     {
@@ -270,7 +271,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   dma[0] = 'X';
   set_ran (fcb, 2);
   /*cppcheck-suppress redundantAssignment */
-  r = bdos (34, (LONG)(unsigned long)fcb);
+  r = bdos (34, (LONG)(ULONG)fcb);
   result (r == 0, 'P');
 
   for (i = 0; i < 128; i++)
@@ -279,7 +280,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   set_ran (fcb, 2);
-  r = bdos (33, (LONG)(unsigned long)fcb);
+  r = bdos (33, (LONG)(ULONG)fcb);
   result (r == 0 && dma[0] == 'X' && dma[1] == 0x5A, 'Q');
 
   /*
@@ -297,10 +298,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   dma[0] = 'H';
   set_ran (fcb, 40);
-  r = bdos (34, (LONG)(unsigned long)fcb);
+  r = bdos (34, (LONG)(ULONG)fcb);
   result (r == 0, 'Y'); /* write past gap */
   set_ran (fcb, 20);
-  r = bdos (33, (LONG)(unsigned long)fcb);
+  r = bdos (33, (LONG)(ULONG)fcb);
   result (r == 1, 'H'); /* hole EOF */
 
   /* Z: random R/W still works after probing a hole (fresh pattern) */
@@ -311,7 +312,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   dma[0] = 'Z';
   set_ran (fcb, 40);
-  r = bdos (34, (LONG)(unsigned long)fcb);
+  r = bdos (34, (LONG)(ULONG)fcb);
 
   for (i = 0; i < 128; i++)
     {
@@ -320,10 +321,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   set_ran (fcb, 40);
   /*cppcheck-suppress redundantAssignment */
-  r = bdos (33, (LONG)(unsigned long)fcb);
+  r = bdos (33, (LONG)(ULONG)fcb);
   result (r == 0 && dma[0] == 'Z', 'Z');
 
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 
   puts (done);
   putu (fails);

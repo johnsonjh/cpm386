@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -44,7 +45,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -231,7 +232,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   fcb[12] = 0;
   fcb[14] = 0;
   fcb[32] = 0xFF;
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r > 3)
     {
@@ -243,12 +244,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   lrbc = fcb[32];
   fcb[32] = 0;
 
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(ULONG)dma);
 
   /* Read ahead one record so LRBC can trim the last */
   for (;;)
     {
-      r = bdos (20, (LONG)(unsigned long)fcb);
+      r = bdos (20, (LONG)(ULONG)fcb);
 
       if (r != 0)
         {
@@ -408,7 +409,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
 done:
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 
   (void)bdos (0, 0);
 }

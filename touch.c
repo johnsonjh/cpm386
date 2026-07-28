@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -44,7 +45,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -151,11 +152,11 @@ touch_one (const char *name)
   fcb[14] = 0; /* s2 */
   fcb[32] = 0;
 
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r <= 3)
     {
-      (void)bdos (16, (LONG)(unsigned long)fcb); /* close */
+      (void)bdos (16, (LONG)(ULONG)fcb); /* close */
 
       return;
     }
@@ -168,11 +169,11 @@ touch_one (const char *name)
   fcb[15] = 0; /* rc */
   fcb[32] = 0;
 
-  r = bdos (22, (LONG)(unsigned long)fcb);
+  r = bdos (22, (LONG)(ULONG)fcb);
 
   if (r <= 3)
     {
-      (void)bdos (16, (LONG)(unsigned long)fcb);
+      (void)bdos (16, (LONG)(ULONG)fcb);
     }
   else
     {
@@ -303,11 +304,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               fcb[14] = 0;
               fcb[32] = 0;
 
-              r = bdos (15, (LONG)(unsigned long)fcb);
+              r = bdos (15, (LONG)(ULONG)fcb);
 
               if (r <= 3)
                 {
-                  (void)bdos (16, (LONG)(unsigned long)fcb);
+                  (void)bdos (16, (LONG)(ULONG)fcb);
 
                   (void)bdos (0, 0);
                 }
@@ -323,11 +324,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               fcb[15] = 0;
               fcb[32] = 0;
 
-              r = bdos (22, (LONG)(unsigned long)fcb);
+              r = bdos (22, (LONG)(ULONG)fcb);
 
               if (r <= 3)
                 {
-                  (void)bdos (16, (LONG)(unsigned long)fcb);
+                  (void)bdos (16, (LONG)(ULONG)fcb);
                 }
 
               (void)bdos (0, 0);

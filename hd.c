@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -31,12 +32,12 @@ typedef unsigned char UBYTE;
 
 static int opt_h = 0, opt_i = 0, opt_o = 0, opt_w = 0, opt_n = 0;
 static int opt_p = 0, opt_a = 0, opt_d = 0, opt_u = 0;
-static unsigned long opt_l = 0; /* 0 = no limit */
-static unsigned long opt_s = 0; /* 0 = no seek  */
+static ULONG opt_l = 0; /* 0 = no limit */
+static ULONG opt_s = 0; /* 0 = no seek  */
 static int opt_b_set = 0;
 static unsigned opt_b = 0;
 static unsigned bytes_per_line = 20, hex_start = 0, ascii_start = 60;
-static unsigned long file_offset = 0;
+static ULONG file_offset = 0;
 static UBYTE out_dma[128];
 static int out_col = 0;
 static UBYTE out_fcb[36];
@@ -59,7 +60,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -80,8 +81,8 @@ putch (char c)
   out_dma[out_col++] = c;
   if (out_col == 128)
     {
-      (void)bdos (26, (LONG)(unsigned long)out_dma);
-      (void)bdos (21, (LONG)(unsigned long)out_fcb);
+      (void)bdos (26, (LONG)(ULONG)out_dma);
+      (void)bdos (21, (LONG)(ULONG)out_fcb);
       out_col = 0;
     }
 }
@@ -100,11 +101,11 @@ out_flush_close (void)
               out_dma[out_col++] = 26;
             }
 
-          (void)bdos (26, (LONG)(unsigned long)out_dma);
-          (void)bdos (21, (LONG)(unsigned long)out_fcb);
+          (void)bdos (26, (LONG)(ULONG)out_dma);
+          (void)bdos (21, (LONG)(ULONG)out_fcb);
         }
 
-      (void)bdos (16, (LONG)(unsigned long)out_fcb);
+      (void)bdos (16, (LONG)(ULONG)out_fcb);
     }
 }
 
@@ -215,7 +216,7 @@ static unsigned col;   /* 0..bytes_per_line-1 bytes filled in line */
 /*****************************************************************************/
 
 static int prev_was_star = 0;
-static unsigned long bytes_dumped = 0;
+static ULONG bytes_dumped = 0;
 
 /*****************************************************************************/
 
@@ -318,7 +319,7 @@ line_flush (void)
 /*****************************************************************************/
 
 static void
-put_dec_offset (unsigned long off)
+put_dec_offset (ULONG off)
 {
   char buf[12];
   int i = 0;
@@ -385,7 +386,7 @@ hexdump_feed (const UBYTE *buf, unsigned size)
                 }
               else
                 {
-                  unsigned long tmp = file_offset;
+                  ULONG tmp = file_offset;
                   int k;
                   line[8] = ':';
                   line[9] = ' ';
@@ -513,15 +514,15 @@ set_fcb (UBYTE *fcb, const char *name)
 
 /*****************************************************************************/
 
-static unsigned long
+static ULONG
 parse_num (const char *s, int *len)
 {
-  unsigned long v = 0;
+  ULONG v = 0;
   int n = 0;
 
   while (s[n] >= '0' && s[n] <= '9')
     {
-      v = v * 10 + (unsigned long)(s[n] - '0');
+      v = v * 10 + (ULONG)(s[n] - '0');
       n++;
     }
 
@@ -631,7 +632,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               else if (c == 'b')
                 {
                   int nlen = 0;
-                  unsigned long v;
+                  ULONG v;
 
                   if (tail[i] && tail[i] != ' ' && tail[i] != '\t')
                     {
@@ -666,7 +667,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               else if (c == 'l')
                 {
                   int nlen = 0;
-                  unsigned long v;
+                  ULONG v;
 
                   if (tail[i] && tail[i] != ' ' && tail[i] != '\t')
                     {
@@ -700,7 +701,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               else if (c == 's')
                 {
                   int nlen = 0;
-                  unsigned long v;
+                  ULONG v;
 
                   if (tail[i] && tail[i] != ' ' && tail[i] != '\t')
                     {
@@ -780,7 +781,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   fcb[14] = 0;
   fcb[32] = 0xFF; /* request LRBC on open */
 
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r > 3)
     {
@@ -810,9 +811,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       out_fcb[12] = out_fcb[13] = out_fcb[14] = out_fcb[15] = 0;
       out_fcb[32] = 0;
 
-      (void)bdos (19, (LONG)(unsigned long)out_fcb);
+      (void)bdos (19, (LONG)(ULONG)out_fcb);
 
-      r = bdos (22, (LONG)(unsigned long)out_fcb);
+      r = bdos (22, (LONG)(ULONG)out_fcb);
 
       if (r > 3)
         {
@@ -843,22 +844,22 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   ascii_start = hex_start + bytes_per_line * 3;
 
   col = 0;
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(ULONG)dma);
 
   /* -s, seek past N bytes */
   if (opt_s > 0)
     {
-      unsigned long to_skip = opt_s;
+      ULONG to_skip = opt_s;
 
       /* skip full records */
       while (to_skip >= 128)
         {
-          r = bdos (20, (LONG)(unsigned long)fcb);
+          r = bdos (20, (LONG)(ULONG)fcb);
 
           if (r != 0)
             {
               puts ("Seek past end of file\r\n");
-              (void)bdos (16, (LONG)(unsigned long)fcb);
+              (void)bdos (16, (LONG)(ULONG)fcb);
 
               (void)bdos (0, 0);
             }
@@ -869,12 +870,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       if (to_skip > 0)
         {
-          r = bdos (20, (LONG)(unsigned long)fcb);
+          r = bdos (20, (LONG)(ULONG)fcb);
 
           if (r != 0)
             {
               puts ("Seek past end of file\r\n");
-              (void)bdos (16, (LONG)(unsigned long)fcb);
+              (void)bdos (16, (LONG)(ULONG)fcb);
 
               (void)bdos (0, 0);
             }
@@ -898,7 +899,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
             for (;;)
               {
-                r = bdos (20, (LONG)(unsigned long)fcb);
+                r = bdos (20, (LONG)(ULONG)fcb);
 
                 if (r != 0)
                   {
@@ -983,7 +984,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* Normal read loop */
   for (;;)
     {
-      r = bdos (20, (LONG)(unsigned long)fcb);
+      r = bdos (20, (LONG)(ULONG)fcb);
 
       if (r != 0)
         {
@@ -1029,7 +1030,7 @@ finish:
   hexdump_end ();
   out_flush_close ();
 
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 
   (void)bdos (0, 0);
 }

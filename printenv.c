@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -43,7 +44,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -239,7 +240,7 @@ dump_env_file (void)
 
   fill_env_fcb (fcb);
   fcb[32] = 0xFF;
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r > 3)
     {
@@ -249,11 +250,11 @@ dump_env_file (void)
 
   lrbc = fcb[32];
   fcb[32] = 0;
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(ULONG)dma);
 
   for (;;)
     {
-      r = bdos (20, (LONG)(unsigned long)fcb);
+      r = bdos (20, (LONG)(ULONG)fcb);
       if (r != 0)
         {
           final = 1;
@@ -448,7 +449,7 @@ done_file:
       puts ("\r\n");
     }
 
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 }
 
 /*****************************************************************************/

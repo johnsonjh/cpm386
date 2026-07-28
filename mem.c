@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -32,8 +33,8 @@ struct tpa_req
 {
   UWORD parms; /* 0 = get, bit0 = set, bit1 = sticky */
   UWORD _pad;
-  unsigned long low; /* BYTE * in kernel */
-  unsigned long high;
+  ULONG low; /* BYTE * in kernel */
+  ULONG high;
 };
 
 /*****************************************************************************/
@@ -50,7 +51,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -78,7 +79,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 static void
-putu (unsigned long n)
+putu (ULONG n)
 {
   char b[12];
   int i = 0;
@@ -104,7 +105,7 @@ putu (unsigned long n)
 /*****************************************************************************/
 
 static void
-puthex32 (unsigned long v)
+puthex32 (ULONG v)
 {
   static const char h[] = "0123456789ABCDEF";
   int i;
@@ -121,7 +122,7 @@ puthex32 (unsigned long v)
 
 /* Print n bytes as KB (rounded down) with unit. */
 static void
-put_kb (unsigned long bytes)
+put_kb (ULONG bytes)
 {
   putu (bytes / 1024UL);
   puts ("K");
@@ -133,14 +134,14 @@ void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct tpa_req t;
-  unsigned long base, top, tpa_len, free_prog, ramdisk_size, kernel_size;
+  ULONG base, top, tpa_len, free_prog, ramdisk_size, kernel_size;
 
   t.parms = 0; /* get */
   t._pad = 0;
   t.low = 0;
   t.high = 0;
 
-  (void)bdos (BDOS_TPA, (LONG)(unsigned long)&t);
+  (void)bdos (BDOS_TPA, (LONG)(ULONG)&t);
 
   base = t.low;
   top = t.high;
@@ -169,7 +170,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   put_kb (top);
   puts (" from 0)\r\n");
 
-  ramdisk_size = (unsigned long)bdos (227, 0) * 1024UL;
+  ramdisk_size = (ULONG)bdos (227, 0) * 1024UL;
   kernel_size = base - ramdisk_size;
 
   puts ("System CBIOS/BDOS/CCP: ");

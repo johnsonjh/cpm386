@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -57,7 +58,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -116,7 +117,7 @@ wait_next_second (UBYTE last_sec)
           return 1;
         }
 
-      if (bdos (BDOS_GET_TOD, (LONG)(unsigned long)&dt) == 0
+      if (bdos (BDOS_GET_TOD, (LONG)(ULONG)&dt) == 0
           && dt.sec != last_sec)
         {
           return 0;
@@ -258,7 +259,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   char dig[16];
   UWORD r;
 
-  r = bdos (BDOS_CON_VIDEO, (LONG)(unsigned long)&vi);
+  r = bdos (BDOS_CON_VIDEO, (LONG)(ULONG)&vi);
 
   if (r == 0xFFFF || vi.sel == 0)
     {
@@ -290,7 +291,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       int hidx;
 
-      if (bdos (BDOS_GET_TOD, (LONG)(unsigned long)&dt) != 0)
+      if (bdos (BDOS_GET_TOD, (LONG)(ULONG)&dt) != 0)
         {
           dt.hour = dt.min = dt.sec = 0;
         }

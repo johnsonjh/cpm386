@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -48,7 +49,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -76,7 +77,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 static void
-putu (unsigned long n)
+putu (ULONG n)
 {
   char buf[12];
   int i = 0;
@@ -102,8 +103,8 @@ putu (unsigned long n)
 /*****************************************************************************/
 
 /* Exact byte length from record count + DOS-PLUS LRBC */
-static unsigned long
-exact_size (unsigned long records, UBYTE lrbc)
+static ULONG
+exact_size (ULONG records, UBYTE lrbc)
 {
   if (records == 0)
     {
@@ -115,7 +116,7 @@ exact_size (unsigned long records, UBYTE lrbc)
       return records * 128UL;
     }
 
-  return (records - 1) * 128UL + (unsigned long)lrbc;
+  return (records - 1) * 128UL + (ULONG)lrbc;
 }
 
 /*****************************************************************************/
@@ -126,7 +127,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   UBYTE fcb[36];
   UWORD r;
   UBYTE lrbc;
-  unsigned long records, bytes_alloc, bytes_exact;
+  ULONG records, bytes_alloc, bytes_exact;
   int i, has_value = 0, new_lrbc = 0;
 
   puts ("\r\nLRBC (Last Record Byte Count)\r\n");
@@ -205,7 +206,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   fcb[14] = 0;    /* s2 */
   fcb[32] = 0xFF; /* request LRBC on open (CP/M Plus / DOS Plus) */
 
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r > 3)
     {
@@ -223,9 +224,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
    * (CP/M-68K packing: ran0 = bits16-23, ran1 = 8-15, ran2 = 0-7).
    */
 
-  (void)bdos (35, (LONG)(unsigned long)fcb);
-  records = ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
-            | (unsigned long)fcb[35];
+  (void)bdos (35, (LONG)(ULONG)fcb);
+  records = ((ULONG)fcb[33] << 16) | ((ULONG)fcb[34] << 8)
+            | (ULONG)fcb[35];
 
   if (has_value)
     {
@@ -236,7 +237,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       fcb[6] |= 0x80;
       fcb[32] = (UBYTE)new_lrbc;
-      r = bdos (30, (LONG)(unsigned long)fcb);
+      r = bdos (30, (LONG)(ULONG)fcb);
 
       if (r == 255)
         {
@@ -277,12 +278,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   puts ("\r\n");
 
   puts ("LRBC (DOS-PLUS, bytes used in last rec): ");
-  putu ((unsigned long)lrbc);
+  putu ((ULONG)lrbc);
 
   if (has_value)
     {
       puts (" -> ");
-      putu ((unsigned long)new_lrbc);
+      putu ((ULONG)new_lrbc);
     }
 
   puts ("\r\n");

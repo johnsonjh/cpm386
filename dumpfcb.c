@@ -23,6 +23,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -53,7 +54,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -304,7 +305,7 @@ dump_fcb (const UBYTE *f, const char *title, int full)
     }
   else
     {
-      unsigned long ran;
+      ULONG ran;
 
       /* +16..31 allocation map */
       puts ("+10     dskmap    ");
@@ -356,8 +357,7 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
       puts ("\r\n");
 
-      ran = (unsigned long)f[33] | ((unsigned long)f[34] << 8)
-            | ((unsigned long)f[35] << 16);
+      ran = (ULONG)f[33] | ((ULONG)f[34] << 8) | ((ULONG)f[35] << 16);
       puts ("+21     ran0..2   ");
       puthex2 (f[33]);
       putch (' ');
@@ -482,7 +482,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   fcb[14] = 0;
   fcb[32] = 0xFF; /* request LRBC on open */
 
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r > 3)
     {

@@ -16,6 +16,7 @@ typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
+typedef unsigned long ULONG;
 
 /*****************************************************************************/
 
@@ -36,8 +37,8 @@ struct tpa_req
 {
   UWORD parms;
   UWORD _pad;
-  unsigned long low;
-  unsigned long high;
+  ULONG low;
+  ULONG high;
 };
 
 /*****************************************************************************/
@@ -54,7 +55,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -82,7 +83,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 static void
-putu (unsigned long n)
+putu (ULONG n)
 {
   char b[12];
   int i = 0;
@@ -115,9 +116,9 @@ void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct tpa_req t;
-  unsigned long esp;
-  unsigned long i;
-  /* unsigned long start_addr, end_addr; */
+  ULONG esp;
+  ULONG i;
+  /* ULONG start_addr, end_addr; */
   int verify = 0;
   const char *tail = (char *)CMD_TAIL;
   int tail_len = tail[0];
@@ -149,11 +150,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   t._pad = 0;
   t.low = 0;
   t.high = 0;
-  (void)bdos (BDOS_TPA, (LONG)(unsigned long)&t);
+  (void)bdos (BDOS_TPA, (LONG)(ULONG)&t);
 
-  unsigned long start_addr1 = (unsigned long)&_end;
+  ULONG start_addr1 = (ULONG)&_end;
   start_addr1 = (start_addr1 + 3) & ~3;
-  unsigned long end_addr1 = esp - 16384;
+  ULONG end_addr1 = esp - 16384;
   end_addr1 &= ~3;
 
   if (end_addr1 > t.high)
@@ -171,9 +172,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       start_addr1 = end_addr1;
     }
 
-  unsigned long start_addr2 = esp + 16384;
+  ULONG start_addr2 = esp + 16384;
   start_addr2 = (start_addr2 + 3) & ~3;
-  unsigned long end_addr2 = t.high;
+  ULONG end_addr2 = t.high;
   end_addr2 &= ~3;
 
   if (start_addr2 < t.low)
@@ -186,22 +187,22 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       start_addr2 = end_addr2;
     }
 
-  unsigned long total_k
+  ULONG total_k
       = ((end_addr1 - start_addr1) + (end_addr2 - start_addr2)) / 1024;
 
   puts ("Clearing: ");
   putu (total_k);
   puts ("K\r\n");
 
-  volatile unsigned long *p1 = (volatile unsigned long *)start_addr1;
-  unsigned long count1 = (end_addr1 - start_addr1) / 4;
+  volatile ULONG *p1 = (volatile ULONG *)start_addr1;
+  ULONG count1 = (end_addr1 - start_addr1) / 4;
   for (i = 0; i < count1; i++)
     {
       p1[i] = 0;
     }
 
-  volatile unsigned long *p2 = (volatile unsigned long *)start_addr2;
-  unsigned long count2 = (end_addr2 - start_addr2) / 4;
+  volatile ULONG *p2 = (volatile ULONG *)start_addr2;
+  ULONG count2 = (end_addr2 - start_addr2) / 4;
   for (i = 0; i < count2; i++)
     {
       p2[i] = 0;

@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -38,7 +39,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -66,7 +67,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 static void
-putu (unsigned long n)
+putu (ULONG n)
 {
   char b[12];
   int i = 0;
@@ -133,7 +134,7 @@ fill_name (UBYTE *fcb, const char *n8, const char *t3)
 /*****************************************************************************/
 
 static void
-set_ran (UBYTE *fcb, unsigned long rec)
+set_ran (UBYTE *fcb, ULONG rec)
 {
   fcb[33] = (UBYTE)((rec >> 16) & 0xff);
   fcb[34] = (UBYTE)((rec >> 8) & 0xff);
@@ -142,11 +143,11 @@ set_ran (UBYTE *fcb, unsigned long rec)
 
 /*****************************************************************************/
 
-static unsigned long
+static ULONG
 get_ran (const UBYTE *fcb)
 {
-  return ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
-         | (unsigned long)fcb[35];
+  return ((ULONG)fcb[33] << 16) | ((ULONG)fcb[34] << 8)
+         | (ULONG)fcb[35];
 }
 
 /*****************************************************************************/
@@ -158,7 +159,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   UBYTE dma[128];
   UWORD r;
   int i;
-  unsigned long sz;
+  ULONG sz;
 
   fails = 0;
   puts ("\r\nTRUNC (BDOS 40/BDOS 99/BDOS 37/BDOS 98)\r\n");
@@ -173,16 +174,16 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   /* Create TRUNC.DAT */
   fill_name (fcb, "TRUNC   ", "DAT");
-  (void)bdos (19, (LONG)(unsigned long)fcb); /* delete if present */
+  (void)bdos (19, (LONG)(ULONG)fcb); /* delete if present */
   fill_name (fcb, "TRUNC   ", "DAT");
-  r = bdos (22, (LONG)(unsigned long)fcb);
+  r = bdos (22, (LONG)(ULONG)fcb);
   result (r <= 3, "make");
 
   fill_name (fcb, "TRUNC   ", "DAT");
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
   result (r <= 3, "open");
 
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(ULONG)dma);
 
   /* Sequential write 10 records (0..9) */
   for (i = 0; i < 10; i++)
@@ -195,7 +196,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         }
 
       dma[0] = (UBYTE)('0' + i);
-      r = bdos (21, (LONG)(unsigned long)fcb);
+      r = bdos (21, (LONG)(ULONG)fcb);
 
       if (r != 0)
         {
@@ -204,41 +205,41 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   result (i == 10, "seq write 10");
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 
   /* Size should be 10 */
   fill_name (fcb, "TRUNC   ", "DAT");
-  (void)bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(ULONG)fcb);
   sz = get_ran (fcb);
   result (sz == 10, "size 10");
 
   /* Truncate to 4 records */
   fill_name (fcb, "TRUNC   ", "DAT");
   set_ran (fcb, 4);
-  r = bdos (99, (LONG)(unsigned long)fcb);
+  r = bdos (99, (LONG)(ULONG)fcb);
   result (r <= 3, "trunc 4");
 
   fill_name (fcb, "TRUNC   ", "DAT");
-  (void)bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(ULONG)fcb);
   sz = get_ran (fcb);
   result (sz == 4, "size now 4");
 
   /* Cannot extend via truncate */
   fill_name (fcb, "TRUNC   ", "DAT");
   set_ran (fcb, 20);
-  r = bdos (99, (LONG)(unsigned long)fcb);
+  r = bdos (99, (LONG)(ULONG)fcb);
   result (r == 255, "no extend");
 
   /* Read remaining records */
   fill_name (fcb, "TRUNC   ", "DAT");
-  r = bdos (15, (LONG)(unsigned long)fcb);
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  r = bdos (15, (LONG)(ULONG)fcb);
+  (void)bdos (26, (LONG)(ULONG)dma);
   {
     int ok = 1;
 
     for (i = 0; i < 4; i++)
       {
-        r = bdos (20, (LONG)(unsigned long)fcb);
+        r = bdos (20, (LONG)(ULONG)fcb);
 
         if (r != 0 || dma[0] != (UBYTE)('0' + i))
           {
@@ -247,11 +248,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       }
 
     /*cppcheck-suppress redundantAssignment*/
-    r = bdos (20, (LONG)(unsigned long)fcb);
+    r = bdos (20, (LONG)(ULONG)fcb);
     result (ok && r == 1, "read 4 + EOF");
   }
 
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 
   /*
    * BDOS 40 WRITEZF: write random rec 32 (new block + zero-fill).
@@ -261,7 +262,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
    */
 
   fill_name (fcb, "TRUNC   ", "DAT");
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
 
   for (i = 0; i < 128; i++)
     {
@@ -271,11 +272,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   dma[0] = 'Z';
   set_ran (fcb, 32);
   /*cppcheck-suppress redundantAssignment*/
-  r = bdos (40, (LONG)(unsigned long)fcb);
+  r = bdos (40, (LONG)(ULONG)fcb);
   result (r == 0, "40 writezf@32");
 
   set_ran (fcb, 16);
-  r = bdos (33, (LONG)(unsigned long)fcb);
+  r = bdos (33, (LONG)(ULONG)fcb);
   result (r == 1, "hole@16 EOF");
 
   set_ran (fcb, 32);
@@ -285,7 +286,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       dma[i] = 0;
     }
 
-  r = bdos (33, (LONG)(unsigned long)fcb);
+  r = bdos (33, (LONG)(ULONG)fcb);
   result (r == 0 && dma[0] == 'Z' && dma[1] == 0xAB, "readzf@32");
 
   /* Extend size into the zero-filled tail of the same block */
@@ -297,11 +298,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   dma[0] = 'T';
   set_ran (fcb, 47);
   r = bdos (34,
-            (LONG)(unsigned long)fcb); /* normal random write, block exists */
+            (LONG)(ULONG)fcb); /* normal random write, block exists */
   result (r == 0, "write@47 same blk");
 
   set_ran (fcb, 33);
-  r = bdos (33, (LONG)(unsigned long)fcb);
+  r = bdos (33, (LONG)(ULONG)fcb);
   {
     int z = (r == 0);
 
@@ -319,15 +320,15 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     result (z, "zf mid@33 zero");
   }
 
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 
   /* Truncate sparse file back to 2 records */
   fill_name (fcb, "TRUNC   ", "DAT");
   set_ran (fcb, 2);
-  r = bdos (99, (LONG)(unsigned long)fcb);
+  r = bdos (99, (LONG)(ULONG)fcb);
   result (r <= 3, "trunc sparse->2");
   fill_name (fcb, "TRUNC   ", "DAT");
-  (void)bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(ULONG)fcb);
   sz = get_ran (fcb);
   result (sz == 2, "size 2 after sparse trunc");
 

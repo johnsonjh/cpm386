@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -59,7 +60,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
   return ret;
 }
@@ -404,7 +405,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           exit_ccp ();
         }
 
-      if (bdos (BDOS_SET_TOD, (LONG)(unsigned long)&dt) != 0)
+      if (bdos (BDOS_SET_TOD, (LONG)(ULONG)&dt) != 0)
         {
           usage ();
 
@@ -417,7 +418,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* Show once (default), or loop until key if TOD P */
   for (;;)
     {
-      if (bdos (BDOS_GET_TOD, (LONG)(unsigned long)&dt) != 0)
+      if (bdos (BDOS_GET_TOD, (LONG)(ULONG)&dt) != 0)
         {
           const char e[] = "RTC read failed\r\n";
           puts (e);

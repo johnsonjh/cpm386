@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 
 /*****************************************************************************/
 
@@ -37,7 +38,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -67,7 +68,7 @@ puts (const char *s)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  unsigned char junk = (unsigned char)&_start;
+  unsigned char junk = 0;
 
   puts ("\r\nring-3 protection test\r\n");
   puts ("Expect a CPU exception message!\r\n");

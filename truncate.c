@@ -15,6 +15,7 @@ typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
+typedef unsigned long ULONG;
 
 /*****************************************************************************/
 
@@ -47,7 +48,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -75,7 +76,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 static void
-putu (unsigned long n)
+putu (ULONG n)
 {
   char buf[12];
   int i = 0;
@@ -102,7 +103,7 @@ putu (unsigned long n)
 /*****************************************************************************/
 
 static void
-puthex (unsigned long n)
+puthex (ULONG n)
 {
   char buf[12];
   int i = 0;
@@ -199,8 +200,8 @@ set_fcb (UBYTE *fcb, const char *name)
 
 /*****************************************************************************/
 
-static unsigned long
-exact_size (unsigned long records, UBYTE lrbc)
+static ULONG
+exact_size (ULONG records, UBYTE lrbc)
 {
   if (records == 0)
     {
@@ -212,13 +213,13 @@ exact_size (unsigned long records, UBYTE lrbc)
       return records * 128UL;
     }
 
-  return (records - 1) * 128UL + (unsigned long)lrbc;
+  return (records - 1) * 128UL + (ULONG)lrbc;
 }
 
 /*****************************************************************************/
 
 static void
-set_ran (UBYTE *fcb, unsigned long rec)
+set_ran (UBYTE *fcb, ULONG rec)
 {
   fcb[33] = (UBYTE)((rec >> 16) & 0xff);
   fcb[34] = (UBYTE)((rec >> 8) & 0xff);
@@ -227,11 +228,11 @@ set_ran (UBYTE *fcb, unsigned long rec)
 
 /*****************************************************************************/
 
-static unsigned long
+static ULONG
 get_ran (const UBYTE *fcb)
 {
-  return ((unsigned long)fcb[33] << 16) | ((unsigned long)fcb[34] << 8)
-         | (unsigned long)fcb[35];
+  return ((ULONG)fcb[33] << 16) | ((ULONG)fcb[34] << 8)
+         | (ULONG)fcb[35];
 }
 
 /*****************************************************************************/
@@ -268,15 +269,15 @@ str_eq_ci (const char *a, const char *b)
 
 /*****************************************************************************/
 
-static unsigned long
+static ULONG
 parse_num (const char *s, int *len)
 {
-  unsigned long v = 0;
+  ULONG v = 0;
   int n = 0;
 
   while (s[n] >= '0' && s[n] <= '9')
     {
-      v = v * 10 + (unsigned long)(s[n] - '0');
+      v = v * 10 + (ULONG)(s[n] - '0');
       n++;
     }
 
@@ -389,9 +390,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   UBYTE fcb[36];
   UWORD r;
   UBYTE lrbc;
-  unsigned long records, file_bytes;
-  unsigned long trunc_bytes;
-  unsigned long new_records;
+  ULONG records, file_bytes;
+  ULONG trunc_bytes;
+  ULONG new_records;
   UBYTE new_lrbc;
   int opt_h = 0;
   int opt_f_set = 0;
@@ -541,7 +542,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   fcb[14] = 0;    /* s2 */
   fcb[32] = 0xFF; /* request LRBC */
 
-  r = bdos (15, (LONG)(unsigned long)fcb);
+  r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r > 3)
     {
@@ -555,11 +556,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   lrbc = fcb[32];
   fcb[32] = 0; /* reset before I/O */
 
-  (void)bdos (35, (LONG)(unsigned long)fcb);
+  (void)bdos (35, (LONG)(ULONG)fcb);
   records = get_ran (fcb);
   file_bytes = exact_size (records, lrbc);
 
-  (void)bdos (16, (LONG)(unsigned long)fcb);
+  (void)bdos (16, (LONG)(ULONG)fcb);
 
   if (use_lrbc)
     {
@@ -632,13 +633,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       set_fcb (fcb, filename);
       set_ran (fcb, new_records);
-      r = bdos (99, (LONG)(unsigned long)fcb);
+      r = bdos (99, (LONG)(ULONG)fcb);
 
       if (r > 3 && r != 0)
         {
           puts ("ERROR: Truncation failed (BDOS 99");
           puts (" returned ");
-          putu ((unsigned long)r);
+          putu ((ULONG)r);
           puts (")\r\n");
 
           (void)bdos (0, 0);
@@ -654,7 +655,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       fcb[14] = 0;
       fcb[32] = 0;
 
-      r = bdos (15, (LONG)(unsigned long)fcb);
+      r = bdos (15, (LONG)(ULONG)fcb);
 
       if (r > 3)
         {
@@ -663,10 +664,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           (void)bdos (0, 0);
         }
 
-      (void)bdos (26, (LONG)(unsigned long)dma);
+      (void)bdos (26, (LONG)(ULONG)dma);
 
       set_ran (fcb, new_records - 1);
-      r = bdos (33, (LONG)(unsigned long)fcb);
+      r = bdos (33, (LONG)(ULONG)fcb);
 
       if (r != 0)
         {
@@ -682,19 +683,19 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         }
 
       set_ran (fcb, new_records - 1);
-      r = bdos (34, (LONG)(unsigned long)fcb);
+      r = bdos (34, (LONG)(ULONG)fcb);
 
       if (r != 0)
         {
           puts ("ERROR: Write failed (BDOS 34 returned ");
-          putu ((unsigned long)r);
+          putu ((ULONG)r);
           puts (")\r\n");
-          (void)bdos (16, (LONG)(unsigned long)fcb);
+          (void)bdos (16, (LONG)(ULONG)fcb);
 
           (void)bdos (0, 0);
         }
 
-      (void)bdos (16, (LONG)(unsigned long)fcb);
+      (void)bdos (16, (LONG)(ULONG)fcb);
     } /*LINTED E_NOP_IF_STMT*/
   else if (new_records > 0 && new_lrbc == 0)
     {
@@ -704,7 +705,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   set_fcb (fcb, filename);
   fcb[6] |= 0x80; /* signal: set LRBC */
   fcb[32] = (UBYTE)new_lrbc; /* new LRBC value */
-  r = bdos (30, (LONG)(unsigned long)fcb);
+  r = bdos (30, (LONG)(ULONG)fcb);
 
   if (r == 255)
     {
@@ -720,13 +721,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   puts (" bytes (");
   putu (new_records);
   puts (" records, LRBC=");
-  putu ((unsigned long)new_lrbc);
+  putu ((ULONG)new_lrbc);
   puts (")");
 
   if (opt_f_set)
     {
       puts (" fill=");
-      puthex ((unsigned long)fill_byte);
+      puthex ((ULONG)fill_byte);
     }
 
   puts ("\r\n");

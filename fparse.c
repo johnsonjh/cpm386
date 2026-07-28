@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -48,7 +49,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -96,7 +97,7 @@ puthex4 (UWORD v)
 /*****************************************************************************/
 
 static void
-store_le32 (UBYTE *p, unsigned long v)
+store_le32 (UBYTE *p, ULONG v)
 {
   p[0] = (UBYTE)(v & 0xff);
   p[1] = (UBYTE)((v >> 8) & 0xff);
@@ -163,10 +164,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   puts (src);
   puts ("\"\r\n");
 
-  store_le32 (pfcb + 0, (unsigned long)(UBYTE *)src);
-  store_le32 (pfcb + 4, (unsigned long)(UBYTE *)fcb);
+  store_le32 (pfcb + 0, (ULONG)(UBYTE *)src);
+  store_le32 (pfcb + 4, (ULONG)(UBYTE *)fcb);
 
-  r = bdos (BDOS_FPARSE, (LONG)(unsigned long)pfcb);
+  r = bdos (BDOS_FPARSE, (LONG)(ULONG)pfcb);
   puts ("F_PARSE ret=");
   puthex4 (r);
   puts ("\r\n");

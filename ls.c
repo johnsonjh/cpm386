@@ -14,6 +14,7 @@
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
+typedef unsigned long ULONG;
 typedef unsigned char UBYTE;
 
 /*****************************************************************************/
@@ -49,7 +50,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -77,7 +78,7 @@ puts (const char *s)
 /*****************************************************************************/
 
 static void
-putu (unsigned long n)
+putu (ULONG n)
 {
   char b[12];
   int i = 0;
@@ -103,7 +104,7 @@ putu (unsigned long n)
 /*****************************************************************************/
 
 static void
-putu_w (unsigned long n, int w)
+putu_w (ULONG n, int w)
 {
   char b[12];
   int i = 0, j;
@@ -135,8 +136,8 @@ putu_w (unsigned long n, int w)
 /*****************************************************************************/
 
 /* DOS-PLUS exact size from total records + LRBC of last extent */
-static unsigned long
-exact_size (unsigned long records, UBYTE lrbc)
+static ULONG
+exact_size (ULONG records, UBYTE lrbc)
 {
   if (records == 0)
     {
@@ -148,7 +149,7 @@ exact_size (unsigned long records, UBYTE lrbc)
       return records * 128UL;
     }
 
-  return (records - 1) * 128UL + (unsigned long)lrbc;
+  return (records - 1) * 128UL + (ULONG)lrbc;
 }
 
 /*****************************************************************************/
@@ -157,8 +158,8 @@ struct fileent
 {
   char name[8];
   char typ[3];
-  unsigned long records; /* sum of rc over extents */
-  unsigned long blocks;  /* allocated map blocks */
+  ULONG records; /* sum of rc over extents */
+  ULONG blocks;  /* allocated map blocks */
   unsigned fcbs;         /* extent count */
   UBYTE lrbc;            /* last extent s1 (DOS-PLUS) */
   UBYTE last_ex;         /* highest extent seen */
@@ -384,10 +385,10 @@ sort_files (int sort_by, int reverse, int ignore_lrbc)
 
           if (sort_by == 2)
             {
-              unsigned long sa = exact_size (files[i].records,
-                                             ignore_lrbc ? 0 : files[i].lrbc);
-              unsigned long sb = exact_size (files[j].records,
-                                             ignore_lrbc ? 0 : files[j].lrbc);
+              ULONG sa = exact_size (files[i].records,
+                                     ignore_lrbc ? 0 : files[i].lrbc);
+              ULONG sb = exact_size (files[j].records,
+                                     ignore_lrbc ? 0 : files[j].lrbc);
 
               if (sa > sb)
                 {
@@ -662,7 +663,7 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user, int word_mode)
 {
   UWORD r;
 
-  (void)bdos (26, (LONG)(unsigned long)dma);
+  (void)bdos (26, (LONG)(ULONG)dma);
 
   if (fcb[0])
     {
@@ -672,7 +673,7 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user, int word_mode)
   fcb[12] = '?'; /* all extents */
   fcb[14] = '?'; /* all modules */
 
-  r = bdos (17, (LONG)(unsigned long)fcb);
+  r = bdos (17, (LONG)(ULONG)fcb);
 
   while (r != 255)
     {
@@ -703,7 +704,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   int user, drive;
   unsigned block_size = 2048;
   int word_mode = 0;
-  unsigned long all_exact = 0, all_alloc_k = 0;
+  ULONG all_exact = 0, all_alloc_k = 0;
   int count = 0, ctr = 0, process = 1;
   char *pats[MAX_PATS];
   int npats = 0;
@@ -828,7 +829,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   drive = (int)bdos (25, 0);
 
   /* DPB for block size / word map mode */
-  (void)bdos (31, (LONG)(unsigned long)dpb);
+  (void)bdos (31, (LONG)(ULONG)dpb);
   /* dpb: spt@0, bsh@2, blm@3, exm@4, dum@5, dsm@6 */
   {
     UBYTE bsh = dpb[2];
@@ -901,7 +902,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   for (i = 0; i < (unsigned)nfiles && process; i++)
     {
       struct fileent *f = &files[i];
-      unsigned long exact, exact_k, alloc_k;
+      ULONG exact, exact_k, alloc_k;
 
       if (f->sys && !flag_all)
         {
@@ -931,7 +932,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       exact = exact_size (f->records, ignore_lrbc ? 0 : f->lrbc);
       exact_k = (exact + 1023UL) / 1024UL;
-      alloc_k = (f->blocks * (unsigned long)block_size) / 1024UL;
+      alloc_k = (f->blocks * (ULONG)block_size) / 1024UL;
       all_exact += exact;
       all_alloc_k += alloc_k;
       count++;

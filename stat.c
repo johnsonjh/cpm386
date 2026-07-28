@@ -68,7 +68,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -189,7 +189,7 @@ pdecimal (UWORD v, UWORD prec, int zerosup)
 
 /*****************************************************************************/
 
-/* Print unsigned long with comma separation, 7-digit max */
+/* Print ULONG with comma separation, 7-digit max */
 static void
 p_long (ULONG value)
 {
@@ -562,7 +562,7 @@ match (const char *va, int vl)
 static void
 load_dpb (void)
 {
-  bdos (31, (LONG)(unsigned long)dpb_raw);
+  bdos (31, (LONG)(ULONG)dpb_raw);
 }
 
 /*****************************************************************************/
@@ -606,7 +606,7 @@ count_free (void)
 
   ULONG free_recs = 0;
 
-  bdos (26, (LONG)(unsigned long)dma); /* set DMA */
+  bdos (26, (LONG)(ULONG)dma); /* set DMA */
   bdos (46, (LONG)cdisk);
   {
     const UBYTE *p = dma;
@@ -827,7 +827,7 @@ userstatus (void)
   show_drive ();
   printx ("Active Files:");
 
-  bdos (26, (LONG)(unsigned long)dma);
+  bdos (26, (LONG)(ULONG)dma);
   /* search all users: use fcb with drive=0, name=all-? */
   {
     UBYTE sfcb[36];
@@ -844,7 +844,7 @@ userstatus (void)
         sfcb[i] = '?';
       }
 
-    r = bdos (17, (LONG)(unsigned long)sfcb);
+    r = bdos (17, (LONG)(ULONG)sfcb);
   }
 
   while (r != 255)
@@ -1264,7 +1264,7 @@ write_attrib (int idx)
       fcb[10] |= 0x80;
     }
 
-  bdos (30, (LONG)(unsigned long)fcb); /* BDOS 30 = set file attributes */
+  bdos (30, (LONG)(ULONG)fcb); /* BDOS 30 = set file attributes */
 }
 
 /*****************************************************************************/
@@ -1367,8 +1367,8 @@ getfile (void)
   sfcb[12] = '?'; /* all extents */
   sfcb[14] = '?'; /* all s2 */
 
-  bdos (26, (LONG)(unsigned long)dma);
-  r = bdos (17, (LONG)(unsigned long)sfcb); /* search first */
+  bdos (26, (LONG)(ULONG)dma);
+  r = bdos (17, (LONG)(ULONG)sfcb); /* search first */
 
   fcbmax = MAX_FILES;
 

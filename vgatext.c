@@ -15,6 +15,7 @@ typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
 typedef unsigned char UBYTE;
+typedef unsigned long ULONG;
 
 /*****************************************************************************/
 
@@ -42,7 +43,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -110,7 +111,7 @@ putu (unsigned n)
 /*****************************************************************************/
 
 static void
-puthex32 (unsigned long v)
+puthex32 (ULONG v)
 {
   static const char h[] = "0123456789ABCDEF";
   int i;
@@ -151,7 +152,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   const char *hint = " Press any key to return to CCP ";
   const char *p;
 
-  r = bdos (BDOS_CON_VIDEO, (LONG)(unsigned long)&vi);
+  r = bdos (BDOS_CON_VIDEO, (LONG)(ULONG)&vi);
 
   if (r == 0xFFFF || vi.sel == 0)
     {

@@ -49,7 +49,7 @@ bdos (WORD func, LONG info)
                     : "=a"(ret)
                     : "a"((unsigned)func),
                       "i"(BDOS_INT),
-                      "d"((unsigned long)info)
+                      "d"((ULONG)info)
                     : "memory", "cc");
 
   return ret;
@@ -126,7 +126,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   puts ("CP/M-386 high-res ticks (BDOS 225/226)\r\n");
 
-  r = bdos (BDOS_GET_TICKS, (LONG)(unsigned long)&t);
+  r = bdos (BDOS_GET_TICKS, (LONG)(ULONG)&t);
 
   if (r == 0xFFFF)
     {
@@ -148,7 +148,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
     ticks_add32 (&t, half);
     puts ("sleep ~0.5s ...\r\n");
-    r = bdos (BDOS_SLEEP_UNTIL, (LONG)(unsigned long)&t);
+    r = bdos (BDOS_SLEEP_UNTIL, (LONG)(ULONG)&t);
 
     if (r == 0xFFFF)
       {
@@ -158,7 +158,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       }
   }
 
-  r = bdos (BDOS_GET_TICKS, (LONG)(unsigned long)&t);
+  r = bdos (BDOS_GET_TICKS, (LONG)(ULONG)&t);
   (void)r;
   puts ("t1 hi=");
   putu32 (t.hi);
@@ -173,10 +173,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       puts (".");
       ticks_add32 (&t, d);
-      (void)bdos (BDOS_SLEEP_UNTIL, (LONG)(unsigned long)&t);
+      (void)bdos (BDOS_SLEEP_UNTIL, (LONG)(ULONG)&t);
 
       /* refresh base for next delta */
-      (void)bdos (BDOS_GET_TICKS, (LONG)(unsigned long)&t);
+      (void)bdos (BDOS_GET_TICKS, (LONG)(ULONG)&t);
     }
 
   puts ("\r\ndone\r\n");
