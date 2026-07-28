@@ -159,13 +159,13 @@ vga_put (int x, int y, char ch, unsigned char attr)
 static void
 cls_vga (void)
 {
-  unsigned x, y, off;
+  unsigned int x, y;
 
   for (y = 0; y < g_rows; y++)
     {
       for (x = 0; x < g_cols; x++)
         {
-          off = (y * g_cols + x) * g_cell;
+          unsigned int off = (y * g_cols + x) * g_cell;
           vga_es_store16 (g_sel, (unsigned short)off,
                           (unsigned short)(' ' | (0x07 << 8)));
         }
@@ -252,7 +252,6 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_vga_text vi;
   struct cpm_datetime dt;
-  int hidx;
   char dig[16];
   UWORD r;
 
@@ -286,6 +285,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (;;)
     {
+      int hidx;
+
       if (bdos (BDOS_GET_TOD, (LONG)(unsigned long)&dt) != 0)
         {
           dt.hour = dt.min = dt.sec = 0;

@@ -310,13 +310,14 @@ void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_datetime dt;
-  int hidx;
   char dig[16];
 
   flush_key ();
 
   for (;;)
     {
+      int hidx;
+
       if (bdos (BDOS_GET_TOD, (LONG)(unsigned long)&dt) != 0)
         {
           dt.hour = dt.min = dt.sec = 0;
