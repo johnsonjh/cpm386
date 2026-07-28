@@ -1325,6 +1325,7 @@ scc-real: README.md
 		print; system("scc \
 			--count-as-pattern \"BSDmakefile:Makefile:Makefile\" \
 			--count-as-pattern \"*.ld:Linker&nbsp;Script:Text\" \
+			--count-as-pattern \"*.inc:Assembly:Assembly\" \
 			--exclude-file LICENSE,README.awk,log.pvs \
 			--exclude-file log.pvs,compile_commands.json \
 			--exclude-file REUSE.toml \
