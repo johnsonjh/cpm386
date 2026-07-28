@@ -88,12 +88,12 @@ WORD            dirindx;        /* index into directory for *dirp */
         i = 0;
         if ((GBL.parmp)->dsm < 256)
         {
-            do setaloc( UBWORD(dirp->dskmap.small[i++]) );
+            do setaloc( UBWORD(dirp->dskmap.small [i++]) );
                 while (i <= 15);
         }
         else
         {
-            do setaloc(swap(dirp->dskmap.big[i++]));
+            do setaloc(swap(dirp->dskmap.big [i++]));
                 while (i <= 7);
         }
     }
@@ -337,8 +337,8 @@ WORD    dirindx;                /* index into directory */
     {                   /* Note that FCB merging is done here as a final
                            confirmation that disks haven't been swapped */
         LOCK
-        fp = &(fcbp->dskmap.small[0]);
-        dp = &(dirp->dskmap.small[0]);
+        fp = &(fcbp->dskmap.small [0]);
+        dp = &(dirp->dskmap.small [0]);
         if ((GBL.parmp)->dsm < 256)
         {               /* Small disk map merge routine  */
             i = 16;
@@ -391,9 +391,9 @@ WORD    dirindx;                /* index into directory */
             dirp->extent = (BYTE)fcb_ext;
         }
         dirp->s1 = fcbp->s1;
-        if ( (dirp->ftype[robit]) & 0x80) ro_err(fcbp,dirindx);
+        if ( (dirp->ftype [robit]) & 0x80) ro_err(fcbp,dirindx);
                                                 /* read-only file error */
-        dirp->ftype[arbit] &= 0x7f;             /* clear archive bit        */
+        dirp->ftype [arbit] &= 0x7f;            /* clear archive bit    */
         dir_wr(dirindx >> 2);
         UNLOCK
         return(TRUE);
@@ -493,7 +493,7 @@ REG WORD dirindx;               /* index into directory         */
         fcbp->rcdcnt = 0; /* clear fcb rcdcnt */
 
         for (i = 0; i < 16; i++) /* clear disk map */
-          fcbp->dskmap.small[i] = 0;
+          fcbp->dskmap.small [i] = 0;
 
         move(fcbp, dirp, sizeof *dirp); /* move the fcb to the directory */
         dir_wr(dirindx >> 2);           /* write the directory sector */
@@ -523,7 +523,7 @@ REG WORD dirindx;               /* index into directory         */
 
     if ( (rtn = match(fcbp, dirp, FALSE)) )
     {
-        if ( (dirp->ftype[robit]) & 0x80 ) ro_err(fcbp,dirindx);
+        if ( (dirp->ftype [robit]) & 0x80 ) ro_err(fcbp,dirindx);
                                 /* check for read-only file */
         dirp->entry = 0xe5;
         LOCK
@@ -532,13 +532,13 @@ REG WORD dirindx;               /* index into directory         */
         if ((GBL.parmp)->dsm < 256)
         {
             i = 16;
-            do clraloc(UBWORD(dirp->dskmap.small[--i]));
+            do clraloc(UBWORD(dirp->dskmap.small [--i]));
                 while (i);
         }
         else
         {
             i = 8;
-            do clraloc(swap(dirp->dskmap.big[--i]));
+            do clraloc(swap(dirp->dskmap.big [--i]));
                 while (i);
         }
         UNLOCK
@@ -566,10 +566,10 @@ REG WORD dirindx;               /* index into directory         */
 
     if ( (rtn = match(fcbp, dirp, FALSE)) )
     {
-        if ( (dirp->ftype[robit]) & 0x80 ) ro_err(fcbp,dirindx);
+        if ( (dirp->ftype [robit]) & 0x80 ) ro_err(fcbp,dirindx);
                                 /* check for read-only file */
-        p = &(fcbp->dskmap.small[1]);
-        q = &(dirp->fname[0]);
+        p = &(fcbp->dskmap.small [1]);
+        q = &(dirp->fname [0]);
         i = 11;
         do
         {
@@ -599,12 +599,12 @@ REG WORD dirindx;               /* index into directory         */
     if ( (rtn = match(fcbp, dirp, FALSE)) )
     {
         /* Copy 11 name/type bytes including attribute high bits (F1'-T3'). */
-        move(&fcbp->fname[0], &dirp->fname[0], 11);
+        move(&fcbp->fname [0], &dirp->fname [0], 11);
         /* CP/M Plus / DOS Plus Last Record Byte Count:
-         * If F6' is set (bit 7 of FCB+6 / fname[5]), FCB+32 (cur_rec)
+         * If F6' is set (bit 7 of FCB+6 / fname [5]), FCB+32 (cur_rec)
          * holds the new LRBC (DOS-PLUS: bytes used in last record, 0=full).
          * Write it to directory entry offset 13 (s1). */
-        if (fcbp->fname[5] & 0x80)
+        if (fcbp->fname [5] & 0x80)
             dirp->s1 = fcbp->cur_rec;
         dir_wr(dirindx >> 2);
     }
@@ -723,11 +723,11 @@ REG struct dirent *dirp;
 
     if ((GBL.parmp)->dsm < 256) {
         i = 16;
-        do clraloc(UBWORD(dirp->dskmap.small[--i]));
+        do clraloc(UBWORD(dirp->dskmap.small [--i]));
             while (i);
     } else {
         i = 8;
-        do clraloc(swap(dirp->dskmap.big[--i]));
+        do clraloc(swap(dirp->dskmap.big [--i]));
             while (i);
     }
 }
@@ -758,15 +758,15 @@ LONG group_base;
             continue;
 
         if ((GBL.parmp)->dsm < 256) {
-            blk = UBWORD(dirp->dskmap.small[i]);
+            blk = UBWORD(dirp->dskmap.small [i]);
             if (blk)
                 clraloc(blk);
-            dirp->dskmap.small[i] = 0;
+            dirp->dskmap.small [i] = 0;
         } else {
-            blk = (UWORD)swap(dirp->dskmap.big[i]);
+            blk = (UWORD)swap(dirp->dskmap.big [i]);
             if (blk)
                 clraloc(blk);
-            dirp->dskmap.big[i] = 0;
+            dirp->dskmap.big [i] = 0;
         }
     }
 }
@@ -807,7 +807,7 @@ WORD dirindx;
     if (!match(fcbp, dirp, FALSE))
         return(FALSE);
 
-    if ((d->ftype[robit]) & 0x80)
+    if ((d->ftype [robit]) & 0x80)
         ro_err(fcbp, dirindx);
 
     trunc_found = 1;
@@ -871,7 +871,7 @@ REG struct fcb *fcbp;
 
     /* Current size via getsize (does not destroy caller's name fields). */
     for (i = 0; i < (WORD)(sizeof tmp); i++)
-        ((UBYTE *)&tmp)[i] = ((UBYTE *)fcbp)[i];
+        ((UBYTE *)&tmp) [i] = ((UBYTE *)fcbp) [i];
     getsize((UBYTE *)&tmp);
     cur = unpack_ranrec(&tmp);
 
@@ -992,19 +992,19 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
         return 0xFFFF;
 
     for (i = 0; i < 36; i++)
-        fcb[i] = 0;
+        fcb [i] = 0;
     for (i = 1; i <= 11; i++)
-        fcb[i] = ' ';
+        fcb [i] = ' ';
 
     while (*p == ' ' || *p == '\t')
         p++;
 
     /* Optional drive d: */
-    if (p[0] && p[1] == ':') {
-        UBYTE d = parse_up(p[0]);
+    if (p [0] && p [1] == ':') {
+        UBYTE d = parse_up(p [0]);
         if (d < 'A' || d > 'P')
             return 0xFFFF;
-        fcb[0] = (UBYTE)(d - 'A' + 1);
+        fcb [0] = (UBYTE)(d - 'A' + 1);
         p += 2;
     }
 
@@ -1012,7 +1012,7 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
     for (i = 0; i < 8; ) {
         if (*p == '*') {
             while (i < 8)
-                fcb[1 + i++] = '?';
+                fcb [1 + i++] = '?';
             p++;
             break;
         }
@@ -1020,7 +1020,7 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
             break;
         if (!parse_is_name_char(*p))
             return 0xFFFF;
-        fcb[1 + i++] = parse_up(*p++);
+        fcb [1 + i++] = parse_up(*p++);
     }
     /* skip excess name chars before type/end */
     while (*p && *p != '.' && *p != ';' && *p != ':' && !parse_is_end(*p)) {
@@ -1035,7 +1035,7 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
         for (i = 0; i < 3; ) {
             if (*p == '*') {
                 while (i < 3)
-                    fcb[9 + i++] = '?';
+                    fcb [9 + i++] = '?';
                 p++;
                 break;
             }
@@ -1043,7 +1043,7 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
                 break;
             if (!parse_is_name_char(*p))
                 return 0xFFFF;
-            fcb[9 + i++] = parse_up(*p++);
+            fcb [9 + i++] = parse_up(*p++);
         }
         while (*p && *p != ';' && *p != ':' && !parse_is_end(*p)) {
             if (*p == '.')
@@ -1059,10 +1059,10 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
         p++;
         plen = 0;
         while (plen < 8 && *p && !parse_is_end(*p) && *p != ';' && *p != ':' && *p != '.') {
-            fcb[0x10 + plen] = parse_up(*p++);
+            fcb [0x10 + plen] = parse_up(*p++);
             plen++;
         }
-        fcb[0x1A] = (UBYTE)plen;
+        fcb [0x1A] = (UBYTE)plen;
         while (*p && !parse_is_end(*p) && *p != ':' && *p != '.')
             p++;
     }

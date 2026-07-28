@@ -117,7 +117,7 @@ mb_init_from_multiboot (void *mbi_ptr) /*cppcheck-suppress unusedFunction*/
    * Choose TPA base like the boot.S logic: after kernel + small stack reserve
    */
 
-  extern char __kernel_end[];
+  extern char __kernel_end [];
   uint32_t k_end = (uint32_t)(uintptr_t)&__kernel_end;
   uint32_t stack_res = 0x4000;
   uint32_t tpa_base = k_end + stack_res + 0x1000;

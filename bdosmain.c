@@ -471,16 +471,17 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         extern unsigned long pmode_tpa_base (void);
         extern unsigned long pmode_tpa_len (void);
 
-        ao = (unsigned long)pfcb[0] | ((unsigned long)pfcb[1] << 8)
-             | ((unsigned long)pfcb[2] << 16) | ((unsigned long)pfcb[3] << 24);
-        fo = (unsigned long)pfcb[4] | ((unsigned long)pfcb[5] << 8)
-             | ((unsigned long)pfcb[6] << 16) | ((unsigned long)pfcb[7] << 24);
+        ao = (unsigned long)pfcb [0] | ((unsigned long)pfcb [1] << 8)
+          | ((unsigned long)pfcb [2] << 16) | ((unsigned long)pfcb [3] << 24);
+        fo = (unsigned long)pfcb [4] | ((unsigned long)pfcb [5] << 8)
+          | ((unsigned long)pfcb [6] << 16) | ((unsigned long)pfcb [7] << 24);
 
         if (pmode_active ())
           {
             if (ao >= pmode_tpa_len () || fo >= pmode_tpa_len ())
               {
                 rtnval = 0xFFFF;
+
                 break;
               }
 
@@ -539,7 +540,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
              */
             for (i = 0; i < 6; i++)
               {
-                buf[i] = serial[10 + i];
+                buf [i] = serial [10 + i];
               }
           }
 

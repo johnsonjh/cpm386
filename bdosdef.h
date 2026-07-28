@@ -183,10 +183,10 @@ struct cpm_ticks
 /* File Control Block definition */
 struct fcb
 {
-  UBYTE drvcode;  /* 0 = default drive, 1..16 are drives A..P */
-  UBYTE fname[8]; /* File name (ASCII)                    */
-  UBYTE ftype[3]; /* File type (ASCII)                    */
-  UBYTE extent;   /* Extent number (bits 0..4 used)       */
+  UBYTE drvcode;   /* 0 = default drive, 1..16 are drives A..P */
+  UBYTE fname [8]; /* File name (ASCII)                        */
+  UBYTE ftype [3]; /* File type (ASCII)                        */
+  UBYTE extent;    /* Extent number (bits 0..4 used)           */
   /* s1 = Last Record Byte Count (LRBC) on CP/M Plus / DOS Plus /
    * CP/M-386.  DOS-PLUS interpretation (this OS):
    *   0  = last record is full (128 data bytes used), or empty file
@@ -201,8 +201,8 @@ struct fcb
   UBYTE rcdcnt; /* Nmbr records used in this extent, 0..128 */
   union
   {
-    UBYTE small[16]; /* 16 block numbers of 1 byte           */
-    WORD big[8];     /* or 8 block numbers of 1 word         */
+    UBYTE small [16]; /* 16 block numbers of 1 byte           */
+    WORD big [8];     /* or 8 block numbers of 1 word         */
   } dskmap;
   UBYTE cur_rec; /* current record field (FCB+32); also
                   * LRBC in/out for open(0xFF)/set_attr  */
@@ -216,18 +216,18 @@ struct fcb
 /* Declaration of directory entry */
 struct dirent
 {
-  UBYTE entry;    /* 0 - 15 for user numbers, E5 for empty    */
-                  /* the rest are reserved                    */
-  UBYTE fname[8]; /* File name (ASCII)                        */
-  UBYTE ftype[3]; /* File type (ASCII)                        */
-  UBYTE extent;   /* Extent number (bits 0..4 used)           */
-  UBYTE s1;       /* Last Record Byte Count (DOS-PLUS)        */
-  UBYTE s2;       /* Module field (bits 0..5), write flag (7) */
-  UBYTE rcdcnt;   /* Nmbr records used in this extent, 0..128 */
+  UBYTE entry;     /* 0 - 15 for user numbers, E5 for empty    */
+                   /* the rest are reserved                    */
+  UBYTE fname [8]; /* File name (ASCII)                        */
+  UBYTE ftype [3]; /* File type (ASCII)                        */
+  UBYTE extent;    /* Extent number (bits 0..4 used)           */
+  UBYTE s1;        /* Last Record Byte Count (DOS-PLUS)        */
+  UBYTE s2;        /* Module field (bits 0..5), write flag (7) */
+  UBYTE rcdcnt;    /* Nmbr records used in this extent, 0..128 */
   union
   {
-    UBYTE small[16]; /* 16 block numbers of 1 byte   */
-    WORD big[8];     /* or 8 block numbers of 1 word */
+    UBYTE small [16]; /* 16 block numbers of 1 byte   */
+    WORD big [8];     /* or 8 block numbers of 1 word */
   } dskmap;
 };
 
@@ -285,10 +285,10 @@ struct stvars
   UWORD srchpos;          /* position in directory for search next   */
   UBYTE *dmaadr;          /* Disk dma address                        */
   struct fcb *srchp;      /* Pointer to search FCB for function 17   */
-  UBYTE *excvec[18];      /* Array of exception vectors              */
+  UBYTE *excvec [18];     /* Array of exception vectors              */
   UBYTE *insptr;          /* sw Insertion pointer for typeahead      */
   UBYTE *remptr;          /* sw Removal pointer for typeahead        */
-  UBYTE t_buff[TBUFSIZ];  /* sw Type-ahead buffer itself             */
+  UBYTE t_buff [TBUFSIZ]; /* sw Type-ahead buffer itself             */
 };
 /*sw removed next line from structure */
 extern UBYTE *chainp; /* Used for chain to program call */
@@ -299,9 +299,9 @@ extern UBYTE *chainp; /* Used for chain to program call */
 
 struct conbuf
 {
-  UBYTE maxlen;  /* Maximum length from calling routine */
-  UBYTE retlen;  /* Length actually found by BDOS       */
-  UBYTE cbuf[0]; /* Console data                        */
+  UBYTE maxlen;   /* Maximum length from calling routine */
+  UBYTE retlen;   /* Length actually found by BDOS       */
+  UBYTE cbuf [0]; /* Console data                        */
 };
 
 /*****************************************************************************/
@@ -348,7 +348,7 @@ UWORD cpm386_load_from_buf (const UBYTE *filebuf, unsigned long buflen,
  * mid-image -> zero-filled record). No size cap beyond TPA.
  */
 
-typedef UWORD (*cpm386_rec_reader) (UBYTE rec[128], void *ctx);
+typedef UWORD (*cpm386_rec_reader) (UBYTE rec [128], void *ctx);
 UWORD cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx,
                                UBYTE *tpa_base, unsigned long tpa_len,
                                UBYTE **entry_out);

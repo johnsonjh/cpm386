@@ -74,7 +74,7 @@ puts (const char *s)
 static void
 putu (unsigned n)
 {
-  char b[8];
+  char b [8];
   int i = 0;
 
   if (!n)
@@ -85,12 +85,12 @@ putu (unsigned n)
 
   while (n && i < 8)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -99,12 +99,12 @@ putu (unsigned n)
 static void
 puthex4 (UWORD v)
 {
-  static const char hx[] = "0123456789ABCDEF";
+  static const char hx [] = "0123456789ABCDEF";
 
-  putch (hx[(v >> 12) & 0xf]);
-  putch (hx[(v >> 8) & 0xf]);
-  putch (hx[(v >> 4) & 0xf]);
-  putch (hx[v & 0xf]);
+  putch (hx [(v >> 12) & 0xf]);
+  putch (hx [(v >> 8) & 0xf]);
+  putch (hx [(v >> 4) & 0xf]);
+  putch (hx [v & 0xf]);
 }
 
 /*****************************************************************************/
@@ -153,8 +153,8 @@ help (void)
 static int
 want_help (void)
 {
-  unsigned tlen = CMD_TAIL[0], i = 0;
-  char t[128];
+  unsigned tlen = CMD_TAIL [0], i = 0;
+  char t [128];
 
   if (tlen > 126)
     {
@@ -163,24 +163,24 @@ want_help (void)
 
   for (i = 0; i < tlen; i++)
     {
-      t[i] = (char)CMD_TAIL[1 + i];
+      t [i] = (char)CMD_TAIL [1 + i];
     }
 
-  t[tlen] = 0;
+  t [tlen] = 0;
   i = 0;
 
-  while (t[i] == ' ' || t[i] == '\t')
+  while (t [i] == ' ' || t [i] == '\t')
     {
       i++;
     }
 
-  if (t[i] == '-' || t[i] == '/')
+  if (t [i] == '-' || t [i] == '/')
     {
       i++;
 
-      while (t[i] && t[i] != ' ')
+      while (t [i] && t [i] != ' ')
         {
-          if (toupper_ch ((unsigned char)t[i]) == 'H')
+          if (toupper_ch ((unsigned char)t [i]) == 'H')
             {
               return 1;
             }
@@ -201,18 +201,18 @@ fill_env_fcb (UBYTE *fcb)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
   /* ENV.DAT */
-  fcb[1] = 'E'; fcb[2] = 'N'; fcb[3] = 'V';
+  fcb [1] = 'E'; fcb [2] = 'N'; fcb [3] = 'V';
 
   for (i = 4; i <= 8; i++)
     {
-      fcb[i] = ' ';
+      fcb [i] = ' ';
     }
 
-  fcb[9] = 'D'; fcb[10] = 'A'; fcb[11] = 'T';
+  fcb [9] = 'D'; fcb [10] = 'A'; fcb [11] = 'T';
 }
 
 /*****************************************************************************/
@@ -225,13 +225,13 @@ fill_env_fcb (UBYTE *fcb)
 static void
 dump_env_file (void)
 {
-  UBYTE fcb[36];
-  UBYTE dma[128]; /*cppcheck-suppress unassignedVariable*/
+  UBYTE fcb [36];
+  UBYTE dma [128]; /*cppcheck-suppress unassignedVariable*/
   UBYTE lrbc = 0;
-  UBYTE prev[128];
+  UBYTE prev [128];
   int have = 0;
   UWORD r;
-  char var[17], val[129];
+  char var [17], val [129];
   int vi = 0, ai = 0;
   /* 0=skip, 1=var, 2=pre=, 3=val, 4=comment */
   int st = 0;
@@ -239,7 +239,7 @@ dump_env_file (void)
   int final = 0;
 
   fill_env_fcb (fcb);
-  fcb[32] = 0xFF;
+  fcb [32] = 0xFF;
   r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r > 3)
@@ -248,8 +248,8 @@ dump_env_file (void)
       return;
     }
 
-  lrbc = fcb[32];
-  fcb[32] = 0;
+  lrbc = fcb [32];
+  fcb [32] = 0;
   (void)bdos (26, (LONG)(ULONG)dma);
 
   for (;;)
@@ -272,7 +272,7 @@ dump_env_file (void)
 
           for (j = 0; j < 128; j++)
             {
-              prev[j] = dma[j];
+              prev [j] = dma [j];
             }
 
           have = 1;
@@ -286,7 +286,7 @@ dump_env_file (void)
 
       for (pos = 0; pos < rec_len; pos++)
         {
-          int c = prev[pos] & 0xff;
+          int c = prev [pos] & 0xff;
 
           if (c == 26)
             {
@@ -307,13 +307,13 @@ dump_env_file (void)
             {
               if (st == 3 || st == 1 || st == 2)
                 {
-                  var[vi] = 0;
-                  val[ai] = 0;
+                  var [vi] = 0;
+                  val [ai] = 0;
 
                   /* trim trailing spaces in val */
-                  while (ai > 0 && isspace_ ((unsigned char)val[ai - 1]))
+                  while (ai > 0 && isspace_ ((unsigned char)val [ai - 1]))
                     {
-                      val[--ai] = 0;
+                      val [--ai] = 0;
                     }
 
                   if (vi > 0 && st == 3)
@@ -348,7 +348,7 @@ dump_env_file (void)
               if (isalnum_ (c) || c == '_')
                 {
                   vi = 0;
-                  var[vi++] = (char)toupper_ch (c);
+                  var [vi++] = (char)toupper_ch (c);
                   st = 1;
                 }
 
@@ -359,7 +359,7 @@ dump_env_file (void)
             {
               if (c == '=')
                 {
-                  var[vi] = 0;
+                  var [vi] = 0;
                   ai = 0;
                   st = 3;
 
@@ -368,7 +368,7 @@ dump_env_file (void)
 
               if (isspace_ (c))
                 {
-                  var[vi] = 0;
+                  var [vi] = 0;
                   st = 2;
 
                   continue;
@@ -376,7 +376,7 @@ dump_env_file (void)
 
               if ((isalnum_ (c) || c == '_') && vi < 16)
                 {
-                  var[vi++] = (char)toupper_ch (c);
+                  var [vi++] = (char)toupper_ch (c);
                 }
 
               continue;
@@ -411,7 +411,7 @@ dump_env_file (void)
 
               if (ai < 128)
                 {
-                  val[ai++] = (char)c;
+                  val [ai++] = (char)c;
                 }
             }
         }
@@ -426,7 +426,7 @@ dump_env_file (void)
 
         for (j = 0; j < 128; j++)
           {
-            prev[j] = dma[j];
+            prev [j] = dma [j];
           }
       }
     }
@@ -435,12 +435,12 @@ done_file:
   /* trailing line without CR */
   if (st == 3 && vi > 0)
     {
-      var[vi] = 0;
-      val[ai] = 0;
+      var [vi] = 0;
+      val [ai] = 0;
 
-      while (ai > 0 && isspace_ ((unsigned char)val[ai - 1]))
+      while (ai > 0 && isspace_ ((unsigned char)val [ai - 1]))
         {
-          val[--ai] = 0;
+          val [--ai] = 0;
         }
 
       puts (var);

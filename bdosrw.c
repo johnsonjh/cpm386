@@ -96,9 +96,9 @@ REG WORD index;       /* index into disk map of fcb     */
 WORD wrdfcb;          /* boolean, fcb disk map of words */
 {
   if (wrdfcb)
-    return (swap (fcbp->dskmap.big[index]));
+    return (swap (fcbp->dskmap.big [index]));
   else
-    return (UBWORD (fcbp->dskmap.small[index]));
+    return (UBWORD (fcbp->dskmap.small [index]));
 }
 
 /*****************************************************************************/
@@ -113,9 +113,9 @@ REG UWORD block;      /* block number                   */
   fcbp->s2 &= 0x7f; /* set file write flag */
 
   if (wrdfcb)
-    fcbp->dskmap.big[index] = swap (block);
+    fcbp->dskmap.big [index] = swap (block);
   else
-    fcbp->dskmap.small[index] = (UBYTE)block;
+    fcbp->dskmap.small [index] = (UBYTE)block;
 }
 
 /*****************************************************************************/
@@ -236,7 +236,7 @@ REG struct fcb *fcbp;
   BSETUP
 
   i = 15;
-  p = &(fcbp->dskmap.small[16]);
+  p = &(fcbp->dskmap.small [16]);
 
   do
     {
@@ -306,7 +306,7 @@ WORD random;          /* 0 = sequential, 1 = random (normal),     */
 
   bigfile = ((GBL.parmp)->dsm) & ~0xff;
 
-  if ((!reading) && (fcbp->ftype[robit] & 0x80))
+  if ((!reading) && (fcbp->ftype [robit] & 0x80))
     ro_err (fcbp, (((GBL.dphp)->dpbp))->drm); /*** rli ***/
                                               /* check for read-only file */
   if (random)
@@ -364,7 +364,7 @@ WORD random;          /* 0 = sequential, 1 = random (normal),     */
           index = SECLEN;
 
           do
-            GBL.dmaadr[--index] = 0;
+            GBL.dmaadr [--index] = 0;
           while (index); /* zero the dma buffer */
 
           for (index = 0; index <= ((GBL.parmp)->blm); index++)

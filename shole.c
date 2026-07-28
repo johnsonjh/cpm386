@@ -19,7 +19,7 @@
 /*****************************************************************************/
 
 /*
- * Copy src into dst[width], uppercased
+ * Copy src into dst [width], uppercased
  * and space-padded (CP/M 8.3 field).
  */
 
@@ -35,12 +35,12 @@ pad_field (char *dst, int width, const char *src, int srclen)
 
   for (i = 0; i < srclen; i++)
     {
-      dst[i] = (char)toupper ((unsigned char)src[i]);
+      dst [i] = (char)toupper ((unsigned char)src [i]);
     }
 
   for (; i < width; i++)
     {
-      dst[i] = ' ';
+      dst [i] = ' ';
     }
 }
 
@@ -67,7 +67,7 @@ int
 main (int argc, char **argv)
 {
   const char *path, *want, *dot;
-  char name[8], typ[3];
+  char name [8], typ [3];
   unsigned char *data;
   long sz, blocksize;
   FILE *f;
@@ -82,41 +82,41 @@ main (int argc, char **argv)
 
   ai = 1;
 
-  while (ai < argc && argv[ai][0] == '-' && argv[ai][1] != '\0')
+  while (ai < argc && argv [ai] [0] == '-' && argv [ai] [1] != '\0')
     {
-      if (strcmp (argv[ai], "-b") == 0)
+      if (strcmp (argv [ai], "-b") == 0)
         {
           if (ai + 1 >= argc)
             {
               (void)fprintf (stderr, "shole: -b requires an argument\n");
-              usage (argv[0]);
+              usage (argv [0]);
 
               return 1;
             }
 
-          blocksize = atol (argv[ai + 1]);
+          blocksize = atol (argv [ai + 1]);
 
           if (blocksize <= 0)
             {
               (void)fprintf (stderr, "shole: invalid blocksize '%s'\n",
-                             argv[ai + 1]);
+                             argv [ai + 1]);
 
               return 1;
             }
 
           ai += 2;
         }
-      else if (strcmp (argv[ai], "-w") == 0)
+      else if (strcmp (argv [ai], "-w") == 0)
         {
           force_word = 1;
           ai += 1;
         }
-      else if (strcmp (argv[ai], "-B") == 0)
+      else if (strcmp (argv [ai], "-B") == 0)
         {
           force_byte = 1;
           ai += 1;
         }
-      else if (strcmp (argv[ai], "--") == 0)
+      else if (strcmp (argv [ai], "--") == 0)
         {
           ai += 1;
 
@@ -124,8 +124,8 @@ main (int argc, char **argv)
         }
       else
         {
-          (void)fprintf (stderr, "shole: unknown option '%s'\n", argv[ai]);
-          usage (argv[0]);
+          (void)fprintf (stderr, "shole: unknown option '%s'\n", argv [ai]);
+          usage (argv [0]);
 
           return 1;
         }
@@ -140,13 +140,13 @@ main (int argc, char **argv)
 
   if (argc - ai < 2)
     {
-      usage (argv[0]);
+      usage (argv [0]);
 
       return 1;
     }
 
-  path = argv[ai];
-  want = argv[ai + 1];
+  path = argv [ai];
+  want = argv [ai + 1];
 
   dot = strchr (want, '.');
 
@@ -220,9 +220,9 @@ main (int argc, char **argv)
   /* Scan first 8 KiB of directory (256 entries for 4mb-hd). */
   for (i = 0; i + 32 <= sz && i < 8192; i += 32)
     {
-      int nonzero[8], ncnt, target, old, nslots;
+      int nonzero [8], ncnt, target, old, nslots;
 
-      if (data[i] >= 16)
+      if (data [i] >= 16)
         {
           continue;
         }
@@ -242,17 +242,17 @@ main (int argc, char **argv)
 
           if (word_mode)
             {
-              val = (unsigned int)data[i + 16 + j * 2]
-                    | ((unsigned int)data[i + 16 + j * 2 + 1] << 8);
+              val = (unsigned int)data [i + 16 + j * 2]
+                    | ((unsigned int)data [i + 16 + j * 2 + 1] << 8);
             }
           else
             {
-              val = data[i + 16 + j];
+              val = data [i + 16 + j];
             }
 
           if (val != 0)
             {
-              nonzero[ncnt++] = j;
+              nonzero [ncnt++] = j;
             }
         }
 
@@ -263,23 +263,23 @@ main (int argc, char **argv)
           continue;
         }
 
-      target = nonzero[ncnt / 2];
+      target = nonzero [ncnt / 2];
 
       if (word_mode)
         {
-          old = data[i + 16 + target * 2]
-                | (data[i + 16 + target * 2 + 1] << 8);
-          data[i + 16 + target * 2] = 0;
-          data[i + 16 + target * 2 + 1] = 0;
+          old = data [i + 16 + target * 2]
+             | (data [i + 16 + target * 2 + 1] << 8);
+          data [i + 16 + target * 2] = 0;
+          data [i + 16 + target * 2 + 1] = 0;
         }
       else
         {
-          old = data[i + 16 + target];
-          data[i + 16 + target] = 0;
+          old = data [i + 16 + target];
+          data [i + 16 + target] = 0;
         }
 
       patched = 1;
-      (void)printf ("shole: %s extent@dir %d cleared map[%d] (%s) was %d\n",
+      (void)printf ("shole: %s extent@dir %d cleared map [%d] (%s) was %d\n",
                     want, i, target, word_mode ? "word" : "byte", old);
 
       break; /* first matching extent only */

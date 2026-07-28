@@ -38,9 +38,9 @@ static int opt_b_set = 0;
 static unsigned opt_b = 0;
 static unsigned bytes_per_line = 20, hex_start = 0, ascii_start = 60;
 static ULONG file_offset = 0;
-static UBYTE out_dma[128];
+static UBYTE out_dma [128];
 static int out_col = 0;
-static UBYTE out_fcb[36];
+static UBYTE out_fcb [36];
 
 /*****************************************************************************/
 
@@ -78,7 +78,7 @@ putch (char c)
       return;
     }
 
-  out_dma[out_col++] = c;
+  out_dma [out_col++] = c;
   if (out_col == 128)
     {
       (void)bdos (26, (LONG)(ULONG)out_dma);
@@ -98,7 +98,7 @@ out_flush_close (void)
         {
           while (out_col < 128)
             {
-              out_dma[out_col++] = 26;
+              out_dma [out_col++] = 26;
             }
 
           (void)bdos (26, (LONG)(ULONG)out_dma);
@@ -210,8 +210,8 @@ pager_check (void)
 /*****************************************************************************/
 
 /* Continuous dump state across sequential records. */
-static char line[161]; /* wider for -b */
-static unsigned col;   /* 0..bytes_per_line-1 bytes filled in line */
+static char line [161]; /* wider for -b */
+static unsigned col;    /* 0..bytes_per_line-1 bytes filled in line */
 
 /*****************************************************************************/
 
@@ -234,10 +234,10 @@ line_clear (void)
 
   for (j = 0; j < width; j++)
     {
-      line[j] = ' ';
+      line [j] = ' ';
     }
 
-  line[width] = 0;
+  line [width] = 0;
   col = 0;
 }
 
@@ -250,7 +250,8 @@ line_all_null (void)
 
   for (j = 0; j < bytes_per_line; j++)
     {
-      if (line[hex_start + j * 3] != '0' || line[hex_start + j * 3 + 1] != '0')
+      if (line [hex_start + j * 3] != '0'
+       || line [hex_start + j * 3 + 1] != '0')
         {
           return 0;
         }
@@ -303,12 +304,12 @@ line_flush (void)
 
   k = (int)width - 1;
 
-  while (k >= 0 && line[k] == ' ')
+  while (k >= 0 && line [k] == ' ')
     {
       k--;
     }
 
-  line[k + 1] = 0;
+  line [k + 1] = 0;
   puts (line);
   putch ('\r');
   putch ('\n');
@@ -321,19 +322,19 @@ line_flush (void)
 static void
 put_dec_offset (ULONG off)
 {
-  char buf[12];
+  char buf [12];
   int i = 0;
   int k;
 
   if (off == 0)
     {
-      buf[i++] = '0';
+      buf [i++] = '0';
     }
   else
     {
       while (off)
         {
-          buf[i++] = (char)('0' + off % 10);
+          buf [i++] = (char)('0' + off % 10);
           off /= 10;
         }
     }
@@ -341,16 +342,16 @@ put_dec_offset (ULONG off)
   /* right-justify in 10 chars */
   for (k = 0; k < 10 - i; k++)
     {
-      line[k] = ' ';
+      line [k] = ' ';
     }
 
   while (i > 0)
     {
-      line[k++] = buf[--i];
+      line [k++] = buf [--i];
     }
 
-  line[10] = ':';
-  line[11] = ' ';
+  line [10] = ':';
+  line [11] = ' ';
 }
 
 /*****************************************************************************/
@@ -388,30 +389,30 @@ hexdump_feed (const UBYTE *buf, unsigned size)
                 {
                   ULONG tmp = file_offset;
                   int k;
-                  line[8] = ':';
-                  line[9] = ' ';
+                  line [8] = ':';
+                  line [9] = ' ';
                   for (k = 7; k >= 0; k--)
                     {
-                      line[k] = hexdig (tmp);
+                      line [k] = hexdig (tmp);
                       tmp >>= 4;
                     }
                 }
             }
         }
 
-      ch = buf[i];
-      line[hex_start + col * 3] = hexdig (ch >> 4);
-      line[hex_start + col * 3 + 1] = hexdig (ch);
+      ch = buf [i];
+      line [hex_start + col * 3] = hexdig (ch >> 4);
+      line [hex_start + col * 3 + 1] = hexdig (ch);
 
       if (!opt_n)
         {
           if (ch < 0x7f && ch > (unsigned char)' ')
             {
-              line[ascii_start + col] = (char)ch;
+              line [ascii_start + col] = (char)ch;
             }
           else
             {
-              line[ascii_start + col] = '.';
+              line [ascii_start + col] = '.';
             }
         }
 
@@ -457,23 +458,23 @@ set_fcb (UBYTE *fcb, const char *name)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
   for (i = 1; i <= 11; i++)
     {
-      fcb[i] = ' ';
+      fcb [i] = ' ';
     }
 
-  if (name[0] && name[1] == ':')
+  if (name [0] && name [1] == ':')
     {
-      char c = name[0];
+      char c = name [0];
       if (c >= 'a' && c <= 'z')
         {
           c -= 32;
         }
 
-      fcb[0] = (UBYTE)(c - 'A' + 1);
+      fcb [0] = (UBYTE)(c - 'A' + 1);
       name += 2;
     }
 
@@ -488,7 +489,7 @@ set_fcb (UBYTE *fcb, const char *name)
 
       if (j <= 8)
         {
-          fcb[j++] = (UBYTE)c;
+          fcb [j++] = (UBYTE)c;
         }
     }
 
@@ -506,7 +507,7 @@ set_fcb (UBYTE *fcb, const char *name)
 
           if (j <= 11)
             {
-              fcb[j++] = (UBYTE)c;
+              fcb [j++] = (UBYTE)c;
             }
         }
     }
@@ -520,9 +521,9 @@ parse_num (const char *s, int *len)
   ULONG v = 0;
   int n = 0;
 
-  while (s[n] >= '0' && s[n] <= '9')
+  while (s [n] >= '0' && s [n] <= '9')
     {
-      v = v * 10 + (ULONG)(s[n] - '0');
+      v = v * 10 + (ULONG)(s [n] - '0');
       n++;
     }
 
@@ -536,7 +537,7 @@ parse_num (const char *s, int *len)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
+  UBYTE fcb [36];
 
   opt_h = opt_i = opt_o = opt_w = opt_n = 0;
   opt_p = opt_a = opt_d = opt_u = 0;
@@ -548,14 +549,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   pager_line_count = 0;
   pager_quit = 0;
   prev_was_star = 0;
-  UBYTE dma[128];
-  UBYTE prev[128];
+  UBYTE dma [128];
+  UBYTE prev [128];
   UWORD r;
   UBYTE lrbc = 0;
   int have = 0;
   int i;
-  char tail[128];
-  int tlen = CMD_TAIL[0];
+  char tail [128];
+  int tlen = CMD_TAIL [0];
   const char *filename = 0;
 
   if (tlen > 126)
@@ -565,27 +566,27 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
 
   i = 0;
 
-  while (tail[i] == ' ' || tail[i] == '\t')
+  while (tail [i] == ' ' || tail [i] == '\t')
     {
       i++;
     }
 
-  while (tail[i])
+  while (tail [i])
     {
-      if (tail[i] == '-' || tail[i] == '/')
+      if (tail [i] == '-' || tail [i] == '/')
         {
           i++;
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
-              char c = tail[i++];
+              char c = tail [i++];
 
               if (c >= 'A' && c <= 'Z')
                 {
@@ -634,19 +635,19 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   int nlen = 0;
                   ULONG v;
 
-                  if (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+                  if (tail [i] && tail [i] != ' ' && tail [i] != '\t')
                     {
-                      v = parse_num (&tail[i], &nlen);
+                      v = parse_num (&tail [i], &nlen);
                       i += nlen;
                     }
                   else
                     {
-                      while (tail[i] == ' ' || tail[i] == '\t')
+                      while (tail [i] == ' ' || tail [i] == '\t')
                         {
                           i++;
                         }
 
-                      v = parse_num (&tail[i], &nlen);
+                      v = parse_num (&tail [i], &nlen);
                       i += nlen;
                     }
 
@@ -669,19 +670,19 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   int nlen = 0;
                   ULONG v;
 
-                  if (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+                  if (tail [i] && tail [i] != ' ' && tail [i] != '\t')
                     {
-                      v = parse_num (&tail[i], &nlen);
+                      v = parse_num (&tail [i], &nlen);
                       i += nlen;
                     }
                   else
                     {
-                      while (tail[i] == ' ' || tail[i] == '\t')
+                      while (tail [i] == ' ' || tail [i] == '\t')
                         {
                           i++;
                         }
 
-                      v = parse_num (&tail[i], &nlen);
+                      v = parse_num (&tail [i], &nlen);
                       i += nlen;
                     }
 
@@ -703,19 +704,19 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   int nlen = 0;
                   ULONG v;
 
-                  if (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+                  if (tail [i] && tail [i] != ' ' && tail [i] != '\t')
                     {
-                      v = parse_num (&tail[i], &nlen);
+                      v = parse_num (&tail [i], &nlen);
                       i += nlen;
                     }
                   else
                     {
-                      while (tail[i] == ' ' || tail[i] == '\t')
+                      while (tail [i] == ' ' || tail [i] == '\t')
                         {
                           i++;
                         }
 
-                      v = parse_num (&tail[i], &nlen);
+                      v = parse_num (&tail [i], &nlen);
                       i += nlen;
                     }
 
@@ -740,12 +741,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         }
       else
         {
-          filename = &tail[i];
+          filename = &tail [i];
 
           break;
         }
 
-      while (tail[i] == ' ' || tail[i] == '\t')
+      while (tail [i] == ' ' || tail [i] == '\t')
         {
           i++;
         }
@@ -777,9 +778,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   set_fcb (fcb, filename);
 
-  fcb[12] = 0;
-  fcb[14] = 0;
-  fcb[32] = 0xFF; /* request LRBC on open */
+  fcb [12] = 0;
+  fcb [14] = 0;
+  fcb [32] = 0xFF; /* request LRBC on open */
 
   r = bdos (15, (LONG)(ULONG)fcb);
 
@@ -790,8 +791,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       (void)bdos (0, 0);
     }
 
-  lrbc = fcb[32]; /* DOS-PLUS bytes used in last record (0 = full) */
-  fcb[32] = 0;    /* sequential from record 0 */
+  lrbc = fcb [32]; /* DOS-PLUS bytes used in last record (0 = full) */
+  fcb [32] = 0;    /* sequential from record 0 */
 
   if (opt_i)
     {
@@ -802,14 +803,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       for (i = 0; i < 36; i++)
         {
-          out_fcb[i] = fcb[i];
+          out_fcb [i] = fcb [i];
         }
 
-      out_fcb[9]  = 'H';
-      out_fcb[10] = 'E';
-      out_fcb[11] = 'X';
-      out_fcb[12] = out_fcb[13] = out_fcb[14] = out_fcb[15] = 0;
-      out_fcb[32] = 0;
+      out_fcb [9]  = 'H';
+      out_fcb [10] = 'E';
+      out_fcb [11] = 'X';
+      out_fcb [12] = out_fcb [13] = out_fcb [14] = out_fcb [15] = 0;
+      out_fcb [32] = 0;
 
       (void)bdos (19, (LONG)(ULONG)out_fcb);
 
@@ -884,17 +885,17 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
           {
             unsigned tail_len = 128 - (unsigned)to_skip;
-            UBYTE partial[128];
+            UBYTE partial [128];
             unsigned pi;
 
             for (pi = 0; pi < tail_len; pi++)
               {
-                partial[pi] = dma[(unsigned)to_skip + pi];
+                partial [pi] = dma [(unsigned)to_skip + pi];
               }
 
             for (pi = 0; pi < tail_len; pi++)
               {
-                prev[pi] = partial[pi];
+                prev [pi] = partial [pi];
               }
 
             for (;;)
@@ -937,7 +938,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
                 for (pi = 0; pi < 128; pi++)
                   {
-                    prev[pi] = dma[pi];
+                    prev [pi] = dma [pi];
                   }
 
                 have = 1;
@@ -1008,7 +1009,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       for (i = 0; i < 128; i++)
         {
-          prev[i] = dma[i];
+          prev [i] = dma [i];
         }
 
       have = 1;

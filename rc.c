@@ -92,7 +92,7 @@ puts (const char *s)
 static void
 putu (ULONG n)
 {
-  char b[12];
+  char b [12];
   int i = 0;
 
   if (!n)
@@ -103,13 +103,13 @@ putu (ULONG n)
 
   while (n && i < 12)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
 
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -130,11 +130,11 @@ static int
 parse_u (unsigned *out)
 {
   unsigned n = 0, i, tlen;
-  char tail[128];
+  char tail [128];
   const char *p;
 
   /* Prefer command tail (allows multi-digit without FCB 8-char limit) */
-  tlen = CMD_TAIL[0];
+  tlen = CMD_TAIL [0];
 
   if (tlen > 126)
     {
@@ -143,10 +143,10 @@ parse_u (unsigned *out)
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
   p = tail;
 
   while (*p == ' ' || *p == '\t')
@@ -156,7 +156,7 @@ parse_u (unsigned *out)
 
   if (*p == '-' || *p == '/')
     {
-      if (p[1] == 'h' || p[1] == 'H')
+      if (p [1] == 'h' || p [1] == 'H')
         {
           help ();
 
@@ -184,11 +184,11 @@ parse_u (unsigned *out)
     }
 
   /* Fallback: first char(s) of FCB name if digits */
-  if (DEF_FCB[1] >= '0' && DEF_FCB[1] <= '9')
+  if (DEF_FCB [1] >= '0' && DEF_FCB [1] <= '9')
     {
-      for (i = 1; i <= 8 && DEF_FCB[i] >= '0' && DEF_FCB[i] <= '9'; i++)
+      for (i = 1; i <= 8 && DEF_FCB [i] >= '0' && DEF_FCB [i] <= '9'; i++)
         {
-          n = n * 10u + (unsigned)(DEF_FCB[i] - '0');
+          n = n * 10u + (unsigned)(DEF_FCB [i] - '0');
         }
 
       *out = n;

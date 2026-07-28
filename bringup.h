@@ -35,7 +35,7 @@
 
 /*****************************************************************************/
 
-extern unsigned char ramdisk[RAMDISK_SIZE];
+extern unsigned char ramdisk [RAMDISK_SIZE];
 extern struct dph dph0;
 extern struct dpb dpb0;
 

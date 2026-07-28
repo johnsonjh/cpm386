@@ -76,7 +76,7 @@ iter_to_char (int iter, int max_iter)
     }
 
   {
-    static const char hex[16] =
+    static const char hex [16] =
       {
         '0', '1', '2', '3', '4', '5', '6', '7',
         '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
@@ -92,7 +92,7 @@ iter_to_char (int iter, int max_iter)
         iter = 15;
       }
 
-    return hex[iter];
+    return hex [iter];
   }
 }
 

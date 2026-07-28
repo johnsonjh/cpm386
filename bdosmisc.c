@@ -110,7 +110,7 @@ bdosinit ()
 
   bsetvec (trap2v, &traphndl); /* set up trap vector                */
   GBL.kbchar = 0;              /* initialize the "global" variables */
-  GBL.insptr = GBL.remptr = &(GBL.t_buff[0]);
+  GBL.insptr = GBL.remptr = &(GBL.t_buff [0]);
   GBL.delim = '$';
   GBL.lstecho = FALSE;
   GBL.echodel = FALSE;
@@ -119,7 +119,7 @@ bdosinit ()
   segp = (void *)bgetseg (); /* get pointer to memory segment table */
   tpa_lt = tpa_lp = segp->low;
   tpa_ht = tpa_hp = tpa_lp + segp->length;
-  initexc (&(GBL.excvec[0]));
+  initexc (&(GBL.excvec [0]));
 }
 
 /*****************************************************************************/
@@ -157,7 +157,7 @@ warmboot (parm)
   GBL.curdsk = 0xff; /* set current disk to "unknown" */
   tpa_lt = tpa_lp;
   tpa_ht = tpa_hp;
-  initexc (&(GBL.excvec[0]));
+  initexc (&(GBL.excvec [0]));
   bwboot ();
 }
 
@@ -281,7 +281,7 @@ WORD dirindx;
           break;
 
         case 'C':
-          fcbp->ftype[robit] &= 0x7f;
+          fcbp->ftype [robit] &= 0x7f;
           dirscan (set_attr, fcbp, 2);
           return (dir_rd (dirindx >> 2));
 
@@ -358,8 +358,8 @@ UWORD setexc (epbp)
   else if ((i < 0) || (i > 9))
     return (255);
 
-  epbp->oldvec = GBL.excvec[i];
-  GBL.excvec[i] = epbp->newvec;
+  epbp->oldvec = GBL.excvec [i];
+  GBL.excvec [i] = epbp->newvec;
 
   return (0);
 }
@@ -408,10 +408,10 @@ set_tpa (p)
 static unsigned long
 le32 (const UBYTE *p)
 {
-  return (unsigned long)(unsigned char)p[0]
-      | ((unsigned long)(unsigned char)p[1] << 8)
-      | ((unsigned long)(unsigned char)p[2] << 16)
-      | ((unsigned long)(unsigned char)p[3] << 24);
+  return (unsigned long)(unsigned char)p [0]
+      | ((unsigned long)(unsigned char)p [1] << 8)
+      | ((unsigned long)(unsigned char)p [2] << 16)
+      | ((unsigned long)(unsigned char)p [3] << 24);
 }
 
 /*****************************************************************************/
@@ -447,7 +447,7 @@ cpm386_load_from_buf (const UBYTE *filebuf, unsigned long buflen,
 
   /* place verbatim */
   for (i = 0; i < sz; i++)
-    tpa_base[load + i] = img[i];
+    tpa_base [load + i] = img [i];
 
   *entry_out = tpa_base + ent;
 
@@ -460,7 +460,7 @@ UWORD
 cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
                          unsigned long tpa_len, UBYTE **entry_out)
 {
-  UBYTE rec[128];
+  UBYTE rec [128];
   unsigned long load, sz, ent, placed, i, n;
   UWORD r;
   UBYTE *dst;
@@ -478,7 +478,7 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
     {
       /* completely empty / missing first record */
       for (i = 0; i < 128; i++)
-        rec[i] = 0;
+        rec [i] = 0;
     }
 
   load = le32 (rec);
@@ -498,7 +498,7 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
   dst = tpa_base + load;
 
   for (i = 0; i < n; i++)
-    dst[i] = rec[12 + i];
+    dst [i] = rec [12 + i];
 
   placed = n;
 
@@ -524,12 +524,12 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
         {
           /* hole/unwritten/EOF: treat as zeros for absolute image */
           for (i = 0; i < n; i++)
-            dst[placed + i] = 0;
+            dst [placed + i] = 0;
         }
       else
         {
           for (i = 0; i < n; i++)
-            dst[placed + i] = rec[i];
+            dst [placed + i] = rec [i];
         }
       placed += n;
 

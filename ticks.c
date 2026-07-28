@@ -79,7 +79,7 @@ puts (const char *s)
 static void
 putu32 (ULONG n)
 {
-  char b[12];
+  char b [12];
   int i = 0;
 
   if (!n)
@@ -90,13 +90,13 @@ putu32 (ULONG n)
 
   while (n)
     {
-      b[i++] = (char)('0' + (n % 10));
+      b [i++] = (char)('0' + (n % 10));
       n /= 10;
     }
 
   while (i--)
     {
-      putch (b[i]);
+      putch (b [i]);
     }
 }
 

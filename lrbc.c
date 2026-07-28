@@ -79,7 +79,7 @@ puts (const char *s)
 static void
 putu (ULONG n)
 {
-  char buf[12];
+  char buf [12];
   int i = 0;
 
   if (n == 0)
@@ -90,13 +90,13 @@ putu (ULONG n)
 
   while (n && i < 12)
     {
-      buf[i++] = (char)('0' + (n % 10));
+      buf [i++] = (char)('0' + (n % 10));
       n /= 10;
     }
 
   while (i > 0)
     {
-      putch (buf[--i]);
+      putch (buf [--i]);
     }
 }
 
@@ -124,7 +124,7 @@ exact_size (ULONG records, UBYTE lrbc)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
+  UBYTE fcb [36];
   UWORD r;
   UBYTE lrbc;
   ULONG records, bytes_alloc, bytes_exact;
@@ -133,7 +133,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   puts ("\r\nLRBC (Last Record Byte Count)\r\n");
 
   /* Need a filename in the default FCB (from CCP base-page setup) */
-  if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
+  if (DEF_FCB [1] == ' ' || DEF_FCB [1] == 0)
     {
       puts ("Usage: LRBC filename [value]\r\n");
 
@@ -142,7 +142,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   {
     unsigned char const *p = CMD_TAIL + 1;
-    int len = CMD_TAIL[0];
+    int len = CMD_TAIL [0];
 
     if (len > 126)
       {
@@ -199,12 +199,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* Copy default FCB; open with cur_rec=0xFF to fetch LRBC into FCB+32 */
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = DEF_FCB[i];
+      fcb [i] = DEF_FCB [i];
     }
 
-  fcb[12] = 0;    /* extent */
-  fcb[14] = 0;    /* s2 */
-  fcb[32] = 0xFF; /* request LRBC on open (CP/M Plus / DOS Plus) */
+  fcb [12] = 0;    /* extent */
+  fcb [14] = 0;    /* s2 */
+  fcb [32] = 0xFF; /* request LRBC on open (CP/M Plus / DOS Plus) */
 
   r = bdos (15, (LONG)(ULONG)fcb);
 
@@ -216,8 +216,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   /* After open with 0xFF: cur_rec and s1 hold DOS-PLUS LRBC */
-  lrbc = fcb[32];
-  fcb[32] = 0; /* reset before any sequential I/O (not used here) */
+  lrbc = fcb [32];
+  fcb [32] = 0; /* reset before any sequential I/O (not used here) */
 
   /*
    * Function 35: compute file size -> ran0..ran2 = next-record count
@@ -225,18 +225,19 @@ _start (void) /*cppcheck-suppress unusedFunction*/
    */
 
   (void)bdos (35, (LONG)(ULONG)fcb);
-  records = ((ULONG)fcb[33] << 16) | ((ULONG)fcb[34] << 8)
-            | (ULONG)fcb[35];
+  records = ((ULONG)fcb [33] << 16)
+          | ((ULONG)fcb [34] << 8)
+          |  (ULONG)fcb [35];
 
   if (has_value)
     {
       for (i = 0; i < 36; i++)
         {
-          fcb[i] = DEF_FCB[i];
+          fcb [i] = DEF_FCB [i];
         }
 
-      fcb[6] |= 0x80;
-      fcb[32] = (UBYTE)new_lrbc;
+      fcb [6] |= 0x80;
+      fcb [32] = (UBYTE)new_lrbc;
       r = bdos (30, (LONG)(ULONG)fcb);
 
       if (r == 255)
@@ -252,18 +253,18 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   puts ("File: ");
 
-  for (i = 1; i <= 8 && fcb[i] != ' '; i++)
+  for (i = 1; i <= 8 && fcb [i] != ' '; i++)
     {
-      putch ((char)(fcb[i] & 0x7f));
+      putch ((char)(fcb [i] & 0x7f));
     }
 
-  if (fcb[9] != ' ')
+  if (fcb [9] != ' ')
     {
       putch ('.');
 
-      for (i = 9; i <= 11 && fcb[i] != ' '; i++)
+      for (i = 9; i <= 11 && fcb [i] != ' '; i++)
         {
-          putch ((char)(fcb[i] & 0x7f));
+          putch ((char)(fcb [i] & 0x7f));
         }
     }
 

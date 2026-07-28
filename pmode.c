@@ -81,8 +81,8 @@ struct tss32
 
 /*****************************************************************************/
 
-static struct gdt_entry gdt[GDT_COUNT];
-static struct idt_entry idt[IDT_COUNT];
+static struct gdt_entry gdt [GDT_COUNT];
+static struct idt_entry idt [IDT_COUNT];
 static struct tss32 tss;
 static struct dt_ptr gdtp, idtp;
 
@@ -94,7 +94,7 @@ static struct dt_ptr gdtp, idtp;
  * interrupt stack; overflow would smash alv/CCP globals below it.
  */
 
-static uint8_t ring0_stack[32768] __attribute__ ((aligned (16)));
+static uint8_t ring0_stack [32768] __attribute__ ((aligned (16)));
 
 /*****************************************************************************/
 
@@ -185,12 +185,12 @@ gdt_set (int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
    * or page count-1 depending on G.
    */
 
-  gdt[idx].limit_lo = (uint16_t)(limit & 0xFFFF);
-  gdt[idx].base_lo = (uint16_t)(base & 0xFFFF);
-  gdt[idx].base_mid = (uint8_t)((base >> 16) & 0xFF);
-  gdt[idx].access = access;
-  gdt[idx].gran = (uint8_t)((flags & 0xF0) | ((limit >> 16) & 0x0F));
-  gdt[idx].base_hi = (uint8_t)((base >> 24) & 0xFF);
+  gdt [idx].limit_lo = (uint16_t)(limit & 0xFFFF);
+  gdt [idx].base_lo = (uint16_t)(base & 0xFFFF);
+  gdt [idx].base_mid = (uint8_t)((base >> 16) & 0xFF);
+  gdt [idx].access = access;
+  gdt [idx].gran = (uint8_t)((flags & 0xF0) | ((limit >> 16) & 0x0F));
+  gdt [idx].base_hi = (uint8_t)((base >> 24) & 0xFF);
 }
 
 /*****************************************************************************/
@@ -200,11 +200,11 @@ idt_set (int vec, void (*handler) (void), uint8_t type)
 {
   uint32_t off = (uint32_t)(unsigned long)handler;
 
-  idt[vec].off_lo = (uint16_t)(off & 0xFFFF);
-  idt[vec].sel = SEL_KCODE;
-  idt[vec].zero = 0;
-  idt[vec].type = type;
-  idt[vec].off_hi = (uint16_t)((off >> 16) & 0xFFFF);
+  idt [vec].off_lo = (uint16_t)(off & 0xFFFF);
+  idt [vec].sel = SEL_KCODE;
+  idt [vec].zero = 0;
+  idt [vec].type = type;
+  idt [vec].off_hi = (uint16_t)((off >> 16) & 0xFFFF);
 }
 
 /*****************************************************************************/
@@ -257,7 +257,7 @@ fault_puts (const char *s)
 static void
 fault_puthex (uint32_t v, int digits)
 {
-  static const char hex[] = "0123456789ABCDEF";
+  static const char hex [] = "0123456789ABCDEF";
   int i;
 
   if (digits < 1)
@@ -272,7 +272,7 @@ fault_puthex (uint32_t v, int digits)
 
   for (i = digits - 1; i >= 0; i--)
     {
-      bios_conout ((unsigned char)hex[(v >> (i * 4)) & 0xF]);
+      bios_conout ((unsigned char)hex [(v >> (i * 4)) & 0xF]);
     }
 }
 
@@ -290,7 +290,7 @@ fault_puthex32 (uint32_t v)
 static const char *
 fault_name (uint32_t vec)
 {
-  static const char *const names[] = {
+  static const char *const names [] = {
     "#DE divide error",
     "#DB debug",
     "NMI",
@@ -313,9 +313,9 @@ fault_name (uint32_t vec)
     "#XM SIMD FP",
   };
 
-  if (vec < sizeof (names) / sizeof (names[0]))
+  if (vec < sizeof (names) / sizeof (names [0]))
     {
-      return names[vec];
+      return names [vec];
     }
 
   return "unknown";
@@ -500,7 +500,7 @@ fault_handler_c (struct fault_frame *f)
 /*****************************************************************************/
 
 /* Exception entry stubs (pmode.S); one pointer per vector 0..31 */
-extern void (*exc_stub_table[32]) (void);
+extern void (*exc_stub_table [32]) (void);
 
 /*****************************************************************************/
 
@@ -688,7 +688,7 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
   /* TSS contents */
   for (i = 0; i < (int)sizeof (tss); i++)
     {
-      ((uint8_t *)&tss)[i] = 0;
+      ((uint8_t *)&tss) [i] = 0;
     }
 
   tss.ss0 = SEL_KDATA;
@@ -710,7 +710,7 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
 
   for (i = 0; i < 32; i++)
     {
-      idt_set (i, (void (*) (void))exc_stub_table[i], 0x8E);
+      idt_set (i, (void (*) (void))exc_stub_table [i], 0x8E);
     }
 
   idt_set (BDOS_INT, bdos_irq, 0xEE); /* present, DPL3 */

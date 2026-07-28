@@ -41,21 +41,22 @@ main (int argc, char **argv)
   FILE *f;
   long sz;
   unsigned char *buf;
-  uint32_t hdr[3];
+  uint32_t hdr [3];
 
   if (argc < 3)
     {
-      (void)fprintf (stderr, "usage: %s in.bin out.386 [load_off]\n", argv[0]);
+      (void)fprintf (stderr, "usage: %s in.bin out.386 [load_off]\n",
+                     argv [0]);
 
       return 1;
     }
 
-  in = argv[1];
-  out = argv[2];
+  in = argv [1];
+  out = argv [2];
 
   if (argc >= 4)
     {
-      load = (uint32_t)strtoul (argv[3], NULL, 0);
+      load = (uint32_t)strtoul (argv [3], NULL, 0);
     }
 
   f = fopen (in, "rb");
@@ -106,9 +107,9 @@ main (int argc, char **argv)
    * and load_off in the header places it at TPA+0x100.
    */
 
-  hdr[0] = load;
-  hdr[1] = (uint32_t)sz;
-  hdr[2] = load; /* entry = load */
+  hdr [0] = load;
+  hdr [1] = (uint32_t)sz;
+  hdr [2] = load; /* entry = load */
 
   f = fopen (out, "wb");
 

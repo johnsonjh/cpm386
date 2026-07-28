@@ -69,7 +69,7 @@ puts (const char *s)
 static void
 putu (ULONG n)
 {
-  char b[12];
+  char b [12];
   int i = 0;
 
   if (!n)
@@ -80,12 +80,12 @@ putu (ULONG n)
 
   while (n && i < 12)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -117,17 +117,17 @@ fill_name (UBYTE *fcb, const char *n8, const char *t3)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
   for (i = 0; i < 8; i++)
     {
-      fcb[1 + i] = (UBYTE)(n8[i] ? n8[i] : ' ');
+      fcb [1 + i] = (UBYTE)(n8 [i] ? n8 [i] : ' ');
     }
 
   for (i = 0; i < 3; i++)
     {
-      fcb[9 + i] = (UBYTE)(t3[i] ? t3[i] : ' ');
+      fcb [9 + i] = (UBYTE)(t3 [i] ? t3 [i] : ' ');
     }
 }
 
@@ -136,9 +136,9 @@ fill_name (UBYTE *fcb, const char *n8, const char *t3)
 static void
 set_ran (UBYTE *fcb, ULONG rec)
 {
-  fcb[33] = (UBYTE)((rec >> 16) & 0xff);
-  fcb[34] = (UBYTE)((rec >> 8) & 0xff);
-  fcb[35] = (UBYTE)(rec & 0xff);
+  fcb [33] = (UBYTE)((rec >> 16) & 0xff);
+  fcb [34] = (UBYTE)((rec >> 8) & 0xff);
+  fcb [35] = (UBYTE)(rec & 0xff);
 }
 
 /*****************************************************************************/
@@ -146,8 +146,9 @@ set_ran (UBYTE *fcb, ULONG rec)
 static ULONG
 get_ran (const UBYTE *fcb)
 {
-  return ((ULONG)fcb[33] << 16) | ((ULONG)fcb[34] << 8)
-         | (ULONG)fcb[35];
+  return ((ULONG)fcb [33] << 16)
+       | ((ULONG)fcb [34] << 8)
+       |  (ULONG)fcb [35];
 }
 
 /*****************************************************************************/
@@ -155,8 +156,8 @@ get_ran (const UBYTE *fcb)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
-  UBYTE dma[128];
+  UBYTE fcb [36];
+  UBYTE dma [128];
   UWORD r;
   int i;
   ULONG sz;
@@ -192,10 +193,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       for (j = 0; j < 128; j++)
         {
-          dma[j] = (UBYTE)(0x10 + i);
+          dma [j] = (UBYTE)(0x10 + i);
         }
 
-      dma[0] = (UBYTE)('0' + i);
+      dma [0] = (UBYTE)('0' + i);
       r = bdos (21, (LONG)(ULONG)fcb);
 
       if (r != 0)
@@ -241,7 +242,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       {
         r = bdos (20, (LONG)(ULONG)fcb);
 
-        if (r != 0 || dma[0] != (UBYTE)('0' + i))
+        if (r != 0 || dma [0] != (UBYTE)('0' + i))
           {
             ok = 0;
           }
@@ -266,10 +267,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < 128; i++)
     {
-      dma[i] = 0xAB;
+      dma [i] = 0xAB;
     }
 
-  dma[0] = 'Z';
+  dma [0] = 'Z';
   set_ran (fcb, 32);
   /*cppcheck-suppress redundantAssignment*/
   r = bdos (40, (LONG)(ULONG)fcb);
@@ -283,19 +284,19 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < 128; i++)
     {
-      dma[i] = 0;
+      dma [i] = 0;
     }
 
   r = bdos (33, (LONG)(ULONG)fcb);
-  result (r == 0 && dma[0] == 'Z' && dma[1] == 0xAB, "readzf@32");
+  result (r == 0 && dma [0] == 'Z' && dma [1] == 0xAB, "readzf@32");
 
   /* Extend size into the zero-filled tail of the same block */
   for (i = 0; i < 128; i++)
     {
-      dma[i] = 0xCC;
+      dma [i] = 0xCC;
     }
 
-  dma[0] = 'T';
+  dma [0] = 'T';
   set_ran (fcb, 47);
   r = bdos (34,
             (LONG)(ULONG)fcb); /* normal random write, block exists */
@@ -310,7 +311,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       {
         for (i = 0; i < 128; i++)
           {
-            if (dma[i] != 0)
+            if (dma [i] != 0)
               {
                 z = 0;
               }

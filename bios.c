@@ -153,7 +153,7 @@ static void vga_clear(void) {
   int i;
 
   for (i = 0; i < VGA_W * VGA_H; i++)
-    vga_mem[i] = (uint16_t)(' ' | (0x07 << 8));
+    vga_mem [i] = (uint16_t)(' ' | (0x07 << 8));
 
   vrow = vcol = 0;
   vga_update_cursor();
@@ -165,12 +165,12 @@ static void vga_scroll(void) {
   for (y = 0; y < VGA_H-1; y++) {
     for (x = 0; x < VGA_W; x++) {
       pos = y * VGA_W + x;
-      vga_mem[pos] = vga_mem[pos + VGA_W];
+      vga_mem [pos] = vga_mem [pos + VGA_W];
     }
   }
 
   for (x = 0; x < VGA_W; x++) {
-      vga_mem[(VGA_H-1)*VGA_W + x] = (uint16_t)(' ' | (0x07 << 8));
+      vga_mem [(VGA_H-1)*VGA_W + x] = (uint16_t)(' ' | (0x07 << 8));
   }
 
   vga_update_cursor();
@@ -243,7 +243,7 @@ static void vga_putc(unsigned char c) {
   }
 
   pos = vrow * VGA_W + vcol;
-  vga_mem[pos] = (uint16_t)(c | (0x07 << 8));
+  vga_mem [pos] = (uint16_t)(c | (0x07 << 8));
   vcol++;
   vga_update_cursor();
 }
@@ -263,7 +263,7 @@ static void vga_init(void) {
 static int kbd_shift = 0;
 static int kbd_ctrl = 0;
 
-static unsigned char kbd_map[128] = {
+static unsigned char kbd_map [128] = {
   0, 0x1b, '1','2','3','4','5','6','7','8','9','0','-','=', '\b',
   '\t','q','w','e','r','t','y','u','i','o','p','[',']','\n', 0,
   'a','s','d','f','g','h','j','k','l',';','\'','`', 0,'\\',
@@ -271,7 +271,7 @@ static unsigned char kbd_map[128] = {
   /* rest 0 for F1 etc */
 };
 
-static unsigned char kbd_map_shift[128] = {
+static unsigned char kbd_map_shift [128] = {
   0, 0x1b, '!','@','#','$','%','^','&','*','(',')','_','+', '\b',
   '\t','Q','W','E','R','T','Y','U','I','O','P','{','}','\n', 0,
   'A','S','D','F','G','H','J','K','L',':','"','~', 0,'|',
@@ -320,7 +320,7 @@ static unsigned char kbd_scancode_to_ascii(void)
   if (sc >= 128)
     return 0;
 
-  ch = kbd_shift ? kbd_map_shift[sc] : kbd_map[sc];
+  ch = kbd_shift ? kbd_map_shift [sc] : kbd_map [sc];
   if (!ch)
     return 0;
 
@@ -484,7 +484,7 @@ static void com_out_raw(unsigned char c)
 
 void bios_con_clear(void)
 {
-  static const char ansi[] = "\033[2J\033[H";
+  static const char ansi [] = "\033[2J\033[H";
   const char *p;
 
   if (con_ser_en) {
@@ -595,11 +595,11 @@ unsigned short int bios_read(void) {
   if (cur_dma_ptr) {
     int i;
 
-    unsigned char *src = &ramdisk[off];
+    unsigned char *src = &ramdisk [off];
     unsigned char *dst = (unsigned char *)cur_dma_ptr;
 
     for (i = 0; i < 128; i++)
-      dst[i] = src[i];
+      dst [i] = src [i];
   }
 
   return 0; /* ok */
@@ -624,10 +624,10 @@ unsigned short int bios_write(unsigned short int typecode) {
   if (cur_dma_ptr) {
     int i;
     unsigned char *src = (unsigned char *)cur_dma_ptr;
-    unsigned char *dst = &ramdisk[off];
+    unsigned char *dst = &ramdisk [off];
 
     for (i = 0; i < 128; i++)
-      dst[i] = src[i];
+      dst [i] = src [i];
   }
 
   return 0;
@@ -663,17 +663,17 @@ void bios_setup_basepage(const void *fcb1, const void *fcb2, const char *tail)
 
   /* Clear base page */
   for (i = 0; i < 0x100; i++)
-    tpa[i] = 0;
+    tpa [i] = 0;
 
   /* Default FCB at 0x5C (first arg), second at 0x6C */
   if (fcb1) {
     for (i = 0; i < 36; i++)
-      tpa[0x5C + i] = ((const UBYTE *)fcb1)[i];
+      tpa [0x5C + i] = ((const UBYTE *)fcb1) [i];
   }
 
   if (fcb2) {
     for (i = 0; i < 16; i++) /* only 16 bytes fit before 0x7C..0x7F */
-      tpa[0x6C + i] = ((const UBYTE *)fcb2)[i];
+      tpa [0x6C + i] = ((const UBYTE *)fcb2) [i];
   }
 
   /*
@@ -687,15 +687,15 @@ void bios_setup_basepage(const void *fcb1, const void *fcb2, const char *tail)
 
     tlen = 0;
 
-    while (tail[tlen] && tlen < 126)
+    while (tail [tlen] && tlen < 126)
       tlen++;
 
-    tpa[0x80] = (UBYTE)tlen;
+    tpa [0x80] = (UBYTE)tlen;
 
     for (i = 0; i < (int)tlen; i++)
-      tpa[0x81 + i] = (UBYTE)tail[i];
+      tpa [0x81 + i] = (UBYTE)tail [i];
 
-    tpa[0x81 + tlen] = 0;
+    tpa [0x81 + tlen] = 0;
   }
 }
 
@@ -703,7 +703,7 @@ void *bios_getmrt(void) {
   if (mrt.count == 0) {
     uint32_t tpa_base = *ABS_U32(0x604);
     uint32_t top = *ABS_U32(0x600);
-    extern char __kernel_end[];
+    extern char __kernel_end [];
     uint32_t k_end = (uint32_t)__kernel_end;
 
     /*
@@ -835,23 +835,23 @@ void cpm386_init(void) {
     extern BYTE *tpa_hp;
     unsigned long tpa_bytes = (unsigned long)tpa_hp - (unsigned long)tpa_lp;
     unsigned long kb = tpa_bytes / 1024;
-    char tmp[16];
+    char tmp [16];
     int i = 0;
 
     if (kb == 0) {
-      tmp[i++] = '0';
+      tmp [i++] = '0';
     } else {
       while (kb > 0 && i < 15) {
-        tmp[i++] = '0' + (kb % 10);
+        tmp [i++] = '0' + (kb % 10);
         kb /= 10;
       }
     }
 
-    char buf[20];
+    char buf [20];
     char *p = buf;
 
     while (i > 0)
-      *p++ = tmp[--i];
+      *p++ = tmp [--i];
 
     *p++ = 'K'; *p++ = ' '; *p++ = 'T'; *p++ = 'P'; *p++ = 'A';
     *p++ = '\r'; *p++ = '\n'; *p++ = '$'; *p = 0;
@@ -914,7 +914,7 @@ struct _filetyps {
   BYTE user_0;
 };
 
-struct _filetyps load_tbl[] = {
+struct _filetyps load_tbl [] = {
   { (BYTE *)"386", 0, 0, 0 },
   { (BYTE *)"SUB", 0, 0, 0 }, /* SUBMIT scripts (CCP cmd_file search) */
   { (BYTE *)"", 0, 0, 0 },
@@ -928,7 +928,7 @@ struct _filetyps load_tbl[] = {
 
 struct pgm_read_ctx {
   BYTE *fcb;
-  UBYTE recbuf[128];
+  UBYTE recbuf [128];
 };
 
 /*
@@ -937,27 +937,27 @@ struct pgm_read_ctx {
  * cur_rec did not advance, bump it so the next call progresses (holes / sparse).
  */
 
-static UWORD pgm_read_rec(UBYTE rec[128], void *vctx)
+static UWORD pgm_read_rec(UBYTE rec [128], void *vctx)
 {
   struct pgm_read_ctx *c = (struct pgm_read_ctx *)vctx;
   UWORD r;
-  UBYTE prev_cr = c->fcb[32];
+  UBYTE prev_cr = c->fcb [32];
   int i;
 
   bdos(26, (LONG)(unsigned long)c->recbuf);
   r = bdos(20, (LONG)(unsigned long)c->fcb);
 
   for (i = 0; i < 128; i++)
-    rec[i] = c->recbuf[i];
+    rec [i] = c->recbuf [i];
 
-  if (r == 1 && c->fcb[32] == prev_cr) {
+  if (r == 1 && c->fcb [32] == prev_cr) {
     /*
      * Unwritten/hole: BDOS left cur_rec unchanged - advance like a skip.
      * cur_rec is UBYTE 0..128; 128 triggers new_ext on the next read.
      */
 
-    if ((unsigned)c->fcb[32] < 128u)
-      c->fcb[32] = (UBYTE)(c->fcb[32] + 1);
+    if ((unsigned)c->fcb [32] < 128u)
+      c->fcb [32] = (UBYTE)(c->fcb [32] + 1);
   }
 
   return r;
@@ -976,7 +976,7 @@ static int g_go_valid;
 static void pgm_after_exit(void)
 {
   extern BYTE *tpa_lt, *tpa_lp, *tpa_ht, *tpa_hp;
-  static UBYTE kdma[128];
+  static UBYTE kdma [128];
 
   tpa_lt = tpa_lp;
   tpa_ht = tpa_hp;
@@ -1013,7 +1013,7 @@ UWORD pgmld(UBYTE *infop, UBYTE *dmaadr) {
   unsigned long tpa_len;
   UBYTE *entry = 0;
   struct pgm_read_ctx ctx;
-  BYTE loadfcb[36];
+  BYTE loadfcb [36];
   int j;
 
   /* get TPA from BIOS mrt (same as bgetseg) */
@@ -1023,17 +1023,17 @@ UWORD pgmld(UBYTE *infop, UBYTE *dmaadr) {
 
   /* Clean FCB for sequential load (fresh cur_rec / dskmap; multi-extent
    * crossing is handled inside BDOS read + new_ext). */
-  for (j = 0; j < 36; j++) loadfcb[j] = 0;
+  for (j = 0; j < 36; j++) loadfcb [j] = 0;
 
-  loadfcb[0] = ((struct fcb *)infop)->drvcode;
+  loadfcb [0] = ((struct fcb *)infop)->drvcode;
 
-  for (j = 0; j < 11; j++) loadfcb[1 + j] = ((BYTE *)infop)[1 + j];
+  for (j = 0; j < 11; j++) loadfcb [1 + j] = ((BYTE *)infop) [1 + j];
 
   if (bdos(15, (LONG)loadfcb) > 3) {
     return 0xFFFE; /* cannot re-open for load read */
   }
 
-  loadfcb[32] = 0; /* ensure sequential from record 0 */
+  loadfcb [32] = 0; /* ensure sequential from record 0 */
 
   ctx.fcb = loadfcb;
   {

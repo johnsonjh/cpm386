@@ -79,24 +79,24 @@ set_fcb (UBYTE *fcb, const char *name)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
   for (i = 1; i <= 11; i++)
     {
-      fcb[i] = ' ';
+      fcb [i] = ' ';
     }
 
-  if (name[0] && name[1] == ':')
+  if (name [0] && name [1] == ':')
     {
-      char c = name[0];
+      char c = name [0];
 
       if (c >= 'a' && c <= 'z')
         {
           c -= 32;
         }
 
-      fcb[0] = (UBYTE)(c - 'A' + 1);
+      fcb [0] = (UBYTE)(c - 'A' + 1);
       name += 2;
     }
 
@@ -112,7 +112,7 @@ set_fcb (UBYTE *fcb, const char *name)
 
       if (j <= 8)
         {
-          fcb[j++] = (UBYTE)c;
+          fcb [j++] = (UBYTE)c;
         }
     }
 
@@ -132,7 +132,7 @@ set_fcb (UBYTE *fcb, const char *name)
 
           if (j <= 11)
             {
-              fcb[j++] = (UBYTE)c;
+              fcb [j++] = (UBYTE)c;
             }
         }
     }
@@ -143,14 +143,14 @@ set_fcb (UBYTE *fcb, const char *name)
 static void
 touch_one (const char *name)
 {
-  UBYTE fcb[36];
+  UBYTE fcb [36];
   UWORD r;
 
   set_fcb (fcb, name);
 
-  fcb[12] = 0; /* extent */
-  fcb[14] = 0; /* s2 */
-  fcb[32] = 0;
+  fcb [12] = 0; /* extent */
+  fcb [14] = 0; /* s2 */
+  fcb [32] = 0;
 
   r = bdos (15, (LONG)(ULONG)fcb);
 
@@ -163,11 +163,11 @@ touch_one (const char *name)
 
   set_fcb (fcb, name);
 
-  fcb[12] = 0;
-  fcb[13] = 0; /* s1 */
-  fcb[14] = 0;
-  fcb[15] = 0; /* rc */
-  fcb[32] = 0;
+  fcb [12] = 0;
+  fcb [13] = 0; /* s1 */
+  fcb [14] = 0;
+  fcb [15] = 0; /* rc */
+  fcb [32] = 0;
 
   r = bdos (22, (LONG)(ULONG)fcb);
 
@@ -197,12 +197,12 @@ usage (void)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  char tail[128];
+  char tail [128];
   int tlen, i;
   int opt_h = 0;
   int nfiles = 0;
 
-  tlen = CMD_TAIL[0];
+  tlen = CMD_TAIL [0];
 
   if (tlen > 126)
     {
@@ -211,26 +211,26 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
 
   i = 0;
 
-  while (tail[i] == ' ' || tail[i] == '\t')
+  while (tail [i] == ' ' || tail [i] == '\t')
     {
       i++;
     }
-  while (tail[i])
+  while (tail [i])
     {
-      if (tail[i] == '-' || tail[i] == '/')
+      if (tail [i] == '-' || tail [i] == '/')
         {
           i++;
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
-              char c = tail[i++];
+              char c = tail [i++];
 
               if (c >= 'A' && c <= 'Z')
                 {
@@ -254,16 +254,16 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         }
       else
         {
-          const char *fn = &tail[i];
+          const char *fn = &tail [i];
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
               i++;
             }
 
-          if (tail[i])
+          if (tail [i])
             {
-              tail[i++] = 0;
+              tail [i++] = 0;
             }
 
           if (!opt_h)
@@ -272,7 +272,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               nfiles++;
             }
 
-          while (tail[i] == ' ' || tail[i] == '\t')
+          while (tail [i] == ' ' || tail [i] == '\t')
             {
               i++;
             }
@@ -280,7 +280,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           continue;
         }
 
-      while (tail[i] == ' ' || tail[i] == '\t')
+      while (tail [i] == ' ' || tail [i] == '\t')
         {
           i++;
         }
@@ -290,19 +290,19 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       if (nfiles == 0)
         {
-          if (DEF_FCB[1] != ' ' && DEF_FCB[1] != 0)
+          if (DEF_FCB [1] != ' ' && DEF_FCB [1] != 0)
             {
-              UBYTE fcb[36];
+              UBYTE fcb [36];
               UWORD r;
 
               for (i = 0; i < 36; i++)
                 {
-                  fcb[i] = DEF_FCB[i];
+                  fcb [i] = DEF_FCB [i];
                 }
 
-              fcb[12] = 0;
-              fcb[14] = 0;
-              fcb[32] = 0;
+              fcb [12] = 0;
+              fcb [14] = 0;
+              fcb [32] = 0;
 
               r = bdos (15, (LONG)(ULONG)fcb);
 
@@ -315,14 +315,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
               for (i = 0; i < 36; i++)
                 {
-                  fcb[i] = DEF_FCB[i];
+                  fcb [i] = DEF_FCB [i];
                 }
 
-              fcb[12] = 0;
-              fcb[13] = 0;
-              fcb[14] = 0;
-              fcb[15] = 0;
-              fcb[32] = 0;
+              fcb [12] = 0;
+              fcb [13] = 0;
+              fcb [14] = 0;
+              fcb [15] = 0;
+              fcb [32] = 0;
 
               r = bdos (22, (LONG)(ULONG)fcb);
 

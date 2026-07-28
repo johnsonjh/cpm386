@@ -78,7 +78,7 @@ puts (const char *s)
 static void
 putu (ULONG n)
 {
-  char buf[12];
+  char buf [12];
   int i = 0;
 
   if (n == 0)
@@ -90,13 +90,13 @@ putu (ULONG n)
 
   while (n && i < 12)
     {
-      buf[i++] = (char)('0' + (n % 10));
+      buf [i++] = (char)('0' + (n % 10));
       n /= 10;
     }
 
   while (i > 0)
     {
-      putch (buf[--i]);
+      putch (buf [--i]);
     }
 }
 
@@ -105,9 +105,9 @@ putu (ULONG n)
 static void
 puthex (ULONG n)
 {
-  char buf[12];
+  char buf [12];
   int i = 0;
-  static const char hex[] = "0123456789ABCDEF";
+  static const char hex [] = "0123456789ABCDEF";
 
   if (n == 0)
     {
@@ -118,7 +118,7 @@ puthex (ULONG n)
 
   while (n && i < 8)
     {
-      buf[i++] = hex[n & 0xf];
+      buf [i++] = hex [n & 0xf];
       n >>= 4;
     }
 
@@ -126,7 +126,7 @@ puthex (ULONG n)
 
   while (i > 0)
     {
-      putch (buf[--i]);
+      putch (buf [--i]);
     }
 }
 
@@ -139,24 +139,24 @@ set_fcb (UBYTE *fcb, const char *name)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
   for (i = 1; i <= 11; i++)
     {
-      fcb[i] = ' ';
+      fcb [i] = ' ';
     }
 
-  if (name[0] && name[1] == ':')
+  if (name [0] && name [1] == ':')
     {
-      char c = name[0];
+      char c = name [0];
 
       if (c >= 'a' && c <= 'z')
         {
           c -= 32;
         }
 
-      fcb[0] = (UBYTE)(c - 'A' + 1);
+      fcb [0] = (UBYTE)(c - 'A' + 1);
       name += 2;
     }
 
@@ -172,7 +172,7 @@ set_fcb (UBYTE *fcb, const char *name)
 
       if (j <= 8)
         {
-          fcb[j++] = (UBYTE)c;
+          fcb [j++] = (UBYTE)c;
         }
     }
 
@@ -192,7 +192,7 @@ set_fcb (UBYTE *fcb, const char *name)
 
           if (j <= 11)
             {
-              fcb[j++] = (UBYTE)c;
+              fcb [j++] = (UBYTE)c;
             }
         }
     }
@@ -221,9 +221,9 @@ exact_size (ULONG records, UBYTE lrbc)
 static void
 set_ran (UBYTE *fcb, ULONG rec)
 {
-  fcb[33] = (UBYTE)((rec >> 16) & 0xff);
-  fcb[34] = (UBYTE)((rec >> 8) & 0xff);
-  fcb[35] = (UBYTE)(rec & 0xff);
+  fcb [33] = (UBYTE)((rec >> 16) & 0xff);
+  fcb [34] = (UBYTE)((rec >> 8) & 0xff);
+  fcb [35] = (UBYTE)(rec & 0xff);
 }
 
 /*****************************************************************************/
@@ -231,8 +231,9 @@ set_ran (UBYTE *fcb, ULONG rec)
 static ULONG
 get_ran (const UBYTE *fcb)
 {
-  return ((ULONG)fcb[33] << 16) | ((ULONG)fcb[34] << 8)
-         | (ULONG)fcb[35];
+  return ((ULONG)fcb [33] << 16)
+       | ((ULONG)fcb [34] << 8)
+       |  (ULONG)fcb [35];
 }
 
 /*****************************************************************************/
@@ -275,9 +276,9 @@ parse_num (const char *s, int *len)
   ULONG v = 0;
   int n = 0;
 
-  while (s[n] >= '0' && s[n] <= '9')
+  while (s [n] >= '0' && s [n] <= '9')
     {
-      v = v * 10 + (ULONG)(s[n] - '0');
+      v = v * 10 + (ULONG)(s [n] - '0');
       n++;
     }
 
@@ -293,46 +294,46 @@ parse_hex_byte (const char *s, UBYTE *out)
 {
   int hi, lo;
 
-  if (s[0] != '0' || (s[1] != 'x' && s[1] != 'X'))
+  if (s [0] != '0' || (s [1] != 'x' && s [1] != 'X'))
     {
       return 0;
     }
 
-  if (s[2] >= '0' && s[2] <= '9')
+  if (s [2] >= '0' && s [2] <= '9')
     {
-      hi = s[2] - '0';
+      hi = s [2] - '0';
     }
-  else if (s[2] >= 'a' && s[2] <= 'f')
+  else if (s [2] >= 'a' && s [2] <= 'f')
     {
-      hi = s[2] - 'a' + 10;
+      hi = s [2] - 'a' + 10;
     }
-  else if (s[2] >= 'A' && s[2] <= 'F')
+  else if (s [2] >= 'A' && s [2] <= 'F')
     {
-      hi = s[2] - 'A' + 10;
+      hi = s [2] - 'A' + 10;
     }
   else
     {
       return 0;
     }
 
-  if (s[3] >= '0' && s[3] <= '9')
+  if (s [3] >= '0' && s [3] <= '9')
     {
-      lo = s[3] - '0';
+      lo = s [3] - '0';
     }
-  else if (s[3] >= 'a' && s[3] <= 'f')
+  else if (s [3] >= 'a' && s [3] <= 'f')
     {
-      lo = s[3] - 'a' + 10;
+      lo = s [3] - 'a' + 10;
     }
-  else if (s[3] >= 'A' && s[3] <= 'F')
+  else if (s [3] >= 'A' && s [3] <= 'F')
     {
-      lo = s[3] - 'A' + 10;
+      lo = s [3] - 'A' + 10;
     }
   else
     {
       return 0;
     }
 
-  if (s[4] && s[4] != ' ' && s[4] != '\t' && s[4] != '\r')
+  if (s [4] && s [4] != ' ' && s [4] != '\t' && s [4] != '\r')
     {
       return 0;
     }
@@ -366,18 +367,18 @@ print_fcb_name (const UBYTE *fcb)
 {
   int i;
 
-  for (i = 1; i <= 8 && fcb[i] != ' '; i++)
+  for (i = 1; i <= 8 && fcb [i] != ' '; i++)
     {
-      putch ((char)(fcb[i] & 0x7f));
+      putch ((char)(fcb [i] & 0x7f));
     }
 
-  if (fcb[9] != ' ')
+  if (fcb [9] != ' ')
     {
       putch ('.');
 
-      for (i = 9; i <= 11 && fcb[i] != ' '; i++)
+      for (i = 9; i <= 11 && fcb [i] != ' '; i++)
         {
-          putch ((char)(fcb[i] & 0x7f));
+          putch ((char)(fcb [i] & 0x7f));
         }
     }
 }
@@ -387,7 +388,7 @@ print_fcb_name (const UBYTE *fcb)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
+  UBYTE fcb [36];
   UWORD r;
   UBYTE lrbc;
   ULONG records, file_bytes;
@@ -401,11 +402,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   const char *filename = 0;
   const char *length_str = 0;
   int i;
-  char tail[128];
+  char tail [128];
   int tlen;
   int nargs = 0; /* count of non-option arguments */
 
-  tlen = CMD_TAIL[0];
+  tlen = CMD_TAIL [0];
 
   if (tlen > 126)
     {
@@ -414,27 +415,27 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
 
   i = 0;
 
-  while (tail[i] == ' ' || tail[i] == '\t')
+  while (tail [i] == ' ' || tail [i] == '\t')
     {
       i++;
     }
 
-  while (tail[i])
+  while (tail [i])
     {
-      if (tail[i] == '-' || tail[i] == '/')
+      if (tail [i] == '-' || tail [i] == '/')
         {
           i++;
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
-              char c = tail[i++];
+              char c = tail [i++];
 
               if (c >= 'A' && c <= 'Z')
                 {
@@ -448,12 +449,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               else if (c == 'f')
                 {
                   /* Skip to fill byte value */
-                  while (tail[i] == ' ' || tail[i] == '\t')
+                  while (tail [i] == ' ' || tail [i] == '\t')
                     {
                       i++;
                     }
 
-                  if (!tail[i])
+                  if (!tail [i])
                     {
                       puts ("ERROR: -f requires a");
                       puts (" value (e.g. -f 0x1A)\r\n");
@@ -462,7 +463,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                     }
 
                   {
-                    const char *fval = &tail[i];
+                    const char *fval = &tail [i];
                     UBYTE parsed_byte;
 
                     if (!parse_hex_byte (fval, &parsed_byte))
@@ -476,7 +477,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                     fill_byte = parsed_byte;
                     opt_f_set = 1;
 
-                    while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+                    while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
                       {
                         i++;
                       }
@@ -499,27 +500,27 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         {
           if (nargs == 0)
             {
-              filename = &tail[i];
+              filename = &tail [i];
             }
           else if (nargs == 1)
             {
-              length_str = &tail[i];
+              length_str = &tail [i];
             }
 
           nargs++;
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
               i++;
             }
 
-          if (tail[i])
+          if (tail [i])
             {
-              tail[i++] = 0;
+              tail [i++] = 0;
             }
         }
 
-      while (tail[i] == ' ' || tail[i] == '\t')
+      while (tail [i] == ' ' || tail [i] == '\t')
         {
           i++;
         }
@@ -538,9 +539,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   set_fcb (fcb, filename);
-  fcb[12] = 0;    /* extent */
-  fcb[14] = 0;    /* s2 */
-  fcb[32] = 0xFF; /* request LRBC */
+  fcb [12] = 0;    /* extent */
+  fcb [14] = 0;    /* s2 */
+  fcb [32] = 0xFF; /* request LRBC */
 
   r = bdos (15, (LONG)(ULONG)fcb);
 
@@ -553,8 +554,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       (void)bdos (0, 0);
     }
 
-  lrbc = fcb[32];
-  fcb[32] = 0; /* reset before I/O */
+  lrbc = fcb [32];
+  fcb [32] = 0; /* reset before I/O */
 
   (void)bdos (35, (LONG)(ULONG)fcb);
   records = get_ran (fcb);
@@ -587,8 +588,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           (void)bdos (0, 0);
         }
 
-      if (length_str[nlen] && length_str[nlen] != ' '
-          && length_str[nlen] != '\t' && length_str[nlen] != '\r')
+      if (length_str [nlen] && length_str [nlen] != ' '
+          && length_str [nlen] != '\t' && length_str [nlen] != '\r')
         {
           puts ("ERROR: Invalid byte count: ");
           puts (length_str);
@@ -648,12 +649,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   if (new_records > 0 && new_lrbc != 0)
     {
-      UBYTE dma[128];
+      UBYTE dma [128];
 
       set_fcb (fcb, filename);
-      fcb[12] = 0;
-      fcb[14] = 0;
-      fcb[32] = 0;
+      fcb [12] = 0;
+      fcb [14] = 0;
+      fcb [32] = 0;
 
       r = bdos (15, (LONG)(ULONG)fcb);
 
@@ -673,13 +674,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         {
           for (i = 0; i < 128; i++)
             {
-              dma[i] = fill_byte;
+              dma [i] = fill_byte;
             }
         }
 
       for (i = (int)new_lrbc; i < 128; i++)
         {
-          dma[i] = fill_byte;
+          dma [i] = fill_byte;
         }
 
       set_ran (fcb, new_records - 1);
@@ -703,8 +704,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   set_fcb (fcb, filename);
-  fcb[6] |= 0x80; /* signal: set LRBC */
-  fcb[32] = (UBYTE)new_lrbc; /* new LRBC value */
+  fcb [6] |= 0x80; /* signal: set LRBC */
+  fcb [32] = (UBYTE)new_lrbc; /* new LRBC value */
   r = bdos (30, (LONG)(ULONG)fcb);
 
   if (r == 255)

@@ -101,7 +101,7 @@ is_leap (unsigned y)
 
 /*****************************************************************************/
 
-static const unsigned char mdays_n[]
+static const unsigned char mdays_n []
     = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 /*****************************************************************************/
@@ -120,7 +120,7 @@ rtc_ymd_to_days (unsigned y, unsigned m, unsigned d)
 
   for (mm = 1; mm < m; mm++)
     {
-      day += mdays_n[mm - 1];
+      day += mdays_n [mm - 1];
 
       if (mm == 2 && is_leap (y))
         {
@@ -160,7 +160,7 @@ rtc_days_to_ymd (unsigned short days, unsigned *y, unsigned *m, unsigned *d)
   for (;;)
     {
       unsigned dim;
-      dim = mdays_n[*m - 1];
+      dim = mdays_n [*m - 1];
 
       if (*m == 2 && is_leap (yy))
         {

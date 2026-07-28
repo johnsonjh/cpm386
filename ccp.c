@@ -61,7 +61,7 @@ struct _cmd_tbl
         UWORD   cmd_code;       /* command code field           */
 };
 
-struct _cmd_tbl cmd_tbl[] =
+struct _cmd_tbl cmd_tbl [] =
 {
         {"DIR",DIRCMD},
         {"DIRS",DIRSCMD},
@@ -91,32 +91,32 @@ extern struct _filetyps
         BYTE user_c;
         BYTE user_0;
 }
-load_tbl[];
+load_tbl [];
 
 /*****************************************************************************/
 
 /*--------------------------------------------------------------*\
  |               Table of User Prompts and Messages             |
 \*--------------------------------------------------------------*/
-BYTE    msg[]  = "NON-SYSTEM FILE(S) EXIST$";
-BYTE    msg2[] = "Enter Filename: $";
-BYTE    msg3[] = "Enter Old Name: $";
-BYTE    msg4[] = "Enter New Name: $";
-BYTE    msg5[] = "File already exists$";
-BYTE    msg6[] = "No file$";
-BYTE    msg7[] = "No wildcard filenames$";
-BYTE    msg8[] = "Syntax: REN Newfile=Oldfile$";
-BYTE    msg9[] = "Confirm(Y/N)? $";
-BYTE   msg10[] = "Enter User No: $";
-BYTE   msg11[] = ".SUB file not found$";
-BYTE   msg12[] = "User # range is [0-15]$";
-BYTE   msg13[] = "Too many arguments: $";
-BYTE  lderr1[] = "Insufficient memory or bad file header$";
+BYTE    msg  [] = "NON-SYSTEM FILE(S) EXIST$";
+BYTE    msg2 [] = "Enter Filename: $";
+BYTE    msg3 [] = "Enter Old Name: $";
+BYTE    msg4 [] = "Enter New Name: $";
+BYTE    msg5 [] = "File already exists$";
+BYTE    msg6 [] = "No file$";
+BYTE    msg7 [] = "No wildcard filenames$";
+BYTE    msg8 [] = "Syntax: REN Newfile=Oldfile$";
+BYTE    msg9 [] = "Confirm(Y/N)? $";
+BYTE   msg10 [] = "Enter User No: $";
+BYTE   msg11 [] = ".SUB file not found$";
+BYTE   msg12 [] = "User # range is [0-15]$";
+BYTE   msg13 [] = "Too many arguments: $";
+BYTE  lderr1 [] = "Insufficient memory or bad file header$";
 #if 0
-BYTE  lderr2[] = "Read error on program load$";
-BYTE  lderr3[] = "Bad relocation information bits$";
+BYTE  lderr2 [] = "Read error on program load$";
+BYTE  lderr3 [] = "Bad relocation information bits$";
 #endif
-BYTE  gonomsg[] = "No program$";
+BYTE  gonomsg [] = "No program$";
 
 /*****************************************************************************/
 
@@ -138,21 +138,21 @@ UWORD index;                    /* index into cmd argument array*/
 UWORD sub_user;                 /* submit file user number      */
 UWORD user;                     /* current default user number  */
 UWORD cur_disk;                 /* current default disk drive   */
-BYTE subcom[CMD_LEN+1];         /* submit command buffer        */
-BYTE subdma[CMD_LEN];           /* buffer to fill from sub file */
-BYTE usercmd[CMD_LEN+2] = {0};  /* user command buffer          */
+BYTE subcom [CMD_LEN+1];        /* submit command buffer        */
+BYTE subdma [CMD_LEN];          /* buffer to fill from sub file */
+BYTE usercmd [CMD_LEN+2] = {0}; /* user command buffer          */
 BYTE *user_ptr;                 /* next user command to execute */
 BYTE *glb_index;                /* points to current command    */
-BYTE save_sub[CMD_LEN+1];       /* saves cur cmd line for submit*/
-BYTE subfcb[FCB_LEN];           /* global fcb for sub files     */
-BYTE cmdfcb[FCB_LEN];           /* global fcb for 68k files     */
+BYTE save_sub [CMD_LEN+1];      /* saves cur cmd line for submit*/
+BYTE subfcb [FCB_LEN];          /* global fcb for sub files     */
+BYTE cmdfcb [FCB_LEN];          /* global fcb for 68k files     */
 BYTE *tail;                     /* pointer to command tail      */
 BYTE autost = 0;                /* autostart flag               */
 BYTE autorom;                   /* needed for ROM system autost */
-BYTE dma[DMA_LEN+3];            /* 128 byte dma buffer          */
-BYTE parm[MAX_ARGS][ARG_LEN];   /* cmd argument array           */
+BYTE dma [DMA_LEN+3];           /* 128 byte dma buffer          */
+BYTE parm [MAX_ARGS] [ARG_LEN]; /* cmd argument array           */
 BYTE *chainp;                   /*sw -> User-specified command  */
-BYTE del[] =                    /* CP/M-68K set of delimiters   */
+BYTE del [] =                   /* CP/M-68K set of delimiters   */
 {'>','<','.',',','=','[',']',';','|','&','/','(',')','+','-','\\'};
                                 /********************************/
 

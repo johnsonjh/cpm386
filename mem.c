@@ -81,7 +81,7 @@ puts (const char *s)
 static void
 putu (ULONG n)
 {
-  char b[12];
+  char b [12];
   int i = 0;
 
   if (!n)
@@ -92,13 +92,13 @@ putu (ULONG n)
 
   while (n && i < 12)
     {
-      b[i++] = (char)('0' + (n % 10));
+      b [i++] = (char)('0' + (n % 10));
       n /= 10;
     }
 
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -107,14 +107,14 @@ putu (ULONG n)
 static void
 puthex32 (ULONG v)
 {
-  static const char h[] = "0123456789ABCDEF";
+  static const char h [] = "0123456789ABCDEF";
   int i;
 
   puts ("0x");
 
   for (i = 7; i >= 0; i--)
     {
-      putch (h[(v >> (i * 4)) & 0xF]);
+      putch (h [(v >> (i * 4)) & 0xF]);
     }
 }
 

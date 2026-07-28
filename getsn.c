@@ -68,25 +68,25 @@ puts (const char *s)
 static void
 puthex48 (const unsigned char *sn)
 {
-  static const char hex[] = "0123456789ABCDEF";
+  static const char hex [] = "0123456789ABCDEF";
   int i;
 
   for (i = 0; i < 3; ++i)
     {
-      unsigned char c = sn[i];
+      unsigned char c = sn [i];
 
-      putch (hex[(c >> 4) & 0xF]);
-      putch (hex[c & 0xF]);
+      putch (hex [(c >> 4) & 0xF]);
+      putch (hex [c & 0xF]);
     }
 
   putch ('-');
 
   for (i = 3; i < 6; ++i)
     {
-      unsigned char c = sn[i];
+      unsigned char c = sn [i];
 
-      putch (hex[(c >> 4) & 0xF]);
-      putch (hex[c & 0xF]);
+      putch (hex [(c >> 4) & 0xF]);
+      putch (hex [c & 0xF]);
     }
 }
 
@@ -95,21 +95,21 @@ puthex48 (const unsigned char *sn)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  const char msg1[] = "Serial Number: ";
-  unsigned char sn[6];
+  const char msg1 [] = "Serial Number: ";
+  unsigned char sn [6];
   int printable = 1;
   int i;
 
   for (i = 0; i < 6; ++i)
     {
-      sn[i] = '?';
+      sn [i] = '?';
     }
 
   (void)bdos (107, (LONG)sn);
 
   for (i = 0; i < 6; ++i)
     {
-      if (sn[i] < 0x20 || sn[i] > 0x7E)
+      if (sn [i] < 0x20 || sn [i] > 0x7E)
         {
           printable = 0;
 
@@ -123,7 +123,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       for (i = 0; i < 6; ++i)
         {
-          putch (sn[i]);
+          putch (sn [i]);
         }
 
       puts (" (");

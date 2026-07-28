@@ -193,14 +193,14 @@ pdecimal (UWORD v, UWORD prec, int zerosup)
 static void
 p_long (ULONG value)
 {
-  UWORD thous[4];
+  UWORD thous [4];
   int j, zerosup;
 
   zerosup = TRUE;
 
   for (j = 3; j >= 0; j--)
     {
-      thous[j] = (UWORD)(value % 1000);
+      thous [j] = (UWORD)(value % 1000);
       value /= 1000;
     }
 
@@ -213,13 +213,13 @@ p_long (ULONG value)
           break; /* billions: skip */
 
         case 1:
-          if (thous[j] == 0)
+          if (thous [j] == 0)
             {
               printx ("  ");
             }
           else
             {
-              pdecimal (thous[j], 1, zerosup);
+              pdecimal (thous [j], 1, zerosup);
               conout (',');
               zerosup = FALSE;
             }
@@ -227,15 +227,15 @@ p_long (ULONG value)
           break;
 
         case 3:
-          pdecimal (thous[j], 100, zerosup);
+          pdecimal (thous [j], 100, zerosup);
           zerosup = FALSE;
 
           break;
 
         default:
-          if (thous[j])
+          if (thous [j])
             {
-              pdecimal (thous[j], 100, zerosup);
+              pdecimal (thous [j], 100, zerosup);
               conout (',');
               zerosup = FALSE;
             }
@@ -286,24 +286,24 @@ static UWORD dcnt;         /* directory search result */
 /*****************************************************************************/
 
 /* DPB fields (from BDOS 31) */
-static UBYTE dpb_raw[32];
-#define DPB_BSH (dpb_raw[2])
-#define DPB_EXM (dpb_raw[4])
-#define DPB_DSM ((UWORD)(dpb_raw[6]  | ((UWORD)dpb_raw[7] << 8)))
-#define DPB_DRM ((UWORD)(dpb_raw[8]  | ((UWORD)dpb_raw[9] << 8)))
-#define DPB_CKS ((UWORD)(dpb_raw[14] | ((UWORD)dpb_raw[15] << 8)))
-#define DPB_OFS ((UWORD)(dpb_raw[16] | ((UWORD)dpb_raw[17] << 8)))
-#define DPB_SPT ((UWORD)(dpb_raw[0]  | ((UWORD)dpb_raw[1] << 8)))
+static UBYTE dpb_raw [32];
+#define DPB_BSH (dpb_raw [2])
+#define DPB_EXM (dpb_raw [4])
+#define DPB_DSM ((UWORD)(dpb_raw [6]  | ((UWORD)dpb_raw  [7] << 8)))
+#define DPB_DRM ((UWORD)(dpb_raw [8]  | ((UWORD)dpb_raw  [9] << 8)))
+#define DPB_CKS ((UWORD)(dpb_raw [14] | ((UWORD)dpb_raw [15] << 8)))
+#define DPB_OFS ((UWORD)(dpb_raw [16] | ((UWORD)dpb_raw [17] << 8)))
+#define DPB_SPT ((UWORD)(dpb_raw [0]  | ((UWORD)dpb_raw  [1] << 8)))
 
 /*****************************************************************************/
 
-static UBYTE dma[128]; /* DMA buffer */
+static UBYTE dma [128]; /* DMA buffer */
 
 /*****************************************************************************/
 
 /* Token strings */
 #define T_SIZE 4
-static char token[T_SIZE];
+static char token [T_SIZE];
 
 /*****************************************************************************/
 
@@ -324,8 +324,8 @@ static UBYTE *bpfcb;
 
 struct fileent
 {
-  char name[8];
-  char typ[3];
+  char name [8];
+  char typ [3];
   UBYTE ro;
   UBYTE sys;
   UBYTE arch;
@@ -337,18 +337,18 @@ struct fileent
 
 /*****************************************************************************/
 
-static struct fileent files[MAX_FILES];
+static struct fileent files [MAX_FILES];
 
 /*****************************************************************************/
 
 /* Disk allocation bitmap (for duplicate-block checking) */
 #define ALLOC_BYTES 512 /* enough for DSM <= 4095 */
-static UBYTE alloc_map[ALLOC_BYTES];
+static UBYTE alloc_map [ALLOC_BYTES];
 
 /*****************************************************************************/
 
 /* 4-char entries: CON:, AXI:, AXO:, LST:, DEV:, VAL:, USR:, DSK: */
-static const char devl[] = "CON:AXI:AXO:LST:DEV:VAL:USR:DSK:";
+static const char devl [] = "CON:AXI:AXO:LST:DEV:VAL:USR:DSK:";
 #define L_SIZE ((int)((sizeof devl - 1) / T_SIZE))
 #define OPT_DEV 5
 #define OPT_VAL 6
@@ -358,7 +358,7 @@ static const char devl[] = "CON:AXI:AXO:LST:DEV:VAL:USR:DSK:";
 /*****************************************************************************/
 
 /* 4-char attribute entries: RO  , RW  , SIZE, SYS , DIR  */
-static const char attribl[] = "RO  RW  SIZESYS DIR ";
+static const char attribl [] = "RO  RW  SIZESYS DIR ";
 #define A_SIZE ((int)((sizeof attribl - 1) / T_SIZE))
 #define OPT_RO 1
 #define OPT_RW 2
@@ -369,23 +369,23 @@ static const char attribl[] = "RO  RW  SIZESYS DIR ";
 /*****************************************************************************/
 
 /* Physical device names for iobyte display */
-static const char devr[]
+static const char devr []
     = "TTY:CRT:BAT:UC1:TTY:PTR:UR1:UR2:TTY:PTP:UP1:UP2:TTY:CRT:LPT:UL1:";
 #define P_SIZE ((int)((sizeof devr - 1) / T_SIZE))
 
 /*****************************************************************************/
 
 /* Messages */
-static const char readonly[] = "Read Only (RO)";
-static const char readwrite[] = "Read Write (RW)";
-static const char entries[] = " Directory Entries";
-static const char filename[] = "d:filename.typ";
-static const char use_str[] = "Use: STAT ";
-static const char invalid[] = "Invalid Assignment";
-static const char set_to[] = " set to ";
-static const char record_msg[] = "128 Byte Record";
-static const char sattrib[] = "[RO] [RW] [SYS] or [DIR]";
-static const char drivename[] = " Drive ";
+static const char readonly   [] = "Read Only (RO)";
+static const char readwrite  [] = "Read Write (RW)";
+static const char entries    [] = " Directory Entries";
+static const char filename   [] = "d:filename.typ";
+static const char use_str    [] = "Use: STAT ";
+static const char invalid    [] = "Invalid Assignment";
+static const char set_to     [] = " set to ";
+static const char record_msg [] = "128 Byte Record";
+static const char sattrib    [] = "[RO] [RW] [SYS] or [DIR]";
+static const char drivename  [] = " Drive ";
 
 /*****************************************************************************/
 
@@ -414,7 +414,7 @@ fill_token (void)
 
   for (k = 0; k < T_SIZE; k++)
     {
-      token[k] = ' ';
+      token [k] = ' ';
     }
 }
 
@@ -425,12 +425,12 @@ scan (void)
 {
   int b, scandex;
 
-  while (buff[ibp] == ' ')
+  while (buff [ibp] == ' ')
     {
       ibp++;
     }
 
-  if (buff[ibp] == '[')
+  if (buff [ibp] == '[')
     {
       ibp++;
     }
@@ -438,7 +438,7 @@ scan (void)
   scandex = 0;
   fill_token ();
 
-  while ((b = buff[ibp]) > 1)
+  while ((b = buff [ibp]) > 1)
     {
       switch (b)
         {
@@ -447,14 +447,14 @@ scan (void)
         case ':':
         case '[':
         case '=':
-          buff[ibp] = 1;
+          buff [ibp] = 1;
 
           break;
 
         default:
           if (b < ' ')
             {
-              buff[ibp] = 1;
+              buff [ibp] = 1;
             }
           else
             {
@@ -473,7 +473,7 @@ scan (void)
         default:
           if (scandex < T_SIZE)
             {
-              token[scandex] = (char)uc ((char)b);
+              token [scandex] = (char)uc ((char)b);
             }
 
           scandex++;
@@ -493,11 +493,11 @@ parse_next (void)
 {
   scan ();
 
-  if (token[0] == ' ')
+  if (token [0] == ' ')
     {
       scan ();
 
-      if (token[0] == ' ')
+      if (token [0] == ' ')
         {
           return FALSE;
         }
@@ -512,7 +512,7 @@ static int
 parse_assign (void)
 {
   scan ();
-  if (token[0] != '=')
+  if (token [0] != '=')
     {
       return FALSE;
     }
@@ -537,12 +537,12 @@ match (const char *va, int vl)
 
       for (k = 0; k < T_SIZE;)
         {
-          if (va[j] == ' ' && found)
+          if (va [j] == ' ' && found)
             {
               break;
             }
 
-          if (va[j++] != token[k++])
+          if (va [j++] != token [k++])
             {
               found = FALSE;
             }
@@ -610,7 +610,7 @@ count_free (void)
   bdos (46, (LONG)cdisk);
   {
     const UBYTE *p = dma;
-    free_recs = (ULONG)p[0] | ((ULONG)p[1] << 8) | ((ULONG)p[2] << 16);
+    free_recs = (ULONG)p [0] | ((ULONG)p [1] << 8) | ((ULONG)p [2] << 16);
   }
 
   return (UWORD)(free_recs >> SPKSHF);
@@ -659,14 +659,14 @@ printfn (const UBYTE *de) /* print drive:name.typ from a dir entry */
           ; /* nothing before name */
         }
 
-      conout ((char)(de[1 + k] & 0x7f));
+      conout ((char)(de [1 + k] & 0x7f));
     }
 
   conout ('.');
 
   for (k = 0; k < 3; k++)
     {
-      conout ((char)(de[9 + k] & 0x7f));
+      conout ((char)(de [9 + k] & 0x7f));
     }
 }
 
@@ -811,12 +811,12 @@ static void
 userstatus (void)
 {
   int i;
-  UBYTE user[16];
+  UBYTE user [16];
   UWORD r;
 
   for (i = 0; i < 16; i++)
     {
-      user[i] = 0;
+      user [i] = 0;
     }
 
   crlf ();
@@ -830,18 +830,18 @@ userstatus (void)
   bdos (26, (LONG)(ULONG)dma);
   /* search all users: use fcb with drive=0, name=all-? */
   {
-    UBYTE sfcb[36];
+    UBYTE sfcb [36];
 
     for (i = 0; i < 36; i++)
       {
-        sfcb[i] = 0;
+        sfcb [i] = 0;
       }
 
-    sfcb[0] = '?'; /* user wildcard via drive byte */
+    sfcb [0] = '?'; /* user wildcard via drive byte */
 
     for (i = 1; i <= 11; i++)
       {
-        sfcb[i] = '?';
+        sfcb [i] = '?';
       }
 
     r = bdos (17, (LONG)(ULONG)sfcb);
@@ -849,12 +849,12 @@ userstatus (void)
 
   while (r != 255)
     {
-      const UBYTE *de = &dma[(r & 3) * 32];
-      int u = de[0] & 0xff;
+      const UBYTE *de = &dma [(r & 3) * 32];
+      int u = de [0] & 0xff;
 
       if (u < 16 && u != 0xe5)
         {
-          user[u & 0x0f] = 1;
+          user [u & 0x0f] = 1;
         }
 
       r = bdos (18, 0);
@@ -862,7 +862,7 @@ userstatus (void)
 
   for (i = 0; i < 16; i++)
     {
-      if (user[i])
+      if (user [i])
         {
           pdecimal ((UWORD)i, 100, TRUE);
         }
@@ -884,9 +884,9 @@ devstatus (void)
 
   for (k = 0; k < 4; k++)
     {
-      prname (&devl[k * 4]);
+      prname (&devl [k * 4]);
       printx (" is ");
-      prname (&devr[((iobyte & 3) * 4) + j]);
+      prname (&devr [((iobyte & 3) * 4) + j]);
       j += 16;
       iobyte >>= 2;
       crlf ();
@@ -915,13 +915,13 @@ values (void)
   for (j = 0; j < 4; j++)
     {
       crlf ();
-      prname (&devl[j * 4]);
+      prname (&devl [j * 4]);
       printx (" =");
 
       for (k = 0; k <= 12; k += 4)
         {
           conout (' ');
-          prname (&devr[(j * 16) + k]);
+          prname (&devr [(j * 16) + k]);
         }
     }
 
@@ -933,7 +933,7 @@ values (void)
 static void
 prdrive (const char *a)
 {
-  print (&drivename[1]);
+  print (&drivename [1]);
   show_dv ();
   printx (set_to);
   printx (a);
@@ -973,7 +973,7 @@ setdrivestatus (void)
 
 /*****************************************************************************/
 
-/* Check if name in dir entry de matches files[idx] */
+/* Check if name in dir entry de matches files [idx] */
 static int
 name_eq_de (int idx, const UBYTE *de)
 {
@@ -981,7 +981,7 @@ name_eq_de (int idx, const UBYTE *de)
 
   for (i = 0; i < 8; i++)
     {
-      if ((files[idx].name[i] & 0x7f) != (de[1 + i] & 0x7f))
+      if ((files [idx].name [i] & 0x7f) != (de [1 + i] & 0x7f))
         {
           return 0;
         }
@@ -989,7 +989,7 @@ name_eq_de (int idx, const UBYTE *de)
 
   for (i = 0; i < 3; i++)
     {
-      if ((files[idx].typ[i] & 0x7f) != (de[9 + i] & 0x7f))
+      if ((files [idx].typ [i] & 0x7f) != (de [9 + i] & 0x7f))
         {
           return 0;
         }
@@ -1009,9 +1009,9 @@ pattern_match_de (const UBYTE *pat, const UBYTE *de)
 
   for (i = 0; i < 8; i++)
     {
-      char p = (char)(pat[1 + i] & 0x7f);
+      char p = (char)(pat [1 + i] & 0x7f);
 
-      if (p != '?' && p != (char)(de[1 + i] & 0x7f))
+      if (p != '?' && p != (char)(de [1 + i] & 0x7f))
         {
           return 0;
         }
@@ -1019,9 +1019,9 @@ pattern_match_de (const UBYTE *pat, const UBYTE *de)
 
   for (i = 0; i < 3; i++)
     {
-      char p = (char)(pat[9 + i] & 0x7f);
+      char p = (char)(pat [9 + i] & 0x7f);
 
-      if (p != '?' && p != (char)(de[9 + i] & 0x7f))
+      if (p != '?' && p != (char)(de [9 + i] & 0x7f))
         {
           return 0;
         }
@@ -1042,7 +1042,7 @@ count_blks_16 (const UBYTE *de)
 
   for (i = 0; i < 8; i++)
     {
-      UWORD b = (UWORD)de[16 + i * 2] | ((UWORD)de[17 + i * 2] << 8);
+      UWORD b = (UWORD)de [16 + i * 2] | ((UWORD)de [17 + i * 2] << 8);
 
       if (b)
         {
@@ -1064,7 +1064,7 @@ count_blks_8 (const UBYTE *de)
 
   for (i = 0; i < 16; i++)
     {
-      if (de[16 + i])
+      if (de [16 + i])
         {
           n++;
         }
@@ -1088,11 +1088,11 @@ allocate_blks (const UBYTE *de)
     {
       if (word_blks)
         {
-          block = (UWORD)de[16 + i * 2] | ((UWORD)de[17 + i * 2] << 8);
+          block = (UWORD)de [16 + i * 2] | ((UWORD)de [17 + i * 2] << 8);
         }
       else
         {
-          block = de[16 + i] & 0xff;
+          block = de [16 + i] & 0xff;
         }
 
       if (block == 0)
@@ -1108,7 +1108,7 @@ allocate_blks (const UBYTE *de)
           continue;
         }
 
-      if (amask & alloc_map[vbyte])
+      if (amask & alloc_map [vbyte])
         {
           if (error_free)
             {
@@ -1124,7 +1124,7 @@ allocate_blks (const UBYTE *de)
           return FALSE;
         }
 
-      alloc_map[vbyte] |= (UBYTE)amask;
+      alloc_map [vbyte] |= (UBYTE)amask;
     }
 
   return TRUE;
@@ -1132,7 +1132,7 @@ allocate_blks (const UBYTE *de)
 
 /*****************************************************************************/
 
-/* Simple insertion sort on files[] by name */
+/* Simple insertion sort on files [] by name */
 static void
 sort_files (void)
 {
@@ -1140,7 +1140,7 @@ sort_files (void)
 
   for (i = 1; i < (int)fcbn; i++)
     {
-      struct fileent tmp = files[i];
+      struct fileent tmp = files [i];
       int j = i - 1;
 
       while (j >= 0)
@@ -1148,12 +1148,12 @@ sort_files (void)
           int k, cmp = 0;
           for (k = 0; k < 8 && !cmp; k++)
             {
-              cmp = (files[j].name[k] & 0x7f) - (tmp.name[k] & 0x7f);
+              cmp = (files [j].name [k] & 0x7f) - (tmp.name [k] & 0x7f);
             }
 
           for (k = 0; k < 3 && !cmp; k++)
             {
-              cmp = (files[j].typ[k] & 0x7f) - (tmp.typ[k] & 0x7f);
+              cmp = (files [j].typ [k] & 0x7f) - (tmp.typ [k] & 0x7f);
             }
 
           if (cmp <= 0)
@@ -1161,11 +1161,11 @@ sort_files (void)
               break;
             }
 
-          files[j + 1] = files[j];
+          files [j + 1] = files [j];
           j--;
         }
 
-      files[j + 1] = tmp;
+      files [j + 1] = tmp;
     }
 }
 
@@ -1181,14 +1181,14 @@ print_name (int idx)
 
   for (k = 0; k < 8; k++)
     {
-      conout ((char)(files[idx].name[k] & 0x7f));
+      conout ((char)(files [idx].name [k] & 0x7f));
     }
 
   conout ('.');
 
   for (k = 0; k < 3; k++)
     {
-      conout ((char)(files[idx].typ[k] & 0x7f));
+      conout ((char)(files [idx].typ [k] & 0x7f));
     }
 }
 
@@ -1234,34 +1234,34 @@ set_sattrib_on (struct fileent *f, int scase)
 static void
 write_attrib (int idx)
 {
-  UBYTE fcb[36];
+  UBYTE fcb [36];
   int k;
 
   for (k = 0; k < 36; k++)
     {
-      fcb[k] = 0;
+      fcb [k] = 0;
     }
 
-  fcb[0] = 0; /* current drive */
+  fcb [0] = 0; /* current drive */
 
   for (k = 0; k < 8; k++)
     {
-      fcb[1 + k] = (UBYTE)(files[idx].name[k] & 0x7f);
+      fcb [1 + k] = (UBYTE)(files [idx].name [k] & 0x7f);
     }
 
   for (k = 0; k < 3; k++)
     {
-      fcb[9 + k] = (UBYTE)(files[idx].typ[k] & 0x7f);
+      fcb [9 + k] = (UBYTE)(files [idx].typ [k] & 0x7f);
     }
 
-  if (files[idx].ro)
+  if (files [idx].ro)
     {
-      fcb[9] |= 0x80;
+      fcb [9] |= 0x80;
     }
 
-  if (files[idx].sys)
+  if (files [idx].sys)
     {
-      fcb[10] |= 0x80;
+      fcb [10] |= 0x80;
     }
 
   bdos (30, (LONG)(ULONG)fcb); /* BDOS 30 = set file attributes */
@@ -1278,7 +1278,7 @@ setfstatus (void)
       return FALSE;
     }
 
-  if (token[0] == '=')
+  if (token [0] == '=')
     {
       scan ();
     }
@@ -1337,7 +1337,7 @@ setfstatus (void)
 static void
 getfile (void)
 {
-  UBYTE sfcb[36];
+  UBYTE sfcb [36];
   int i, k;
   UWORD r;
 
@@ -1351,7 +1351,7 @@ getfile (void)
   /* Clear state */
   for (i = 0; i < ALLOC_BYTES; i++)
     {
-      alloc_map[i] = 0;
+      alloc_map [i] = 0;
     }
 
   fcbn = 0;
@@ -1361,11 +1361,11 @@ getfile (void)
   /* Build search FCB: copy from basepage FCB, force all extents */
   for (i = 0; i < 36; i++)
     {
-      sfcb[i] = bpfcb[i];
+      sfcb [i] = bpfcb [i];
     }
 
-  sfcb[12] = '?'; /* all extents */
-  sfcb[14] = '?'; /* all s2 */
+  sfcb [12] = '?'; /* all extents */
+  sfcb [14] = '?'; /* all s2 */
 
   bdos (26, (LONG)(ULONG)dma);
   r = bdos (17, (LONG)(ULONG)sfcb); /* search first */
@@ -1374,8 +1374,8 @@ getfile (void)
 
   while (r != 255)
     {
-      const UBYTE *de = &dma[(r & 3) * 32];
-      int u = de[0] & 0xff;
+      const UBYTE *de = &dma [(r & 3) * 32];
+      int u = de [0] & 0xff;
 
       /* Skip deleted, XFCBs (drive >= 0x20) */
       if (u < 0x20 && u != 0xe5)
@@ -1405,41 +1405,41 @@ getfile (void)
 
                       for (k = 0; k < 8; k++)
                         {
-                          files[idx].name[k] = (char)(de[1 + k] & 0x7f);
+                          files [idx].name [k] = (char)(de [1 + k] & 0x7f);
                         }
 
                       for (k = 0; k < 3; k++)
                         {
-                          files[idx].typ[k] = (char)(de[9 + k] & 0x7f);
+                          files [idx].typ [k] = (char)(de [9 + k] & 0x7f);
                         }
 
-                      files[idx].ro = (de[9] & 0x80) ? 1 : 0;
-                      files[idx].sys = (de[10] & 0x80) ? 1 : 0;
-                      files[idx].arch = (de[11] & 0x80) ? 1 : 0;
-                      files[idx].extent_count = 0;
-                      files[idx].records = 0;
-                      files[idx].kcnt = 0;
-                      files[idx].used = 1;
+                      files [idx].ro = (de [9] & 0x80) ? 1 : 0;
+                      files [idx].sys = (de [10] & 0x80) ? 1 : 0;
+                      files [idx].arch = (de [11] & 0x80) ? 1 : 0;
+                      files [idx].extent_count = 0;
+                      files [idx].records = 0;
+                      files [idx].kcnt = 0;
+                      files [idx].used = 1;
                     }
                 }
 
               if (idx >= 0)
                 {
-                  UBYTE rc = de[15];
+                  UBYTE rc = de [15];
                   UWORD blks
                       = word_blks ? count_blks_16 (de) : count_blks_8 (de);
-                  files[idx].records += rc;
-                  files[idx].kcnt += (UWORD)(blks * (UWORD)kpb);
-                  files[idx].extent_count++;
+                  files [idx].records += rc;
+                  files [idx].kcnt += (UWORD)(blks * (UWORD)kpb);
+                  files [idx].extent_count++;
 
-                  if (de[9] & 0x80)
+                  if (de [9] & 0x80)
                     {
-                      files[idx].ro = 1;
+                      files [idx].ro = 1;
                     }
 
-                  if (de[10] & 0x80)
+                  if (de [10] & 0x80)
                     {
-                      files[idx].sys = 1;
+                      files [idx].sys = 1;
                     }
 
                   nfcbs++;
@@ -1472,12 +1472,12 @@ getfile (void)
           crlf ();
           print_name (i);
           printx (set_to);
-          set_sattrib_on (&files[i], scase1);
+          set_sattrib_on (&files [i], scase1);
 
           if (scase2)
             {
               printx (", ");
-              set_sattrib_on (&files[i], scase2);
+              set_sattrib_on (&files [i], scase2);
             }
 
           write_attrib (i);
@@ -1507,24 +1507,24 @@ getfile (void)
 
     for (i = 0; i < (int)fcbn; i++)
       {
-        UWORD bytes_k = (files[i].records + 7) / 8;
-        tall += files[i].kcnt;
+        UWORD bytes_k = (files [i].records + 7) / 8;
+        tall += files [i].kcnt;
         crlf ();
 
         if (sizeset)
           {
             /* physical record count as "size" */
-            p_long ((ULONG)files[i].records);
+            p_long ((ULONG)files [i].records);
             conout (' ');
           }
 
-        pdecimal (files[i].records, 10000, TRUE);
+        pdecimal (files [i].records, 10000, TRUE);
         conout (' ');
         pdecimal (bytes_k, 10000, TRUE);
         printx ("k ");
-        pdecimal (files[i].extent_count, 1000, TRUE);
-        printx (files[i].sys ? " Sys " : " Dir ");
-        printx (files[i].ro ? "RO " : "RW ");
+        pdecimal (files [i].extent_count, 1000, TRUE);
+        printx (files [i].sys ? " Sys " : " Dir ");
+        printx (files [i].ro ? "RO " : "RW ");
         print_name (i);
       }
 
@@ -1628,7 +1628,7 @@ devreq (void)
               }
 
             {
-              int idx = match (&devr[k2], 4) - 1;
+              int idx = match (&devr [k2], 4) - 1;
 
               if (idx < 0)
                 {
@@ -1675,8 +1675,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   /* make a local copy of the command tail, scan() modifies it */
   {
-    static UBYTE cmd_copy[128];
-    int tail_len = buff[0];
+    static UBYTE cmd_copy [128];
+    int tail_len = buff [0];
     int i;
 
     if (tail_len > 126)
@@ -1686,11 +1686,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
     for (i = 0; i < tail_len; i++)
       {
-        cmd_copy[i + 1] = (UBYTE)uc ((char)buff[i + 1]);
+        cmd_copy [i + 1] = (UBYTE)uc ((char)buff [i + 1]);
       }
 
-    cmd_copy[tail_len + 1] = 0;
-    cmd_copy[0] = (UBYTE)tail_len;
+    cmd_copy [tail_len + 1] = 0;
+    cmd_copy [0] = (UBYTE)tail_len;
     buff = cmd_copy;
   }
 
@@ -1712,9 +1712,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   /* Drive specifier? */
-  if (token[1] == ':')
+  if (token [1] == ':')
     {
-      char d = token[0];
+      char d = token [0];
       if (d >= 'A' && d <= 'P')
         {
           select_disk (d - 'A');
@@ -1728,7 +1728,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           bdos (0, 0);
         }
 
-      if (token[0] == '=')
+      if (token [0] == '=')
         {
           scan ();
           setdrivestatus ();

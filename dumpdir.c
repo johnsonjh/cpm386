@@ -85,10 +85,10 @@ puts (const char *s)
 static void
 puthex2 (unsigned v)
 {
-  static const char h[] = "0123456789ABCDEF";
+  static const char h [] = "0123456789ABCDEF";
 
-  putch (h[(v >> 4) & 0xF]);
-  putch (h[v & 0xF]);
+  putch (h [(v >> 4) & 0xF]);
+  putch (h [v & 0xF]);
 }
 
 /*****************************************************************************/
@@ -96,7 +96,7 @@ puthex2 (unsigned v)
 static void
 putu (unsigned n)
 {
-  char b[8];
+  char b [8];
   int i = 0;
 
   if (!n)
@@ -107,13 +107,13 @@ putu (unsigned n)
 
   while (n && i < 8)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
 
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -152,23 +152,23 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
   for (i = 1; i <= 11; i++)
     {
-      fcb[i] = ' ';
+      fcb [i] = ' ';
     }
 
-  fcb[0] = 0; /* default drive */
+  fcb [0] = 0; /* default drive */
 
-  if (pat[0] && pat[1] == ':')
+  if (pat [0] && pat [1] == ':')
     {
-      c = toupper_ch ((unsigned char)pat[0]);
+      c = toupper_ch ((unsigned char)pat [0]);
 
       if (c >= 'A' && c <= 'P')
         {
-          fcb[0] = (UBYTE)(c - 'A' + 1);
+          fcb [0] = (UBYTE)(c - 'A' + 1);
         }
 
       pat += 2;
@@ -191,14 +191,14 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
             {
               while (ni < 8)
                 {
-                  fcb[1 + ni++] = '?';
+                  fcb [1 + ni++] = '?';
                 }
             }
           else
             {
               while (ti < 3)
                 {
-                  fcb[9 + ti++] = '?';
+                  fcb [9 + ti++] = '?';
                 }
             }
 
@@ -209,11 +209,11 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
         {
           if (!in_type && ni < 8)
             {
-              fcb[1 + ni++] = '?';
+              fcb [1 + ni++] = '?';
             }
           else if (in_type && ti < 3)
             {
-              fcb[9 + ti++] = '?';
+              fcb [9 + ti++] = '?';
             }
 
           continue;
@@ -223,18 +223,18 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 
       if (!in_type && ni < 8)
         {
-          fcb[1 + ni++] = (UBYTE)c;
+          fcb [1 + ni++] = (UBYTE)c;
         }
       else if (in_type && ti < 3)
         {
-          fcb[9 + ti++] = (UBYTE)c;
+          fcb [9 + ti++] = (UBYTE)c;
         }
     }
 
   /* bare name, no type -> any type */
   if (!in_type && ti == 0)
     {
-      fcb[9] = fcb[10] = fcb[11] = '?';
+      fcb [9] = fcb [10] = fcb [11] = '?';
     }
 }
 
@@ -248,7 +248,7 @@ put_name11 (const UBYTE *p)
 
   for (i = 0; i < 8; i++)
     {
-      c = (unsigned char)(p[i] & 0x7f);
+      c = (unsigned char)(p [i] & 0x7f);
       putch ((c >= 32 && c < 127) ? (char)c : '.');
     }
 
@@ -256,7 +256,7 @@ put_name11 (const UBYTE *p)
 
   for (i = 8; i < 11; i++)
     {
-      c = (unsigned char)(p[i] & 0x7f);
+      c = (unsigned char)(p [i] & 0x7f);
       putch ((c >= 32 && c < 127) ? (char)c : '.');
     }
 }
@@ -273,17 +273,17 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
   puts (" ----\r\n");
 
   puts ("user/ex  ");
-  puthex2 (de[0]);
+  puthex2 (de [0]);
   puts ("  ");
 
-  if (de[0] == 0xE5)
+  if (de [0] == 0xE5)
     {
       puts ("(empty/deleted)");
     }
-  else if (de[0] < 16)
+  else if (de [0] < 16)
     {
       puts ("user ");
-      putu (de[0]);
+      putu (de [0]);
     }
   else
     {
@@ -295,17 +295,17 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
   puts ("name     ");
   put_name11 (de + 1);
 
-  if (de[9] & 0x80)
+  if (de [9] & 0x80)
     {
       puts ("  R/O");
     }
 
-  if (de[10] & 0x80)
+  if (de [10] & 0x80)
     {
       puts (" SYS");
     }
 
-  if (de[11] & 0x80)
+  if (de [11] & 0x80)
     {
       puts (" ARC");
     }
@@ -313,23 +313,23 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
   puts ("\r\n");
 
   puts ("extent   ");
-  puthex2 (de[12]);
+  puthex2 (de [12]);
   puts ("  (");
-  putu (de[12] & 0x1f);
+  putu (de [12] & 0x1f);
   puts (")\r\n");
 
   puts ("s1/LRBC  ");
-  puthex2 (de[13]);
+  puthex2 (de [13]);
   puts ("  (");
-  putu (de[13]);
+  putu (de [13]);
   puts (")\r\n");
 
   puts ("s2       ");
-  puthex2 (de[14]);
+  puthex2 (de [14]);
   puts ("  module=");
-  putu (de[14] & 0x3f);
+  putu (de [14] & 0x3f);
 
-  if (de[14] & 0x80)
+  if (de [14] & 0x80)
     {
       puts (" write");
     }
@@ -337,9 +337,9 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
   puts ("\r\n");
 
   puts ("rc       ");
-  puthex2 (de[15]);
+  puthex2 (de [15]);
   puts ("  (");
-  putu (de[15]);
+  putu (de [15]);
   puts (" records)\r\n");
 
   puts ("map bytes");
@@ -352,7 +352,7 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
         }
 
       putch (' ');
-      puthex2 (de[16 + i]);
+      puthex2 (de [16 + i]);
     }
 
   puts ("\r\n");
@@ -361,7 +361,7 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
 
   for (i = 0; i < 8; i++)
     {
-      UWORD w = (UWORD)de[16 + i * 2] | ((UWORD)de[17 + i * 2] << 8);
+      UWORD w = (UWORD)de [16 + i * 2] | ((UWORD)de [17 + i * 2] << 8);
 
       putch (' ');
       puthex2 ((w >> 8) & 0xFF);
@@ -376,16 +376,16 @@ dump_dirent (const UBYTE *de, unsigned dir_index)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
-  UBYTE dma[128];
-  char tail[128];
+  UBYTE fcb [36];
+  UBYTE dma [128];
+  char tail [128];
   unsigned tlen, i;
   int flag_all = 0;
   const char *pat = 0;
   UWORD r;
   int user, count = 0;
 
-  tlen = CMD_TAIL[0];
+  tlen = CMD_TAIL [0];
 
   if (tlen > 126)
     {
@@ -394,26 +394,26 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
 
   i = 0;
 
-  while (tail[i] == ' ' || tail[i] == '\t')
+  while (tail [i] == ' ' || tail [i] == '\t')
     {
       i++;
     }
-  while (tail[i])
+  while (tail [i])
     {
-      if (tail[i] == '-' || tail[i] == '/')
+      if (tail [i] == '-' || tail [i] == '/')
         {
           i++;
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
-              char c = toupper_ch ((unsigned char)tail[i++]);
+              char c = toupper_ch ((unsigned char)tail [i++]);
 
               if (c == 'H')
                 {
@@ -427,7 +427,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   flag_all = 1;
                 }
             }
-          while (tail[i] == ' ' || tail[i] == '\t')
+          while (tail [i] == ' ' || tail [i] == '\t')
             {
               i++;
             }
@@ -435,7 +435,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           continue;
         }
 
-      pat = &tail[i];
+      pat = &tail [i];
 
       break;
     }
@@ -444,16 +444,16 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       pattern_to_fcb (fcb, pat);
     }
-  else if (DEF_FCB[1] != ' ' && DEF_FCB[1] != '?' && DEF_FCB[1] != 0)
+  else if (DEF_FCB [1] != ' ' && DEF_FCB [1] != '?' && DEF_FCB [1] != 0)
     {
       for (i = 0; i < 36; i++)
         {
-          fcb[i] = DEF_FCB[i];
+          fcb [i] = DEF_FCB [i];
         }
 
-      if (fcb[9] == ' ' && fcb[10] == ' ' && fcb[11] == ' ')
+      if (fcb [9] == ' ' && fcb [10] == ' ' && fcb [11] == ' ')
         {
-          fcb[9] = fcb[10] = fcb[11] = '?';
+          fcb [9] = fcb [10] = fcb [11] = '?';
         }
     }
   else
@@ -464,13 +464,13 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   user = (int)bdos (32, 0xFF);
   (void)bdos (26, (LONG)(ULONG)dma);
 
-  if (fcb[0])
+  if (fcb [0])
     {
-      (void)bdos (14, (LONG)(fcb[0] - 1));
+      (void)bdos (14, (LONG)(fcb [0] - 1));
     }
 
-  fcb[12] = '?';
-  fcb[14] = '?';
+  fcb [12] = '?';
+  fcb [14] = '?';
 
   puts ("DUMPDIR");
 
@@ -493,7 +493,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       const UBYTE *de = dma + (r * 32);
 
-      if (de[0] != 0xE5 && (flag_all || de[0] == (UBYTE)user))
+      if (de [0] != 0xE5 && (flag_all || de [0] == (UBYTE)user))
         {
           dump_dirent (de, (unsigned)r);
           count++;

@@ -97,7 +97,7 @@ isdigit (char c)
 static unsigned
 u2 (const char *p)
 {
-  return (unsigned)(p[0] - '0') * 10u + (unsigned)(p[1] - '0');
+  return (unsigned)(p [0] - '0') * 10u + (unsigned)(p [1] - '0');
 }
 
 /*****************************************************************************/
@@ -111,7 +111,7 @@ is_leap (unsigned y)
 
 /*****************************************************************************/
 
-static const UBYTE mdays[]
+static const UBYTE mdays []
     = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 /*****************************************************************************/
@@ -128,7 +128,7 @@ ymd_to_days (unsigned y, unsigned m, unsigned d)
 
   for (mm = 1; mm < m; mm++)
     {
-      day += mdays[mm - 1];
+      day += mdays [mm - 1];
 
       if (mm == 2 && is_leap (y))
         {
@@ -166,7 +166,7 @@ days_to_ymd (UWORD days, unsigned *y, unsigned *m, unsigned *d)
 
   for (;;)
     {
-      unsigned int dim = mdays[*m - 1];
+      unsigned int dim = mdays [*m - 1];
 
       if (*m == 2 && is_leap (yy))
         {
@@ -222,19 +222,19 @@ static int
 parse_set (const char *p, struct cpm_datetime *dt)
 {
   unsigned mo, da, yy, hh, mi, ss, y;
-  char buf[20];
+  char buf [20];
   int i, n = 0;
 
   while (*p == ' ' || *p == '\t')
     {
       p++;
     }
-  for (i = 0; i < 17 && p[i] && p[i] != '\r' && p[i] != '\n'; i++)
+  for (i = 0; i < 17 && p [i] && p [i] != '\r' && p [i] != '\n'; i++)
     {
-      buf[i] = p[i];
+      buf [i] = p [i];
     }
 
-  buf[i] = 0;
+  buf [i] = 0;
   n = i;
 
   /* MM/DD/YY HH:MM:SS = 17 chars */
@@ -243,8 +243,11 @@ parse_set (const char *p, struct cpm_datetime *dt)
       return 1;
     }
 
-  if (buf[2] != '/' || buf[5] != '/' || buf[8] != ' ' || buf[11] != ':'
-      || buf[14] != ':')
+  if (buf [2] != '/'
+   || buf [5] != '/'
+   || buf [8] != ' '
+   || buf [11] != ':'
+   || buf [14] != ':')
     {
       return 1;
     }
@@ -256,7 +259,7 @@ parse_set (const char *p, struct cpm_datetime *dt)
           continue;
         }
 
-      if (!isdigit (buf[i]))
+      if (!isdigit (buf [i]))
         {
           return 1;
         }
@@ -278,7 +281,7 @@ parse_set (const char *p, struct cpm_datetime *dt)
     }
 
   {
-    unsigned dim = mdays[mo - 1];
+    unsigned dim = mdays [mo - 1];
 
     if (mo == 2 && is_leap (y))
       {
@@ -304,11 +307,11 @@ parse_set (const char *p, struct cpm_datetime *dt)
 static void
 usage (void)
 {
-  const char m1[] = "Invalid Date & Time Format\r\n";
-  const char m2[] = "Please retry using:\r\n";
-  const char m3[] = "\"TOD MM/DD/YY HH:MM:SS\"\r\n";
-  const char m4[] = "where YY is 00-99 for 2000-2099, or:\r\n";
-  const char m5[] = "\"TOD P\" for continuous display.";
+  const char m1 [] = "Invalid Date & Time Format\r\n";
+  const char m2 [] = "Please retry using:\r\n";
+  const char m3 [] = "\"TOD MM/DD/YY HH:MM:SS\"\r\n";
+  const char m4 [] = "where YY is 00-99 for 2000-2099, or:\r\n";
+  const char m5 [] = "\"TOD P\" for continuous display.";
 
   puts (m1);
   puts (m2);
@@ -355,15 +358,15 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_datetime dt;
   const UBYTE *tail = CMD_TAIL;
-  char arg[128];
+  char arg [128];
   unsigned tlen;
   unsigned i;
   /* Original: default shows once and quits; P enables continuous update. */
   int continuous = 0;
-  const char nl[] = "\r\n";
+  const char nl [] = "\r\n";
 
   /* Copy command tail (length at 0x80) */
-  tlen = tail[0];
+  tlen = tail [0];
 
   if (tlen > 126)
     {
@@ -372,33 +375,33 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < tlen; i++)
     {
-      arg[i] = (char)tail[1 + i];
+      arg [i] = (char)tail [1 + i];
     }
 
-  arg[tlen] = 0;
+  arg [tlen] = 0;
 
   /* Skip leading spaces; check for P or date */
   i = 0;
 
-  while (arg[i] == ' ' || arg[i] == '\t')
+  while (arg [i] == ' ' || arg [i] == '\t')
     {
       i++;
     }
 
-  if (arg[i] == 'P' || arg[i] == 'p')
+  if (arg [i] == 'P' || arg [i] == 'p')
     {
       continuous = 1;
       i++;
 
-      while (arg[i] == ' ' || arg[i] == '\t')
+      while (arg [i] == ' ' || arg [i] == '\t')
         {
           i++;
         }
     }
 
-  if (arg[i] && arg[i] != '\r')
+  if (arg [i] && arg [i] != '\r')
     {
-      if (parse_set (&arg[i], &dt) != 0)
+      if (parse_set (&arg [i], &dt) != 0)
         {
           usage ();
 
@@ -420,7 +423,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       if (bdos (BDOS_GET_TOD, (LONG)(ULONG)&dt) != 0)
         {
-          const char e[] = "RTC read failed\r\n";
+          const char e [] = "RTC read failed\r\n";
           puts (e);
 
           exit_ccp ();

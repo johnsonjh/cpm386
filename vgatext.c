@@ -73,12 +73,12 @@ puts (const char *s)
 static void
 puthex16 (unsigned v)
 {
-  static const char h[] = "0123456789ABCDEF";
+  static const char h [] = "0123456789ABCDEF";
   int i;
 
   for (i = 3; i >= 0; i--)
     {
-      putch (h[(v >> (i * 4)) & 0xF]);
+      putch (h [(v >> (i * 4)) & 0xF]);
     }
 }
 
@@ -87,7 +87,7 @@ puthex16 (unsigned v)
 static void
 putu (unsigned n)
 {
-  char b[8];
+  char b [8];
   int i = 0;
 
   if (!n)
@@ -98,13 +98,13 @@ putu (unsigned n)
 
   while (n && i < 8)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
 
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -113,14 +113,14 @@ putu (unsigned n)
 static void
 puthex32 (ULONG v)
 {
-  static const char h[] = "0123456789ABCDEF";
+  static const char h [] = "0123456789ABCDEF";
   int i;
 
   puts ("0x");
 
   for (i = 7; i >= 0; i--)
     {
-      putch (h[(v >> (i * 4)) & 0xF]);
+      putch (h [(v >> (i * 4)) & 0xF]);
     }
 }
 

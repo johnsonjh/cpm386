@@ -12,7 +12,7 @@
 /*****************************************************************************/
 
 /*
- * Usage: RM [-h] | [-a][-i][-f] filespec [filespec ...]
+ * Usage: RM [-h] | [-a] [-i] [-f] filespec [filespec ...]
  *
  *   -a  include system files
  *   -i  confirm each delete (Y/N)
@@ -139,7 +139,7 @@ help (void)
 /* Collect unique 11-char names (+ sys/ro flags) matching pattern */
 struct ent
 {
-  char name[11];
+  char name [11];
   UBYTE sys;
   UBYTE ro;
   UBYTE used;
@@ -147,7 +147,7 @@ struct ent
 
 /*****************************************************************************/
 
-static struct ent ents[MAX_NAMES];
+static struct ent ents [MAX_NAMES];
 static int nents;
 
 /*****************************************************************************/
@@ -159,7 +159,7 @@ name_eq (const struct ent *e, const UBYTE *de)
 
   for (i = 0; i < 11; i++)
     {
-      if ((e->name[i] & 0x7f) != (de[1 + i] & 0x7f))
+      if ((e->name [i] & 0x7f) != (de [1 + i] & 0x7f))
         {
           return 0;
         }
@@ -175,14 +175,14 @@ add_ent (const UBYTE *de)
 {
   int i, idx = -1;
 
-  if (de[0] >= 16)
+  if (de [0] >= 16)
     {
       return;
     }
 
   for (i = 0; i < nents; i++)
     {
-      if (ents[i].used && name_eq (&ents[i], de))
+      if (ents [i].used && name_eq (&ents [i], de))
         {
           idx = i;
 
@@ -201,22 +201,22 @@ add_ent (const UBYTE *de)
 
       for (i = 0; i < 11; i++)
         {
-          ents[idx].name[i] = (char)(de[1 + i] & 0x7f);
+          ents [idx].name [i] = (char)(de [1 + i] & 0x7f);
         }
 
-      ents[idx].sys = 0;
-      ents[idx].ro = 0;
-      ents[idx].used = 1;
+      ents [idx].sys = 0;
+      ents [idx].ro = 0;
+      ents [idx].used = 1;
     }
 
-  if (de[9] & 0x80)
+  if (de [9] & 0x80)
     {
-      ents[idx].ro = 1;
+      ents [idx].ro = 1;
     }
 
-  if (de[10] & 0x80)
+  if (de [10] & 0x80)
     {
-      ents[idx].sys = 1;
+      ents [idx].sys = 1;
     }
 }
 
@@ -229,12 +229,12 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
   for (i = 1; i <= 11; i++)
     {
-      fcb[i] = ' ';
+      fcb [i] = ' ';
     }
 
   while (*pat == ' ' || *pat == '\t')
@@ -242,13 +242,13 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
       pat++;
     }
 
-  if (pat[0] && pat[1] == ':')
+  if (pat [0] && pat [1] == ':')
     {
-      int d = toupper_ch ((unsigned char)pat[0]);
+      int d = toupper_ch ((unsigned char)pat [0]);
 
       if (d >= 'A' && d <= 'P')
         {
-          fcb[0] = (UBYTE)(d - 'A' + 1);
+          fcb [0] = (UBYTE)(d - 'A' + 1);
         }
 
       pat += 2;
@@ -272,14 +272,14 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
             {
               while (ni < 8)
                 {
-                  fcb[1 + ni++] = '?';
+                  fcb [1 + ni++] = '?';
                 }
             }
           else
             {
               while (ti < 3)
                 {
-                  fcb[9 + ti++] = '?';
+                  fcb [9 + ti++] = '?';
                 }
             }
 
@@ -290,11 +290,11 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
         {
           if (!in_typ && ni < 8)
             {
-              fcb[1 + ni++] = '?';
+              fcb [1 + ni++] = '?';
             }
           else if (in_typ && ti < 3)
             {
-              fcb[9 + ti++] = '?';
+              fcb [9 + ti++] = '?';
             }
 
           continue;
@@ -302,11 +302,11 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 
       if (!in_typ && ni < 8)
         {
-          fcb[1 + ni++] = c;
+          fcb [1 + ni++] = c;
         }
       else if (in_typ && ti < 3)
         {
-          fcb[9 + ti++] = c;
+          fcb [9 + ti++] = c;
         }
     }
 
@@ -314,14 +314,14 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
     {
       for (i = 0; i < 11; i++)
         {
-          fcb[1 + i] = '?';
+          fcb [1 + i] = '?';
         }
     }
   else if (!in_typ)
     {
       for (i = 0; i < 3; i++)
         {
-          fcb[9 + i] = '?';
+          fcb [9 + i] = '?';
         }
     }
 }
@@ -335,27 +335,27 @@ print_name (const struct ent *e)
 
   for (i = 0; i < 8; i++)
     {
-      if (e->name[i] == ' ')
+      if (e->name [i] == ' ')
         {
           break;
         }
 
-      putch (e->name[i] & 0x7f);
+      putch (e->name [i] & 0x7f);
       any = 1;
     }
 
-  if (e->name[8] != ' ' || e->name[9] != ' ' || e->name[10] != ' ')
+  if (e->name [8] != ' ' || e->name [9] != ' ' || e->name [10] != ' ')
     {
       putch ('.');
 
       for (i = 8; i < 11; i++)
         {
-          if (e->name[i] == ' ')
+          if (e->name [i] == ' ')
             {
               break;
             }
 
-          putch (e->name[i] & 0x7f);
+          putch (e->name [i] & 0x7f);
         }
     }
   else if (!any)
@@ -373,12 +373,12 @@ fill_del_fcb (UBYTE *fcb, const struct ent *e)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
   for (i = 0; i < 11; i++)
     {
-      fcb[1 + i] = (UBYTE)(e->name[i] & 0x7f);
+      fcb [1 + i] = (UBYTE)(e->name [i] & 0x7f);
     }
 }
 
@@ -391,13 +391,13 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user)
 
   (void)bdos (26, (LONG)(ULONG)dma);
 
-  if (fcb[0])
+  if (fcb [0])
     {
-      (void)bdos (14, (LONG)(fcb[0] - 1));
+      (void)bdos (14, (LONG)(fcb [0] - 1));
     }
 
-  fcb[12] = '?';
-  fcb[14] = '?';
+  fcb [12] = '?';
+  fcb [14] = '?';
 
   r = bdos (17, (LONG)(ULONG)fcb);
 
@@ -405,7 +405,7 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user)
     {
       UBYTE const *de = dma + (r * 32);
 
-      if (de[0] == (UBYTE)user)
+      if (de [0] == (UBYTE)user)
         {
           add_ent (de);
         }
@@ -419,17 +419,17 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
-  UBYTE dma[128];
-  char tail[128];
+  UBYTE fcb [36];
+  UBYTE dma [128];
+  char tail [128];
   unsigned tlen, i;
   int flag_all = 0, flag_ask = 0, flag_force = 0;
-  char *pats[MAX_PATS];
+  char *pats [MAX_PATS];
   int npats = 0;
   UWORD r;
   int user;
 
-  tlen = CMD_TAIL[0];
+  tlen = CMD_TAIL [0];
 
   if (tlen > 126)
     {
@@ -438,26 +438,26 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
 
   i = 0;
 
-  while (tail[i] == ' ' || tail[i] == '\t')
+  while (tail [i] == ' ' || tail [i] == '\t')
     {
       i++;
     }
-  while (tail[i])
+  while (tail [i])
     {
-      if (tail[i] == '-' || tail[i] == '/')
+      if (tail [i] == '-' || tail [i] == '/')
         {
           i++;
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
-              char c = (char)toupper_ch ((unsigned char)tail[i++]);
+              char c = (char)toupper_ch ((unsigned char)tail [i++]);
 
               switch (c)
                 {
@@ -490,7 +490,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   (void)bdos (0, 0);
                 }
             }
-          while (tail[i] == ' ' || tail[i] == '\t')
+          while (tail [i] == ' ' || tail [i] == '\t')
             {
               i++;
             }
@@ -500,20 +500,20 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       if (npats < MAX_PATS)
         {
-          pats[npats++] = &tail[i];
+          pats [npats++] = &tail [i];
         }
 
-      while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+      while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
         {
           i++;
         }
 
-      if (tail[i])
+      if (tail [i])
         {
-          tail[i++] = 0;
+          tail [i++] = 0;
         }
 
-      while (tail[i] == ' ' || tail[i] == '\t')
+      while (tail [i] == ' ' || tail [i] == '\t')
         {
           i++;
         }
@@ -525,7 +525,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (npats == 0)
     {
       /* fall back to default FCB from CCP */
-      if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
+      if (DEF_FCB [1] == ' ' || DEF_FCB [1] == 0)
         {
           puts ("ERROR: No filespec\r\n");
           help ();
@@ -535,12 +535,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       for (i = 0; i < 36; i++)
         {
-          fcb[i] = DEF_FCB[i];
+          fcb [i] = DEF_FCB [i];
         }
 
-      if (fcb[9] == ' ' && fcb[10] == ' ' && fcb[11] == ' ')
+      if (fcb [9] == ' ' && fcb [10] == ' ' && fcb [11] == ' ')
         {
-          fcb[9] = fcb[10] = fcb[11] = '?';
+          fcb [9] = fcb [10] = fcb [11] = '?';
         }
 
       search_pattern (fcb, dma, user);
@@ -551,7 +551,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       for (p = 0; p < npats; p++)
         {
-          pattern_to_fcb (fcb, pats[p]);
+          pattern_to_fcb (fcb, pats [p]);
           search_pattern (fcb, dma, user);
         }
     }
@@ -565,8 +565,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < (unsigned)nents; i++)
     {
-      struct ent const *e = &ents[i];
-      UBYTE dfcb[36];
+      struct ent const *e = &ents [i];
+      UBYTE dfcb [36];
       int do_del = 1;
 
       if (e->sys && !flag_all)
@@ -630,14 +630,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       if (e->ro && flag_force)
         {
           /* clear R/O attribute then delete */
-          dfcb[9] = (UBYTE)(e->name[0] & 0x7f); /* rebuild clean */
+          dfcb [9] = (UBYTE)(e->name [0] & 0x7f); /* rebuild clean */
 
           {
             int j;
 
             for (j = 0; j < 11; j++)
               {
-                dfcb[1 + j] = (UBYTE)(e->name[j] & 0x7f);
+                dfcb [1 + j] = (UBYTE)(e->name [j] & 0x7f);
               }
           }
 

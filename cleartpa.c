@@ -85,7 +85,7 @@ puts (const char *s)
 static void
 putu (ULONG n)
 {
-  char b[12];
+  char b [12];
   int i = 0;
 
   if (!n)
@@ -97,12 +97,12 @@ putu (ULONG n)
 
   while (n && i < 12)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -121,14 +121,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* ULONG start_addr, end_addr; */
   int verify = 0;
   const char *tail = (char *)CMD_TAIL;
-  int tail_len = tail[0];
+  int tail_len = tail [0];
 
   /* parse args */
   for (i = 1; i <= tail_len; i++)
     {
-      if (tail[i] == '-')
+      if (tail [i] == '-')
         {
-          if (tail[i + 1] == 'h' || tail[i + 1] == 'H')
+          if (tail [i + 1] == 'h' || tail [i + 1] == 'H')
             {
               puts ("Usage: CLEARTPA [-h] [-v]\r\n");
               puts ("  -h   Show this help\r\n");
@@ -137,7 +137,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               (void)bdos (0, 0);
             }
 
-          if (tail[i + 1] == 'v' || tail[i + 1] == 'V')
+          if (tail [i + 1] == 'v' || tail [i + 1] == 'V')
             {
               verify = 1;
             }
@@ -198,14 +198,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   ULONG count1 = (end_addr1 - start_addr1) / 4;
   for (i = 0; i < count1; i++)
     {
-      p1[i] = 0;
+      p1 [i] = 0;
     }
 
   volatile ULONG *p2 = (volatile ULONG *)start_addr2;
   ULONG count2 = (end_addr2 - start_addr2) / 4;
   for (i = 0; i < count2; i++)
     {
-      p2[i] = 0;
+      p2 [i] = 0;
     }
 
   if (verify)
@@ -216,7 +216,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       int failed = 0;
       for (i = 0; i < count1; i++)
         {
-          if (p1[i] != 0)
+          if (p1 [i] != 0)
             {
               failed = 1;
               break;
@@ -225,7 +225,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       for (i = 0; i < count2; i++)
         {
-          if (p2[i] != 0)
+          if (p2 [i] != 0)
             {
               failed = 1;
               break;

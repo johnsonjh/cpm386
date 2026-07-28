@@ -125,7 +125,7 @@ fill_from_def_fcb (UBYTE *fcb)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = DEF_FCB[i];
+      fcb [i] = DEF_FCB [i];
     }
 }
 
@@ -134,9 +134,9 @@ fill_from_def_fcb (UBYTE *fcb)
 static int
 parse_tail_help (void)
 {
-  unsigned tlen = CMD_TAIL[0];
+  unsigned tlen = CMD_TAIL [0];
   unsigned i;
-  char tail[128];
+  char tail [128];
 
   if (tlen > 126)
     {
@@ -145,34 +145,34 @@ parse_tail_help (void)
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
 
   i = 0;
 
-  while (tail[i] == ' ' || tail[i] == '\t')
+  while (tail [i] == ' ' || tail [i] == '\t')
     {
       i++;
     }
 
-  while (tail[i])
+  while (tail [i])
     {
-      if (tail[i] == '-' || tail[i] == '/')
+      if (tail [i] == '-' || tail [i] == '/')
         {
           i++;
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
-              if (toupper_ch ((unsigned char)tail[i]) == 'H')
+              if (toupper_ch ((unsigned char)tail [i]) == 'H')
                 {
                   return 1;
                 }
 
               i++;
             }
-          while (tail[i] == ' ' || tail[i] == '\t')
+          while (tail [i] == ' ' || tail [i] == '\t')
             {
               i++;
             }
@@ -200,9 +200,9 @@ clear_more (void)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
-  UBYTE dma[128];
-  UBYTE prev[128];
+  UBYTE fcb [36];
+  UBYTE dma [128];
+  UBYTE prev [128];
   UBYTE lrbc = 0;
   UWORD r;
   int process = 1;
@@ -220,7 +220,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       (void)bdos (0, 0);
     }
 
-  if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
+  if (DEF_FCB [1] == ' ' || DEF_FCB [1] == 0)
     {
       help ();
       puts ("ERR: No file specified\r\n");
@@ -229,9 +229,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   fill_from_def_fcb (fcb);
-  fcb[12] = 0;
-  fcb[14] = 0;
-  fcb[32] = 0xFF;
+  fcb [12] = 0;
+  fcb [14] = 0;
+  fcb [32] = 0xFF;
   r = bdos (15, (LONG)(ULONG)fcb);
 
   if (r > 3)
@@ -241,8 +241,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       (void)bdos (0, 0);
     }
 
-  lrbc = fcb[32];
-  fcb[32] = 0;
+  lrbc = fcb [32];
+  fcb [32] = 0;
 
   (void)bdos (26, (LONG)(ULONG)dma);
 
@@ -280,7 +280,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
               /* first record: stash and read again */
               for (i = 0; i < 128; i++)
                 {
-                  prev[i] = dma[i];
+                  prev [i] = dma [i];
                 }
 
               have = 1;
@@ -289,7 +289,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
             }
         }
 
-      /* Emit prev[0..rec_len) */
+      /* Emit prev [0..rec_len) */
       pos = 0;
 
       while (process && pos < rec_len)
@@ -303,7 +303,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
             }
           else
             {
-              c = prev[pos++] & 0xff;
+              c = prev [pos++] & 0xff;
               if (c == 9)
                 {
                   c = ' ';
@@ -402,7 +402,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       /* shift dma -> prev for next iteration */
       for (i = 0; i < 128; i++)
         {
-          prev[i] = dma[i];
+          prev [i] = dma [i];
         }
 
       have = 1;

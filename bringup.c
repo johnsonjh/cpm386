@@ -39,13 +39,13 @@ asm (" .section .ramdisk, \"aw\", @progbits\n"
 
 /*****************************************************************************/
 
-extern unsigned char ramdisk[RAMDISK_SIZE]; /* provided by incbin asm above */
+extern unsigned char ramdisk [RAMDISK_SIZE]; /* provided by incbin asm above */
 
 /*****************************************************************************/
 
-static UBYTE xlt[26];
-static UBYTE dirbuf[128];
-static UBYTE csv[64];
+static UBYTE xlt [26];
+static UBYTE dirbuf [128];
+static UBYTE csv [64];
 
 /*****************************************************************************/
 
@@ -54,7 +54,7 @@ static UBYTE csv[64];
  * alv bit vector: (dsm+1+7)/8 ~= 256 bytes for dsm=2047
  */
 
-static UBYTE alv[256];
+static UBYTE alv [256];
 
 /*****************************************************************************/
 

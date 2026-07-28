@@ -81,7 +81,7 @@ puts (const char *s)
 static void
 putu (unsigned n)
 {
-  char b[8];
+  char b [8];
   int i = 0;
 
   if (!n)
@@ -92,13 +92,13 @@ putu (unsigned n)
 
   while (n && i < 8)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
 
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 

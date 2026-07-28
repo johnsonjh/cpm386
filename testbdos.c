@@ -45,18 +45,18 @@ bdos (WORD func, LONG info)
 static int mock_disk_selected = -1;
 static int mock_read_count = 0;
 static int mock_conout_count = 0;
-static unsigned char mock_dma[128];
+static unsigned char mock_dma [128];
 static void *last_dma = 0;
 static unsigned short cur_sec = 0;
 static unsigned short cur_trk = 0;
-static UBYTE mock_dir_sector[128];
+static UBYTE mock_dir_sector [128];
 static unsigned char
     unit_dma0; /* snapshot for gate, avoid stack clobber in test */
 
 /*****************************************************************************/
 
 /* capture for dir writes (create 22, close 16, set attr 30) per plan checklist */
-static unsigned char last_dir_write[128];
+static unsigned char last_dir_write [128];
 static int last_dir_write_valid = 0;
 static int mock_write_count = 0;
 

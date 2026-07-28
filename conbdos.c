@@ -210,7 +210,7 @@ UBYTE getch()           /* Get char from buffer or bios */
         temp = *GBL.remptr++;           /* Fetch the character    */
         GBL.kbchar--;                   /* Decrement the count    */
         if(!GBL.kbchar)                 /* Gone to zero?          */
-                GBL.remptr = GBL.insptr = &(GBL.t_buff[0]);
+                GBL.remptr = GBL.insptr = &(GBL.t_buff [0]);
         return(temp);
     }
     return( bconin() );                 /* else get char from bios */
@@ -289,7 +289,7 @@ REG WORD col;                   /* starting console column      */
     if (bufp->retlen) --(bufp->retlen);
                                 /* if buffer non-empty, decrease it by 1 */
     i = UBWORD(bufp->retlen);   /* get new character count      */
-    p = &(bufp->cbuf[0]);       /* point to character buffer    */
+    p = &(bufp->cbuf [0]);      /* point to character buffer    */
     while (i--)                 /* calculate column position    */
     {                           /*  across entire char buffer   */
         ch = *p++;              /* get next char                */
@@ -371,7 +371,7 @@ REG struct conbuf *p;
                 if (p->retlen)
                 {
                     i = UBWORD(--(p->retlen));
-                    conout( p->cbuf[i] );
+                    conout( p->cbuf [i] );
                 }
             }
             else backsp(p, stcol);
@@ -397,11 +397,11 @@ REG struct conbuf *p;
             newline(stcol);
             retlen = UBWORD(p->retlen);
             for (i=0; i < retlen; i++)
-                    cookdout( p->cbuf[i] );
+                    cookdout( p->cbuf [i] );
         }
 
         else                                    /* normal character */
-            cookdout( p->cbuf[UBWORD((p->retlen)++)] = ch );
+            cookdout( p->cbuf [UBWORD((p->retlen)++)] = ch );
     }
 }
 

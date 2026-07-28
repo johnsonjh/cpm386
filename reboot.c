@@ -86,7 +86,7 @@ puts (const char *s)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE ch = DEF_FCB[1];
+  UBYTE ch = DEF_FCB [1];
   int warm = 0;
 
   if (ch == 'W' || ch == 'w')

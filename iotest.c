@@ -69,7 +69,7 @@ puts (const char *s)
 static void
 putu (ULONG n)
 {
-  char buf[12];
+  char buf [12];
   int i = 0;
 
   if (!n)
@@ -80,13 +80,13 @@ putu (ULONG n)
 
   while (n && i < 12)
     {
-      buf[i++] = (char)('0' + (n % 10));
+      buf [i++] = (char)('0' + (n % 10));
       n /= 10;
     }
 
   while (i)
     {
-      putch (buf[--i]);
+      putch (buf [--i]);
     }
 }
 
@@ -122,19 +122,19 @@ fill_name (UBYTE *fcb, const char *name8, const char *typ3)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
-  fcb[0] = 0;
+  fcb [0] = 0;
 
   for (i = 0; i < 8; i++)
     {
-      fcb[1 + i] = (UBYTE)(name8[i] ? name8[i] : ' ');
+      fcb [1 + i] = (UBYTE)(name8 [i] ? name8 [i] : ' ');
     }
 
   for (i = 0; i < 3; i++)
     {
-      fcb[9 + i] = (UBYTE)(typ3[i] ? typ3[i] : ' ');
+      fcb [9 + i] = (UBYTE)(typ3 [i] ? typ3 [i] : ' ');
     }
 }
 
@@ -144,22 +144,22 @@ fill_name (UBYTE *fcb, const char *name8, const char *typ3)
 static void
 set_ran (UBYTE *fcb, ULONG rec)
 {
-  fcb[33] = (UBYTE)((rec >> 16) & 0xff);
-  fcb[34] = (UBYTE)((rec >> 8) & 0xff);
-  fcb[35] = (UBYTE)(rec & 0xff);
+  fcb [33] = (UBYTE)((rec >> 16) & 0xff);
+  fcb [34] = (UBYTE)((rec >> 8) & 0xff);
+  fcb [35] = (UBYTE)(rec & 0xff);
 }
 
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
-  UBYTE dma[128];
-  UBYTE dma2[128]; /*cppcheck-suppress unassignedVariable*/
+  UBYTE fcb [36];
+  UBYTE dma [128];
+  UBYTE dma2 [128]; /*cppcheck-suppress unassignedVariable*/
   UWORD r;
   int i;
   ULONG rec;
-  const char banner[] = "\r\nIOTEST (BDOS I/O Test Suite)\r\n";
-  const char done[] = "*** done fails=";
+  const char banner [] = "\r\nIOTEST (BDOS I/O Test Suite)\r\n";
+  const char done [] = "*** done fails=";
 
   fails = 0;
   puts (banner);
@@ -183,10 +183,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       for (i = 0; i < 128; i++)
         {
-          dma[i] = (UBYTE)(0xA0 + rec);
+          dma [i] = (UBYTE)(0xA0 + rec);
         }
 
-      dma[0] = (UBYTE)('0' + rec);
+      dma [0] = (UBYTE)('0' + rec);
       r = bdos (21, (LONG)(ULONG)fcb);
 
       if (r != 0)
@@ -210,7 +210,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       r = bdos (20, (LONG)(ULONG)fcb);
 
-      if (r != 0 || dma2[0] != (UBYTE)('0' + rec))
+      if (r != 0 || dma2 [0] != (UBYTE)('0' + rec))
         {
           break;
         }
@@ -237,7 +237,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (r <= 3)
     {
       const UBYTE *de = dma + (r * 32);
-      result (de[1] == 'I' && de[2] == 'O' && de[9] == 'D', 'S');
+      result (de [1] == 'I' && de [2] == 'O' && de [9] == 'D', 'S');
     }
   else
     {
@@ -265,10 +265,10 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < 128; i++)
     {
-      dma[i] = 0x5A;
+      dma [i] = 0x5A;
     }
 
-  dma[0] = 'X';
+  dma [0] = 'X';
   set_ran (fcb, 2);
   /*cppcheck-suppress redundantAssignment */
   r = bdos (34, (LONG)(ULONG)fcb);
@@ -276,27 +276,27 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < 128; i++)
     {
-      dma[i] = 0;
+      dma [i] = 0;
     }
 
   set_ran (fcb, 2);
   r = bdos (33, (LONG)(ULONG)fcb);
-  result (r == 0 && dma[0] == 'X' && dma[1] == 0x5A, 'Q');
+  result (r == 0 && dma [0] == 'X' && dma [1] == 0x5A, 'Q');
 
   /*
    * H = hole: with 2K blocks, 16 records/block.
-   * Seq wrote 0-4 -> map[0].
-   * Write random record 40 -> map[2].
-   * map[1] (recs 16-31) stays unallocated.
+   * Seq wrote 0-4 -> map [0].
+   * Write random record 40 -> map [2].
+   * map [1] (recs 16-31) stays unallocated.
    * Random read record 20 must return EOF (1).
    */
 
   for (i = 0; i < 128; i++)
     {
-      dma[i] = 0xEE;
+      dma [i] = 0xEE;
     }
 
-  dma[0] = 'H';
+  dma [0] = 'H';
   set_ran (fcb, 40);
   r = bdos (34, (LONG)(ULONG)fcb);
   result (r == 0, 'Y'); /* write past gap */
@@ -307,22 +307,22 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* Z: random R/W still works after probing a hole (fresh pattern) */
   for (i = 0; i < 128; i++)
     {
-      dma[i] = 0x11;
+      dma [i] = 0x11;
     }
 
-  dma[0] = 'Z';
+  dma [0] = 'Z';
   set_ran (fcb, 40);
   r = bdos (34, (LONG)(ULONG)fcb);
 
   for (i = 0; i < 128; i++)
     {
-      dma[i] = 0;
+      dma [i] = 0;
     }
 
   set_ran (fcb, 40);
   /*cppcheck-suppress redundantAssignment */
   r = bdos (33, (LONG)(ULONG)fcb);
-  result (r == 0 && dma[0] == 'Z', 'Z');
+  result (r == 0 && dma [0] == 'Z', 'Z');
 
   (void)bdos (16, (LONG)(ULONG)fcb);
 

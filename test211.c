@@ -49,22 +49,22 @@ bdos (WORD func, LONG info)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  char msg1[] = "\r\nTesting BDOS 211 (Print decimal number):\r\n";
-  char msg2[] = " -> ";
-  char newline[] = "\r\n";
-  char *p;
+  const char msg1    [] = "\r\nTesting BDOS 211 (Print decimal number):\r\n";
+  const char msg2    [] = " -> ";
+  const char newline [] = "\r\n";
+  const char *p;
   int i;
-  UWORD tests[9];
+  UWORD tests [9];
 
-  tests[0] = 0;
-  tests[1] = 7;
-  tests[2] = 42;
-  tests[3] = 1234;
-  tests[4] = 65535;
-  tests[5] = -1;    /* 65535 */
-  tests[6] = 4321;
-  tests[7] = 0;
-  tests[8] = 7;
+  tests [0] = 0;
+  tests [1] = 7;
+  tests [2] = 42;
+  tests [3] = 1234;
+  tests [4] = 65535;
+  tests [5] = -1;    /* 65535 */
+  tests [6] = 4321;
+  tests [7] = 0;
+  tests [8] = 7;
 
   for (p = msg1; *p; p++)
     {
@@ -78,7 +78,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           (void)bdos (2, (LONG)*p);
         }
 
-      (void)bdos (211, (LONG)tests[i]);
+      (void)bdos (211, (LONG)tests [i]);
 
       for (p = newline; *p; p++)
         {

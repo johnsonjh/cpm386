@@ -80,24 +80,25 @@ puts (const char *s)
 static void
 putu (ULONG n)
 {
-  char b[12];
+  char b [12];
   int i = 0;
 
   if (!n)
     {
       putch ('0');
+
       return;
     }
 
   while (n && i < 12)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
 
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -106,18 +107,18 @@ putu (ULONG n)
 static void
 putu_w (ULONG n, int w)
 {
-  char b[12];
+  char b [12];
   int i = 0, j;
 
   if (!n)
     {
-      b[i++] = '0';
+      b [i++] = '0';
     }
   else
     {
       while (n && i < 12)
         {
-          b[i++] = (char)('0' + n % 10);
+          b [i++] = (char)('0' + n % 10);
           n /= 10;
         }
     }
@@ -129,7 +130,7 @@ putu_w (ULONG n, int w)
 
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -156,13 +157,13 @@ exact_size (ULONG records, UBYTE lrbc)
 
 struct fileent
 {
-  char name[8];
-  char typ[3];
+  char name [8];
+  char typ [3];
   ULONG records; /* sum of rc over extents */
   ULONG blocks;  /* allocated map blocks */
-  unsigned fcbs;         /* extent count */
-  UBYTE lrbc;            /* last extent s1 (DOS-PLUS) */
-  UBYTE last_ex;         /* highest extent seen */
+  unsigned fcbs; /* extent count */
+  UBYTE lrbc;    /* last extent s1 (DOS-PLUS) */
+  UBYTE last_ex; /* highest extent seen */
   UBYTE last_s2;
   UBYTE sys;
   UBYTE ro;
@@ -171,7 +172,7 @@ struct fileent
 
 /*****************************************************************************/
 
-static struct fileent files[MAX_FILES];
+static struct fileent files [MAX_FILES];
 static int nfiles;
 
 /*****************************************************************************/
@@ -183,7 +184,7 @@ name_eq (const struct fileent *f, const UBYTE *de)
 
   for (i = 0; i < 8; i++)
     {
-      if ((f->name[i] & 0x7f) != (de[1 + i] & 0x7f))
+      if ((f->name [i] & 0x7f) != (de [1 + i] & 0x7f))
         {
           return 0;
         }
@@ -191,7 +192,7 @@ name_eq (const struct fileent *f, const UBYTE *de)
 
   for (i = 0; i < 3; i++)
     {
-      if ((f->typ[i] & 0x7f) != (de[9 + i] & 0x7f))
+      if ((f->typ [i] & 0x7f) != (de [9 + i] & 0x7f))
         {
           return 0;
         }
@@ -212,7 +213,7 @@ count_map_blocks (const UBYTE *de, int word_mode)
     {
       for (i = 0; i < 8; i++)
         {
-          UWORD b = (UWORD)de[16 + i * 2] | ((UWORD)de[17 + i * 2] << 8);
+          UWORD b = (UWORD)de [16 + i * 2] | ((UWORD)de [17 + i * 2] << 8);
 
           if (b)
             {
@@ -224,7 +225,7 @@ count_map_blocks (const UBYTE *de, int word_mode)
     {
       for (i = 0; i < 16; i++)
         {
-          if (de[16 + i])
+          if (de [16 + i])
             {
               n++;
             }
@@ -258,19 +259,19 @@ static void
 add_dirent (const UBYTE *de, int word_mode)
 {
   int i, idx = -1;
-  UBYTE ex = de[12];
-  UBYTE s1 = de[13]; /*cppcheck-suppress variableScope*/
-  UBYTE s2 = de[14];
-  UBYTE rc = de[15];
+  UBYTE ex = de [12];
+  UBYTE s1 = de [13]; /*cppcheck-suppress variableScope*/
+  UBYTE s2 = de [14];
+  UBYTE rc = de [15];
 
-  if (de[0] >= 16) /* empty / XFCB / etc. */
+  if (de [0] >= 16) /* empty / XFCB / etc. */
     {
       return;
     }
 
   for (i = 0; i < nfiles; i++)
     {
-      if (files[i].used && name_eq (&files[i], de))
+      if (files [i].used && name_eq (&files [i], de))
         {
           idx = i;
 
@@ -289,44 +290,44 @@ add_dirent (const UBYTE *de, int word_mode)
 
       for (i = 0; i < 8; i++)
         {
-          files[idx].name[i] = (char)(de[1 + i] & 0x7f);
+          files [idx].name [i] = (char)(de [1 + i] & 0x7f);
         }
 
       for (i = 0; i < 3; i++)
         {
-          files[idx].typ[i] = (char)(de[9 + i] & 0x7f);
+          files [idx].typ [i] = (char)(de [9 + i] & 0x7f);
         }
 
-      files[idx].records = 0;
-      files[idx].blocks = 0;
-      files[idx].fcbs = 0;
-      files[idx].lrbc = 0;
-      files[idx].last_ex = 0;
-      files[idx].last_s2 = 0;
-      files[idx].sys = 0;
-      files[idx].ro = 0;
-      files[idx].used = 1;
+      files [idx].records = 0;
+      files [idx].blocks = 0;
+      files [idx].fcbs = 0;
+      files [idx].lrbc = 0;
+      files [idx].last_ex = 0;
+      files [idx].last_s2 = 0;
+      files [idx].sys = 0;
+      files [idx].ro = 0;
+      files [idx].used = 1;
     }
 
-  files[idx].records += rc;
-  files[idx].blocks += count_map_blocks (de, word_mode);
-  files[idx].fcbs++;
+  files [idx].records += rc;
+  files [idx].blocks += count_map_blocks (de, word_mode);
+  files [idx].fcbs++;
 
-  if (de[9] & 0x80)
+  if (de [9] & 0x80)
     {
-      files[idx].ro = 1;
+      files [idx].ro = 1;
     }
 
-  if (de[10] & 0x80)
+  if (de [10] & 0x80)
     {
-      files[idx].sys = 1;
+      files [idx].sys = 1;
     }
 
-  if (later_extent (s2, ex, files[idx].last_s2, files[idx].last_ex))
+  if (later_extent (s2, ex, files [idx].last_s2, files [idx].last_ex))
     {
-      files[idx].last_ex = ex;
-      files[idx].last_s2 = s2;
-      files[idx].lrbc = s1; /* DOS-PLUS LRBC on last extent */
+      files [idx].last_ex = ex;
+      files [idx].last_s2 = s2;
+      files [idx].lrbc = s1; /* DOS-PLUS LRBC on last extent */
     }
 }
 
@@ -339,7 +340,7 @@ cmp_name (const struct fileent *a, const struct fileent *b)
 
   for (i = 0; i < 8; i++)
     {
-      d = (a->name[i] & 0x7f) - (b->name[i] & 0x7f);
+      d = (a->name [i] & 0x7f) - (b->name [i] & 0x7f);
 
       if (d)
         {
@@ -349,7 +350,7 @@ cmp_name (const struct fileent *a, const struct fileent *b)
 
   for (i = 0; i < 3; i++)
     {
-      d = (a->typ[i] & 0x7f) - (b->typ[i] & 0x7f);
+      d = (a->typ [i] & 0x7f) - (b->typ [i] & 0x7f);
 
       if (d)
         {
@@ -385,10 +386,10 @@ sort_files (int sort_by, int reverse, int ignore_lrbc)
 
           if (sort_by == 2)
             {
-              ULONG sa = exact_size (files[i].records,
-                                     ignore_lrbc ? 0 : files[i].lrbc);
-              ULONG sb = exact_size (files[j].records,
-                                     ignore_lrbc ? 0 : files[j].lrbc);
+              ULONG sa = exact_size (files [i].records,
+                                     ignore_lrbc ? 0 : files [i].lrbc);
+              ULONG sb = exact_size (files [j].records,
+                                     ignore_lrbc ? 0 : files [j].lrbc);
 
               if (sa > sb)
                 {
@@ -400,20 +401,20 @@ sort_files (int sort_by, int reverse, int ignore_lrbc)
                 }
               else
                 {
-                  c = cmp_name (&files[i], &files[j]);
+                  c = cmp_name (&files [i], &files [j]);
                 }
             }
           else
             {
-              c = cmp_name (&files[i], &files[j]);
+              c = cmp_name (&files [i], &files [j]);
             }
 
           if ((!reverse && c > 0) || (reverse && c < 0))
             {
-              struct fileent t = files[i];
+              struct fileent t = files [i];
 
-              files[i] = files[j];
-              files[j] = t;
+              files [i] = files [j];
+              files [j] = t;
             }
         }
     }
@@ -428,15 +429,15 @@ print_name (const struct fileent *f, int pack)
 
   for (i = 0; i < 8; i++)
     {
-      if (pack && f->name[i] == ' ')
+      if (pack && f->name [i] == ' ')
         {
           break;
         }
 
-      putch (f->name[i] & 0x7f);
+      putch (f->name [i] & 0x7f);
     }
 
-  if (f->typ[0] == ' ' && f->typ[1] == ' ' && f->typ[2] == ' ')
+  if (f->typ [0] == ' ' && f->typ [1] == ' ' && f->typ [2] == ' ')
     {
       if (!pack)
         {
@@ -450,12 +451,12 @@ print_name (const struct fileent *f, int pack)
 
   for (i = 0; i < 3; i++)
     {
-      if (pack && f->typ[i] == ' ')
+      if (pack && f->typ [i] == ' ')
         {
           break;
         }
 
-      putch (f->typ[i] & 0x7f);
+      putch (f->typ [i] & 0x7f);
     }
 
   /*LINTED E_NOP_IF_STMT*/
@@ -475,14 +476,14 @@ print_name_fixed (const struct fileent *f)
 
   for (i = 0; i < 8; i++)
     {
-      putch ((f->name[i] && f->name[i] != ' ') ? (f->name[i] & 0x7f) : ' ');
+      putch ((f->name [i] && f->name [i] != ' ') ? (f->name [i] & 0x7f) : ' ');
     }
 
-  putch ((f->typ[0] != ' ' || f->typ[1] != ' ' || f->typ[2] != ' ') ? '.'
-                                                                    : ' ');
+  putch ((f->typ [0] != ' ' || f->typ [1] != ' ' || f->typ [2] != ' ') ? '.'
+                                                                       : ' ');
   for (i = 0; i < 3; i++)
     {
-      putch ((f->typ[i] && f->typ[i] != ' ') ? (f->typ[i] & 0x7f) : ' ');
+      putch ((f->typ [i] && f->typ [i] != ' ') ? (f->typ [i] & 0x7f) : ' ');
     }
 }
 
@@ -553,14 +554,14 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = 0;
+      fcb [i] = 0;
     }
 
-  fcb[0] = 0; /* default drive */
+  fcb [0] = 0; /* default drive */
 
   for (i = 1; i <= 11; i++)
     {
-      fcb[i] = ' ';
+      fcb [i] = ' ';
     }
 
   while (*pat == ' ' || *pat == '\t')
@@ -570,13 +571,13 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 
   /* optional n/ prefix for user */
   /* optional d: drive */
-  if (pat[0] && pat[1] == ':')
+  if (pat [0] && pat [1] == ':')
     {
-      int d = toupper_ch ((unsigned char)pat[0]);
+      int d = toupper_ch ((unsigned char)pat [0]);
 
       if (d >= 'A' && d <= 'P')
         {
-          fcb[0] = (UBYTE)(d - 'A' + 1);
+          fcb [0] = (UBYTE)(d - 'A' + 1);
         }
 
       pat += 2;
@@ -600,14 +601,14 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
             {
               while (ni < 8)
                 {
-                  fcb[1 + ni++] = '?';
+                  fcb [1 + ni++] = '?';
                 }
             }
           else
             {
               while (ti < 3)
                 {
-                  fcb[9 + ti++] = '?';
+                  fcb [9 + ti++] = '?';
                 }
             }
 
@@ -618,11 +619,11 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
         {
           if (!in_typ && ni < 8)
             {
-              fcb[1 + ni++] = '?';
+              fcb [1 + ni++] = '?';
             }
           else if (in_typ && ti < 3)
             {
-              fcb[9 + ti++] = '?';
+              fcb [9 + ti++] = '?';
             }
 
           continue;
@@ -630,11 +631,11 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
 
       if (!in_typ && ni < 8)
         {
-          fcb[1 + ni++] = c;
+          fcb [1 + ni++] = c;
         }
       else if (in_typ && ti < 3)
         {
-          fcb[9 + ti++] = c;
+          fcb [9 + ti++] = c;
         }
     }
 
@@ -643,7 +644,7 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
     {
       for (i = 0; i < 11; i++)
         {
-          fcb[1 + i] = '?';
+          fcb [1 + i] = '?';
         }
     }
   else if (!in_typ)
@@ -651,7 +652,7 @@ pattern_to_fcb (UBYTE *fcb, const char *pat)
       /* name only: any type */
       for (i = 0; i < 3; i++)
         {
-          fcb[9 + i] = '?';
+          fcb [9 + i] = '?';
         }
     }
 }
@@ -665,13 +666,13 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user, int word_mode)
 
   (void)bdos (26, (LONG)(ULONG)dma);
 
-  if (fcb[0])
+  if (fcb [0])
     {
-      (void)bdos (14, (LONG)(fcb[0] - 1));
+      (void)bdos (14, (LONG)(fcb [0] - 1));
     }
 
-  fcb[12] = '?'; /* all extents */
-  fcb[14] = '?'; /* all modules */
+  fcb [12] = '?'; /* all extents */
+  fcb [14] = '?'; /* all modules */
 
   r = bdos (17, (LONG)(ULONG)fcb);
 
@@ -680,7 +681,7 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user, int word_mode)
       const UBYTE *de = dma + (r * 32);
 
       /* current user only (search may return other users with ?) */
-      if (de[0] == (UBYTE)user)
+      if (de [0] == (UBYTE)user)
         {
           add_dirent (de, word_mode);
         }
@@ -694,10 +695,10 @@ search_pattern (UBYTE *fcb, UBYTE *dma, int user, int word_mode)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
-  UBYTE dma[128];
-  UBYTE dpb[32];
-  char tail[128];
+  UBYTE fcb [36];
+  UBYTE dma [128];
+  UBYTE dpb [32];
+  char tail [128];
   unsigned tlen, i;
   int flag_all = 0, flag_mode = 0, flag_pause = 0;
   int sort_by = 0, reverse_sort = 0, ignore_lrbc = 0;
@@ -706,11 +707,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   int word_mode = 0;
   ULONG all_exact = 0, all_alloc_k = 0;
   int count = 0, ctr = 0, process = 1;
-  char *pats[MAX_PATS];
+  char *pats [MAX_PATS];
   int npats = 0;
 
   /* Parse command tail */
-  tlen = CMD_TAIL[0];
+  tlen = CMD_TAIL [0];
 
   if (tlen > 126)
     {
@@ -719,26 +720,26 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
 
   i = 0;
 
-  while (tail[i] == ' ' || tail[i] == '\t')
+  while (tail [i] == ' ' || tail [i] == '\t')
     {
       i++;
     }
-  while (tail[i])
+  while (tail [i])
     {
-      if (tail[i] == '-' || tail[i] == '/')
+      if (tail [i] == '-' || tail [i] == '/')
         {
           i++;
 
-          while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
             {
-              char c = (char)toupper_ch ((unsigned char)tail[i++]);
+              char c = (char)toupper_ch ((unsigned char)tail [i++]);
 
               switch (c)
                 {
@@ -796,7 +797,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   (void)bdos (0, 0);
                 }
             }
-          while (tail[i] == ' ' || tail[i] == '\t')
+          while (tail [i] == ' ' || tail [i] == '\t')
             {
               i++;
             }
@@ -806,20 +807,20 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       if (npats < MAX_PATS)
         {
-          pats[npats++] = &tail[i];
+          pats [npats++] = &tail [i];
         }
 
-      while (tail[i] && tail[i] != ' ' && tail[i] != '\t')
+      while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
         {
           i++;
         }
 
-      if (tail[i])
+      if (tail [i])
         {
-          tail[i++] = 0;
+          tail [i++] = 0;
         }
 
-      while (tail[i] == ' ' || tail[i] == '\t')
+      while (tail [i] == ' ' || tail [i] == '\t')
         {
           i++;
         }
@@ -832,8 +833,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   (void)bdos (31, (LONG)(ULONG)dpb);
   /* dpb: spt@0, bsh@2, blm@3, exm@4, dum@5, dsm@6 */
   {
-    UBYTE bsh = dpb[2];
-    UWORD dsm = (UWORD)dpb[6] | ((UWORD)dpb[7] << 8);
+    UBYTE bsh = dpb [2];
+    UWORD dsm = (UWORD)dpb [6] | ((UWORD)dpb [7] << 8);
     block_size = 128u << bsh;
     word_mode = (dsm > 255) ? 1 : 0;
   }
@@ -847,16 +848,16 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   if (npats == 0)
     {
-      if (DEF_FCB[1] != ' ' && DEF_FCB[1] != '?' && DEF_FCB[1] != 0)
+      if (DEF_FCB [1] != ' ' && DEF_FCB [1] != '?' && DEF_FCB [1] != 0)
         {
           for (i = 0; i < 36; i++)
             {
-              fcb[i] = DEF_FCB[i];
+              fcb [i] = DEF_FCB [i];
             }
 
-          if (fcb[9] == ' ' && fcb[10] == ' ' && fcb[11] == ' ')
+          if (fcb [9] == ' ' && fcb [10] == ' ' && fcb [11] == ' ')
             {
-              fcb[9] = fcb[10] = fcb[11] = '?';
+              fcb [9] = fcb [10] = fcb [11] = '?';
             }
         }
       else
@@ -864,9 +865,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           pattern_to_fcb (fcb, "*.*");
         }
 
-      if (fcb[0])
+      if (fcb [0])
         {
-          drive = fcb[0] - 1;
+          drive = fcb [0] - 1;
         }
 
       search_pattern (fcb, dma, user, word_mode);
@@ -877,11 +878,11 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       for (p = 0; p < npats; p++)
         {
-          pattern_to_fcb (fcb, pats[p]);
+          pattern_to_fcb (fcb, pats [p]);
 
-          if (fcb[0])
+          if (fcb [0])
             {
-              drive = fcb[0] - 1;
+              drive = fcb [0] - 1;
             }
 
           search_pattern (fcb, dma, user, word_mode);
@@ -901,7 +902,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < (unsigned)nfiles && process; i++)
     {
-      struct fileent *f = &files[i];
+      struct fileent *f = &files [i];
       ULONG exact, exact_k, alloc_k;
 
       if (f->sys && !flag_all)

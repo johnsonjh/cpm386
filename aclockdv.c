@@ -206,7 +206,7 @@ draw_circle (void)
 
   for (n = 0; n < 60; n++)
     {
-      draw_point (circle[n][0], circle[n][1], (char)circle[n][2]);
+      draw_point (circle [n] [0], circle [n] [1], (char)circle [n] [2]);
     }
 }
 
@@ -219,7 +219,7 @@ draw_hour (int n)
 
   for (m = 0; m < 6; m++)
     {
-      draw_point (hour[n][m][0], hour[n][m][1], 'h');
+      draw_point (hour [n] [m] [0], hour [n] [m] [1], 'h');
     }
 }
 
@@ -232,7 +232,7 @@ draw_minute (int n)
 
   for (m = 0; m < 8; m++)
     {
-      draw_point (minute[n][m][0], minute[n][m][1], 'm');
+      draw_point (minute [n] [m] [0], minute [n] [m] [1], 'm');
     }
 }
 
@@ -245,7 +245,7 @@ draw_seconds (int n)
 
   for (m = 0; m < 8; m++)
     {
-      draw_point (minute[n][m][0], minute[n][m][1], '.');
+      draw_point (minute [n] [m] [0], minute [n] [m] [1], '.');
     }
 }
 
@@ -256,7 +256,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct cpm_vga_text vi;
   struct cpm_datetime dt;
-  char dig[16];
+  char dig [16];
   UWORD r;
 
   r = bdos (BDOS_CON_VIDEO, (LONG)(ULONG)&vi);
@@ -320,17 +320,17 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
       draw_text (35, 6, ".:ACLOCK:.");
 
-      dig[0] = '[';
-      dig[1] = (char)('0' + (dt.hour / 10) % 10);
-      dig[2] = (char)('0' + dt.hour % 10);
-      dig[3] = ':';
-      dig[4] = (char)('0' + (dt.min / 10) % 10);
-      dig[5] = (char)('0' + dt.min % 10);
-      dig[6] = ':';
-      dig[7] = (char)('0' + (dt.sec / 10) % 10);
-      dig[8] = (char)('0' + dt.sec % 10);
-      dig[9] = ']';
-      dig[10] = 0;
+      dig [0] = '[';
+      dig [1] = (char)('0' + (dt.hour / 10) % 10);
+      dig [2] = (char)('0' + dt.hour % 10);
+      dig [3] = ':';
+      dig [4] = (char)('0' + (dt.min / 10) % 10);
+      dig [5] = (char)('0' + dt.min % 10);
+      dig [6] = ':';
+      dig [7] = (char)('0' + (dt.sec / 10) % 10);
+      dig [8] = (char)('0' + dt.sec % 10);
+      dig [9] = ']';
+      dig [10] = 0;
 
       draw_text (35, 19, dig);
 

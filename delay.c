@@ -60,9 +60,12 @@ puts (const char *s)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  const char msg1[] = "Testing BDOS 141 (P_DELAY) with 60 ticks (1 sec)...\r\n";
-  const char msg2[] = "Tick!\r\n";
-  const char msg3[] = "Done.\r\n";
+  const char msg1 [] =
+    "Testing BDOS 141 (P_DELAY) with 60 ticks (1 sec)...\r\n";
+  const char msg2 [] =
+    "Tick!\r\n";
+  const char msg3 [] =
+    "Done.\r\n";
   int i;
 
   puts (msg1);

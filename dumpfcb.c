@@ -84,10 +84,10 @@ puts (const char *s)
 static void
 puthex2 (unsigned v)
 {
-  static const char h[] = "0123456789ABCDEF";
+  static const char h [] = "0123456789ABCDEF";
 
-  putch (h[(v >> 4) & 0xF]);
-  putch (h[v & 0xF]);
+  putch (h [(v >> 4) & 0xF]);
+  putch (h [v & 0xF]);
 }
 
 /*****************************************************************************/
@@ -95,7 +95,7 @@ puthex2 (unsigned v)
 static void
 putu (unsigned n)
 {
-  char b[8];
+  char b [8];
   int i = 0;
 
   if (!n)
@@ -107,13 +107,13 @@ putu (unsigned n)
 
   while (n && i < 8)
     {
-      b[i++] = (char)('0' + n % 10);
+      b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
 
   while (i)
     {
-      putch (b[--i]);
+      putch (b [--i]);
     }
 }
 
@@ -166,17 +166,17 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
   /* +0 drive */
   puts ("+00     drvcode   ");
-  puthex2 (f[0]);
+  puthex2 (f [0]);
   puts ("               ");
 
-  if (f[0] == 0)
+  if (f [0] == 0)
     {
       puts ("default drive");
     }
-  else if (f[0] >= 1 && f[0] <= 16)
+  else if (f [0] >= 1 && f [0] <= 16)
     {
       puts ("drive ");
-      putch ((char)('A' + f[0] - 1));
+      putch ((char)('A' + f [0] - 1));
       puts (":");
     }
   else
@@ -191,7 +191,7 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
   for (i = 1; i <= 8; i++)
     {
-      puthex2 (f[i]);
+      puthex2 (f [i]);
       putch (' ');
     }
 
@@ -199,26 +199,26 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
   for (i = 1; i <= 8; i++)
     {
-      c = (unsigned char)(f[i] & 0x7f);
+      c = (unsigned char)(f [i] & 0x7f);
       putch ((c >= 32 && c < 127) ? (char)c : '.');
     }
 
-  if (f[1] & 0x80)
+  if (f [1] & 0x80)
     {
       puts ("  f1'");
     }
 
-  if (f[2] & 0x80)
+  if (f [2] & 0x80)
     {
       puts (" f2'");
     }
 
-  if (f[3] & 0x80)
+  if (f [3] & 0x80)
     {
       puts (" f3'");
     }
 
-  if (f[4] & 0x80)
+  if (f [4] & 0x80)
     {
       puts (" f4'");
     }
@@ -230,7 +230,7 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
   for (i = 9; i <= 11; i++)
     {
-      puthex2 (f[i]);
+      puthex2 (f [i]);
       putch (' ');
     }
 
@@ -238,21 +238,21 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
   for (i = 9; i <= 11; i++)
     {
-      c = (unsigned char)(f[i] & 0x7f);
+      c = (unsigned char)(f [i] & 0x7f);
       putch ((c >= 32 && c < 127) ? (char)c : '.');
     }
 
-  if (f[9] & 0x80)
+  if (f [9] & 0x80)
     {
       puts ("  R/O");
     }
 
-  if (f[10] & 0x80)
+  if (f [10] & 0x80)
     {
       puts (" SYS");
     }
 
-  if (f[11] & 0x80)
+  if (f [11] & 0x80)
     {
       puts (" ARC");
     }
@@ -260,17 +260,17 @@ dump_fcb (const UBYTE *f, const char *title, int full)
   puts ("\r\n");
 
   puts ("+0C     extent    ");
-  puthex2 (f[12]);
+  puthex2 (f [12]);
   puts ("               ");
-  putu (f[12] & 0x1f);
+  putu (f [12] & 0x1f);
   puts (" (low 5 bits)\r\n");
 
   puts ("+0D     s1/LRBC   ");
-  puthex2 (f[13]);
+  puthex2 (f [13]);
   puts ("               ");
-  putu (f[13]);
+  putu (f [13]);
 
-  if (f[13] == 0)
+  if (f [13] == 0)
     {
       puts (" (full last rec / empty)");
     }
@@ -282,11 +282,11 @@ dump_fcb (const UBYTE *f, const char *title, int full)
   puts ("\r\n");
 
   puts ("+0E     s2        ");
-  puthex2 (f[14]);
+  puthex2 (f [14]);
   puts ("               module=");
-  putu (f[14] & 0x3f);
+  putu (f [14] & 0x3f);
 
-  if (f[14] & 0x80)
+  if (f [14] & 0x80)
     {
       puts ("  write-flag");
     }
@@ -294,9 +294,9 @@ dump_fcb (const UBYTE *f, const char *title, int full)
   puts ("\r\n");
 
   puts ("+0F     rcdcnt    ");
-  puthex2 (f[15]);
+  puthex2 (f [15]);
   puts ("               ");
-  putu (f[15]);
+  putu (f [15]);
   puts (" records in extent\r\n");
 
   if (!full)
@@ -312,7 +312,7 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
       for (i = 0; i < 16; i++)
         {
-          puthex2 (f[16 + i]);
+          puthex2 (f [16 + i]);
 
           if (i == 7)
             {
@@ -329,7 +329,7 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 
       for (i = 0; i < 8; i++)
         {
-          UWORD w = (UWORD)f[16 + i * 2] | ((UWORD)f[17 + i * 2] << 8);
+          UWORD w = (UWORD)f [16 + i * 2] | ((UWORD)f [17 + i * 2] << 8);
           puthex2 ((w >> 8) & 0xFF);
           puthex2 (w & 0xFF);
 
@@ -342,28 +342,28 @@ dump_fcb (const UBYTE *f, const char *title, int full)
       puts (" (LE)\r\n");
 
       puts ("+20     cur_rec   ");
-      puthex2 (f[32]);
+      puthex2 (f [32]);
       puts ("               ");
 
-      if (f[32] == 0xFF)
+      if (f [32] == 0xFF)
         {
           puts ("0xFF (LRBC request/result)");
         }
       else
         {
-          putu (f[32]);
+          putu (f [32]);
           puts (" (current record 0..127)");
         }
 
       puts ("\r\n");
 
-      ran = (ULONG)f[33] | ((ULONG)f[34] << 8) | ((ULONG)f[35] << 16);
+      ran = (ULONG)f [33] | ((ULONG)f [34] << 8) | ((ULONG)f [35] << 16);
       puts ("+21     ran0..2   ");
-      puthex2 (f[33]);
+      puthex2 (f [33]);
       putch (' ');
-      puthex2 (f[34]);
+      puthex2 (f [34]);
       putch (' ');
-      puthex2 (f[35]);
+      puthex2 (f [35]);
       puts ("          random=");
       putu ((unsigned)ran);
       puts ("\r\n");
@@ -372,15 +372,15 @@ dump_fcb (const UBYTE *f, const char *title, int full)
   /* human name line */
   puts ("\r\nAs filespec: ");
 
-  if (f[0] >= 1 && f[0] <= 16)
+  if (f [0] >= 1 && f [0] <= 16)
     {
-      putch ((char)('A' + f[0] - 1));
+      putch ((char)('A' + f [0] - 1));
       putch (':');
     }
 
   for (i = 1; i <= 8; i++)
     {
-      c = (unsigned char)(f[i] & 0x7f);
+      c = (unsigned char)(f [i] & 0x7f);
 
       if (c != ' ')
         {
@@ -388,13 +388,15 @@ dump_fcb (const UBYTE *f, const char *title, int full)
         }
     }
 
-  if ((f[9] & 0x7f) != ' ' || (f[10] & 0x7f) != ' ' || (f[11] & 0x7f) != ' ')
+  if ((f  [9] & 0x7f) != ' '
+   || (f [10] & 0x7f) != ' '
+   || (f [11] & 0x7f) != ' ')
     {
       putch ('.');
 
       for (i = 9; i <= 11; i++)
         {
-          c = (unsigned char)(f[i] & 0x7f);
+          c = (unsigned char)(f [i] & 0x7f);
 
           if (c != ' ')
             {
@@ -411,8 +413,8 @@ dump_fcb (const UBYTE *f, const char *title, int full)
 static int
 parse_help (void)
 {
-  unsigned tlen = CMD_TAIL[0], i;
-  char tail[128];
+  unsigned tlen = CMD_TAIL [0], i;
+  char tail [128];
 
   if (tlen > 126)
     {
@@ -421,21 +423,21 @@ parse_help (void)
 
   for (i = 0; i < tlen; i++)
     {
-      tail[i] = (char)CMD_TAIL[1 + i];
+      tail [i] = (char)CMD_TAIL [1 + i];
     }
 
-  tail[tlen] = 0;
+  tail [tlen] = 0;
   i = 0;
 
-  while (tail[i] == ' ' || tail[i] == '\t')
+  while (tail [i] == ' ' || tail [i] == '\t')
     {
       i++;
     }
-  if (tail[i] == '-' || tail[i] == '/')
+  if (tail [i] == '-' || tail [i] == '/')
     {
       i++;
 
-      if (toupper_ch ((unsigned char)tail[i]) == 'H')
+      if (toupper_ch ((unsigned char)tail [i]) == 'H')
         {
           return 1;
         }
@@ -449,7 +451,7 @@ parse_help (void)
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
-  UBYTE fcb[36];
+  UBYTE fcb [36];
   int i;
   UWORD r;
 
@@ -465,7 +467,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
    * dump base-page FCB1 (and FCB2 prefix)
    */
 
-  if (DEF_FCB[1] == ' ' || DEF_FCB[1] == 0)
+  if (DEF_FCB [1] == ' ' || DEF_FCB [1] == 0)
     {
       dump_fcb (DEF_FCB, "FCB1 at TPA+0x5C (first 16 bytes)", 0);
       dump_fcb (DEF_FCB + 0x10, "FCB2 at TPA+0x6C (first 16 bytes)", 0);
@@ -475,12 +477,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   for (i = 0; i < 36; i++)
     {
-      fcb[i] = DEF_FCB[i];
+      fcb [i] = DEF_FCB [i];
     }
 
-  fcb[12] = 0;
-  fcb[14] = 0;
-  fcb[32] = 0xFF; /* request LRBC on open */
+  fcb [12] = 0;
+  fcb [14] = 0;
+  fcb [32] = 0xFF; /* request LRBC on open */
 
   r = bdos (15, (LONG)(ULONG)fcb);
 
