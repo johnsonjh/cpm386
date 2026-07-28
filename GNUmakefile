@@ -13,6 +13,10 @@ export MAKE=$(shell printf '%s'\
 
 ################################################################################
 
+DATESTR=$(shell env TZ=UTC date +"built %Y-%m-%d %H:%M:%S UTC")
+
+################################################################################
+
 CSTD:=-std=gnu89
 
 ################################################################################
@@ -286,6 +290,7 @@ CFLAGS = \
 	$(W_NO_DEPRECATED_NON_PROTOTYPE) \
 	$(W_NO_RETURN_MISMATCH) \
 	$(W_NO_UNUSED_COMMAND_LINE_ARGUMENT) \
+	-DBUILDDATE='"$(DATESTR)"' \
 	-D__cpm386 \
 	-D__cpm386__ \
 	-Dcpm386 \
@@ -332,7 +337,8 @@ CFLAGS = \
 
 ################################################################################
 
-NASMFLAGS = -f elf32
+NASMFLAGS=-DBUILDDATE='"$(DATESTR)"' -f elf32
+NASMFLAGS2=-DBUILDDATE='"$(DATESTR)"'
 
 ################################################################################
 
@@ -433,7 +439,7 @@ CPMFS:=4mb-hd
 
 .PHONY: all
 
-all: $(TARGET) boot.bin os.bin floppy.img
+all: $(TARGET) stage1.bin stage2.bin os.bin floppy.img
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Build completed successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1164,10 +1170,18 @@ bss.inc: $(TARGET)
 
 ################################################################################
 
-boot.bin: boot.s bss.inc
+stage1.bin: stage1.s layout.inc
+	$(NASM) $(NASMFLAGS2) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+stage2.bin: stage2.s layout.inc bss.inc
 	$(NM) ./$(TARGET) 2>&1 | $(GREP) -q "no symbols" 2> /dev/null && { \
 		$(RM) -f ./$(TARGET) && "$${MAKE:-$(MAKE)}" $(TARGET); } || :
-	$(NASM) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
+	$(NASM) $(NASMFLAGS2) $(NASMDEBUG) -f bin -I. -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1195,8 +1209,8 @@ endif
 
 ################################################################################
 
-floppy.img: boot.bin os.bin
-	cat ./boot.bin ./os.bin > ./payload.bin
+floppy.img: stage1.bin stage2.bin os.bin
+	cat ./stage1.bin ./stage2.bin ./os.bin > ./payload.bin
 	$(PRINTF) '\x1a' >> ./payload.bin
 	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440"
 	$(DD) if="./payload.bin" of="$@" conv="notrunc"
@@ -1220,8 +1234,8 @@ floppy.img: boot.bin os.bin
 .PHONY: clean distclean
 
 clean distclean:
-	$(RM) -f ./*.o ./*.elf ./*.img ./*.inc /*.log ./*.bin ./*.386 ./testbdos \
-		./*.su ./*.ci ./$(MK386) ./$(SHOLE) ./$(TARGET)
+	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 \
+		./bss.inc ./testbdos ./*.su ./*.ci ./$(MK386) ./$(SHOLE) ./$(TARGET)
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Clean completed successfully."

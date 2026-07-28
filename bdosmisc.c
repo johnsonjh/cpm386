@@ -52,7 +52,7 @@
 /*****************************************************************************/
 
 /* serial # and copyright notice */
-char *copyrt = "CP/M-386 Version 0.1$";
+char *copyrt = "CP/M-386 Version 0.1 (" BUILDDATE ")$";
 char *copyr1 = "Copyright (c) 1982-1984 Digital Research, Inc.$";
 char *copyr2 = "Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>$";
 char *serial = "XXXX-0000-654321$";
