@@ -169,7 +169,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 * It is recommended to use **GCC** as **Clang**‑compiled i386 code is larger.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 * 32‑bit support libraries are required to run the test suite (`make test`).
-* <sup>‡</sup>At the time of writing, **FreeBSD** is shipping non-functional
+* <sup>‡</sup>At the time of writing, **FreeBSD** is shipping non‑functional
   `cpmtools2` packages with broken `mkfs.cpm` functionality.  To successfully
   build on **FreeBSD**, you *must* rebuild `cpmtools` and ensure it is **not**
   linked with `libdsk`.  If you receive a `Disc rejected by driver` error on
@@ -184,6 +184,8 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
   |-------------:|:---------------------------------------|
   | `cpm386.elf` | Multiboot kernel image                 |
   | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
+
+You can [download](#downloads) pre‑compiled binaries above.
 
 ## QEMU testing
 
@@ -329,13 +331,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>511</th>
-                <th>64</th>
+                <th>513</th>
+                <th>65</th>
                 <th>0</th>
-                <th>447</th>
+                <th>448</th>
                 <th>0</th>
-                <th>22485</th>
-                <th>396</th>
+                <th>22550</th>
+                <th>397</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -360,13 +362,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>82</th>
-                <th>29775</th>
-                <th>5547</th>
+                <th>29777</th>
+                <th>5548</th>
                 <th>4584</th>
-                <th>19644</th>
+                <th>19645</th>
                 <th>3981</th>
-                <th>760429</th>
-                <th>11283</th>
+                <th>760494</th>
+                <th>11284</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
