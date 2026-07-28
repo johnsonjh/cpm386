@@ -114,6 +114,7 @@ wait_next_second (UBYTE last_sec)
       if (key_ready ())
         {
           (void)bdos (BDOS_CONIN, 0);
+
           return 1;
         }
 
@@ -170,6 +171,7 @@ cls_vga (void)
       for (x = 0; x < g_cols; x++)
         {
           unsigned int off = (y * g_cols + x) * g_cell;
+
           vga_es_store16 (g_sel, (unsigned short)off,
                           (unsigned short)(' ' | (0x07 << 8)));
         }

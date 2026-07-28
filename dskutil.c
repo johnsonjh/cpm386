@@ -244,13 +244,17 @@ retry:      dirsec = i >> 2;
         if ( (*funcp)(fcbp, (GBL.dirbufp) + (i&3), (WORD)i) )
                         /* call function with parms of (1) fcb ptr,
                            (2) pointer to directory entry, and
-                           (3) directory index                  */
+                           (3) directory index */
         {
-            if (parms & full) rtn = 0;  /* found a match, but keep going */
-            else return(i & 3);         /* return directory code        */
+            if (parms & full)
+              rtn = 0;  /* found a match, but keep going */
+            else
+              return(i & 3); /* return directory code */
         }
+
         i += 1;
     }
+
     return(rtn);
 }
 
@@ -326,6 +330,7 @@ REG UWORD leftblk;
             if (chkaloc(--leftblk))
             {
                 blk = leftblk;
+
                 break;
             }
 
@@ -333,6 +338,7 @@ REG UWORD leftblk;
             if (chkaloc(++rtblk))
             {
                 blk = rtblk;
+
                 break;
             }
     }

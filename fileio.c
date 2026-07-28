@@ -120,12 +120,18 @@ REG UBYTE dsknum;               /* disk number to select */
     {                           /* if not last used disk or not logged on */
         selpkt.iofcn = sel_info;
         GBL.curdsk = (selpkt.devnum = dsknum);
-        if (UBWORD(dsknum) > 15) error(2);
+
+        if (UBWORD(dsknum) > 15)
+          error(2);
+
         selpkt.ioflags = logflag ^ 1;
+
         do
         {
             do_phio(&selpkt);   /* actually do the disk select  */
-            if ( (void *)(GBL.dphp = selpkt.infop) != NULL ) break;
+
+            if ( (void *)(GBL.dphp = selpkt.infop) != NULL )
+              break;
         } while ( ! error(3) );
 
         GBL.dirbufp = (void *)((GBL.dphp)->dbufp);
@@ -136,12 +142,16 @@ REG UBYTE dsknum;               /* disk number to select */
     {           /* if disk not previously logged on, do it now */
         LOCK    /* must lock the file system while messing with alloc vec */
         i = (GBL.parmp)->dsm;
+
         do clraloc(i); while (i--);     /* clear the allocation vector */
+
         i = udiv( (LONG)(((GBL.parmp)->drm) + 1),
                   4 * (((GBL.parmp)->blm) + 1), &j);
                                         /* calculate nmbr of directory blks */
         if (j) i++;                     /* round up */
+
         do setaloc(--i); while (i);     /* alloc directory blocks */
+
         dirscan(alloc, NULL, 0x0e);     /* do directory scan & alloc blocks */
         log_dsk |= 1 << dsknum;         /* mark disk as logged in       */
     }
@@ -178,21 +188,28 @@ BOOLEAN  chk_ext;
     BSETUP
 
     i = 12;
+
     do
     {
         temp = (*p1 ^ '?');
+
         if ( ((*p1++ ^ *p2++) & 0x7f) && temp )
             return(FALSE);
+
         i -= 1;
     } while (i);
+
     if (chk_ext)
     {
         if ( (*p1 != '?') && ((*p1 ^ *p2) & ~((GBL.parmp)->exm)) )
             return(FALSE);
+
         p1 += 2;
         p2 += 2;
+
         if ((*p1 ^ *p2) & 0x3f) return(FALSE);
     }
+
     return(TRUE);
 }
 
@@ -232,6 +249,7 @@ WORD    dirindx;
             fcbp->cur_rec = fcbp->s1; /* provisional; fixed by file_last_lrbc */
         crit_dsk |= 1 << (GBL.curdsk);
     }
+
    return(rtn);
 }
 
@@ -255,6 +273,7 @@ WORD dirindx;
     (void)dirindx;
     if (UBWORD(d->entry) >= 0x10)
         return(FALSE);
+
     if (!match(fcbp, dirp, FALSE))
         return(FALSE); /* name only; all extents */
 
@@ -272,6 +291,7 @@ WORD dirindx;
     }
 
     (void)f;
+
     return(FALSE); /* never stop - need every extent */
 }
 
@@ -309,8 +329,11 @@ UWORD flushit()
     struct iopb flushpkt;       /* I/O packet for flush buffers call */
 
     flushpkt.iofcn = flush;
+
     while ( (rtn = do_phio(&flushpkt)) )
-        if ( error(1) ) break;
+        if ( error(1) )
+          break;
+
     return(rtn);
 }
 
@@ -396,14 +419,17 @@ WORD    dirindx;                /* index into directory */
         dirp->ftype [arbit] &= 0x7f;            /* clear archive bit    */
         dir_wr(dirindx >> 2);
         UNLOCK
+
         return(TRUE);
 
 badmerge:
         UNLOCK
         ro_dsk |= (1 << GBL.curdsk);
+
         return(FALSE);
     }
-    else return(FALSE);
+    else
+      return(FALSE);
 }
 
 
@@ -416,7 +442,9 @@ UWORD close_fi(fcbp)
 struct fcb *fcbp;               /* pointer to fcb for file to close */
 {
     flushit();                          /* first, flush the buffers     */
-    if ((fcbp->s2) & 0x80) return(0);   /* if file write flag not on,
+
+    if ((fcbp->s2) & 0x80)
+      return(0);                        /* if file write flag not on,
                                            don't need to do physical close */
     return( dirscan(close, fcbp, 0));   /* call dirscan with close function */
 }
@@ -468,7 +496,9 @@ UBYTE   *p;                     /* pointer to pass through to tmp_sel   */
         fcbp->s2 = 0;
         rtn = dirscan(matchit, fcbp, dsparm);
     }
+
     move( GBL.dirbufp, GBL.dmaadr, SECLEN);
+
     return(rtn);
 }
 
@@ -502,6 +532,7 @@ REG WORD dirindx;               /* index into directory         */
             (GBL.dphp)->hiwater = dirindx;
         crit_dsk |= 1 << (GBL.curdsk);
     }
+
     return(rtn);
 }
 
@@ -543,6 +574,7 @@ REG WORD dirindx;               /* index into directory         */
         }
         UNLOCK
     }
+
     return(rtn);
 }
 
@@ -578,6 +610,7 @@ REG WORD dirindx;               /* index into directory         */
         } while (i);
         dir_wr(dirindx >> 2);
     }
+
     return(rtn);
 }
 
@@ -608,6 +641,7 @@ REG WORD dirindx;               /* index into directory         */
             dirp->s1 = fcbp->cur_rec;
         dir_wr(dirindx >> 2);
     }
+
     return(rtn);
 }
 
@@ -682,6 +716,7 @@ WORD dirindx;                   /* index into directory         */
         nrecs = (LONG)UBWORD(dirp->rcdcnt) + extsize(dirp);
         pack_ranrec(fcbp, nrecs);
     }
+
     return(rtn);
 }
 
@@ -759,13 +794,17 @@ LONG group_base;
 
         if ((GBL.parmp)->dsm < 256) {
             blk = UBWORD(dirp->dskmap.small [i]);
+
             if (blk)
                 clraloc(blk);
+
             dirp->dskmap.small [i] = 0;
         } else {
             blk = (UWORD)swap(dirp->dskmap.big [i]);
+
             if (blk)
                 clraloc(blk);
+
             dirp->dskmap.big [i] = 0;
         }
     }
@@ -779,6 +818,7 @@ REG struct dirent *dirp;
     BSETUP
 
     first_ex = (UBYTE)(dirp->extent & ~((GBL.parmp)->exm) & 0x1f);
+
     return ((LONG)(dirp->s2 & 0x3f) << 12) | ((LONG)first_ex << 7);
 }
 
@@ -877,6 +917,7 @@ REG struct fcb *fcbp;
 
     if (want > cur)
         return(255); /* cannot extend */
+
     if (want == cur)
         return(0);   /* no-op success */
 
@@ -889,6 +930,7 @@ REG struct fcb *fcbp;
 
     if (!trunc_found)
         return(255);
+
     crit_dsk |= 1 << (GBL.curdsk);
 
     return(trunc_code);
@@ -944,6 +986,7 @@ static int parse_is_end(int c)
     case ';': case '=': case '>': case '<':
     case ',': case '[': case ']': case '/': case '|':
         return 1;
+
     default:
         return 0;
     }
@@ -953,15 +996,20 @@ static int parse_is_name_char(int c)
 {
     if (c == '?' || c == '*')
         return 1;
+
     if (c >= '0' && c <= '9')
         return 1;
+
     if (c >= 'A' && c <= 'Z')
         return 1;
+
     if (c >= 'a' && c <= 'z')
         return 1;
+
     /* common extras allowed in some parsers */
     if (c == '-' || c == '_' || c == '!')
         return 1;
+
     return 0;
 }
 
@@ -969,6 +1017,7 @@ static UBYTE parse_up(int c)
 {
     if (c >= 'a' && c <= 'z')
         return (UBYTE)(c - 32);
+
     return (UBYTE)c;
 }
 
@@ -1002,8 +1051,10 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
     /* Optional drive d: */
     if (p [0] && p [1] == ':') {
         UBYTE d = parse_up(p [0]);
+
         if (d < 'A' || d > 'P')
             return 0xFFFF;
+
         fcb [0] = (UBYTE)(d - 'A' + 1);
         p += 2;
     }
@@ -1014,42 +1065,55 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
             while (i < 8)
                 fcb [1 + i++] = '?';
             p++;
+
             break;
         }
+
         if (*p == '.' || *p == ':' || parse_is_end(*p))
             break;
+
         if (!parse_is_name_char(*p))
             return 0xFFFF;
+
         fcb [1 + i++] = parse_up(*p++);
     }
     /* skip excess name chars before type/end */
     while (*p && *p != '.' && *p != ';' && *p != ':' && !parse_is_end(*p)) {
         if (!parse_is_name_char(*p) && *p != '*')
             return 0xFFFF;
+
         p++;
     }
 
     /* Type (.typ) */
     if (*p == '.') {
         p++;
+
         for (i = 0; i < 3; ) {
             if (*p == '*') {
                 while (i < 3)
                     fcb [9 + i++] = '?';
                 p++;
+
                 break;
             }
+
             if (*p == '.' || *p == ';' || *p == ':' || parse_is_end(*p))
                 break;
+
             if (!parse_is_name_char(*p))
                 return 0xFFFF;
+
             fcb [9 + i++] = parse_up(*p++);
         }
+
         while (*p && *p != ';' && *p != ':' && !parse_is_end(*p)) {
             if (*p == '.')
                 break;
+
             if (!parse_is_name_char(*p) && *p != '*')
                 return 0xFFFF;
+
             p++;
         }
     }
@@ -1058,17 +1122,21 @@ UWORD f_parse_fn(const UBYTE *src, UBYTE *fcb)
     if (*p == ';') {
         p++;
         plen = 0;
+
         while (plen < 8 && *p && !parse_is_end(*p) && *p != ';' && *p != ':' && *p != '.') {
             fcb [0x10 + plen] = parse_up(*p++);
             plen++;
         }
+
         fcb [0x1A] = (UBYTE)plen;
+
         while (*p && !parse_is_end(*p) && *p != ':' && *p != '.')
             p++;
     }
 
     if (*p == '\0' || *p == '\r')
         return 0;
+
     /* Offset of next character from start of string (fits classic HL return) */
     return (UWORD)(p - src);
 }

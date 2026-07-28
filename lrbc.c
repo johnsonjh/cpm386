@@ -85,6 +85,7 @@ putu (ULONG n)
   if (n == 0)
     {
       putch ('0');
+
       return;
     }
 

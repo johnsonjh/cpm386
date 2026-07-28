@@ -219,6 +219,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           if (p1 [i] != 0)
             {
               failed = 1;
+
               break;
             }
         }
@@ -228,6 +229,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           if (p2 [i] != 0)
             {
               failed = 1;
+
               break;
             }
         }

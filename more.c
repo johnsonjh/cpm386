@@ -97,11 +97,13 @@ getch_wait (void)
   while (bdos (11, 0))
     {
       int d = (int)bdos (6, 0xFF) & 0xff;
+
       if (d != '\r' && d != '\n' && d != 0)
         {
           break;
         }
     }
+
   return c & 0xff;
 }
 

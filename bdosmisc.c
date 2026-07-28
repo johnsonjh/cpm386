@@ -283,6 +283,7 @@ WORD dirindx;
         case 'C':
           fcbp->ftype [robit] &= 0x7f;
           dirscan (set_attr, fcbp, 2);
+
           return (dir_rd (dirindx >> 2));
 
         } /* Reset the directory buffer !!!! */
@@ -316,6 +317,7 @@ UWORD error (errnum)
 
     case 2:
       abrt_err ("select$"); /* does not return */
+
       break;
 
     case 3:
@@ -353,6 +355,7 @@ UWORD setexc (epbp)
 
   if (i == 32 || i == 33)
     return (-1);
+
   if ((30 <= i) && (i <= 37))
     i -= 20;
   else if ((i < 0) || (i > 9))
@@ -487,6 +490,7 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
 
   if (sz == 0 || load > tpa_len || sz > tpa_len - load)
     return 0xFFFD;
+
   if (ent < load || ent >= load + sz)
     return 0xFFFC;
 

@@ -87,6 +87,7 @@ putu (unsigned n)
   if (!n)
     {
       putch ('0');
+
       return;
     }
 

@@ -143,6 +143,7 @@ pmode_vga_selector (void)
 #if CPM386_HAS_VGA_TEXT
   if (!pmode_ready)
     return 0;
+
   return (unsigned short)SEL_UVIDEO_RPL3;
 #else
   return 0;
@@ -494,6 +495,7 @@ fault_handler_c (struct fault_frame *f)
     }
 
   fault_puts ("Kernel fault - system halted.\r\n");
+
   return 0;
 }
 
@@ -569,6 +571,7 @@ bdos_syscall_c (WORD func, unsigned long info, unsigned long user_cs)
   if (func == 0 && (user_cs & 3) == 3)
     {
       return_to_kernel ();
+
       /* not reached */
       return 0;
     }

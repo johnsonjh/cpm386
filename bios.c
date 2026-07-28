@@ -39,7 +39,9 @@ static inline void outb(uint16_t port, uint8_t val) {
 
 static inline uint8_t inb(uint16_t port) {
   uint8_t ret;
+
   __asm__ volatile ("inb %1, %0" : "=a"(ret) : "Nd"(port));
+
   return ret;
 }
 
@@ -103,6 +105,7 @@ static void com_init(void) {
 static int com_stat(void) {
   if (!com_present)
     return 0;
+
   return (inb(COM1_PORT + 5) & 0x01) ? 0x00FF : 0x0000;
 }
 
@@ -131,8 +134,10 @@ static unsigned char com_in(void) {
 
   if (!com_present)
     return 0;
+
   while ((inb(COM1_PORT + 5) & 0x01) == 0 && ++spins < 1000000)
     ;
+
   return inb(COM1_PORT);
 }
 
@@ -321,6 +326,7 @@ static unsigned char kbd_scancode_to_ascii(void)
     return 0;
 
   ch = kbd_shift ? kbd_map_shift [sc] : kbd_map [sc];
+
   if (!ch)
     return 0;
 
@@ -330,12 +336,16 @@ static unsigned char kbd_scancode_to_ascii(void)
 
     if (u >= 'a' && u <= 'z')
       u = (unsigned char)(u - 'a' + 'A');
+
     if (u >= 'A' && u <= 'Z')
       return (unsigned char)(u - '@'); /* A->1 ... Z->0x1A */
+
     if (u == ' ')
       return 0; /* Ctrl-Space: ignore */
+
     if (u == '[')
       return 0x1b; /* often ESC */
+
     return 0;
   }
 
@@ -468,8 +478,10 @@ static void com_out_raw(unsigned char c)
 
   if (!com_present)
     return;
+
   while ((inb(COM1_PORT + 5) & 0x20) == 0 && ++spins < 1000000)
     ;
+
   outb(COM1_PORT, c);
 }
 
@@ -538,9 +550,20 @@ unsigned short bios_con_ser_ctl(unsigned short info)
   return (unsigned short)(con_ser_en ? 1 : 0);
 }
 
-void bios_list(unsigned char c) { (void)c; }
-void bios_punch(unsigned char c) { (void)c; }
-unsigned char bios_reader(void) { return 0x1A; } /* ^Z eof */
+void bios_list(unsigned char c)
+{
+  (void)c;
+}
+
+void bios_punch(unsigned char c)
+{
+  (void)c;
+}
+
+unsigned char bios_reader(void)
+{
+  return 0x1A;
+} /* ^Z eof */
 
 #if 0
 void bios_home(void) { /* no-op for ram */ }
@@ -642,7 +665,9 @@ unsigned short int bios_listst(void)
 
 unsigned short int bios_sectran(unsigned short int sec, void *table)
 {
-  (void)table; return sec; /* no xlt */
+  (void)table;
+
+  return sec; /* no xlt */
 }
 
 /*
@@ -740,12 +765,28 @@ void *bios_getmrt(void) {
   return &mrt;
 }
 
-unsigned short int bios_getiobyte(void) { return 0; }
-void bios_setiobyte(unsigned short int v) { (void)v; }
+unsigned short int bios_getiobyte(void)
+{
+  return 0;
+}
 
-unsigned short int bios_flush(void) { return 0; }
+void bios_setiobyte(unsigned short int v)
+{
+  (void)v;
+}
 
-void *bios_setexc(unsigned short int vec, void *h) { (void)vec; (void)h; return 0; }
+unsigned short int bios_flush(void)
+{
+  return 0;
+}
+
+void *bios_setexc(unsigned short int vec, void *h)
+{
+  (void)vec;
+  (void)h;
+
+  return 0;
+}
 
 /* --- glue / init / bdos wrapper for CCP --- */
 
@@ -760,6 +801,7 @@ UWORD bdos(WORD func, LONG info) {
 
   extern UWORD _bdos(WORD func, UWORD info, UBYTE *infop);
   unsigned long pval = (unsigned long) info;
+
   return _bdos(func, (UWORD)pval, (UBYTE *)pval);
 }
 #endif
@@ -884,22 +926,39 @@ WORD swap(WORD victim) {
   static int swaptype = -1;
   static unsigned short testpattern = 0x0102;
   unsigned short temp;
-  if (swaptype < 0) {
-    if (*(char *)&testpattern == 0x01) swaptype = 1; else swaptype = 0;
-  }
-  if (swaptype == 0) return victim;
+
+  if (swaptype < 0)
+    {
+     if (*(char *)&testpattern == 0x01) swaptype = 1; else swaptype = 0;
+    }
+
+  if (swaptype == 0)
+    return victim;
+
   temp = ((victim & 0xff) << 8) | ((victim & 0xff00) >> 8);
+
   return (WORD)temp;
 }
 
 UWORD udiv(LONG dividend, UWORD divisor, UWORD *remainder) {
-  if (divisor == 0) { *remainder = 0; return 0; }
+  if (divisor == 0)
+    {
+      *remainder = 0;
+      return 0;
+    }
+
   *remainder = (UWORD)(dividend % (LONG)divisor);
+
   return (UWORD)(dividend / (LONG)divisor);
 }
 
 #if 0
-UWORD load68k(BYTE *info) { (void)info; return 3; /* load error */ }
+UWORD load68k(BYTE *info)
+{
+  (void)info;
+
+  return 3; /* load error */
+}
 #endif
 
 /*
@@ -1070,9 +1129,15 @@ UWORD pgm_go(void)
   return pgm_enter(g_go_entry_off);
 }
 
-UBYTE *traphndl(void) { return (UBYTE *)0; }
+UBYTE *traphndl(void)
+{
+  return (UBYTE *)0;
+}
 
-void initexc(UBYTE **vecs) { (void)vecs; }  /* no 68k exceptions here! */
+void initexc(UBYTE **vecs)
+{
+  (void)vecs;
+}  /* no 68k exceptions here! */
 
 /*
  * Local Variables:

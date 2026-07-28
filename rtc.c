@@ -40,6 +40,7 @@ inb (uint16_t port)
   uint8_t r;
 
   __asm__ volatile ("inb %1, %0" : "=a"(r) : "Nd"(port));
+
   return r;
 }
 
@@ -55,6 +56,7 @@ static uint8_t
 cmos_read (uint8_t reg)
 {
   outb (CMOS_ADDR, (uint8_t)(reg & 0x7f));
+
   return inb (CMOS_DATA);
 }
 

@@ -169,7 +169,8 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
     {
     case 0:
       warmboot (0); /* warm boot function */
-      break;        /* does not return */
+
+      break; /* does not return */
 
     case 1:
       return (UWORD)conin (); /* console input function */
@@ -178,6 +179,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 2:
       tabout ((UBYTE)info); /* console output with */
+
       break;                /*    tab expansion    */
 
     case 3:
@@ -187,10 +189,12 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 4:
       bpun ((UBYTE)info); /* punch output to bios */
+
       break;
 
     case 5:
       blstout ((UBYTE)info); /* list output from bios */
+
       break;
 
     case 6:
@@ -205,14 +209,17 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 8:
       bsetiob (info); /* set i/o byte function */
+
       break;
 
     case 9:
       prt_line (infop); /* print line function */
+
       break;
 
     case 10:
       readline (infop); /* read buffered con input */
+
       break;
 
     case 11:
@@ -231,11 +238,13 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       crit_dsk = 0;
       GBL.curdsk = 0xff;
       GBL.dfltdsk = 0;
+
       break;
 
     case 14:
       seldsk ((UBYTE)info); /* select disk */
       GBL.dfltdsk = (UBYTE)info;
+
       break;
 
     case 15:
@@ -263,32 +272,38 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
     case 16:
       tmp_sel (&temp); /* close file */
       rtnval = close_fi (infop);
+
       break;
 
     case 17:
       GBL.srchp = (void *)infop; /* search first */
       rtnval = search ((UBYTE *)infop, 0, (UBYTE *)&temp);
+
       break;
 
     case 18:
       infop = (void *)GBL.srchp; /* search next */
       temp.fptr = (void *)infop;
       rtnval = search ((UBYTE *)infop, 1, (UBYTE *)&temp);
+
       break;
 
     case 19:
       tmp_sel (&temp); /* delete file */
       rtnval = dirscan (delete, (UBYTE *)infop, 2);
+
       break;
 
     case 20:
       tmp_sel (&temp); /* read sequential */
       rtnval = bdosrw (infop, TRUE, 0);
+
       break;
 
     case 21:
       tmp_sel (&temp); /* write sequential */
       rtnval = bdosrw (infop, FALSE, 0);
+
       break;
 
     case 22:
@@ -299,11 +314,13 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       ((struct fcb *)infop)->rcdcnt = 0;
       /* Zero extent, S1, S2, rcrdcnt. create zeros rest */
       rtnval = dirscan (create, (UBYTE *)infop, 8);
+
       break;
 
     case 23:
       tmp_sel (&temp); /* rename file */
       rtnval = dirscan (rename, (UBYTE *)infop, 2);
+
       break;
 
     case 24:
@@ -318,12 +335,14 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 26:
       GBL.dmaadr = infop; /* set dma address */
+
       break;
 
       /* No function 27 -- Get Allocation Vector */
 
     case 28:
       ro_dsk |= 1 << GBL.dfltdsk; /* set disk read-only */
+
       break;
 
     case 29:
@@ -334,6 +353,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
     case 30:
       tmp_sel (&temp); /* set file attributes */
       rtnval = dirscan (set_attr, (UBYTE *)infop, 2);
+
       break;
 
     case 31:
@@ -343,6 +363,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         }
 
       move ((UBYTE *)(GBL.parmp), (UBYTE *)infop, sizeof *(GBL.parmp));
+
       break; /* return disk parameters */
 
     case 32:
@@ -358,21 +379,25 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
     case 33:
       tmp_sel (&temp); /* random read */
       rtnval = bdosrw (infop, TRUE, 1);
+
       break;
 
     case 34:
       tmp_sel (&temp); /* random write */
       rtnval = bdosrw (infop, FALSE, 1);
+
       break;
 
     case 35:
       tmp_sel (&temp); /* get file size */
       getsize (infop);
+
       break;
 
     case 36:
       tmp_sel (&temp); /* set random record */
       setran (infop);
+
       break;
 
     /*
@@ -387,6 +412,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       ro_dsk &= info;
       crit_dsk &= info;
       rtnval = 0;
+
       break;
 
     /*
@@ -397,16 +423,19 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
     case 40:
       tmp_sel (&temp);
       rtnval = bdosrw (infop, FALSE, 2);
+
       break;
 
     case 46:
       free_sp (info); /* get disk free space */
+
       break;
 
     case 47:
       chainp = GBL.dmaadr; /*sw chain to program */
       warmboot (0);        /* terminate calling program */
-      break;               /* does not return */
+
+      break; /* does not return */
 
     case 48:
       /*
@@ -429,6 +458,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 63:
       set_tpa (infop); /* get/set TPA limits */
+
       break;
 
     /*
@@ -439,6 +469,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 98:
       rtnval = 0;
+
       break;
 
     /*
@@ -449,6 +480,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
     case 99:
       tmp_sel (&temp);
       rtnval = truncate_fi (infop);
+
       break;
 
     /*
@@ -496,11 +528,13 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
         rtnval = f_parse_fn (ascii, fcbp);
       }
+
       break;
 
     /* BDOS 163 (S_OSVER): user-visible product version (not BDOS 12). */
     case 163:
       rtnval = (UWORD)OSVER_CPM386;
+
       break;
 
     /*
@@ -515,6 +549,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         extern int rtc_set (void *);
         rtnval = (UWORD)rtc_set (infop);
       }
+
       break;
 
     case 200: /* P2DOS get time */
@@ -523,6 +558,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         extern int rtc_get (void *);
         rtnval = (UWORD)rtc_get (infop);
       }
+
       break;
 
     /* BDOS 107 (S_SERIAL) - Get serial number. DE -> 6-byte buffer. */
@@ -587,6 +623,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         extern int rtc_get_bcd (void *);
         rtnval = (UWORD)rtc_get_bcd (infop);
       }
+
       break;
 
     /*
@@ -620,6 +657,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         extern void bios_system_reboot (int);
         bios_system_reboot ((int)(info & 1));
       }
+
       break;
 
     /*
@@ -633,6 +671,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         bios_con_clear ();
         GBL.column = 0;
       }
+
       break;
 
     /*
@@ -646,6 +685,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         extern unsigned short bios_con_vga_ctl (unsigned short);
         rtnval = bios_con_vga_ctl (info);
       }
+
       break;
 
     /* BDOS 223: serial console on/off/query (same ABI as 222). */
@@ -654,6 +694,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         extern unsigned short bios_con_ser_ctl (unsigned short);
         rtnval = bios_con_ser_ctl (info);
       }
+
       break;
 
     /*
@@ -681,7 +722,9 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
                 vp->map_size = 0;
                 vp->phys_base = 0;
               }
+
             rtnval = 0xFFFF;
+
             break;
           }
 
@@ -699,6 +742,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         vp->phys_base = (ULONG)pmode_vga_phys_base ();
         rtnval = sel;
       }
+
       break;
 
     /*
@@ -755,6 +799,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
         if (!tp)
           {
             rtnval = 0xFFFF;
+
             break;
           }
 
@@ -805,6 +850,7 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
     case 227:
       rtnval = (UWORD)(RAMDISK_SIZE / 1024);
+
       break;
 
     default:

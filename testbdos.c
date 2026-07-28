@@ -36,6 +36,7 @@ bdos (WORD func, LONG info)
 {
   extern UWORD _bdos (WORD func, UWORD info, UBYTE * infop);
   unsigned long pval = (unsigned long)info;
+
   return _bdos (func, (UWORD)pval, (UBYTE *)pval);
 }
 
@@ -352,6 +353,7 @@ bios_setexc (unsigned short v, void *h)
 {
   (void)v;
   (void)h;
+
   return 0;
 }
 
@@ -409,6 +411,7 @@ udiv (LONG dividend, UWORD divisor, UWORD *remainder)
   if (divisor == 0)
     {
       *remainder = 0;
+
       return 0;
     }
 
@@ -444,6 +447,7 @@ pgmld (UBYTE *i, UBYTE *d)
 {
   (void)i;
   (void)d;
+
   return 0xffff;
 }
 
@@ -472,6 +476,7 @@ int
 rtc_get (void *p)
 {
   (void)p;
+
   return 1;
 }
 
@@ -481,6 +486,7 @@ int
 rtc_get_bcd (void *p)
 {
   (void)p;
+
   return 1;
 }
 
@@ -490,6 +496,7 @@ int
 rtc_set (void *p)
 {
   (void)p;
+
   return 1;
 }
 
@@ -1361,6 +1368,7 @@ main (void)
             if (tpa[0x100 + i] != exp)
               {
                 bad = i + 1;
+
                 break;
               }
           }

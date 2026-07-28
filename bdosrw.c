@@ -189,6 +189,7 @@ WORD ran;             /* random I/O flag */
     if (!((ext ^ (fcbp->extent)) & ~((GBL.parmp)->exm) & 0x1f))
       { /* we're in same logical extent */
         fcbp->extent = ext;
+
         return (0);
       }
 
@@ -209,6 +210,7 @@ WORD ran;             /* random I/O flag */
         { /* reading unwritten extent */
           fcbp->s2 = t_mod;
           fcbp->extent = t_ext;
+
           return (4);
         }
 
@@ -242,6 +244,7 @@ REG struct fcb *fcbp;
     {
       if (*--p)
         break;
+
       i -= 1;
     }
   while (i);
@@ -313,6 +316,7 @@ WORD random;          /* 0 = sequential, 1 = random (normal),     */
     {
       if ((rtn = new_ext (fcbp, reading, TRUE)))
         return (rtn);
+
       /* open new extent if necessary, return if error */
       fcbp->cur_rec = (fcbp->ran2) & 0x7f;
     }
@@ -320,7 +324,8 @@ WORD random;          /* 0 = sequential, 1 = random (normal),     */
     if (fcbp->cur_rec == (UBYTE)128)
       { /* time to try next extent */
         if (new_ext (fcbp, reading, FALSE))
-          return (1);      /* if can't open new extent, error */
+          return (1); /* if can't open new extent, error */
+
         fcbp->cur_rec = 0; /* opened new extent, zero cur_rec */
       }
 

@@ -162,7 +162,7 @@ struct cpm_vga_text
  * High-resolution tick block (BDOS 225/226; DE -> this, TPA-relative).
  * BDOS 225 (GET_TICKS): fills lo/hi/hz; returns 0, or 0xFFFF if DE bad.
  * BDOS 226 (SLEEP_UNTIL): waits until absolute tick >= (hi:lo); hz ignored;
- *   returns 0, or 0xFFFF if DE bad.  Rate is PIT_HZ (1_193_182 Hz).
+ * returns 0, or 0xFFFF if DE bad.  Rate is PIT_HZ (1_193_182 Hz).
  */
 
 struct cpm_ticks
