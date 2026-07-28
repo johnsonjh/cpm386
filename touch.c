@@ -181,6 +181,15 @@ touch_one (const char *name)
 
 /*****************************************************************************/
 
+static void
+usage (void)
+{
+  puts ("Usage: TOUCH [-h] filename [filename ...]\r\n");
+  puts ("  -h  help\r\n");
+}
+
+/*****************************************************************************/
+
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
@@ -230,7 +239,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                 }
               else
                 {
-                  opt_h = 1;
+                  puts ("ERROR: Invalid option '");
+                  putch (c);
+                  puts ("'\r\n");
+                  usage ();
+
+                  bdos (0, 0);
                 }
             }
         }
@@ -317,8 +331,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
             }
         }
 
-      puts ("Usage: TOUCH [-h] filename [filename ...]\r\n");
-      puts ("  -h  help\r\n");
+      usage ();
     }
 
   bdos (0, 0);
