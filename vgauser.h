@@ -38,6 +38,10 @@ static inline void
 /*cppcheck-suppress unusedFunction*/
 vga_es_store16 (unsigned short sel, unsigned off, unsigned short cell)
 {
+  (void)sel;
+  (void)off;
+  (void)cell;
+
   __asm__ volatile ("movw %0, %%es\n\t"
                     "movw %2, %%es:(%1)\n\t"
                     :
@@ -52,7 +56,10 @@ static inline unsigned short
 /*cppcheck-suppress unusedFunction*/
 vga_es_load16 (unsigned short sel, unsigned off)
 {
-  unsigned short cell;
+  unsigned short cell = 0;
+
+  (void)sel;
+  (void)off;
 
   __asm__ volatile ("movw %1, %%es\n\t"
                     "movw %%es:(%2), %0\n\t"
