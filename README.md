@@ -48,7 +48,7 @@
 
 ## Hardware support
 
-* Compatible with 386 (and later systems) with 1MB (or more) memory.
+* Compatible with 386 (and later systems) with 2MB (or more) memory.
 * Systems using either PC BIOS or UEFI (with CSM) are supported.
 * VGA, 8042 PS/2, 8250/16450/16550 UART, CMOS RTC, and 8253/8254 PIT
   are supported.
