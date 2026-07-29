@@ -100,6 +100,7 @@ bdos_irq:
     mov     es, ax
     mov     fs, ax
     mov     gs, ax
+    cld
 
     mov     eax, [esp + 24]     ; user EAX (func)
     mov     edx, [esp + 12]     ; user EDX (info)
@@ -207,6 +208,7 @@ exc_common:
     mov     es, ax
     mov     fs, ax
     mov     gs, ax
+    cld
 
     push    esp                 ; &fault_frame
     call    fault_handler_c

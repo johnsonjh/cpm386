@@ -90,10 +90,12 @@ stage2_entry:
     mov ax, 0x2401
     int 0x15
     in al, 0x92
+    test al, 2
+    jnz .a20_on
     or al, 2
     and al, 0xfe
     out 0x92, al
-
+.a20_on:
     cli
     cld
     lgdt [gdt_desc]
