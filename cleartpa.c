@@ -118,7 +118,6 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   struct tpa_req t;
   ULONG esp;
   ULONG i;
-  /* ULONG start_addr, end_addr; */
   int verify = 0;
   const char *tail = (char *)CMD_TAIL;
   int tail_len = tail [0];
@@ -190,57 +189,128 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   ULONG total_k
       = ((end_addr1 - start_addr1) + (end_addr2 - start_addr2)) / 1024;
 
-  puts ("Clearing: ");
-  putu (total_k);
-  puts ("K\r\n");
+  ULONG cleared_bytes = 0;
+  ULONG chunk;
 
   volatile ULONG *p1 = (volatile ULONG *)start_addr1;
   ULONG count1 = (end_addr1 - start_addr1) / 4;
-  for (i = 0; i < count1; i++)
+  ULONG rem1 = count1;
+
+  puts ("Clearing: 0K");
+
+  while (rem1 > 0)
     {
-      p1 [i] = 0;
+      chunk = rem1 > 25600 ? 25600 : rem1;
+
+      for (i = 0; i < chunk; i++)
+        {
+          *p1++ = 0;
+        }
+
+      rem1 -= chunk;
+      cleared_bytes += chunk * 4;
+
+      puts ("\rClearing: ");
+      putu (cleared_bytes / 1024);
+      puts ("K");
     }
 
   volatile ULONG *p2 = (volatile ULONG *)start_addr2;
   ULONG count2 = (end_addr2 - start_addr2) / 4;
-  for (i = 0; i < count2; i++)
+  ULONG rem2 = count2;
+
+  while (rem2 > 0)
     {
-      p2 [i] = 0;
+      chunk = rem2 > 25600 ? 25600 : rem2;
+
+      for (i = 0; i < chunk; i++)
+        {
+          *p2++ = 0;
+        }
+
+      rem2 -= chunk;
+      cleared_bytes += chunk * 4;
+
+      puts ("\rClearing: ");
+      putu (cleared_bytes / 1024);
+      puts ("K");
     }
+
+  puts ("\rClearing: ");
+  putu (total_k);
+  puts ("K\r\n");
 
   if (verify)
     {
-      puts ("Verify: ");
-      putu (total_k);
-      puts ("K\r\n");
+      ULONG verified_bytes = 0;
+      puts ("Verify: 0K");
       int failed = 0;
-      for (i = 0; i < count1; i++)
-        {
-          if (p1 [i] != 0)
-            {
-              failed = 1;
 
-              break;
+      p1 = (volatile ULONG *)start_addr1;
+      rem1 = count1;
+
+      while (rem1 > 0 && !failed)
+        {
+          chunk = rem1 > 25600 ? 25600 : rem1;
+
+          for (i = 0; i < chunk; i++)
+            {
+              if (*p1++ != 0)
+                {
+                  failed = 1;
+
+                  break;
+                }
             }
+
+          if (failed)
+            break;
+
+          rem1 -= chunk;
+          verified_bytes += chunk * 4;
+
+          puts ("\rVerify: ");
+          putu (verified_bytes / 1024);
+          puts ("K");
         }
 
-      for (i = 0; i < count2; i++)
-        {
-          if (p2 [i] != 0)
-            {
-              failed = 1;
+      p2 = (volatile ULONG *)start_addr2;
+      rem2 = count2;
 
-              break;
+      while (rem2 > 0 && !failed)
+        {
+          chunk = rem2 > 25600 ? 25600 : rem2;
+
+          for (i = 0; i < chunk; i++)
+            {
+              if (*p2++ != 0)
+                {
+                  failed = 1;
+
+                  break;
+                }
             }
+
+          if (failed)
+            break;
+
+          rem2 -= chunk;
+          verified_bytes += chunk * 4;
+
+          puts ("\rVerify: ");
+          putu (verified_bytes / 1024);
+          puts ("K");
         }
 
       if (failed)
         {
-          puts ("Failure!\r\n");
+          puts ("\r\nFailure!\r\n");
         }
       else
         {
-          puts ("Success!\r\n");
+          puts ("\rVerify: ");
+          putu (total_k);
+          puts ("K\r\nSuccess!\r\n");
         }
     }
   else
