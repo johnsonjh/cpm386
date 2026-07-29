@@ -1078,8 +1078,10 @@ ramdisk.bin: \
 			"*** ERROR: ramdisk too large for $(RAMDISK_KB)K space reserved"; \
 			tput sgr0 2> /dev/null || :; \
 			exit 2; }
-	$(DD) if="/dev/zero" of="./ramdisk.bin" bs="1024" count="$(RAMDISK_KB)"
-	$(DD) if="/tmp/ramdisk.tmp" of="./ramdisk.bin" conv="notrunc"
+	$(DD) if="/dev/zero" of="./ramdisk.bin" bs="1024" count="$(RAMDISK_KB)" \
+		2>&1
+	$(DD) if="/tmp/ramdisk.tmp" of="./ramdisk.bin" conv="notrunc" \
+		2>&1
 	$(RM) -rf /tmp/ramdisk.tmp /tmp/cpmd
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1212,8 +1214,8 @@ $(TARGET): $(OBJS) linker.ld
 floppy.img: stage1.bin stage2.bin os.bin
 	cat ./stage1.bin ./stage2.bin ./os.bin > ./payload.bin
 	$(PRINTF) '\x1a' >> ./payload.bin
-	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440"
-	$(DD) if="./payload.bin" of="$@" conv="notrunc"
+	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440" 2>&1
+	$(DD) if="./payload.bin" of="$@" conv="notrunc" 2>&1
 	@set -- "$$(wc -c < ./payload.bin)"; pbytes="$$1"; \
 	  if [ "$$pbytes" -gt 1474560 ]; then \
 	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
