@@ -64,10 +64,6 @@ this section as *wishlist* and not a *roadmap*!
   * Add SAVE program to write TPA to disk, and to optionally add a `.386`
     executable header.  SAVE should be able to take a range to save, as well
     as the ability to autodetect a range (`CLEARTPA` could be useful here).
-  * Fix bug with CLEARTPA w/TPA >3.4GB and show progress during clear/verify.
-  * Extend HD and OD `-w` option to use LRBC when writing `.HEX`/`.OCT` files
-    and with `-e` option to decode text as EBCDIC rather than ASCII
-    (same as https://gitlab.com/esr/hexd).
   * Extend STAT to query and also set the LRBC
   * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
   * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984) +LRBC

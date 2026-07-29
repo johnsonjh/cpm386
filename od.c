@@ -108,8 +108,12 @@ out_flush_close (void)
 {
   if (opt_w)
     {
+      UBYTE final_lrbc = 0;
+
       if (out_col > 0)
         {
+          final_lrbc = (UBYTE)out_col;
+
           while (out_col < 128)
             {
               out_dma [out_col++] = 26;
@@ -120,6 +124,18 @@ out_flush_close (void)
         }
 
       (void)bdos (16, (LONG)(ULONG)out_fcb);
+
+      if (!opt_i)
+        {
+          out_fcb [12] = 0;
+          out_fcb [13] = 0;
+          out_fcb [14] = 0;
+          out_fcb [15] = 0;
+          out_fcb [6] |= 0x80;
+          out_fcb [32] = final_lrbc;
+
+          (void)bdos (30, (LONG)(ULONG)out_fcb);
+        }
     }
 }
 
