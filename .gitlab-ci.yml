@@ -47,17 +47,17 @@ pages:
     - |
       #
       echo -e "section_start:`date +%s`:Lint_section[collapsed=true]\r\e[0K\033[0;36mLinting ...\033[0m" || true
-    - stdbuf -oL make lint
+    - stdbuf -oL -eL make lint
     - echo -e "section_end:`date +%s`:Lint_section\r\e[0K" || true
     - |
       #
       echo -e "section_start:`date +%s`:Build_section[collapsed=true]\r\e[0K\033[0;36mCP/M-386 build ...\033[0m" || true
-    - stdbuf -oL make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
+    - stdbuf -oL -eL make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
     - echo -e "section_end:`date +%s`:Build_section\r\e[0K" || true
     - |
       #
       echo -e "section_start:`date +%s`:Test_section[collapsed=true]\r\e[0K\033[0;36mCP/M-386 test ...\033[0m" || true
-    - stdbuf -oL make test
+    - make test
     - echo -e "section_end:`date +%s`:Test_section\r\e[0K" || true
     - |
       #

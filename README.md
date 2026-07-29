@@ -356,7 +356,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>15</th>
                 <th>59</th>
                 <th>0</th>
-                <th>3188</th>
+                <th>3185</th>
                 <th>63</th>
         </tr></tbody>
         <tfoot><tr>
@@ -367,7 +367,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>4585</th>
                 <th>19777</th>
                 <th>3981</th>
-                <th>761500</th>
+                <th>761497</th>
                 <th>11303</th>
         </tr></tfoot></table>
 <!-- scc-end -->
