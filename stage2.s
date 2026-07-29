@@ -20,6 +20,7 @@ KERNEL_LBA equ 1 + STAGE2_SECTORS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 stage2_entry:
+    cld
     mov [boot_dl], dl
 
     mov si, bootmsg
@@ -86,7 +87,15 @@ stage2_entry:
     jmp .load_one
 
 .loaded:
+    mov ax, 0x2401
+    int 0x15
+    in al, 0x92
+    or al, 2
+    and al, 0xfe
+    out 0x92, al
+
     cli
+    cld
     lgdt [gdt_desc]
     mov eax, cr0
     or al, 1

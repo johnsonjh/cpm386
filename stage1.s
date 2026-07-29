@@ -21,6 +21,7 @@ STAGE2_OFF equ 0x7e00
 
 start:
     cli
+    cld
     xor ax, ax
     mov ds, ax
     mov es, ax

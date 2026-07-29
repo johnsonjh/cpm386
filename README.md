@@ -321,13 +321,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Assembly</th>
                 <th>5</th>
-                <th>837</th>
-                <th>133</th>
+                <th>847</th>
+                <th>134</th>
                 <th>154</th>
-                <th>550</th>
+                <th>559</th>
                 <th>0</th>
-                <th>18722</th>
-                <th>464</th>
+                <th>18842</th>
+                <th>470</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
@@ -362,13 +362,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>82</th>
-                <th>30173</th>
-                <th>5742</th>
+                <th>30183</th>
+                <th>5743</th>
                 <th>4584</th>
-                <th>19847</th>
+                <th>19856</th>
                 <th>3991</th>
-                <th>763296</th>
-                <th>11336</th>
+                <th>763416</th>
+                <th>11342</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
