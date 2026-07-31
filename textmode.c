@@ -438,7 +438,7 @@ confirm (void)
       ULONG elapsed;
 
       clear_line ();
-      puts ("Did the mode change work correctly [y/N] (");
+      puts ("Mode changed correctly [y/N] (");
       putu ((ULONG)secs);
       puts ("s)? ");
 
@@ -455,8 +455,7 @@ confirm (void)
               return (c == 'y' || c == 'Y');
             }
 
-          /* Unsigned arithmetic, so the 32-bit tick wrap takes care of
-           * itself. */
+          /* Unsigned arithmetic so the 32-bit wrap takes care of itself */
           elapsed = now_lo (&dummy) - start;
 
           if (elapsed >= hz)
