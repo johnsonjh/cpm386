@@ -116,7 +116,6 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 []()
 * **GCC** build (recommended):
-
   ```sh
   make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
   make test
@@ -125,10 +124,8 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 []()
 * **Clang** build:
-
   ```sh
   make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
-  make test CC="clang"
   ```
 []()
 
@@ -303,12 +300,12 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>477</th>
-                <th>62</th>
+                <th>475</th>
+                <th>60</th>
                 <th>0</th>
                 <th>415</th>
                 <th>0</th>
-                <th>21598</th>
+                <th>21617</th>
                 <th>374</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -334,12 +331,12 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>97</th>
-                <th>36684</th>
-                <th>7069</th>
+                <th>36682</th>
+                <th>7067</th>
                 <th>5869</th>
                 <th>23746</th>
                 <th>4600</th>
-                <th>926581</th>
+                <th>926600</th>
                 <th>13800</th>
         </tr></tfoot></table>
 <!-- scc-end -->
