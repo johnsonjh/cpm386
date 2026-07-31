@@ -257,10 +257,10 @@ usage (void)
   puts ("Usage: TEXTMODE [-h] [-a] [-y] [-t] [mode]\r\n");
   puts ("  (no args)  print the current mode and the available modes\r\n");
   puts ("  mode       set the mode (asks for confirmation)\r\n");
+  puts ("  -a         list graphics modes as well as text modes\r\n");
+  puts ("  -h         show this help text\r\n");
+  puts ("  -t         set as a transient mode (reset at program exit)\r\n");
   puts ("  -y         set without asking; the mode is kept immediately\r\n");
-  puts ("  -a         also list graphics modes\r\n");
-  puts ("  -t         set as a transient mode, undone when this exits\r\n");
-  puts ("  -h         show this help\r\n");
 }
 
 /*****************************************************************************/
@@ -401,7 +401,7 @@ clear_line (void)
 
   putch ('\r');
 
-  for (i = 0; i < 52; i++)
+  for (i = 0; i < 39; i++)
     {
       putch (' ');
     }
