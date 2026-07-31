@@ -245,11 +245,26 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   vga_es_store16 (sel, (unsigned short)off,
                   (unsigned short)('+' | (0x1E << 8)));
 
-  /* optional page-1 marker at +4K */
-  if (vi.map_size >= 4096UL + 2)
-    {
-      vga_es_store16 (sel, 4096, (unsigned short)('2' | (0x0A << 8)));
-    }
+  /*
+   * The selector maps more than the visible screen, so prove it by writing
+   * past the end of the screen and reading it back.
+   */
+
+  {
+    unsigned long visible = (unsigned long)rows * cols * cell;
+    unsigned long off_hi = (visible + 0xFFFUL) & ~0xFFFUL;
+
+    if (off_hi + cell <= vi.map_size)
+      {
+        unsigned short want = (unsigned short)('2' | (0x0A << 8));
+
+        vga_es_store16 (sel, off_hi, want);
+
+        puts (vga_es_load16 (sel, off_hi) == want
+                  ? "  off-screen page readback OK\r\n"
+                  : "  off-screen page readback FAILED\r\n");
+      }
+  }
 
   wait_key ();
 
