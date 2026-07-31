@@ -39,7 +39,7 @@ pages:
     - export TERM=xterm-color
     - export TZ=UTC
     - export LC_ALL=C
-    - dnf -y install advancecomp cppi binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 libatomic.x86_64 libatomic.i686 make nasm pigz zip --allowerasing --setopt=install_weak_deps=True
+    - dnf -y install advancecomp cppi binutils coreutils cpmtools file gawk gcc glibc-devel.i686 glibc.i686 libatomic.x86_64 libatomic.i686 make nasm pigz reuse zip --allowerasing --setopt=install_weak_deps=True
     - dnf -y clean all || true
     - rpmconf -au use_maintainer || true
     - rpmconf -acu use_maintainer || true

@@ -1388,6 +1388,7 @@ testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 
 lint:
 	cppi -ac ./*.[ch]
+	reuse lint -q || reuse lint
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Lint completed successfully."
 	@tput sgr0 2> /dev/null || :
