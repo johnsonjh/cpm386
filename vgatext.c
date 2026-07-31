@@ -245,6 +245,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   vga_es_store16 (sel, (unsigned short)off,
                   (unsigned short)('+' | (0x1E << 8)));
 
+  wait_key ();
+
   /*
    * The selector maps more than the visible screen, so prove it by writing
    * past the end of the screen and reading it back.
@@ -261,14 +263,12 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         vga_es_store16 (sel, off_hi, want);
 
         puts (vga_es_load16 (sel, off_hi) == want
-                  ? "  off-screen page readback OK\r\n"
-                  : "  off-screen page readback FAILED\r\n");
+                  ? "Off-screen page readback test OK.\r\n"
+                  : "Off-screen page readback test FAILED.\r\n");
       }
   }
 
-  wait_key ();
-
-  puts ("VGATEXT done.\r\n");
+  puts ("\r\nVGATEXT done.\r\n\r\n");
 
   (void)bdos (0, 0);
 }
