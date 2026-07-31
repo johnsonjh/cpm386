@@ -24,6 +24,15 @@ typedef unsigned long ULONG;
 
 /*****************************************************************************/
 
+/* BDOS 222/223 status codes; must match bios.c */
+
+#define CON_OFF 0x00
+#define CON_ON 0x01
+#define CON_ABSENT 0xFE /* no such adapter fitted, request ignored */
+#define CON_LAST 0xFF   /* refused, would leave no console at all  */
+
+/*****************************************************************************/
+
 void _start (void) __attribute__ ((section (".text._start")));
 
 /*****************************************************************************/
@@ -67,47 +76,82 @@ puts (const char *s)
 
 /*****************************************************************************/
 
+static void
+report (UWORD r, const char *dev, int turning_on)
+{
+  puts (dev);
+
+  switch (r)
+    {
+    case CON_ABSENT:
+      puts (" console not present\r\n");
+
+      break;
+
+    case CON_LAST:
+      puts (turning_on ? " console ON failed\r\n"
+                       : " console OFF refused (only console)\r\n");
+
+      break;
+
+    case CON_ON:
+      puts (" console ON\r\n");
+
+      break;
+
+    case CON_OFF:
+      puts (" console OFF\r\n");
+
+      break;
+
+    default:
+      puts (" console: unexpected status\r\n");
+
+      break;
+    }
+}
+
+/*****************************************************************************/
+
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
   UWORD r;
-  WORD func;
-  LONG arg;
 
 #if defined(PROG_VGAON)
-  func = BDOS_CON_VGA;
-  arg = 1;
-  r = bdos (func, arg);
-  puts (r == 0xFF ? "VGA ON failed\r\n" : "VGA console ON\r\n");
+  r = bdos (BDOS_CON_VGA, 1);
+  report (r, "VGA", 1);
 
 #elif defined(PROG_VGAOFF)
-  func = BDOS_CON_VGA;
-  arg = 0;
-  /* Announce while VGA still enabled so both paths may show it */
-  puts ("VGA console OFF\r\n");
-  r = bdos (func, arg);
-
-  if (r == 0xFF)
+  if (bdos (BDOS_CON_VGA, 0xFFFF) == CON_ON
+      && bdos (BDOS_CON_SER, 0xFFFF) == CON_ON)
     {
-      puts ("VGA OFF refused (last console?)\r\n");
+      puts ("VGA console OFF\r\n");
+    }
+
+  r = bdos (BDOS_CON_VGA, 0);
+
+  if (r != CON_OFF)
+    {
+      report (r, "VGA", 0);
     }
 
 #elif defined(PROG_SERON)
-  func = BDOS_CON_SER;
-  arg = 1;
-  r = bdos (func, arg);
-  puts (r == 0xFF ? "Serial ON failed\r\n" : "Serial console ON\r\n");
+  r = bdos (BDOS_CON_SER, 1);
+  report (r, "Serial", 1);
 
 #elif defined(PROG_SEROFF)
-  func = BDOS_CON_SER;
-  arg = 0;
-  /* Announce on serial before disabling it */
-  puts ("Serial console OFF\r\n");
-  r = bdos (func, arg);
-
-  if (r == 0xFF)
+  if (bdos (BDOS_CON_SER, 0xFFFF) == CON_ON
+      && bdos (BDOS_CON_VGA, 0xFFFF) == CON_ON)
     {
-      puts ("Serial OFF refused (last console?)\r\n");
+      puts ("Serial console OFF\r\n");
+    }
+
+  r = bdos (BDOS_CON_SER, 0);
+
+  if (r != CON_OFF)
+    {
+      report (r, "Serial", 0);
     }
 
 #else

@@ -338,7 +338,27 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
       break;
 
-      /* No function 27 -- Get Allocation Vector */
+    /*
+     * BDOS 27 (Get Allocation Vector).
+     *
+     * The vector itself is the one dskutil.c maintains through
+     * setaloc()/clraloc(), so it always reflects current allocation.
+     */
+
+    case 27:
+      if (GBL.curdsk != GBL.dfltdsk)
+        {
+          seldsk (GBL.dfltdsk);
+        }
+
+      {
+        REG UWORD alvlen = (UWORD)((((GBL.parmp)->dsm) >> 3) + 1);
+
+        move ((UBYTE *)((GBL.dphp)->alv), (UBYTE *)infop, (WORD)alvlen);
+        rtnval = alvlen;
+      }
+
+      break; /* return allocation vector */
 
     case 28:
       ro_dsk |= 1 << GBL.dfltdsk; /* set disk read-only */
@@ -677,7 +697,8 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
     /*
      * BDOS 222: VGA console on/off/query.
      * DE=0 off, DE=1 on, DE=0xFFFF query.
-     * Returns 0/1 or 0xFF if disabling would leave no output device.
+     * Returns 0 (off), 1 (on), 0xFE if no such adapter is fitted, or 0xFF
+     * if disabling would leave no output device.
      */
 
     case 222:

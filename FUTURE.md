@@ -8,7 +8,6 @@ I hope to eventually implement the following features in **CP/M‑386**.  Treat
 this section as *wishlist* and not a *roadmap*!
 
 * OS enhancements:
-  * Finish remaining unimplemented BDOS functions
   * Drivers for floppy disk, hard disk, and parallel printer
   * PRNG (based on interrupt timer/PIT first, detect RDRAND/RDSEED later)
   * Better keyboard support (Alt+nnn‑style 8‑bit input, numeric keypad,

@@ -33,6 +33,7 @@ typedef unsigned long size_t; /* rough */
 #define COM1_PORT 0x3f8
 
 static int com_present;
+static int vga_present;
 
 static inline void outb(uint16_t port, uint8_t val) {
   __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
@@ -86,6 +87,8 @@ static int com_probe(void)
   return (ier & 0x0F) == 0x0F && (ier & 0xF0) == 0;
 }
 
+static int vga_probe(void); /* forward */
+
 static void com_init(void) {
   com_present = com_probe();
 
@@ -100,7 +103,18 @@ static void com_init(void) {
     outb(COM1_PORT + 4, 0x0B); /* DTR/RTS/OUT2 */
   }
 
-  vga_init(); /* VGA text always; serial only if present */
+  vga_present = vga_probe();
+
+  /*
+   * A machine with neither adapter has no console at all!
+   * Assume the VGA probe was wrong.
+   */
+
+  if (!vga_present && !com_present)
+    vga_present = 1;
+
+  if (vga_present)
+    vga_init();
 }
 
 static int com_stat(void) {
@@ -154,6 +168,42 @@ static unsigned char com_in(void) {
 static volatile uint16_t *vga_mem = (volatile uint16_t *)VGA_BASE;
 static int vrow = 0, vcol = 0;
 static int have_kbd_input = 0; /* once we see PS/2 input, ignore serial input */
+
+/* Probe for a VGA text adapter */
+static int vga_probe(void) {
+#if !CPM386_HAS_VGA_TEXT
+  return 0;
+#else
+  volatile uint16_t *p = vga_mem;
+  uint16_t save0 = p [0];
+  uint16_t save1 = p [1];
+  int ok;
+
+  p [0] = 0xA55A;
+  p [1] = 0x5AA5;
+  ok = (p [0] == 0xA55A && p [1] == 0x5AA5);
+
+  if (ok) {
+    p [0] = 0x1234;
+    ok = (p [0] == 0x1234 && p [1] == 0x5AA5);
+  }
+
+  p [0] = save0;
+  p [1] = save1;
+
+  return ok;
+#endif
+}
+
+int bios_vga_present(void)
+{
+  return vga_present;
+}
+
+int bios_com_present(void)
+{
+  return com_present;
+}
 
 static void vga_clear(void) {
   int i;
@@ -411,11 +461,11 @@ static mrt_t mrt;
 /* --- BIOS entry points, some to be completed) --- */
 
 /*
- * Console output enables (BDOS 222/223). VGA on by default.
- * Serial is enabled in cpm386_init only if COM1 probe succeeds.
+ * Console output enables (BDOS 222/223).
+ * Both start disabled and are set from the probes in cpm386_init.
  */
 
-static int con_vga_en = 1;
+static int con_vga_en = 0;
 static int con_ser_en = 0;
 
 void bios_wboot(void) {
@@ -510,45 +560,48 @@ void bios_con_clear(void)
 }
 
 /*
- * BDOS 222: VGA console enable.
+ * BDOS 222 / 223: console path enables.
  * info 0 = off, 1 = on, 0xFFFF = query.
- * Returns 0/1 status, or 0xFF if refusing to
- * disable the last remaining output path.
+ *
+ * Returns:
+ *   0            path is disabled
+ *   1            path is enabled
+ *   CON_ABSENT   no such adapter fitted; the request was ignored
+ *   CON_LAST     refused, would leave no console output at all
  */
+
+#define CON_ABSENT 0xFE
+#define CON_LAST 0xFF
+
+static unsigned short con_ctl(int *en, int present, int other_en,
+                              unsigned short info)
+{
+  if (!present)
+    return CON_ABSENT;
+
+  if (info == 0xFFFF)
+    return (unsigned short)(*en ? 1 : 0);
+
+  if (info == 0) {
+    if (!other_en)
+      return CON_LAST;
+
+    *en = 0;
+  } else {
+    *en = 1;
+  }
+
+  return (unsigned short)(*en ? 1 : 0);
+}
 
 unsigned short bios_con_vga_ctl(unsigned short info)
 {
-  if (info == 0xFFFF)
-      return (unsigned short)(con_vga_en ? 1 : 0);
-
-  if (info == 0) {
-    if (!con_ser_en)
-      return 0xFF; /* would leave no console output */
-
-    con_vga_en = 0;
-  } else {
-    con_vga_en = 1;
-  }
-
-  return (unsigned short)(con_vga_en ? 1 : 0);
+  return con_ctl(&con_vga_en, vga_present, con_ser_en && com_present, info);
 }
 
-/* BDOS 223: serial console enable */
 unsigned short bios_con_ser_ctl(unsigned short info)
 {
-  if (info == 0xFFFF)
-    return (unsigned short)(con_ser_en ? 1 : 0);
-
-  if (info == 0) {
-    if (!con_vga_en)
-      return 0xFF;
-
-    con_ser_en = 0;
-  } else {
-    con_ser_en = 1;
-  }
-
-  return (unsigned short)(con_ser_en ? 1 : 0);
+  return con_ctl(&con_ser_en, com_present, con_vga_en && vga_present, info);
 }
 
 void bios_list(unsigned char c)
@@ -883,7 +936,9 @@ void bios_system_reboot(int warm)
 /* cold boot entry from asm */
 void cpm386_init(void) {
   com_init();
-  /* Dual console only when hardware is there; VGA-only is fine. */
+
+  /* Enable devices the probes found; either alone is OK */
+  con_vga_en = vga_present ? 1 : 0;
   con_ser_en = com_present ? 1 : 0;
 
   /* Install user TPA segments, TSS, and int 0x30 BDOS gate before any load. */

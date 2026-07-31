@@ -60,17 +60,15 @@
 |                System | BDOS coverage       |
 |----------------------:|:--------------------|
 | **CP/M‑68K&nbsp;1.3** | **100%**            |
-| **CP/M&nbsp;2.2**     | **98%**<sup>†</sup> |
+| **CP/M&nbsp;2.2**     | **100%**            |
 | **CP/M‑Plus**         | **71%**             |
 | **DOS‑Plus**          | **62%**             |
 | **MP/M&nbsp;2.1**     | **50%**             |
 
 The system currently reports **BDOS 2.2** to applications.
 
-* The **CP/M‑386** BDOS is at full parity with **CP/M‑68K&nbsp;1.3**.
-* <sup>†</sup>**CP/M&nbsp;2.2** equivalence is lacking only
-  [BDOS 27](https://www.seasip.info/Cpm/bdos.html#27) (which was deliberately
-  omitted from **CP/M‑68K** by Digital Research).
+* The **CP/M‑386** BDOS is at full parity with **CP/M‑68K&nbsp;1.3** and
+  **CP/M&nbsp;2.2**.
 * A large majority of the **CP/M‑Plus** (**CP/M&nbsp;3**) BDOS is also
   supported.
 * More than 60% of the **DOS‑Plus** additions have been implemented.
@@ -231,6 +229,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `LRBC.386`     | Query and/or set Last Record Byte Count                                                            |
 | `LS.386`       | List files (with sizes)                                                                            |
 | `MANDEL.386`   | Draw a Mandelbrot set fractal (terminal version)                                                   |
+| `ALVTST.386`   | Get Allocation Vector test ([BDOS 27](https://www.seasip.info/Cpm/bdos.html))                      |
 | `MEM.386`      | Memory map utility (BDOS 227/228)                                                                  |
 | `MORE.386`     | UNIX `more`‑style pager                                                                            |
 | `OD.386`       | Octal dump utility                                                                                 |

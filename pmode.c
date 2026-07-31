@@ -141,7 +141,10 @@ unsigned short
 pmode_vga_selector (void)
 {
 #if CPM386_HAS_VGA_TEXT
-  if (!pmode_ready)
+  extern int bios_vga_present (void);
+
+  /* No adapter fitted means no text plane to hand ring 3. */
+  if (!pmode_ready || !bios_vga_present ())
     return 0;
 
   return (unsigned short)SEL_UVIDEO_RPL3;
@@ -525,6 +528,7 @@ bdos_arg_is_ptr (WORD func)
     case 22:  /* make */
     case 23:  /* rename */
     case 26:  /* set DMA */
+    case 27:  /* get allocation vector (copied to caller buffer) */
     case 30:  /* set file attrs */
     case 31:  /* get DPB (CP/M-68K copies into caller buffer) */
     case 33:  /* read random */
