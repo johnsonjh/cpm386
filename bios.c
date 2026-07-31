@@ -868,15 +868,28 @@ void cpm386_init(void) {
    * transition works on this machine before anything depends on it.
    */
 
+  /* Clear 40 characters */
+  {
+    unsigned short x;
+
+    bios_conout('\r');
+
+    for (x = 0; x < 40; x++)
+      bios_conout(' ');
+
+    bios_conout('\r');
+  }
+
   if (vga_present) {
-    static const char vmsg [] = "Video: BIOS mode ";
-    static const char vbad [] = "Video: BIOS not callable\r\n";
+    static const char vmsg [] = "VGA console enabled (mode ";
+    static const char vbad [] = "VGA BIOS not callable!";
     const char *p;
     unsigned m;
 
     vidbios_init();
     m = vid_bios_mode();
 
+    /* Debugging output, most users won't see it! */
     if (m == 0xFFFF) {
       for (p = vbad; *p; p++)
         bios_conout((unsigned char)*p);
@@ -894,9 +907,20 @@ void cpm386_init(void) {
       bios_num_out(vgacon_cols());
       bios_conout('x');
       bios_num_out(vgacon_rows());
-      bios_conout('\r');
-      bios_conout('\n');
+      bios_conout(')');
     }
+  }
+
+  /* Clear 40 characters again */
+  {
+    unsigned short x;
+
+    bios_conout('\r');
+
+    for (x = 0; x < 40; x++)
+      bios_conout(' ');
+
+    bios_conout('\r');
   }
 
   /* Learn the mode the BIOS left us in, without changing it. */
