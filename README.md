@@ -293,23 +293,23 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>63</th>
-                <th>29969</th>
-                <th>5888</th>
-                <th>4225</th>
-                <th>19856</th>
-                <th>4236</th>
-                <th>703020</th>
-                <th>10294</th>
+                <th>30147</th>
+                <th>5922</th>
+                <th>4256</th>
+                <th>19969</th>
+                <th>4255</th>
+                <th>708029</th>
+                <th>10362</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>21</th>
-                <th>2935</th>
-                <th>530</th>
-                <th>1159</th>
-                <th>1246</th>
+                <th>2951</th>
+                <th>533</th>
+                <th>1167</th>
+                <th>1251</th>
                 <th>13</th>
-                <th>107664</th>
-                <th>1505</th>
+                <th>108234</th>
+                <th>1519</th>
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
@@ -338,7 +338,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>445</th>
                 <th>0</th>
-                <th>22529</th>
+                <th>22568</th>
                 <th>393</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -364,13 +364,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>97</th>
-                <th>36472</th>
-                <th>7030</th>
-                <th>5825</th>
-                <th>23617</th>
-                <th>4576</th>
-                <th>920745</th>
-                <th>13721</th>
+                <th>36666</th>
+                <th>7067</th>
+                <th>5864</th>
+                <th>23735</th>
+                <th>4595</th>
+                <th>926363</th>
+                <th>13801</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
