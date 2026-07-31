@@ -292,44 +292,44 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>55</th>
-                <th>25197</th>
-                <th>4912</th>
-                <th>3512</th>
-                <th>16773</th>
-                <th>3676</th>
-                <th>593398</th>
-                <th>8605</th>
+                <th>63</th>
+                <th>29969</th>
+                <th>5888</th>
+                <th>4225</th>
+                <th>19856</th>
+                <th>4236</th>
+                <th>703020</th>
+                <th>10294</th>
         </tr><tr>
                 <th>C Header</th>
-                <th>15</th>
-                <th>1960</th>
-                <th>322</th>
-                <th>718</th>
-                <th>920</th>
+                <th>21</th>
+                <th>2935</th>
+                <th>530</th>
+                <th>1159</th>
+                <th>1246</th>
                 <th>13</th>
-                <th>74207</th>
-                <th>1076</th>
+                <th>107664</th>
+                <th>1505</th>
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1420</th>
-                <th>270</th>
-                <th>185</th>
-                <th>965</th>
-                <th>302</th>
-                <th>47506</th>
-                <th>713</th>
+                <th>1547</th>
+                <th>295</th>
+                <th>198</th>
+                <th>1054</th>
+                <th>326</th>
+                <th>52027</th>
+                <th>765</th>
         </tr><tr>
                 <th>Assembly</th>
-                <th>5</th>
-                <th>851</th>
-                <th>133</th>
-                <th>154</th>
-                <th>564</th>
-                <th>0</th>
-                <th>18897</th>
-                <th>473</th>
+                <th>6</th>
+                <th>1262</th>
+                <th>212</th>
+                <th>228</th>
+                <th>822</th>
+                <th>1</th>
+                <th>28397</th>
+                <th>687</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
@@ -338,7 +338,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>445</th>
                 <th>0</th>
-                <th>22355</th>
+                <th>22529</th>
                 <th>393</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -363,14 +363,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>82</th>
-                <th>30187</th>
-                <th>5742</th>
-                <th>4584</th>
-                <th>19861</th>
-                <th>3991</th>
-                <th>763471</th>
-                <th>11345</th>
+                <th>97</th>
+                <th>36472</th>
+                <th>7030</th>
+                <th>5825</th>
+                <th>23617</th>
+                <th>4576</th>
+                <th>920745</th>
+                <th>13721</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
