@@ -282,6 +282,7 @@ build_frame (void)
 static unsigned g_checked;
 static unsigned g_bad;
 static UWORD g_palrc = VIDR_OK;
+static int g_bykey;
 
 static void
 verify_frame (unsigned short sel, unsigned long pitch)
@@ -309,19 +310,28 @@ verify_frame (unsigned short sel, unsigned long pitch)
 
 /*****************************************************************************/
 
-/* Wait n seconds, or until a key is pressed. */
+/*
+ * Wait n seconds, or until a key is pressed.  Returns 1 if a keypress
+ * ended it, 0 if the time ran out.
+ */
 
-static void
+static int
 wait_secs (int n)
 {
   struct cpm_ticks t;
   ULONG hz, start, now;
+  int drain = 0;
+
+  while (bdos (BDOS_CONST, 0) != 0 && drain++ < 64)
+    {
+      (void)bdos (6, 0xFF);
+    }
 
   zero (&t, sizeof (t));
 
   if (bdos (BDOS_GET_TICKS, (LONG)(ULONG)&t) != 0)
     {
-      return;
+      return 0;
     }
 
   hz = t.hz;
@@ -333,21 +343,21 @@ wait_secs (int n)
         {
           (void)bdos (6, 0xFF);
 
-          return;
+          return 1;
         }
 
       zero (&t, sizeof (t));
 
       if (bdos (BDOS_GET_TICKS, (LONG)(ULONG)&t) != 0)
         {
-          return;
+          return 0;
         }
 
       now = t.lo - start;
 
       if (now >= hz * (ULONG)n)
         {
-          return;
+          return 0;
         }
     }
 }
@@ -519,7 +529,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
         }
 
       verify_frame (v.sel, v.pitch);
-      wait_secs (SHOW_SECS);
+      g_bykey = wait_secs (SHOW_SECS);
     }
 
   zero (&s, sizeof (s));
@@ -559,6 +569,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts ("\r\n");
     }
 
+  puts (g_bykey ? "GFXTEST: ended by keypress\r\n"
+                : "GFXTEST: displayed for the full 5 seconds\r\n");
   puts ("GFXTEST done.\r\n");
 
   (void)bdos (0, 0);
