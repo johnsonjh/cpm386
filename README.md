@@ -254,7 +254,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `TRUNCTST.386` | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
 | `TSEC.386`     | Get date and time ([BDOS 155](https://www.seasip.info/Cpm/bdos.html#155))                          |
 | `VER.386`      | Display OS version ([BDOS 163](https://www.seasip.info/Cpm/bdos.html#163))                         |
-| `VGAFONT.386`  | Load a [text console font](https://github.com/viler-int10h/vga-text-mode-fonts) or restore the default ROM font (BDOS 232) |
+| `VGAFONT.386`  | Load a [text console font](https://github.com/viler-int10h/vga-text-mode-fonts) or restore the ROM font (BDOS 232) |
 | `VGAOFF.386`   | Disable VGA text console (BDOS 222)                                                                |
 | `VGAON.386`    | Enable VGA text console (BDOS 222)                                                                 |
 | `VGATEXT.386`  | VGA text direct access demo (BDOS 224)                                                             |
@@ -263,10 +263,11 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 * Do **not** open pull requests with large amounts of LLM‑generated code.
   These will be immediately rejected.
-* There is currently **no** AI‑generated code in the repository (though there
-  *are* some AI comments and analysis), as this project is intended to be as
-  much of a learning experience for me as it is a useful OS port.
-* Usage of AI (artificial intelligence) tools by contributors is currently
+* There is currently **no** AI‑generated code in the operating system at this
+  time (though there *are* some AI tests, comments, and analysis), as the
+  project is intended to be as much of a learning experience for me as it is
+  a useful OS port.
+* Usage of AI (artificial intelligence) tools by contributors *is* currently
   permitted, subject to the same terms and conditions as the
   [LLVM AI Tool Use Policy](https://llvm.org/docs/AIToolPolicy.html), but
   this permission may be withdrawn at any time and without notice.
@@ -333,13 +334,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>507</th>
+                <th>508</th>
                 <th>65</th>
                 <th>0</th>
-                <th>442</th>
+                <th>443</th>
                 <th>0</th>
-                <th>22437</th>
-                <th>390</th>
+                <th>22459</th>
+                <th>391</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -364,13 +365,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>97</th>
-                <th>36689</th>
+                <th>36690</th>
                 <th>7072</th>
                 <th>5869</th>
-                <th>23748</th>
+                <th>23749</th>
                 <th>4599</th>
-                <th>927022</th>
-                <th>13808</th>
+                <th>927044</th>
+                <th>13809</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
