@@ -263,9 +263,9 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 * Do **not** open pull requests with large amounts of LLM‑generated code.
   These will be immediately rejected.
-* There is currently **no** AI‑generated code in the repository, as this
-  project is intended to be as much of a learning experience for me as
-  it is a useful OS port.
+* There is currently **no** AI‑generated code in the repository (though there
+  *are* some AI comments and analysis), as this project is intended to be as
+  much of a learning experience for me as it is a useful OS port.
 * Usage of AI (artificial intelligence) tools by contributors is currently
   permitted, subject to the same terms and conditions as the
   [LLVM AI Tool Use Policy](https://llvm.org/docs/AIToolPolicy.html), but
