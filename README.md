@@ -114,7 +114,7 @@ The system currently reports **BDOS 2.2** to applications.
 The following dependencies are required to compile **CP/M‑386**:
 
 * [AWK](https://en.wikipedia.org/wiki/AWK)
-* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>*</sup>
+* [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>†</sup>
 * [GNU Binutils](https://www.gnu.org/software/binutils/)
 * [GNU Coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
@@ -124,7 +124,7 @@ The following dependencies are required to compile **CP/M‑386**:
 []()
 
 []()
-<sup>*</sup>Be sure to use `cpmtools` version **2.23** or later.  Older
+<sup>†</sup>Be sure to use `cpmtools` version **2.23** or later.  Older
 versions may *appear* to work but have several known bugs.
 
 ## Downloads
@@ -254,7 +254,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `TRUNCTST.386` | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
 | `TSEC.386`     | Get date and time ([BDOS 155](https://www.seasip.info/Cpm/bdos.html#155))                          |
 | `VER.386`      | Display OS version ([BDOS 163](https://www.seasip.info/Cpm/bdos.html#163))                         |
-| `VGAFONT.386`  | Load a VGA text console font or restore the default ROM font (BDOS 232)                            |
+| `VGAFONT.386`  | Load a [text console font](https://github.com/viler-int10h/vga-text-mode-fonts) or restore the default ROM font (BDOS 232) |
 | `VGAOFF.386`   | Disable VGA text console (BDOS 222)                                                                |
 | `VGAON.386`    | Enable VGA text console (BDOS 222)                                                                 |
 | `VGATEXT.386`  | VGA text direct access demo (BDOS 224)                                                             |
@@ -338,7 +338,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>442</th>
                 <th>0</th>
-                <th>22409</th>
+                <th>22437</th>
                 <th>390</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -369,7 +369,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>5869</th>
                 <th>23748</th>
                 <th>4599</th>
-                <th>926994</th>
+                <th>927022</th>
                 <th>13808</th>
         </tr></tfoot></table>
 <!-- scc-end -->
