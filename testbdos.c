@@ -683,6 +683,56 @@ test_stream_reader (UBYTE rec[128], void *ctx)
 
 /*****************************************************************************/
 
+/*
+ * Build a version 1 .386 header, so the fixtures below describe programs
+ * the way mk386 actually writes them.
+ */
+
+/* Image byte at which record 1 - the simulated allocation hole - begins. */
+#define HOLE_FIRST (128 - CPM386_HDR_SIZE)
+
+static void
+mk_hdr (UBYTE *h, unsigned long load, unsigned long sz, unsigned long ent,
+        unsigned long min_kb)
+{
+  int i;
+
+  for (i = 0; i < CPM386_HDR_SIZE; i++)
+    {
+      h[i] = 0;
+    }
+
+  h[0] = (UBYTE)(CPM386_MAGIC & 0xFF);
+  h[1] = (UBYTE)((CPM386_MAGIC >> 8) & 0xFF);
+  h[2] = (UBYTE)((CPM386_MAGIC >> 16) & 0xFF);
+  h[3] = (UBYTE)((CPM386_MAGIC >> 24) & 0xFF);
+  h[4] = CPM386_VERSION;
+  h[5] = CPM386_HDR_SIZE;
+  /* h[6..7] flags stay 0 */
+
+  h[8] = (UBYTE)(load & 0xFF);
+  h[9] = (UBYTE)((load >> 8) & 0xFF);
+  h[10] = (UBYTE)((load >> 16) & 0xFF);
+  h[11] = (UBYTE)((load >> 24) & 0xFF);
+
+  h[12] = (UBYTE)(sz & 0xFF);
+  h[13] = (UBYTE)((sz >> 8) & 0xFF);
+  h[14] = (UBYTE)((sz >> 16) & 0xFF);
+  h[15] = (UBYTE)((sz >> 24) & 0xFF);
+
+  h[16] = (UBYTE)(ent & 0xFF);
+  h[17] = (UBYTE)((ent >> 8) & 0xFF);
+  h[18] = (UBYTE)((ent >> 16) & 0xFF);
+  h[19] = (UBYTE)((ent >> 24) & 0xFF);
+
+  h[20] = (UBYTE)(min_kb & 0xFF);
+  h[21] = (UBYTE)((min_kb >> 8) & 0xFF);
+  h[22] = (UBYTE)((min_kb >> 16) & 0xFF);
+  h[23] = (UBYTE)((min_kb >> 24) & 0xFF);
+}
+
+/*****************************************************************************/
+
 int
 main (void)
 {
@@ -1240,7 +1290,7 @@ main (void)
   /* (synthetic .386 buffers, no disk, drive shipped cpm386_load_from_buf) */
   {
     /* synthetic header load=0 size=4 entry=2 ; followed by 4 bytes of "image" */
-    UBYTE fakefile[16];
+    UBYTE fakefile[CPM386_HDR_SIZE + 4];
     UBYTE tpa[64];
     UBYTE *ent = 0;
     UWORD lrc;
@@ -1252,24 +1302,12 @@ main (void)
         tpa[i] = 0;
       }
 
-    /* header: load=0, size=4, entry=2 ; LE */
-    fakefile[0] = 0;
-    fakefile[1] = 0;
-    fakefile[2] = 0;
-    fakefile[3] = 0;
-    fakefile[4] = 4;
-    fakefile[5] = 0;
-    fakefile[6] = 0;
-    fakefile[7] = 0;
-    fakefile[8] = 2;
-    fakefile[9] = 0;
-    fakefile[10] = 0;
-    fakefile[11] = 0;
-    fakefile[12] = 0x90;
-    fakefile[13] = 0x90;
-    fakefile[14] = 0xCC;
-    fakefile[15] = 0x90;
-    lrc = cpm386_load_from_buf (fakefile, 16, tpa, 64, &ent);
+    mk_hdr (fakefile, 0, 4, 2, 0);
+    fakefile[CPM386_HDR_SIZE + 0] = 0x90;
+    fakefile[CPM386_HDR_SIZE + 1] = 0x90;
+    fakefile[CPM386_HDR_SIZE + 2] = 0xCC;
+    fakefile[CPM386_HDR_SIZE + 3] = 0x90;
+    lrc = cpm386_load_from_buf (fakefile, sizeof (fakefile), tpa, 64, &ent);
 
     if (lrc != 0 || ent != (tpa + 2) || (UBYTE)tpa[0] != (UBYTE)0x90
         || (UBYTE)tpa[1] != (UBYTE)0x90 || (UBYTE)tpa[2] != (UBYTE)0xCC
@@ -1289,20 +1327,89 @@ main (void)
       }
 
     /* test bad size (overflow) */
-    fakefile[4] = 0xff;
-    fakefile[5] = 0xff;
-    fakefile[6] = 0xff;
-    fakefile[7] = 0x7f; /* huge sz */
-    lrc = cpm386_load_from_buf (fakefile, 16, tpa, 64, &ent);
+    mk_hdr (fakefile, 0, 0x7fffffffUL, 2, 0);
+    lrc = cpm386_load_from_buf (fakefile, sizeof (fakefile), tpa, 64, &ent);
 
-    if (lrc == 0)
+    if (lrc != CPMLD_BADSIZE)
       {
-        printf ("UNIT HARD FAIL: core did not reject huge size\n");
+        printf ("UNIT HARD FAIL: core did not reject huge size (rc=%u)\n",
+                lrc);
         ok = 0;
       }
     else
       {
         printf ("loader core: size validation error path ok\n");
+      }
+
+    /* bad magic */
+    mk_hdr (fakefile, 0, 4, 2, 0);
+    fakefile[0] ^= 0xFF;
+    lrc = cpm386_load_from_buf (fakefile, sizeof (fakefile), tpa, 64, &ent);
+
+    if (lrc != CPMLD_BADHDR)
+      {
+        printf ("UNIT HARD FAIL: core accepted bad magic (rc=%u)\n", lrc);
+        ok = 0;
+      }
+    else
+      {
+        printf ("loader core: bad magic rejected\n");
+      }
+
+    /* unknown version */
+    mk_hdr (fakefile, 0, 4, 2, 0);
+    fakefile[4] = CPM386_VERSION + 1;
+    lrc = cpm386_load_from_buf (fakefile, sizeof (fakefile), tpa, 64, &ent);
+
+    if (lrc != CPMLD_BADHDR)
+      {
+        printf ("UNIT HARD FAIL: core accepted bad version (rc=%u)\n", lrc);
+        ok = 0;
+      }
+    else
+      {
+        printf ("loader core: unknown version rejected\n");
+      }
+
+    /* non-zero reserved flags */
+    mk_hdr (fakefile, 0, 4, 2, 0);
+    fakefile[6] = 1;
+    lrc = cpm386_load_from_buf (fakefile, sizeof (fakefile), tpa, 64, &ent);
+
+    if (lrc != CPMLD_BADHDR)
+      {
+        printf ("UNIT HARD FAIL: core accepted set reserved flag (rc=%u)\n",
+                lrc);
+        ok = 0;
+      }
+    else
+      {
+        printf ("loader core: reserved flags must be zero\n");
+      }
+
+    /* declared memory requirement larger than the TPA */
+    mk_hdr (fakefile, 0, 4, 2, 64); /* 64K wanted, 64 bytes available */
+    lrc = cpm386_load_from_buf (fakefile, sizeof (fakefile), tpa, 64, &ent);
+
+    if (lrc != CPMLD_NOMEM)
+      {
+        printf ("UNIT HARD FAIL: core ignored min_kb (rc=%u)\n", lrc);
+        ok = 0;
+      }
+    else
+      {
+        printf ("loader core: min_kb refused (%luK wanted, %luK free)\n",
+                cpm386_load_req_kb (), cpm386_load_avail_kb ());
+      }
+
+    /* a requirement that does fit must still load */
+    mk_hdr (fakefile, 0, 4, 2, 0);
+    lrc = cpm386_load_from_buf (fakefile, sizeof (fakefile), tpa, 64, &ent);
+
+    if (lrc != CPMLD_OK)
+      {
+        printf ("UNIT HARD FAIL: core rejected a good header (rc=%u)\n", lrc);
+        ok = 0;
       }
   }
 
@@ -1324,22 +1431,23 @@ main (void)
         g_stream_blob[i] = 0;
       }
 
-    g_stream_blob[0] = 0x00;
-    g_stream_blob[1] = 0x01; /* load 0x100 */
-    g_stream_blob[4] = (UBYTE)sz;
-    g_stream_blob[5] = (UBYTE)(sz >> 8);
-    g_stream_blob[8] = 0x00;
-    g_stream_blob[9] = 0x01; /* entry 0x100 */
+    mk_hdr (g_stream_blob, 0x100, sz, 0x100, 0);
+
+    /*
+     * Record 0 carries the header plus whatever is left of its 128 bytes,
+     * so the image bytes served by record 1 - the hole - start at
+     * 128 - CPM386_HDR_SIZE and run for one record.
+     */
 
     for (i = 0; i < (int)sz; i++)
       {
-        if (i >= 116 && i < 244)
+        if (i >= HOLE_FIRST && i < HOLE_FIRST + 128)
           {
-            g_stream_blob[12 + i] = 0; /* hole region expected zeros */
+            g_stream_blob[CPM386_HDR_SIZE + i] = 0; /* hole reads as zero */
           }
         else
           {
-            g_stream_blob[12 + i] = (UBYTE)((i + 1) & 0xff);
+            g_stream_blob[CPM386_HDR_SIZE + i] = (UBYTE)((i + 1) & 0xff);
           }
       }
 
@@ -1364,7 +1472,9 @@ main (void)
         int bad = 0;
         for (i = 0; i < (int)sz; i++)
           {
-            UBYTE exp = (i >= 116 && i < 244) ? 0 : (UBYTE)((i + 1) & 0xff);
+            UBYTE exp = (i >= HOLE_FIRST && i < HOLE_FIRST + 128)
+                            ? 0
+                            : (UBYTE)((i + 1) & 0xff);
             if (tpa[0x100 + i] != exp)
               {
                 bad = i + 1;
@@ -1399,16 +1509,11 @@ main (void)
           g_stream_blob[i] = 0;
         }
 
-      g_stream_blob[0] = 0;
-      g_stream_blob[1] = 0; /* load 0 */
-      g_stream_blob[4] = (UBYTE)bsz;
-      g_stream_blob[5] = (UBYTE)(bsz >> 8);
-      g_stream_blob[8] = 0;
-      g_stream_blob[9] = 0; /* entry 0 */
+      mk_hdr (g_stream_blob, 0, bsz, 0, 0);
 
       for (i = 0; i < (int)bsz; i++)
         {
-          g_stream_blob[12 + i] = (UBYTE)(0x40 + (i & 0x3f));
+          g_stream_blob[CPM386_HDR_SIZE + i] = (UBYTE)(0x40 + (i & 0x3f));
         }
 
       g_stream_idx = 0;
