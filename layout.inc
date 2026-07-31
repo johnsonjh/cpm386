@@ -5,7 +5,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-STAGE2_SECTORS equ 8
+; 16 sectors (8K): stage 2 retains the whole E820 map for merging, and
+; stage 1 loads it to 0x7e00, so it must stay clear of 0x10000.
+STAGE2_SECTORS equ 16
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

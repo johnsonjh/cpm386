@@ -545,6 +545,7 @@ bdos_arg_is_ptr (WORD func)
     case 224: /* BDOS_CON_VIDEO - fill cpm_vga_text */
     case 225: /* BDOS_GET_TICKS - fill cpm_ticks */
     case 226: /* BDOS_SLEEP_UNTIL - read cpm_ticks target */
+    case 228: /* BDOS_MEM_LAYOUT - fill cpm_memlayout */
       return 1;
 
     default:

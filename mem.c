@@ -21,6 +21,18 @@ typedef unsigned char UBYTE;
 
 #define BDOS_INT 0x30
 #define BDOS_TPA 63
+#define BDOS_MEMLAYOUT 228
+
+/*****************************************************************************/
+
+/* MEMF_* from memmap.h */
+
+#define MEMF_E820 0x0001
+#define MEMF_E801 0x0002
+#define MEMF_88 0x0004
+#define MEMF_MBMMAP 0x0008
+#define MEMF_MBBASIC 0x0010
+#define MEMF_A20 0x0020
 
 /*****************************************************************************/
 
@@ -35,6 +47,22 @@ struct tpa_req
   UWORD _pad;
   ULONG low; /* BYTE * in kernel */
   ULONG high;
+};
+
+/*****************************************************************************/
+
+/* Must match struct cpm_memlayout in bdosdef.h */
+struct memlayout
+{
+  ULONG kernel_base;
+  ULONG kernel_end;
+  ULONG ramdisk_base;
+  ULONG ramdisk_size;
+  ULONG lowmem_top;
+  ULONG tpa_base;
+  ULONG tpa_top;
+  ULONG stack_top;
+  ULONG mem_flags;
 };
 
 /*****************************************************************************/
@@ -131,11 +159,65 @@ put_kb (ULONG bytes)
 
 /*****************************************************************************/
 
+/* "start -> end (nnnK)" region line. */
+static void
+put_region (const char *label, ULONG start, ULONG end)
+{
+  puts (label);
+  puthex32 (start);
+  puts (" -> ");
+  puthex32 (end);
+  puts (" (");
+  put_kb (end > start ? end - start : 0);
+  puts (")\r\n");
+}
+
+/*****************************************************************************/
+
+static void
+put_detect (ULONG flags)
+{
+  puts ("Detected via:          ");
+
+  if (flags & MEMF_MBMMAP)
+    {
+      puts ("multiboot memory map");
+    }
+  else if (flags & MEMF_MBBASIC)
+    {
+      puts ("multiboot mem_upper");
+    }
+  else if (flags & MEMF_E820)
+    {
+      puts ("BIOS int 15h e820h");
+    }
+  else if (flags & MEMF_E801)
+    {
+      puts ("BIOS int 15h e801h");
+    }
+  else if (flags & MEMF_88)
+    {
+      puts ("BIOS int 15h ah=88h");
+    }
+  else
+    {
+      puts ("unknown");
+    }
+
+  puts (", A20 ");
+  puts ((flags & MEMF_A20) ? "on" : "OFF");
+  puts (".\r\n");
+}
+
+/*****************************************************************************/
+
 void
 _start (void) /*cppcheck-suppress unusedFunction*/
 {
   struct tpa_req t;
-  ULONG base, top, tpa_len, free_prog, ramdisk_size, kernel_size;
+  struct memlayout m;
+  ULONG base, top, tpa_len, free_prog;
+  int i;
 
   t.parms = 0; /* get */
   t._pad = 0;
@@ -154,9 +236,17 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   tpa_len = top - base;
 
+  for (i = 0; i < (int)sizeof (m); i++)
+    {
+      ((UBYTE *)&m) [i] = 0;
+    }
+
+  (void)bdos (BDOS_MEMLAYOUT, (LONG)(ULONG)&m);
+
   /*
-   * Program load at TPA+0x100; ring-3 stack uses up to ~1M at the top
-   * of the TPA (see pgm_enter).  Report bulk free as TPA minus base page.
+   * Program load at TPA+0x100.  The ring-3 stack is reserved above the
+   * region reported here (see pgm_enter), so the whole of it less the base
+   * page is available to the program.
    */
 
   free_prog = (tpa_len > 0x100UL) ? (tpa_len - 0x100UL) : 0;
@@ -164,51 +254,42 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   puts ("\r\nCP/M-386 Memory Map\r\n");
   puts (    "-------------------\r\n");
 
-  /* Usable RAM is [0 .. TPA top); TPA is the transient region. */
-  puts ("Usable RAM top:        ");
-  puthex32 (top);
-  puts (" (");
-  put_kb (top);
-  puts (" from 0)\r\n");
+  /*
+   * The kernel runs in conventional memory and the TPA is above 1MB; the
+   * two are separated by the video/ROM hole, which is not RAM and is not
+   * part of any region below.
+   */
 
-  ramdisk_size = (ULONG)bdos (227, 0) * 1024UL;
-  kernel_size = base - ramdisk_size;
+  put_region ("System CBIOS/BDOS/CCP: ", m.kernel_base, m.ramdisk_base);
 
-  puts ("System CBIOS/BDOS/CCP: ");
-  puthex32 (0);
-  puts (" -> ");
-  puthex32 (kernel_size);
-  puts (" (");
-  put_kb (kernel_size);
-  puts (")\r\n");
-
-  if (ramdisk_size > 0)
+  if (m.ramdisk_size > 0)
     {
-      puts ("Initial RAM Disk:      ");
-      puthex32 (kernel_size);
-      puts (" -> ");
-      puthex32 (base);
-      puts (" (");
-      put_kb (ramdisk_size);
-      puts (")\r\n");
+      put_region ("Initial RAM Disk:      ", m.ramdisk_base,
+                  m.ramdisk_base + m.ramdisk_size);
     }
+
+  put_region ("Ring-0 stack:          ", m.kernel_end, m.lowmem_top);
+  put_region ("Video / ROM (no RAM):  ", 0xA0000UL, 0x100000UL);
 
   puts ("TPA base:              ");
   puthex32 (base);
-  puts (" (");
-  put_kb (base);
-  puts (")\r\n");
+  puts ("\r\n");
   puts ("TPA top:               ");
   puthex32 (top);
-  puts (" (");
-  put_kb (top);
-  puts (")\r\n");
+  puts ("\r\n");
 
   puts ("TPA size:              ");
   put_kb (tpa_len);
   puts (" (");
   putu (tpa_len);
   puts (" bytes)\r\n");
+
+  if (m.stack_top > m.tpa_top)
+    {
+      put_region ("Ring-3 stack reserve:  ", m.tpa_top, m.stack_top);
+    }
+
+  put_detect (m.mem_flags);
 
   puts ("Program load:          TPA+0x100\r\n");
   puts ("Approximate free RAM:  ");

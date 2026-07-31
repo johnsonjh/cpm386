@@ -21,6 +21,7 @@
 #include "bringup.h" /* shared: ramdisk, dph0, cpm_bringup(), struct dpb/dph defs */
 #include "pmode.h"   /* ring-3 GDT/IDT/TSS + enter_ring3 */
 #include "absaddr.h"
+#include "memmap.h"  /* loader memory descriptor + A20 / RAM verification */
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -724,45 +725,82 @@ void bios_setup_basepage(const void *fcb1, const void *fcb2, const char *tail)
   }
 }
 
+static unsigned long mem_flags;
+static int mem_a20_ok;
+
+unsigned long bios_mem_flags(void) { return mem_flags; }
+
+int bios_mem_a20_ok(void) { return mem_a20_ok; }
+
+#define TPA_STACK_MIN 0x10000UL  /* 64K  */
+#define TPA_STACK_MAX 0x100000UL /* 1M   */
+
+static unsigned long tpa_stack_reserve;
+
+unsigned long bios_tpa_stack_reserve(void) { return tpa_stack_reserve; }
+
 void *bios_getmrt(void) {
   if (mrt.count == 0) {
-    uint32_t tpa_base = *ABS_U32(0x604);
-    uint32_t top = *ABS_U32(0x600);
-    extern char __kernel_end [];
-    uint32_t k_end = (uint32_t)__kernel_end;
+    unsigned long base = 0;
+    unsigned long top = 0;
 
-    /*
-     * Keep TPA below typical PCI MMIO (~3.5G).
-     * Offsets near 4G-1 with nonzero base land in non-RAM,
-     * and ring-3 stack/data would silently fail
-     */
+    mem_flags = mem_get_boot_region(&base, &top);
+    mem_a20_ok = mem_a20_enabled();
 
-    const uint32_t usable_top = 0xE0000000u;
-
-    if (top == 0 || top > usable_top)
-      top = usable_top;
-
-    if (tpa_base == 0 || top <= tpa_base || tpa_base < k_end) {
-      /* safe adaptive for low-mem (<1MB) or bad detect */
-      uint32_t stack_res = 0x4000;
-      tpa_base = k_end + stack_res + 0x1000;
-
-      if (top <= tpa_base)
-        top = k_end + 0x20000; /* fallback room */
+    if (!mem_a20_ok) {
+      base = top = 0;
     }
 
-    uint32_t tpa_len = (top > tpa_base) ? (top - tpa_base) : 0x10000;
-
-    /* Ensure base+len never wraps past 4G */
-    if (tpa_base + tpa_len < tpa_base)
-      tpa_len = (uint32_t)0u - tpa_base;
+    if (top > base) {
+      top = mem_verify_region(base, top);
+    }
 
     mrt.count = 1;
-    mrt.base = (void *)tpa_base;
-    mrt.length = tpa_len;
+
+    if (top > base && top - base >= TPA_MIN_BYTES) {
+      unsigned long len = top - base;
+      unsigned long res = len / 8;
+
+      if (res > TPA_STACK_MAX)
+        res = TPA_STACK_MAX;
+
+      if (res < TPA_STACK_MIN)
+        res = TPA_STACK_MIN;
+
+      res = (res + 0xFFFUL) & ~0xFFFUL;
+
+      /* TPA_MIN_BYTES > TPA_STACK_MIN keeps this from underflowing. */
+      tpa_stack_reserve = res;
+      mrt.base = (void *)base;
+      mrt.length = len - res;
+    } else {
+      /* Nothing usable; pmode_active() stays false and the CCP says so. */
+      tpa_stack_reserve = 0;
+      mrt.base = (void *)0;
+      mrt.length = 0;
+    }
   }
 
   return &mrt;
+}
+
+/* BDOS 228 stuff */
+
+unsigned long bios_mem_layout(struct cpm_memlayout *mp) {
+  mrt_t *lmrt = bios_getmrt();
+  extern char __kernel_end [];
+
+  mp->kernel_base = 0x10000UL;
+  mp->kernel_end = (unsigned long)__kernel_end;
+  mp->ramdisk_base = (unsigned long)&ramdisk [0];
+  mp->ramdisk_size = (unsigned long)RAMDISK_SIZE;
+  mp->lowmem_top = (unsigned long)__kernel_end + 0x4000UL;
+  mp->tpa_base = (unsigned long)lmrt->base;
+  mp->tpa_top = (unsigned long)lmrt->base + lmrt->length;
+  mp->stack_top = mp->tpa_top + bios_tpa_stack_reserve();
+  mp->mem_flags = mem_flags;
+
+  return 0;
 }
 
 unsigned short int bios_getiobyte(void)
@@ -851,7 +889,42 @@ void cpm386_init(void) {
   /* Install user TPA segments, TSS, and int 0x30 BDOS gate before any load. */
   {
     mrt_t *lmrt = bios_getmrt();
-    pmode_init((unsigned long)lmrt->base, (unsigned long)lmrt->length);
+
+    /*
+     * Without a verified TPA there is nowhere to run ring-3 code, and
+     * carrying on would corrupt the kernel rather than fail cleanly.
+     * Say which of the two things went wrong and stop.
+     */
+
+    if (lmrt->length == 0) {
+      const char *why =
+        !bios_mem_a20_ok()
+          ? "A20 gate is not enabled - cannot address memory above 1MB"
+          : "no usable RAM found above 1MB (2MB or more is required)";
+
+      bios_conout('\r');
+      bios_conout('\n');
+
+      while (*why)
+        bios_conout((unsigned char)*why++);
+
+      why = "\r\nCP/M-386 halted.\r\n";
+
+      while (*why)
+        bios_conout((unsigned char)*why++);
+
+      for (;;)
+        __asm__ volatile("cli; hlt");
+    }
+
+    /*
+     * The ring-3 segment spans the loadable region plus the stack reserve
+     * above it; ring 3 must be able to address its own stack, and BDOS
+     * pointer arguments are routinely stack locals.
+     */
+
+    pmode_init((unsigned long)lmrt->base,
+               (unsigned long)lmrt->length + bios_tpa_stack_reserve());
   }
 
   cpm_bringup(); /* shared bring-up (ramdisk/dph + bdosinit + select A) */
@@ -1050,15 +1123,26 @@ static void pgm_after_exit(void)
 /* Enter ring 3 at TPA-relative entry_off; returns after BDOS(0). */
 static UWORD pgm_enter(unsigned long entry_off)
 {
+  /*
+   * Full segment length, including the stack reserve.  ESP starts at the
+   * very top of the segment so the program (growing up from TPA+0x100) and
+   * its stack (growing down) are as far apart as the TPA allows.  Pinning
+   * ESP to a fixed 1M offset used to both waste everything above it and
+   * put the stack inside the image of any program larger than 1M.
+   */
+
   unsigned long ulen = pmode_tpa_len();
   unsigned long user_esp;
-  const unsigned long stack_room = 0x100000UL;
 
   if (ulen < 0x2000)
     return 0xFFFD;
 
-  user_esp = (ulen > stack_room) ? stack_room : (ulen & ~0xFFFUL);
-  user_esp -= 16;
+  /*
+   * Round down to the page granularity pmode_init used for the segment
+   * limit, then leave a little slack below the very last valid byte.
+   */
+
+  user_esp = (ulen & ~0xFFFUL) - 16;
   enter_ring3(entry_off, user_esp);
   pgm_after_exit();
 

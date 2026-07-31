@@ -174,6 +174,28 @@ struct cpm_ticks
 
 /*****************************************************************************/
 
+/*
+ * Physical memory layout (BDOS 228; DE -> this, TPA-relative).
+ * The kernel lives in conventional memory and the TPA above 1MB, with the
+ * video/ROM hole in between, so the layout cannot be inferred from the TPA
+ * limits alone.  Returns 0, or 0xFFFF if DE is bad.
+ */
+
+struct cpm_memlayout
+{
+  ULONG kernel_base;   /* load address of the kernel image        */
+  ULONG kernel_end;    /* end of image, including the RAM disk    */
+  ULONG ramdisk_base;  /* RAM disk within the image               */
+  ULONG ramdisk_size;  /* RAM disk byte length                    */
+  ULONG lowmem_top;    /* end of usable conventional memory       */
+  ULONG tpa_base;      /* TPA (>= 1MB)                            */
+  ULONG tpa_top;       /* end of the loadable region              */
+  ULONG stack_top;     /* end of the ring-3 stack reserve         */
+  ULONG mem_flags;     /* MEMF_* from memmap.h                    */
+};
+
+/*****************************************************************************/
+
 # define robit 0    /* read-only bit in file type field of fcb */
 # define arbit 2    /* archive bit in file type field of fcb   */
 # define SECLEN 128 /* length of a CP/M sector                 */

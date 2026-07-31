@@ -32,7 +32,7 @@ _start:
     ;   - set up GDT + segments
     ;   - zeroed BSS
     ;   - set up stack
-    ;   - filled 0x600 (top) and 0x604 (tpa) via real-mode detection
+    ;   - published the memory descriptor at 0x600 (see memmap.h)
     ; We can just enter the common init.
     jmp .common_init
 
@@ -62,28 +62,18 @@ _start:
     xor eax, eax
     rep stosb
 
-    ; let C parse the multiboot info and fill the legacy memory variables
-    ; (0x600 / 0x604) so bios_getmrt + TPA logic works without change
+    ; let C parse the multiboot info and publish the memory descriptor at
+    ; 0x600 (see memmap.h) so bios_getmrt sees the same thing on both paths
     extern mb_init_from_multiboot
     push dword [mb_info_ptr]
     call mb_init_from_multiboot
     add esp, 4
 
-    ; set up a proper runtime stack after whole kernel (incl. ramdisk)
+    ; Runtime stack directly above the kernel image (incl. ramdisk), in
+    ; conventional memory - same placement as the stage 2 loader uses.
+    ; The TPA is above 1MB and is validated by the kernel, not here.
     extern __kernel_end
-    mov ebx, __kernel_end
-    add ebx, 0x4000                 ; stack reserve
-    mov ecx, [0x600]
-    cmp ecx, 0
-    jne .have_top
-    mov ecx, 0xFFFFFFFF
-.have_top:
-    cmp ebx, ecx
-    jb .stok
-    mov ebx, ecx
-    sub ebx, 0x1000
-.stok:
-    mov esp, ebx
+    mov esp, __kernel_end + 0x4000
 
 .common_init:
     ; jump into the existing C bring-up (banner, cpm_bringup, ccp, etc.)

@@ -228,10 +228,10 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `ILLEGAL.386`  | Ring‑3 protection and exception handler test                                                       |
 | `IOTEST.386`   | File I/O BDOS tests                                                                                |
 | `JULIA.386`    | Draw a Julia set fractal (terminal version)                                                        |
-| `LRBC.386`     | Query and/or set Last Record Byte Count                                                                       |
+| `LRBC.386`     | Query and/or set Last Record Byte Count                                                            |
 | `LS.386`       | List files (with sizes)                                                                            |
 | `MANDEL.386`   | Draw a Mandelbrot set fractal (terminal version)                                                   |
-| `MEM.386`      | Memory map utility (BDOS 227)                                                                      |
+| `MEM.386`      | Memory map utility (BDOS 227/228)                                                                  |
 | `MORE.386`     | UNIX `more`‑style pager                                                                            |
 | `OD.386`       | Octal dump utility                                                                                 |
 | `PAUSE.386`    | Wait for keypress                                                                                  |

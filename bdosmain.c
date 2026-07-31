@@ -853,6 +853,30 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
       break;
 
+    /*
+     * BDOS 228 (0xE4): Get physical memory layout.
+     * DE -> struct cpm_memlayout (TPA-relative).
+     * AX = 0, or 0xFFFF if DE is bad.
+     */
+
+    case 228:
+      {
+        extern unsigned long bios_mem_layout (struct cpm_memlayout *);
+        REG struct cpm_memlayout *mp = (struct cpm_memlayout *)infop;
+
+        if (!mp)
+          {
+            rtnval = 0xFFFF;
+
+            break;
+          }
+
+        bios_mem_layout (mp);
+        rtnval = 0;
+      }
+
+      break;
+
     default:
       return -1; /* bad function number */
                  /* break; */

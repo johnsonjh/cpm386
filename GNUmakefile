@@ -407,10 +407,11 @@ CCP_OBJ = ccp.o
 BIOS_OBJ = bios.o
 BRINGUP_OBJ = bringup.o
 PMODE_OBJS = pmode.o pmodeasm.o
+MEMMAP_OBJ = memmap.o
 RTC_OBJ = rtc.o
 PIT_OBJ = pit.o
 OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
-	$(RTC_OBJ) $(PIT_OBJ) mbentry.o mltiboot.o
+	$(MEMMAP_OBJ) $(RTC_OBJ) $(PIT_OBJ) mbentry.o mltiboot.o
 
 ################################################################################
 
@@ -1089,7 +1090,7 @@ ramdisk.bin: \
 
 ################################################################################
 
-bringup.o: bringup.c ramdisk.bin bringup.h
+bringup.o: bringup.c ramdisk.bin bringup.h bdosinc.h biosdef.h bdosdef.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1105,11 +1106,45 @@ bringup.o: bringup.c ramdisk.bin bringup.h
 
 ################################################################################
 
-bios.o: bios.c
+bios.o: bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h absaddr.h \
+	memmap.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+memmap.o: memmap.c memmap.h absaddr.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+mltiboot.o: mltiboot.c mltiboot.h memmap.h absaddr.h bdosinc.h biosdef.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+# The BDOS sources share one set of headers; bdosdef.h carries the ring-3
+# request structs (cpm_vga_text / cpm_ticks / cpm_memlayout).
+
+BDOS_HDRS = diverge.h bdosinc.h bdosdef.h biosdef.h pktio.h platform.h
+
+bdosmain.o: bdosmain.c $(BDOS_HDRS)
+bdosmisc.o: bdosmisc.c $(BDOS_HDRS)
+bdosrw.o: bdosrw.c $(BDOS_HDRS)
+conbdos.o: conbdos.c $(BDOS_HDRS)
+fileio.o: fileio.c $(BDOS_HDRS)
+dskutil.o: dskutil.c $(BDOS_HDRS)
+iosys.o: iosys.c $(BDOS_HDRS)
+
+ccp.o: ccp.c ccpdef.h diverge.h bdosinc.h bdosdef.h
 
 ################################################################################
 
@@ -1129,7 +1164,7 @@ pit.o: pit.c pit.h
 
 ################################################################################
 
-pmode.o: pmode.c pmode.h
+pmode.o: pmode.c pmode.h bdosinc.h platform.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1169,6 +1204,17 @@ bss.inc: $(TARGET)
 			bytes=$$((0x$$ke - 0x10000)); \
 			sec=$$(( (bytes + 511) / 512 + 2 )); \
 			$(PRINTF) '%s\n' "SECTORS_TO_LOAD equ $$sec" >> ./bss.inc
+	@ke=$$($(NM) $(TARGET) | \
+		$(AWK) '/__kernel_end/ { print $$1 }'); \
+		top=$$((0x$$ke + 0x4000)); \
+		if [ "$$top" -gt $$((0x9E000)) ]; then \
+			tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
+			$(PRINTF) '%s\n' \
+				"ERROR: kernel end + r0 stack ($$top) overruns conventional"; \
+			$(PRINTF) '%s\n' \
+				"       memory (0x9E000); reduce RAMDISK_KB ($(RAMDISK_KB))"; \
+			tput sgr0 2> /dev/null || :; \
+			exit 1; fi
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
