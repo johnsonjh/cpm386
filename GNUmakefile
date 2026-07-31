@@ -408,10 +408,14 @@ BIOS_OBJ = bios.o
 BRINGUP_OBJ = bringup.o
 PMODE_OBJS = pmode.o pmodeasm.o
 MEMMAP_OBJ = memmap.o
+VGACON_OBJ = vgacon.o
+VIDBIOS_OBJS = vidbios.o vidbiosasm.o
+VIDMODE_OBJ = vidmode.o
 RTC_OBJ = rtc.o
 PIT_OBJ = pit.o
 OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
-	$(MEMMAP_OBJ) $(RTC_OBJ) $(PIT_OBJ) mbentry.o mltiboot.o
+	$(MEMMAP_OBJ) $(VGACON_OBJ) $(VIDBIOS_OBJS) $(VIDMODE_OBJ) \
+	$(RTC_OBJ) $(PIT_OBJ) mbentry.o mltiboot.o
 
 ################################################################################
 
@@ -542,6 +546,14 @@ iotest.386: iotest.bin $(MK386)
 
 delay.386: delay.bin $(MK386)
 	./$(MK386) ./delay.bin ./delay.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+gfxtest.386: gfxtest.bin $(MK386)
+	./$(MK386) ./gfxtest.bin ./gfxtest.386 0x100
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -880,8 +892,24 @@ aclockdv.386: aclockdv.bin $(MK386)
 
 ################################################################################
 
+vgafont.386: vgafont.bin $(MK386)
+	./$(MK386) ./vgafont.bin ./vgafont.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 vgatext.386: vgatext.bin $(MK386)
 	./$(MK386) ./vgatext.bin ./vgatext.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+textmode.386: textmode.bin $(MK386)
+	./$(MK386) ./textmode.bin ./textmode.386 0x100
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -944,6 +972,7 @@ ramdisk.bin: \
 			dumpfcb.386 \
 			fparse.386 \
 			getsn.386 \
+			gfxtest.386 \
 			hd.386 \
 			hello.386 \
 			illegal.386 \
@@ -965,6 +994,7 @@ ramdisk.bin: \
 			stat.386 \
 			sync.386 \
 			test211.386 \
+			textmode.386 \
 			ticks.386 \
 			tod.386 \
 			touch.386 \
@@ -974,6 +1004,7 @@ ramdisk.bin: \
 			ver.386 \
 			vgaoff.386 \
 			vgaon.386 \
+			vgafont.386 \
 			vgatext.386
 	$(RM) -f /tmp/ramdisk.tmp
 	$(RM) -rf /tmp/cpmd
@@ -996,6 +1027,7 @@ ramdisk.bin: \
 	$(CP) -f ./dumpfcb.386 /tmp/cpmd/DUMPFCB.386
 	$(CP) -f ./fparse.386 /tmp/cpmd/FPARSE.386
 	$(CP) -f ./getsn.386 /tmp/cpmd/GETSN.386
+	$(CP) -f ./gfxtest.386 /tmp/cpmd/GFXTEST.386
 	$(CP) -f ./hd.386 /tmp/cpmd/HD.386
 	$(CP) -f ./hello.386 /tmp/cpmd/HELLO.386
 	$(CP) -f ./illegal.386 /tmp/cpmd/ILLEGAL.386
@@ -1017,6 +1049,7 @@ ramdisk.bin: \
 	$(CP) -f ./stat.386 /tmp/cpmd/STAT.386
 	$(CP) -f ./sync.386 /tmp/cpmd/SYNC.386
 	$(CP) -f ./test211.386 /tmp/cpmd/TEST211.386
+	$(CP) -f ./textmode.386 /tmp/cpmd/TEXTMODE.386
 	$(CP) -f ./ticks.386 /tmp/cpmd/TICKS.386
 	$(CP) -f ./tod.386 /tmp/cpmd/TOD.386
 	$(CP) -f ./touch.386 /tmp/cpmd/TOUCH.386
@@ -1026,6 +1059,7 @@ ramdisk.bin: \
 	$(CP) -f ./ver.386 /tmp/cpmd/VER.386
 	$(CP) -f ./vgaoff.386 /tmp/cpmd/VGAOFF.386
 	$(CP) -f ./vgaon.386 /tmp/cpmd/VGAON.386
+	$(CP) -f ./vgafont.386 /tmp/cpmd/VGAFONT.386
 	$(CP) -f ./vgatext.386 /tmp/cpmd/VGATEXT.386
 	mkfs.cpm -f $(CPMFS) /tmp/ramdisk.tmp
 	cpmcp -f $(CPMFS) /tmp/ramdisk.tmp \
@@ -1042,6 +1076,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/ENV.DAT \
 	  /tmp/cpmd/FPARSE.386 \
 	  /tmp/cpmd/GETSN.386 \
+	  /tmp/cpmd/GFXTEST.386 \
 	  /tmp/cpmd/HD.386 \
 	  /tmp/cpmd/HELLO.386 \
 	  /tmp/cpmd/ILLEGAL.386 \
@@ -1065,6 +1100,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/STAT.386 \
 	  /tmp/cpmd/SYNC.386 \
 	  /tmp/cpmd/TEST211.386 \
+	  /tmp/cpmd/TEXTMODE.386 \
 	  /tmp/cpmd/TICKS.386 \
 	  /tmp/cpmd/TOD.386 \
 	  /tmp/cpmd/TOUCH.386 \
@@ -1074,6 +1110,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/VER.386 \
 	  /tmp/cpmd/VGAOFF.386 \
 	  /tmp/cpmd/VGAON.386 \
+	  /tmp/cpmd/VGAFONT.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
 	./$(SHOLE) -w /tmp/ramdisk.tmp BIG.386
@@ -1118,7 +1155,7 @@ bringup.o: bringup.c ramdisk.bin bringup.h bdosinc.h biosdef.h bdosdef.h
 ################################################################################
 
 bios.o: bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h absaddr.h \
-	memmap.h
+	memmap.h io.h vgacon.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1128,6 +1165,38 @@ bios.o: bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h absaddr.h \
 
 memmap.o: memmap.c memmap.h absaddr.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+vgacon.o: vgacon.c vgacon.h io.h absaddr.h platform.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+vidbios.o: vidbios.c vidbios.h absaddr.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+vidmode.o: vidmode.c vidmode.h vidbios.h vgacon.h absaddr.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+vidbiosasm.o: vidbios.s
+	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -l ./${@:.o=.lst} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1145,7 +1214,8 @@ mltiboot.o: mltiboot.c mltiboot.h memmap.h absaddr.h bdosinc.h biosdef.h
 # The BDOS sources share one set of headers; bdosdef.h carries the ring-3
 # request structs (cpm_vga_text / cpm_ticks / cpm_memlayout).
 
-BDOS_HDRS = diverge.h bdosinc.h bdosdef.h biosdef.h pktio.h platform.h
+BDOS_HDRS = diverge.h bdosinc.h bdosdef.h biosdef.h pktio.h platform.h \
+	vidmode.h vgacon.h
 
 bdosmain.o: bdosmain.c $(BDOS_HDRS)
 bdosmisc.o: bdosmisc.c $(BDOS_HDRS)
@@ -1175,7 +1245,7 @@ pit.o: pit.c pit.h
 
 ################################################################################
 
-pmode.o: pmode.c pmode.h bdosinc.h platform.h
+pmode.o: pmode.c pmode.h bdosinc.h platform.h io.h vidbios.h vidmode.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."

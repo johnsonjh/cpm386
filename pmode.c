@@ -14,6 +14,9 @@
 #include "bdosinc.h"
 #include "platform.h"
 #include "pmode.h"
+#include "io.h"
+#include "vidbios.h"
+#include "vidmode.h"
 
 /*****************************************************************************/
 
@@ -76,7 +79,13 @@ struct tss32
 
 /*****************************************************************************/
 
-#define GDT_COUNT 7 /* + SEL_UVIDEO at index 6 */
+/*
+ * 0-6 as before; 7 is the ring-3 graphics framebuffer (built null until a
+ * graphics mode is set), 8 and 9 are the 16-bit descriptors the real mode
+ * thunk needs to step down through 16-bit protected mode.
+ */
+
+#define GDT_COUNT 10
 #define IDT_COUNT 256
 
 /*****************************************************************************/
@@ -179,6 +188,49 @@ pmode_vga_map_size (void)
 
 /*****************************************************************************/
 
+/*
+ * Ring-3 graphics framebuffer.  GDT index 7 is reprogrammed on every
+ * graphics mode set and nulled on the way back to text, so a program that
+ * hangs on to the selector across a mode change faults instead of writing
+ * into whatever now lives at that address.
+ *
+ * Segments are the only mapping mechanism here - there is no paging - so a
+ * linear framebuffer needs nothing more than a descriptor pointing at its
+ * physical address.
+ */
+
+static unsigned long g_fb_base;
+static unsigned long g_fb_size;
+
+/*****************************************************************************/
+
+unsigned short
+pmode_fb_selector (void)
+{
+  if (!pmode_ready || g_fb_size == 0)
+    return 0;
+
+  return (unsigned short)SEL_UFB_RPL3;
+}
+
+/*****************************************************************************/
+
+unsigned long
+pmode_fb_base (void)
+{
+  return g_fb_base;
+}
+
+/*****************************************************************************/
+
+unsigned long
+pmode_fb_size (void)
+{
+  return g_fb_size;
+}
+
+/*****************************************************************************/
+
 /* GDT helpers */
 
 static void
@@ -195,6 +247,47 @@ gdt_set (int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
   gdt [idx].access = access;
   gdt [idx].gran = (uint8_t)((flags & 0xF0) | ((limit >> 16) & 0x0F));
   gdt [idx].base_hi = (uint8_t)((base >> 24) & 0xFF);
+}
+
+/*****************************************************************************/
+
+/*
+ * Point the ring-3 framebuffer selector at base for size bytes, or null it
+ * when size is 0.  Changing a descriptor already covered by the loaded GDT
+ * takes effect on the next selector load, so no reload is needed.
+ */
+
+void
+pmode_set_fb (unsigned long base, unsigned long size)
+{
+  if (!pmode_ready || size == 0)
+    {
+      g_fb_base = 0;
+      g_fb_size = 0;
+      gdt_set (7, 0, 0, 0, 0);
+
+      return;
+    }
+
+  g_fb_base = base;
+  g_fb_size = size;
+
+  /*
+   * Byte granularity caps a segment at 1MB, which is fine for the 64K
+   * window at 0xA0000 but not for a linear framebuffer; switch to page
+   * granularity once the region is large enough to need it.
+   */
+
+  if (size <= 0x100000UL)
+    {
+      gdt_set (7, (uint32_t)base, (uint32_t)(size - 1), 0xF2, 0x40);
+    }
+  else
+    {
+      uint32_t pages = (uint32_t)((size + 0xFFFUL) >> 12);
+
+      gdt_set (7, (uint32_t)base, pages - 1, 0xF2, 0xC0);
+    }
 }
 
 /*****************************************************************************/
@@ -367,6 +460,30 @@ fault_handler_c (struct fault_frame *f)
   __asm__ volatile ("mov %%cr2, %0" : "=r"(cr2));
   __asm__ volatile ("mov %%cr3, %0" : "=r"(cr3));
 
+  /*
+   * Get the display back into a readable text mode before printing a
+   * single character, or a program that died in a graphics mode leaves the
+   * dump as pixel noise.  Deliberately conservative:
+   *
+   *   - Nothing happens unless the mode actually differs from the console
+   *     mode, so the overwhelmingly common case costs nothing and risks
+   *     nothing.
+   *   - Skipped outright if the fault came from inside the thunk itself,
+   *     which would otherwise re-enter it from its own failure path.
+   *
+   * Serial output is unaffected by the video mode, so on a machine with a
+   * serial console the dump survives regardless of what happens here.
+   */
+
+  {
+    extern int bios_vga_present (void);
+
+    if (bios_vga_present () && !vid_thunk_busy ())
+      {
+        vidmode_restore_console ();
+      }
+  }
+
   fault_puts ("\r\n");
   fault_puts ("CP/M-386 exception ");
   fault_puthex (f->vec, 2);
@@ -509,6 +626,98 @@ extern void (*exc_stub_table [32]) (void);
 
 /*****************************************************************************/
 
+/*
+ * Bytes the BDOS will touch at the caller's pointer, for the calls whose
+ * payload is a fixed-size object.  Returning 0 means "not known here" and
+ * keeps the historical start-offset-only check for that call - correct for
+ * genuinely variable-length payloads such as function 9's '$'-terminated
+ * string, function 10's caller-sized line buffer, and function 27, whose
+ * length depends on a DPB that has not been selected yet.
+ *
+ * Without this the only validation is that the *first* byte is inside the
+ * TPA, so an object placed within sizeof(object)-1 bytes of the top lets
+ * the BDOS write past the end of the ring-3 segment.
+ */
+
+#define ARGLEN_FCB 36     /* struct fcb                      */
+#define ARGLEN_DMA 128    /* one CP/M record                 */
+#define ARGLEN_DPB 16     /* struct dpb                      */
+#define ARGLEN_TPA 12     /* struct set_tpa_struct           */
+#define ARGLEN_SERIAL 6   /* S_SERIAL number                 */
+#define ARGLEN_VGATEXT 16 /* struct cpm_vga_text             */
+#define ARGLEN_TICKS 12   /* struct cpm_ticks                */
+#define ARGLEN_MEMLAY 36  /* struct cpm_memlayout            */
+#define ARGLEN_VIDMODE 32 /* struct cpm_vidmode              */
+#define ARGLEN_VIDSET 8   /* struct cpm_vidset               */
+#define ARGLEN_VIDFONT 12 /* struct cpm_vidfont              */
+#define ARGLEN_VIDPAL 12  /* struct cpm_vidpal               */
+
+static unsigned long
+bdos_arg_len (WORD func)
+{
+  switch (func)
+    {
+    case 15: /* open           */
+    case 16: /* close          */
+    case 17: /* search first   */
+    case 18: /* search next    */
+    case 19: /* delete         */
+    case 20: /* read seq       */
+    case 21: /* write seq      */
+    case 22: /* make           */
+    case 23: /* rename         */
+    case 30: /* set file attrs */
+    case 33: /* read random    */
+    case 34: /* write random   */
+    case 35: /* file size      */
+    case 36: /* set random rec */
+    case 40: /* write ran zero */
+    case 59: /* program load   */
+    case 99: /* truncate       */
+      return ARGLEN_FCB;
+
+    case 26: /* set DMA */
+      return ARGLEN_DMA;
+
+    case 31: /* get DPB */
+      return ARGLEN_DPB;
+
+    case 63: /* get/set TPA */
+      return ARGLEN_TPA;
+
+    case 107: /* get serial number */
+      return ARGLEN_SERIAL;
+
+    case 224: /* BDOS_CON_VIDEO */
+      return ARGLEN_VGATEXT;
+
+    case 225: /* BDOS_GET_TICKS   */
+    case 226: /* BDOS_SLEEP_UNTIL */
+      return ARGLEN_TICKS;
+
+    case 228: /* BDOS_MEM_LAYOUT */
+      return ARGLEN_MEMLAY;
+
+    case 229: /* BDOS_VID_QUERY */
+    case 230: /* BDOS_VID_ENUM  */
+      return ARGLEN_VIDMODE;
+
+    case 231: /* BDOS_VID_SET */
+      return ARGLEN_VIDSET;
+
+    case 232: /* BDOS_VID_FONT */
+      return ARGLEN_VIDFONT;
+
+    case 233: /* BDOS_VID_PALETTE */
+      return ARGLEN_VIDPAL;
+
+    default:
+      return 0;
+    }
+}
+
+/*****************************************************************************/
+
 /* pointer-arg BDOS functions (info is TPA-relative from ring 3!) */
 
 static int
@@ -550,6 +759,11 @@ bdos_arg_is_ptr (WORD func)
     case 225: /* BDOS_GET_TICKS - fill cpm_ticks */
     case 226: /* BDOS_SLEEP_UNTIL - read cpm_ticks target */
     case 228: /* BDOS_MEM_LAYOUT - fill cpm_memlayout */
+    case 229: /* BDOS_VID_QUERY - fill cpm_vidmode    */
+    case 230: /* BDOS_VID_ENUM  - fill cpm_vidmode    */
+    case 231: /* BDOS_VID_SET   - read cpm_vidset     */
+    case 232: /* BDOS_VID_FONT  - read cpm_vidfont    */
+    case 233: /* BDOS_VID_PALETTE - read cpm_vidpal   */
       return 1;
 
     default:
@@ -583,8 +797,21 @@ bdos_syscall_c (WORD func, unsigned long info, unsigned long user_cs)
 
   if (bdos_arg_is_ptr (func) && pmode_ready)
     {
+      unsigned long need = bdos_arg_len (func);
+
       /* user pointer is TPA-relative; reject out-of-range */
       if (info >= g_tpa_len)
+        {
+          return 0xFFFF;
+        }
+
+      /*
+       * ...and reject an object that starts inside the TPA but would be
+       * written past the end of it.  Calls with no fixed size keep the
+       * start-only check.
+       */
+
+      if (need > 0 && need > g_tpa_len - info)
         {
           return 0xFFFF;
         }
@@ -595,14 +822,6 @@ bdos_syscall_c (WORD func, unsigned long info, unsigned long user_cs)
   r = _bdos (func, (UWORD)info, (UBYTE *)(unsigned long)infop);
 
   return r;
-}
-
-/*****************************************************************************/
-
-static inline void
-outb (uint16_t port, uint8_t val)
-{
-  __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
 }
 
 /*****************************************************************************/
@@ -692,6 +911,22 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
 #else
   gdt_set (6, 0, 0, 0, 0);
 #endif
+
+  /*
+   * 0x38 ring-3 framebuffer: null until a graphics mode is set.
+   */
+
+  gdt_set (7, 0, 0, 0, 0);
+
+  /*
+   * 0x40 / 0x48 16-bit code and data, base 0, limit 64K-1, byte
+   * granularity, D/B = 0.  Used only by the int 10h thunk to reach real
+   * mode; the trampoline lives below 0x10000 because a 16-bit code segment
+   * only has a 16-bit IP.
+   */
+
+  gdt_set (8, 0, 0xFFFF, 0x9A, 0x00);
+  gdt_set (9, 0, 0xFFFF, 0x92, 0x00);
 
   /* TSS contents */
   for (i = 0; i < (int)sizeof (tss); i++)

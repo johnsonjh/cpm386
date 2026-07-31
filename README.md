@@ -221,6 +221,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `ENV.DAT`      | Environment data file                                                                              |
 | `FPARSE.386`   | F_PARSE test ([BDOS 152](https://www.seasip.info/Cpm/bdos.html#152))                               |
 | `GETSN.386`    | Display serial number ([BDOS 107](https://www.seasip.info/Cpm/bdos.html#107))                      |
+| `GFXTEST.386`  | Graphics mode and framebuffer access demo (BDOS 229, BDOS 230, BDOS 231, BDOS 233)                 |
 | `HD.386`       | Hex dump utility                                                                                   |
 | `HELLO.386`    | Hello world (the very first **CP/M‑386** program!)                                                 |
 | `ILLEGAL.386`  | Ring‑3 protection and exception handler test                                                       |
@@ -245,6 +246,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C 01/03/84)                                          |
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
+| `TEXTMODE.386` | Query and set the console text mode (BDOS 229, BDOS 230, BDOS 231)                                 |
 | `TICKS.386`    | High‑resolution timer tests (BDOS 225, BDOS 226)                                                   |
 | `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104), [BDOS 105](https://www.seasip.info/Cpm/bdos.html#105)) |
 | `TOUCH.386`    | Create an empty file                                                                               |
@@ -252,6 +254,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `TRUNCTST.386` | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
 | `TSEC.386`     | Get date and time ([BDOS 155](https://www.seasip.info/Cpm/bdos.html#155))                          |
 | `VER.386`      | Display OS version ([BDOS 163](https://www.seasip.info/Cpm/bdos.html#163))                         |
+| `VGAFONT.386`  | Load a console font or restore the default ROM font (BDOS 232)                                     |
 | `VGAOFF.386`   | Disable VGA console (BDOS 222)                                                                     |
 | `VGAON.386`    | Enable VGA console (BDOS 222)                                                                      |
 | `VGATEXT.386`  | VGA direct access demo (BDOS 224)                                                                  |

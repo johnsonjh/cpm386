@@ -15,13 +15,17 @@
  * Using in-memory RAM disk for initial FS.
  */
 
-#include "bdosinc.h" /* UBYTE/WORD etc */
-#include "bdosdef.h" /* for CPM386_HDR / loader core */
-#include "biosdef.h" /* for bios_* decls/macros */
-#include "bringup.h" /* shared: ramdisk, dph0, cpm_bringup(), struct dpb/dph defs */
-#include "pmode.h"   /* ring-3 GDT/IDT/TSS + enter_ring3 */
-#include "absaddr.h"
+#include "bdosinc.h" /* UBYTE/WORD etc                                    */
+#include "bdosdef.h" /* for CPM386_HDR / loader core                      */
+#include "biosdef.h" /* for bios_* decls/macros                           */
+#include "bringup.h" /* ramdisk, dph0, cpm_bringup(), struct dpb/dph defs */
+#include "pmode.h"   /* ring-3 GDT/IDT/TSS + enter_ring3                  */
+#include "absaddr.h" /* abs. addr                                         */
 #include "memmap.h"  /* loader memory descriptor + A20 / RAM verification */
+#include "io.h"      /* shared port I/O primitives                        */
+#include "vgacon.h"  /* VGA text console primitives                       */
+#include "vidbios.h" /* real mode int 10h thunk                           */
+#include "vidmode.h" /* video mode table + console restore                */
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -34,21 +38,6 @@ typedef unsigned long size_t; /* rough */
 
 static int com_present;
 static int vga_present;
-
-static inline void outb(uint16_t port, uint8_t val) {
-  __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
-}
-
-static inline uint8_t inb(uint16_t port) {
-  uint8_t ret;
-
-  __asm__ volatile ("inb %1, %0" : "=a"(ret) : "Nd"(port));
-
-  return ret;
-}
-
-static void vga_init(void); /* forward */
-static void vga_update_cursor(void); /* forward for calls in clear/scroll */
 
 static int com_probe(void)
 {
@@ -87,7 +76,6 @@ static int com_probe(void)
   return (ier & 0x0F) == 0x0F && (ier & 0xF0) == 0;
 }
 
-static int vga_probe(void); /* forward */
 
 static void com_init(void) {
   com_present = com_probe();
@@ -103,7 +91,7 @@ static void com_init(void) {
     outb(COM1_PORT + 4, 0x0B); /* DTR/RTS/OUT2 */
   }
 
-  vga_present = vga_probe();
+  vga_present = vgacon_probe();
 
   /*
    * A machine with neither adapter has no console at all!
@@ -114,7 +102,7 @@ static void com_init(void) {
     vga_present = 1;
 
   if (vga_present)
-    vga_init();
+    vgacon_init();
 }
 
 static int com_stat(void) {
@@ -157,43 +145,11 @@ static unsigned char com_in(void) {
 }
 
 /*
- * --- Video (VGA 80x25 0xb8000) + AT keyboard ---
+ * --- Video (VGA text console, see vgacon.c) + AT keyboard ---
  * Input: prefer keyboard if ready else serial
  */
 
-#define VGA_BASE 0xb8000UL
-#define VGA_W 80
-#define VGA_H 25
-
-static volatile uint16_t *vga_mem = (volatile uint16_t *)VGA_BASE;
-static int vrow = 0, vcol = 0;
 static int have_kbd_input = 0; /* once we see PS/2 input, ignore serial input */
-
-/* Probe for a VGA text adapter */
-static int vga_probe(void) {
-#if !CPM386_HAS_VGA_TEXT
-  return 0;
-#else
-  volatile uint16_t *p = vga_mem;
-  uint16_t save0 = p [0];
-  uint16_t save1 = p [1];
-  int ok;
-
-  p [0] = 0xA55A;
-  p [1] = 0x5AA5;
-  ok = (p [0] == 0xA55A && p [1] == 0x5AA5);
-
-  if (ok) {
-    p [0] = 0x1234;
-    ok = (p [0] == 0x1234 && p [1] == 0x5AA5);
-  }
-
-  p [0] = save0;
-  p [1] = save1;
-
-  return ok;
-#endif
-}
 
 int bios_vga_present(void)
 {
@@ -203,115 +159,6 @@ int bios_vga_present(void)
 int bios_com_present(void)
 {
   return com_present;
-}
-
-static void vga_clear(void) {
-  int i;
-
-  for (i = 0; i < VGA_W * VGA_H; i++)
-    vga_mem [i] = (uint16_t)(' ' | (0x07 << 8));
-
-  vrow = vcol = 0;
-  vga_update_cursor();
-}
-
-static void vga_scroll(void) {
-  int y, x, pos;
-
-  for (y = 0; y < VGA_H-1; y++) {
-    for (x = 0; x < VGA_W; x++) {
-      pos = y * VGA_W + x;
-      vga_mem [pos] = vga_mem [pos + VGA_W];
-    }
-  }
-
-  for (x = 0; x < VGA_W; x++) {
-      vga_mem [(VGA_H-1)*VGA_W + x] = (uint16_t)(' ' | (0x07 << 8));
-  }
-
-  vga_update_cursor();
-}
-
-/* hardware cursor via CRTC (0x3D4/0x3D5). */
-static void vga_update_cursor(void) {
-  uint16_t pos = (uint16_t)(vrow * VGA_W + vcol);
-  outb(0x3D4, 0x0E); /* cursor location high */
-  outb(0x3D5, (pos >> 8) & 0xFF);
-  outb(0x3D4, 0x0F); /* cursor location low */
-  outb(0x3D5, pos & 0xFF);
-}
-
-static void vga_putc(unsigned char c) {
-  int pos;
-
-  if (c == '\r') {
-    vcol = 0;
-    vga_update_cursor();
-
-    return;
-  }
-
-  if (c == '\n') {
-    vcol = 0;
-
-    if (++vrow >= VGA_H) {
-      vrow = VGA_H-1;
-      vga_scroll();
-    }
-
-    vga_update_cursor();
-
-    return;
-  }
-
-  if (c == '\b') {
-    if (vcol > 0) vcol--;
-    vga_update_cursor();
-
-    return;
-  }
-
-  if (c == '\t') {
-    vcol = (vcol + 8) & ~7;
-
-    if (vcol >= VGA_W) {
-      vcol = 0;
-
-      if (++vrow >= VGA_H) {
-        vrow = VGA_H-1;
-        vga_scroll();
-      }
-    }
-
-    vga_update_cursor();
-
-    return;
-  }
-
-  /* printable or control we treat as-is */
-  if (vcol >= VGA_W) {
-    vcol = 0;
-
-    if (++vrow >= VGA_H) {
-      vrow = VGA_H-1;
-      vga_scroll();
-    }
-  }
-
-  pos = vrow * VGA_W + vcol;
-  vga_mem [pos] = (uint16_t)(c | (0x07 << 8));
-  vcol++;
-  vga_update_cursor();
-}
-
-static void vga_init(void) {
-  vga_clear();
-  /* reset CRTC start address (regs 0x0C/0x0D) to 0 */
-  outb(0x3D4, 0x0C);
-  outb(0x3D5, 0);
-  outb(0x3D4, 0x0D);
-  outb(0x3D5, 0);
-  vga_update_cursor();
 }
 
 /* Basic PS/2 scancode set1 to ASCII (no numpad yet, basic shifts) */
@@ -469,8 +316,18 @@ static int con_vga_en = 0;
 static int con_ser_en = 0;
 
 void bios_wboot(void) {
-  /* for now, just loop or jump to ccp restart */
   extern void ccp(void);
+
+  /*
+   * The other end of the video restore.  A BDOS 47 chain, or a disk error
+   * the user answers with abort, calls warmboot() and re-enters the CCP
+   * here without ever unwinding through pgm_enter(), so pgm_after_exit()
+   * does not run on those paths.
+   */
+
+  if (vga_present)
+    vidmode_restore_console();
+
   ccp();
 }
 
@@ -515,7 +372,7 @@ void bios_conout(unsigned char c)
     com_out(c);
 
   if (con_vga_en)
-    vga_putc(c);
+    vgacon_putc(c);
 }
 
 /*
@@ -556,7 +413,7 @@ void bios_con_clear(void)
   }
 
   if (con_vga_en)
-      vga_clear();
+      vgacon_clear();
 }
 
 /*
@@ -933,6 +790,27 @@ void bios_system_reboot(int warm)
   }
 }
 
+/* Unsigned decimal to the console, for boot diagnostics only */
+static void bios_num_out(unsigned long n)
+{
+  char b [12];
+  int i = 0;
+
+  if (!n) {
+    bios_conout('0');
+
+    return;
+  }
+
+  while (n && i < 12) {
+    b [i++] = (char)('0' + (n % 10));
+    n /= 10;
+  }
+
+  while (i)
+    bios_conout((unsigned char)b [--i]);
+}
+
 /* cold boot entry from asm */
 void cpm386_init(void) {
   com_init();
@@ -981,6 +859,50 @@ void cpm386_init(void) {
     pmode_init((unsigned long)lmrt->base,
                (unsigned long)lmrt->length + bios_tpa_stack_reserve());
   }
+
+  /*
+   * Real mode int 10h thunk.  This has to come after pmode_init(), which
+   * is what installs the GDT holding the 16-bit descriptors the transition
+   * step down.  Only useful with an VGA video adapter fitted, and so the
+   * read-only AH=0Fh call below is the proof that the protected/real mode
+   * transition works on this machine before anything depends on it.
+   */
+
+  if (vga_present) {
+    static const char vmsg [] = "Video: BIOS mode ";
+    static const char vbad [] = "Video: BIOS not callable\r\n";
+    const char *p;
+    unsigned m;
+
+    vidbios_init();
+    m = vid_bios_mode();
+
+    if (m == 0xFFFF) {
+      for (p = vbad; *p; p++)
+        bios_conout((unsigned char)*p);
+    } else {
+      static const char hex [] = "0123456789ABCDEF";
+
+      for (p = vmsg; *p; p++)
+        bios_conout((unsigned char)*p);
+
+      bios_conout((unsigned char)hex [(m >> 4) & 0xF]);
+      bios_conout((unsigned char)hex [m & 0xF]);
+      bios_conout('h');
+      bios_conout(',');
+      bios_conout(' ');
+      bios_num_out(vgacon_cols());
+      bios_conout('x');
+      bios_num_out(vgacon_rows());
+      bios_conout('\r');
+      bios_conout('\n');
+    }
+  }
+
+  /* Learn the mode the BIOS left us in, without changing it. */
+  if (vga_present)
+    vidmode_init();
+
 
   cpm_bringup(); /* shared bring-up (ramdisk/dph + bdosinit + select A) */
   extern void bdosinit(void);
@@ -1165,6 +1087,16 @@ static void pgm_after_exit(void)
   extern BYTE *tpa_lt, *tpa_lp, *tpa_ht, *tpa_hp;
   static UBYTE kdma [128];
 
+  /*
+   * undo any video mode the program left behind, including a console mode
+   * it set but never committed to.  Covers both a clean exit and a fault
+   * abort, since both return through pgm_enter().  A noop when the mode
+   * already matches so ordinary programs unaffected.
+   */
+
+  if (vga_present)
+    vidmode_restore_console();
+
   tpa_lt = tpa_lp;
   tpa_ht = tpa_hp;
 
@@ -1190,7 +1122,7 @@ static UWORD pgm_enter(unsigned long entry_off)
   unsigned long user_esp;
 
   if (ulen < 0x2000)
-    return 0xFFFD;
+    return CPMLD_NOMEM; /* nowhere to run at all */
 
   /*
    * Round down to the page granularity pmode_init used for the segment

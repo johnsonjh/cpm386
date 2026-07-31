@@ -23,13 +23,17 @@
 # define SEL_UCODE 0x18 /* DPL=3; use with RPL3 => 0x1B */
 # define SEL_UDATA 0x20 /* DPL=3; use with RPL3 => 0x23 */
 # define SEL_TSS 0x28
-# define SEL_UVIDEO 0x30 /* DPL=3 VGA text; use with RPL3 => 0x33 */
+# define SEL_UVIDEO 0x30  /* DPL=3 VGA text; use with RPL3 => 0x33 */
+# define SEL_UFB 0x38     /* DPL=3 graphics framebuffer (stage 2)  */
+# define SEL_RCODE16 0x40 /* 16-bit code, for the real mode thunk  */
+# define SEL_RDATA16 0x48 /* 16-bit data, for the real mode thunk  */
 
 /*****************************************************************************/
 
 # define SEL_UCODE_RPL3 0x1B
 # define SEL_UDATA_RPL3 0x23
 # define SEL_UVIDEO_RPL3 0x33
+# define SEL_UFB_RPL3 0x3B
 
 /*****************************************************************************/
 
@@ -75,6 +79,12 @@ int pmode_active (void);
 unsigned short pmode_vga_selector (void);
 unsigned long pmode_vga_phys_base (void);
 unsigned long pmode_vga_map_size (void);
+
+/* Ring-3 graphics framebuffer (stage 2); 0 selector when none is mapped. */
+unsigned short pmode_fb_selector (void);
+unsigned long pmode_fb_base (void);
+unsigned long pmode_fb_size (void);
+void pmode_set_fb (unsigned long base, unsigned long size);
 
 /*****************************************************************************/
 

@@ -135,6 +135,13 @@
 # define BDOS_CON_VIDEO 224     /* map info for direct VGA text (sel) */
 # define BDOS_GET_TICKS 225     /* high-res 64-bit tick counter       */
 # define BDOS_SLEEP_UNTIL 226   /* busy-wait until absolute tick      */
+# define BDOS_RAMDISK_KB 227    /* RAM disk size in KB                */
+# define BDOS_MEM_LAYOUT 228    /* physical memory layout             */
+# define BDOS_VID_QUERY 229     /* describe the current video mode    */
+# define BDOS_VID_ENUM 230      /* describe video mode [index]        */
+# define BDOS_VID_SET 231       /* set / commit / revert a video mode */
+# define BDOS_VID_FONT 232      /* load console glyphs / restore ROM  */
+# define BDOS_VID_PALETTE 233   /* load DAC palette entries           */
 
 /*****************************************************************************/
 
@@ -192,6 +199,104 @@ struct cpm_memlayout
   ULONG tpa_top;       /* end of the loadable region              */
   ULONG stack_top;     /* end of the ring-3 stack reserve         */
   ULONG mem_flags;     /* MEMF_* from memmap.h                    */
+};
+
+/*****************************************************************************/
+
+/*
+ * Video mode description (BDOS 229/230; DE -> this, TPA-relative).
+ *
+ * BDOS 229 (VID_QUERY) fills for the mode the hardware is currently in.
+ * BDOS 230 (VID_ENUM) reads .index and fills the rest for that entry.
+ * Both return , or VIDR_* on failure: 0xFFFE when there is no usable adapter,
+ *   0xFFFC when the enumeration index is past the end.
+ *
+ * The width/height/bpp/pitch/fb_* fields describe gfx modes,and are
+ * zero for text modes.
+ */
+
+struct cpm_vidmode
+{
+  UWORD index;      /* IN for enum, OUT: table ordinal          */
+  UWORD mode;       /* CP/M-386 mode id                         */
+  UWORD flags;      /* VIDM_*                                   */
+  UWORD cols;       /* text columns                             */
+  UWORD rows;       /* text rows                                */
+  UWORD cell_bytes; /* bytes per text cell (2)                  */
+  UWORD width;      /* pixels across (graphics)                 */
+  UWORD height;     /* pixels down (graphics)                   */
+  UWORD bpp;        /* bits per pixel (graphics)                */
+  UWORD sel;        /* ring-3 selector|RPL3 for the plane, or 0 */
+  ULONG pitch;      /* bytes per scan line (graphics)           */
+  ULONG fb_size;    /* mapped bytes                             */
+  ULONG fb_phys;    /* physical base (informational)            */
+};
+
+/*****************************************************************************/
+
+/*
+ * Video mode request (BDOS 231; DE -> this, TPA-relative).
+ *
+ * action is VIDA_TRANSIENT (a program mode, dropped when the program
+ * exits), VIDA_CONSOLE (a console mode, provisional until committed),
+ * VIDA_COMMIT (make the provisional mode stick) or VIDA_REVERT (go back to
+ * the committed console mode).  mode is ignored for COMMIT and REVERT.
+ *
+ * A console mode that is never committed is undone when the program
+ * leaves, so a crash or a hang cannot strand the console in a mode the
+ * user cannot read.
+ */
+
+struct cpm_vidset
+{
+  UWORD mode;
+  UWORD action;
+  UWORD flags; /* reserved, must be 0 */
+  UWORD pad;
+};
+
+/*****************************************************************************/
+
+/*
+ * Console font (BDOS 232; DE -> this, TPA-relative).
+ *
+ * data is itself a TPA-relative pointer to count glyphs of height bytes
+ * each, or 0 to put the ROM font back.  height must match the cell height
+ * of the current mode - pick the cell height with a text mode first, then
+ * load glyphs to match, so loading a font never has to reprogram the CRTC.
+ *
+ * Returns 0, or VIDR_* (see vidmode.h); 0xFFFA when the geometry does not
+ * fit the current mode.
+ */
+
+struct cpm_vidfont
+{
+  ULONG data;   /* TPA-relative glyph data, or 0 for the ROM font */
+  UWORD height; /* scan lines per glyph                           */
+  UWORD count;  /* number of glyphs                               */
+  UWORD first;  /* first glyph index                              */
+  UWORD flags;  /* reserved, must be 0                            */
+};
+
+/*****************************************************************************/
+
+/*
+ * Palette (BDOS 233; DE -> this, TPA-relative).
+ *
+ * Ring 3 cannot reach the DAC ports, so palette changes come through here.
+ * data is a TPA-relative pointer to three bytes per entry - red, green,
+ * blue - each in the VGA's native range of 0 to 63.
+ *
+ * Returns 0, or VIDR_* (see vidmode.h).
+ */
+
+struct cpm_vidpal
+{
+  ULONG data;  /* TPA-relative rgb triples */
+  UWORD first; /* first DAC index          */
+  UWORD count; /* number of entries        */
+  UWORD flags; /* reserved, must be 0      */
+  UWORD pad;
 };
 
 /*****************************************************************************/
@@ -329,23 +434,66 @@ struct conbuf
 /*****************************************************************************/
 
 /*
- * .386 absolute executable format (minimal, inspired by CP/M-68K absolute
- * files, adapted to flat 32-bit protected mode, using relative offsets from
- * TPA base): Offset 0:  32-bit little-endian load offset (image at TPA_base +
- * load_off) Offset 4:  32-bit little-endian image size in bytes Offset 8:
- * 32-bit little-endian entry offset (transfer to TPA_base + entry_off) Offset
- * 12+: raw image bytes (exactly img_size bytes, verbatim memory content)
- * Convention: load/entry = 0x100 (classic CP/M program origin); TPA[0..0xFF]
- * is the base page (default FCBs, command tail).  Header values are relative
- * to the TPA allocation base (not physical 0000:0100).
+ * .386 absolute executable format.  Inspired by CP/M-68K absolute files,
+ * adapted to flat 32-bit protected mode; all offsets are relative to the
+ * TPA allocation base, NOT to physical 0000:0100.
+ *
+ *   0x00  4  magic      "M386" (CPM386_MAGIC), so a program is identifiable
+ *   0x04  1  version    format version, currently 1
+ *   0x05  1  hdr_size   bytes of header before the image (32 for version 1)
+ *   0x06  2  flags      reserved, must be 0
+ *   0x08  4  load_off   image is placed at tpa_base + load_off
+ *   0x0C  4  img_size   bytes of image following the header
+ *   0x10  4  entry_off  control transfers to tpa_base + entry_off
+ *   0x14  4  min_kb     total TPA required, in KB; 0 means do not check
+ *   0x18  8  reserved   must be 0
+ *
+ * followed by exactly img_size bytes of image, verbatim memory content.
+ *
+ * min_kb lets a program state what it needs beyond its own image - a small
+ * image with a large BSS or heap - so the loader can refuse it up front
+ * with a useful message instead of letting it fault later.
+ *
+ * Convention: load/entry = 0x100, the classic CP/M program origin;
+ * TPA[0..0xFF] is the base page holding the default FCBs and command tail.
  */
+
+# define CPM386_MAGIC 0x3638334DUL /* "M386" little-endian */
+# define CPM386_VERSION 1
+# define CPM386_HDR_SIZE 32
 
 typedef struct
 {
+  unsigned long magic;
+  unsigned char version;
+  unsigned char hdr_size;
+  unsigned short flags;
   unsigned long load_off;
   unsigned long img_size;
   unsigned long entry_off;
+  unsigned long min_kb;
 } CPM386_HDR;
+
+/*****************************************************************************/
+
+/* Loader result codes, returned by BDOS 59 and the cpm386_load_* helpers. */
+
+# define CPMLD_OK 0x0000
+# define CPMLD_NOMEM 0xFFFA    /* declared requirement exceeds the TPA   */
+# define CPMLD_TRUNC 0xFFFB    /* image data ends early                  */
+# define CPMLD_BADENTRY 0xFFFC /* entry point outside the image          */
+# define CPMLD_BADSIZE 0xFFFD  /* load/size does not fit the TPA         */
+# define CPMLD_BADHDR 0xFFFE   /* bad magic, version, or header fields   */
+
+/*****************************************************************************/
+
+/*
+ * Set by the loaders when a load is refused for want of memory, so the CCP
+ * can say how much was wanted and how much there was.  Both are in KB.
+ */
+
+unsigned long cpm386_load_req_kb (void);
+unsigned long cpm386_load_avail_kb (void);
 
 /*****************************************************************************/
 

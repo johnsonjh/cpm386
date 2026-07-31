@@ -30,7 +30,7 @@
  *               serial # and copyright notice, machine readable *
  *                                                               *
  *                                                               *
- *       Configured for Alcyon C on the VAX                      *
+ *       Configured (originally) for Alcyon C on the VAX         *
  *                                                               *
  *      Modified 2/5/84 sw for ^C disk reset.                    *
  *      Again    3/17/84   for chain hack                        *
@@ -419,42 +419,124 @@ le32 (const UBYTE *p)
 
 /*****************************************************************************/
 
+/*
+ * Recorded when a load is refused for want of memory, so the CCP can
+ * report both numbers rather than a bare "insufficient memory".
+ */
+
+static unsigned long ld_req_kb;
+static unsigned long ld_avail_kb;
+
+/*****************************************************************************/
+
+unsigned long
+cpm386_load_req_kb (void)
+{
+  return ld_req_kb;
+}
+
+/*****************************************************************************/
+
+unsigned long
+cpm386_load_avail_kb (void)
+{
+  return ld_avail_kb;
+}
+
+/*****************************************************************************/
+
+/*
+ * Validate a header and unpack it.  Shared by both loaders so the two can
+ * never disagree about what a valid program looks like.
+ */
+
+static UWORD
+cpm386_parse_hdr (const UBYTE *h, unsigned long tpa_len, CPM386_HDR *out)
+{
+  unsigned long need;
+
+  out->magic = le32 (h);
+  out->version = h [4];
+  out->hdr_size = h [5];
+  out->flags = (unsigned short)(h [6] | (h [7] << 8));
+  out->load_off = le32 (h + 8);
+  out->img_size = le32 (h + 12);
+  out->entry_off = le32 (h + 16);
+  out->min_kb = le32 (h + 20);
+
+  if (out->magic != CPM386_MAGIC)
+    return CPMLD_BADHDR;
+
+  if (out->version != CPM386_VERSION)
+    return CPMLD_BADHDR;
+
+  if (out->hdr_size != CPM386_HDR_SIZE)
+    return CPMLD_BADHDR;
+
+  if (out->flags != 0)
+    return CPMLD_BADHDR;
+
+  /* Reject wrap and images that do not fit the TPA. */
+  if (out->img_size == 0 || out->load_off > tpa_len
+      || out->img_size > tpa_len - out->load_off)
+    return CPMLD_BADSIZE;
+
+  /* Entry must land inside the image, not one past its end. */
+  if (out->entry_off < out->load_off
+      || out->entry_off >= out->load_off + out->img_size)
+    return CPMLD_BADENTRY;
+
+  /*
+   * A stated requirement is the total TPA the program needs, image
+   * included.  Zero means the program has not said, so nothing is checked.
+   */
+
+  if (out->min_kb != 0)
+    {
+      need = out->min_kb;
+      ld_req_kb = need;
+      ld_avail_kb = tpa_len / 1024UL;
+
+      /* Compare in KB; the multiply could overflow on a big request. */
+      if (need > ld_avail_kb)
+        return CPMLD_NOMEM;
+    }
+
+  return CPMLD_OK;
+}
+
+/*****************************************************************************/
+
 UWORD
 cpm386_load_from_buf (const UBYTE *filebuf, unsigned long buflen,
                       UBYTE *tpa_base, unsigned long tpa_len,
                       UBYTE **entry_out)
 {
-  unsigned long load, sz, ent;
+  CPM386_HDR h;
   const UBYTE *img;
   unsigned long i;
+  UWORD rc;
 
-  if (buflen < 12 || !filebuf || !tpa_base || !entry_out)
-    return 0xFFFE; /* bad header / args */
+  if (buflen < CPM386_HDR_SIZE || !filebuf || !tpa_base || !entry_out)
+    return CPMLD_BADHDR;
 
-  load = le32 (filebuf);
-  sz = le32 (filebuf + 4);
-  ent = le32 (filebuf + 8);
+  rc = cpm386_parse_hdr (filebuf, tpa_len, &h);
 
-  /* reject wrap and images that do not fit in TPA */
-  if (sz == 0 || load > tpa_len || sz > tpa_len - load)
-    return 0xFFFD; /* bad size / won't fit TPA */
+  if (rc != CPMLD_OK)
+    return rc;
 
-  /* entry must land inside the loaded image (not one-past-end) */
-  if (ent < load || ent >= load + sz)
-    return 0xFFFC; /* entry outside image */
+  img = filebuf + CPM386_HDR_SIZE;
 
-  img = filebuf + 12;
-
-  if (buflen - 12 < sz)
-    return 0xFFFB; /* truncated image data */
+  if (buflen - CPM386_HDR_SIZE < h.img_size)
+    return CPMLD_TRUNC;
 
   /* place verbatim */
-  for (i = 0; i < sz; i++)
-    tpa_base [load + i] = img [i];
+  for (i = 0; i < h.img_size; i++)
+    tpa_base [h.load_off + i] = img [i];
 
-  *entry_out = tpa_base + ent;
+  *entry_out = tpa_base + h.entry_off;
 
-  return 0; /* success */
+  return CPMLD_OK;
 }
 
 /*****************************************************************************/
@@ -464,18 +546,19 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
                          unsigned long tpa_len, UBYTE **entry_out)
 {
   UBYTE rec [128];
-  unsigned long load, sz, ent, placed, i, n;
+  CPM386_HDR h;
+  unsigned long sz, placed, i, n;
   UWORD r;
   UBYTE *dst;
 
   if (!reader || !tpa_base || !entry_out)
-    return 0xFFFE;
+    return CPMLD_BADHDR;
 
-  /* Record 0: 12-byte header + up to 116 image bytes */
+  /* Record 0: the header, followed by the first of the image. */
   r = reader (rec, ctx);
 
   if (r != 0 && r != 1)
-    return 0xFFFE;
+    return CPMLD_BADHDR;
 
   if (r == 1)
     {
@@ -484,25 +567,22 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
         rec [i] = 0;
     }
 
-  load = le32 (rec);
-  sz = le32 (rec + 4);
-  ent = le32 (rec + 8);
+  r = cpm386_parse_hdr (rec, tpa_len, &h);
 
-  if (sz == 0 || load > tpa_len || sz > tpa_len - load)
-    return 0xFFFD;
+  if (r != CPMLD_OK)
+    return r;
 
-  if (ent < load || ent >= load + sz)
-    return 0xFFFC;
+  sz = h.img_size;
 
-  /* First record payload after 12-byte header */
-  n = 116;
+  /* Whatever is left of the first record after the header. */
+  n = 128 - CPM386_HDR_SIZE;
 
   if (n > sz)
     n = sz;
-  dst = tpa_base + load;
+  dst = tpa_base + h.load_off;
 
   for (i = 0; i < n; i++)
-    dst [i] = rec [12 + i];
+    dst [i] = rec [CPM386_HDR_SIZE + i];
 
   placed = n;
 
@@ -517,7 +597,7 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
       r = reader (rec, ctx);
 
       if (r != 0 && r != 1)
-        return 0xFFFE;
+        return CPMLD_BADHDR;
 
       n = sz - placed;
 
@@ -544,9 +624,9 @@ cpm386_load_from_reader (cpm386_rec_reader reader, void *ctx, UBYTE *tpa_base,
        */
     }
 
-  *entry_out = tpa_base + ent;
+  *entry_out = tpa_base + h.entry_off;
 
-  return 0;
+  return CPMLD_OK;
 }
 
 /*****************************************************************************/

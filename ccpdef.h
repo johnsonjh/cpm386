@@ -174,6 +174,19 @@
 
 /*****************************************************************************/
 
+        /*-------------------------------------------------------*\
+         |  Loader result codes - keep in sync with bdosdef.h     |
+        \*-------------------------------------------------------*/
+
+#define CPMLD_OK        0x0000
+#define CPMLD_NOMEM     0xFFFA  /* declared requirement exceeds the TPA */
+#define CPMLD_TRUNC     0xFFFB  /* image data ends early                */
+#define CPMLD_BADENTRY  0xFFFC  /* entry point outside the image        */
+#define CPMLD_BADSIZE   0xFFFD  /* load/size does not fit the TPA       */
+#define CPMLD_BADHDR    0xFFFE  /* bad magic, version, or header fields */
+
+/*****************************************************************************/
+
         /*----------------------------------------------*\
          |                    MACROS                    |
         \*----------------------------------------------*/

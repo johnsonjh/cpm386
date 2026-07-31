@@ -99,20 +99,23 @@ load_tbl [];
 /*--------------------------------------------------------------*\
  |               Table of User Prompts and Messages             |
 \*--------------------------------------------------------------*/
-BYTE    msg  [] = "NON-SYSTEM FILE(S) EXIST$";
-BYTE    msg2 [] = "Enter Filename: $";
-BYTE    msg3 [] = "Enter Old Name: $";
-BYTE    msg4 [] = "Enter New Name: $";
-BYTE    msg5 [] = "File already exists$";
-BYTE    msg6 [] = "No file$";
-BYTE    msg7 [] = "No wildcard filenames$";
-BYTE    msg8 [] = "Syntax: REN Newfile=Oldfile$";
-BYTE    msg9 [] = "Confirm(Y/N)? $";
-BYTE   msg10 [] = "Enter User No: $";
-BYTE   msg11 [] = ".SUB file not found$";
-BYTE   msg12 [] = "User # range is [0-15]$";
-BYTE   msg13 [] = "Too many arguments: $";
-BYTE  lderr1 [] = "Insufficient memory or bad file header$";
+BYTE      msg  [] = "NON-SYSTEM FILE(S) EXIST$";
+BYTE      msg2 [] = "Enter Filename: $";
+BYTE      msg3 [] = "Enter Old Name: $";
+BYTE      msg4 [] = "Enter New Name: $";
+BYTE      msg5 [] = "File already exists$";
+BYTE      msg6 [] = "No file$";
+BYTE      msg7 [] = "No wildcard filenames$";
+BYTE      msg8 [] = "Syntax: REN Newfile=Oldfile$";
+BYTE      msg9 [] = "Confirm(Y/N)? $";
+BYTE     msg10 [] = "Enter User No: $";
+BYTE     msg11 [] = ".SUB file not found$";
+BYTE     msg12 [] = "User # range is [0-15]$";
+BYTE     msg13 [] = "Too many arguments: $";
+BYTE  lderrmem [] = "Insufficient memory; $";
+BYTE  lderrreq [] = "K required, $";
+BYTE  lderravl [] = "K available$";
+BYTE  lderrhdr [] = "Bad file header$";
 #if 0
 BYTE  lderr2 [] = "Read error on program load$";
 BYTE  lderr3 [] = "Bad relocation information bits$";
@@ -251,6 +254,54 @@ REG BYTE *com_index;
         while(*com_index && *com_index != EXLIMPT)
                 *temp++ = *com_index++;
         *temp = NULL;
+}
+                                /********************************/
+VOID put_dec(n)                 /*  unsigned decimal to console */
+                                /********************************/
+REG unsigned long n;
+{
+        BYTE d[12];
+        REG WORD i;
+
+        i = 0;
+        if(!n)
+        {
+                bdos(CONSOLE_OUTPUT,(long)'0');
+                return;
+        }
+        while(n && i < 12)
+        {
+                d[i++] = (BYTE)('0' + (n % 10));
+                n /= 10;
+        }
+        while(i > 0)
+                bdos(CONSOLE_OUTPUT,(long)d[--i]);
+}
+                                /********************************/
+VOID load_error(rc)             /*  report why a load failed    */
+                                /********************************/
+REG UWORD rc;
+{
+        extern unsigned long cpm386_load_req_kb();
+        extern unsigned long cpm386_load_avail_kb();
+
+        /*-------------------------------------------------------*/
+        /* A program that asked for more memory than the TPA has  */
+        /* is worth being specific about; everything else is a    */
+        /* malformed or unloadable file.                          */
+        /*-------------------------------------------------------*/
+        if(rc == (UWORD)CPMLD_NOMEM)
+        {
+                bdos(PRINT_STRING,lderrmem);
+                put_dec(cpm386_load_req_kb());
+                bdos(PRINT_STRING,lderrreq);
+                put_dec(cpm386_load_avail_kb());
+                bdos(PRINT_STRING,lderravl);
+        }
+        else
+                bdos(PRINT_STRING,lderrhdr);
+
+        cr_lf();
 }
                                 /********************************/
 VOID prompt()                   /*   print the CCP prompt       */
@@ -1490,8 +1541,7 @@ REG BYTE *cmd;
                                                 bdos(PRINT_STRING, gonomsg);
                                                 cr_lf();
                                         } else if (grc != 0) {
-                                                bdos(PRINT_STRING, lderr1);
-                                                cr_lf();
+                                                load_error(grc);
                                         } else {
                                                 UWORD prc = bdos(P_CODE,
                                                                  (LONG)0xFFFF);
@@ -1580,9 +1630,7 @@ REG BYTE *cmd;
                                                             (LONG)cmdfcb);
                                                         bdos(CLEAN_DISK, 0);
                                                         if (rc) {
-                                                                bdos(PRINT_STRING,
-                                                                     lderr1);
-                                                                cr_lf();
+                                                                load_error(rc);
                                                         } else {
                                                                 UWORD prc = bdos(
                                                                     P_CODE,

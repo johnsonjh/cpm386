@@ -45,6 +45,8 @@
 /*****************************************************************************/
 
 #include "platform.h" /* VGA text geometry for BDOS 224 */
+#include "vidmode.h"  /* video mode table for BDOS 229-231 */
+#include "vgacon.h"   /* live console geometry              */
 
 /*****************************************************************************/
 
@@ -749,11 +751,20 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
             break;
           }
 
+        /*
+         * Live geometry, not the old compile-time constants: the
+         * console mode can change at runtime, and a program painting the
+         * screen directly has to be told the shape it actually has.
+         * map_size stays the selector extent (all four text pages), which
+         * is what bounds legal writes the visible screen is the smaller
+         * cols * rows * cell_bytes.
+         */
+
         vp->sel = sel;
 #if CPM386_HAS_VGA_TEXT
-        vp->cols = (UWORD)CPM386_VGA_TEXT_COLS;
-        vp->rows = (UWORD)CPM386_VGA_TEXT_ROWS;
-        vp->cell_bytes = (UWORD)CPM386_VGA_TEXT_CELL;
+        vp->cols = (UWORD)vgacon_cols ();
+        vp->rows = (UWORD)vgacon_rows ();
+        vp->cell_bytes = (UWORD)vgacon_cell_bytes ();
 #else
         vp->cols = 0;
         vp->rows = 0;
@@ -890,6 +901,261 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
             rtnval = 0xFFFF;
 
             break;
+
+    /*
+     * BDOS 229 (VID_QUERY): describe the current video mode.
+     * BDOS 230 (VID_ENUM):  describe mode [index]; DE->index on entry.
+     * DE -> struct cpm_vidmode (TPA-relative).
+     * AX = 0, or VIDR_* (see vidmode.h).
+     */
+
+    case 229:
+    case 230:
+      {
+        REG struct cpm_vidmode *vp = (struct cpm_vidmode *)infop;
+        struct vidmode_info vi;
+        unsigned idx;
+        unsigned rc;
+        int i;
+
+        if (!vp)
+          {
+            rtnval = VIDR_BADPTR;
+
+            break;
+          }
+
+        extern int bios_vga_present (void);
+
+        if (!bios_vga_present ())
+          {
+            rtnval = VIDR_NOHW;
+
+            break;
+          }
+
+        if (func == 229)
+          {
+            idx = vidmode_current ();
+            rc = vidmode_describe (idx, &vi);
+          }
+        else
+          {
+            idx = (unsigned)vp->index;
+            rc = vidmode_enum (idx, &vi);
+          }
+
+        if (rc != VIDR_OK)
+          {
+            rtnval = (UWORD)rc;
+
+            break;
+          }
+
+        for (i = 0; i < (int)sizeof (*vp); i++)
+          {
+            ((UBYTE *)vp) [i] = 0;
+          }
+
+        vp->index = (UWORD)idx;
+        vp->mode = (UWORD)vi.mode;
+        vp->flags = (UWORD)vi.flags;
+        vp->cols = (UWORD)vi.cols;
+        vp->rows = (UWORD)vi.rows;
+        vp->width = (UWORD)vi.width;
+        vp->height = (UWORD)vi.height;
+        vp->bpp = (UWORD)vi.bpp;
+        vp->pitch = (ULONG)vi.pitch;
+        vp->fb_size = (ULONG)vi.fb_size;
+        vp->fb_phys = (ULONG)vi.fb_phys;
+        vp->cell_bytes
+            = (UWORD)((vi.flags & VIDM_TEXT) ? vgacon_cell_bytes () : 0);
+
+        /*
+         * Only the mode the hardware is actually in has a usable plane to
+         * hand out; describing another entry must not imply a selector.
+         */
+
+        if (vi.flags & VIDM_CURRENT)
+          {
+            extern unsigned short pmode_vga_selector (void);
+            extern unsigned long pmode_vga_phys_base (void);
+            extern unsigned long pmode_vga_map_size (void);
+            extern unsigned short pmode_fb_selector (void);
+
+            if (vi.flags & VIDM_GRAPHICS)
+              {
+                vp->sel = pmode_fb_selector ();
+              }
+            else
+              {
+                vp->sel = pmode_vga_selector ();
+                vp->fb_size = (ULONG)pmode_vga_map_size ();
+                vp->fb_phys = (ULONG)pmode_vga_phys_base ();
+              }
+          }
+
+        rtnval = VIDR_OK;
+      }
+
+      break;
+
+    /*
+     * BDOS 231 (VID_SET): set, commit or revert a video mode.
+     * DE -> struct cpm_vidset (TPA-relative).
+     * AX = 0, or VIDR_* (see vidmode.h).
+     */
+
+    case 231:
+      {
+        REG struct cpm_vidset *sp = (struct cpm_vidset *)infop;
+
+        if (!sp)
+          {
+            rtnval = VIDR_BADPTR;
+
+            break;
+
+    /*
+     * BDOS 232 (VID_FONT): load console glyphs, or restore the ROM font.
+     * DE -> struct cpm_vidfont (TPA-relative); .data is itself a
+     * TPA-relative pointer and is translated and bounds checked here, the
+     * same way F_PARSE handles its embedded pointers.
+     * AX = 0, or VIDR_* (see vidmode.h).
+     */
+
+    case 232:
+      {
+        REG struct cpm_vidfont *fp = (struct cpm_vidfont *)infop;
+        const UBYTE *glyphs = 0;
+
+        if (!fp)
+          {
+            rtnval = VIDR_BADPTR;
+
+            break;
+
+    /*
+     * BDOS 233 (VID_PALETTE): load DAC entries.
+     * DE -> struct cpm_vidpal (TPA-relative); .data is itself TPA-relative
+     * and points at three bytes per entry, each 0-63.
+     * AX = 0, or VIDR_* (see vidmode.h).
+     */
+
+    case 233:
+      {
+        REG struct cpm_vidpal *pp = (struct cpm_vidpal *)infop;
+        const UBYTE *rgb = 0;
+
+        if (!pp)
+          {
+            rtnval = VIDR_BADPTR;
+
+            break;
+          }
+
+        extern int bios_vga_present (void);
+
+        if (!bios_vga_present ())
+          {
+            rtnval = VIDR_NOHW;
+
+            break;
+          }
+
+        {
+          extern int pmode_active (void);
+          extern unsigned long pmode_tpa_base (void);
+          extern unsigned long pmode_tpa_len (void);
+
+          if (pmode_active ())
+            {
+              unsigned long off = (unsigned long)pp->data;
+              unsigned long need = (unsigned long)pp->count * 3UL;
+
+              if (off >= pmode_tpa_len () || need > pmode_tpa_len () - off)
+                {
+                  rtnval = VIDR_BADPTR;
+
+                  break;
+                }
+
+              rgb = (const UBYTE *)(pmode_tpa_base () + off);
+            }
+          else
+            {
+              rgb = (const UBYTE *)(unsigned long)pp->data;
+            }
+        }
+
+        rtnval = (UWORD)vidmode_palette ((const unsigned char *)rgb,
+                                         (unsigned)pp->first,
+                                         (unsigned)pp->count);
+      }
+
+      break;
+          }
+
+        extern int bios_vga_present (void);
+
+        if (!bios_vga_present ())
+          {
+            rtnval = VIDR_NOHW;
+
+            break;
+          }
+
+        if (fp->data)
+          {
+            extern int pmode_active (void);
+            extern unsigned long pmode_tpa_base (void);
+            extern unsigned long pmode_tpa_len (void);
+
+            if (pmode_active ())
+              {
+                unsigned long off = (unsigned long)fp->data;
+                unsigned long need
+                    = (unsigned long)fp->count * (unsigned long)fp->height;
+
+                if (off >= pmode_tpa_len ()
+                    || need > pmode_tpa_len () - off)
+                  {
+                    rtnval = VIDR_BADPTR;
+
+                    break;
+                  }
+
+                glyphs = (const UBYTE *)(pmode_tpa_base () + off);
+              }
+            else
+              {
+                glyphs = (const UBYTE *)(unsigned long)fp->data;
+              }
+          }
+
+        rtnval = (UWORD)vidmode_font_load ((const unsigned char *)glyphs,
+                                           (unsigned)fp->height,
+                                           (unsigned)fp->count,
+                                           (unsigned)fp->first);
+      }
+
+      break;
+          }
+
+        extern int bios_vga_present (void);
+
+        if (!bios_vga_present ())
+          {
+            rtnval = VIDR_NOHW;
+
+            break;
+          }
+
+        rtnval = (UWORD)vidmode_action ((unsigned)sp->mode,
+                                        (unsigned)sp->action);
+      }
+
+      break;
           }
 
         bios_mem_layout (mp);

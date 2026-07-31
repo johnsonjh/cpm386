@@ -33,20 +33,49 @@
 
 /*****************************************************************************/
 
+/*
+ * The .386 header, described in bdosdef.h.  This is a host tool and cannot
+ * include the kernel headers, so the three values it needs are repeated
+ * here, and we need always to keep them in sync.
+ */
+
+#define CPM386_MAGIC 0x3638334DUL /* "M386" in little-endian */
+#define CPM386_VERSION 1
+#define CPM386_HDR_SIZE 32
+
+/*****************************************************************************/
+
+static void
+put32 (unsigned char *p, uint32_t v)
+{
+  p [0] = (unsigned char)(v & 0xFF);
+  p [1] = (unsigned char)((v >> 8) & 0xFF);
+  p [2] = (unsigned char)((v >> 16) & 0xFF);
+  p [3] = (unsigned char)((v >> 24) & 0xFF);
+}
+
+/*****************************************************************************/
+
 int
 main (int argc, char **argv)
 {
   const char *in, *out;
   uint32_t load = 0x100;
+  uint32_t min_kb = 0;
   FILE *f;
   long sz;
+  int i;
   unsigned char *buf;
-  uint32_t hdr [3];
+  unsigned char hdr [CPM386_HDR_SIZE];
 
   if (argc < 3)
     {
-      (void)fprintf (stderr, "usage: %s in.bin out.386 [load_off]\n",
+      (void)fprintf (stderr, "usage: %s in.bin out.386 [load_off [min_kb]]\n",
                      argv [0]);
+      (void)fprintf (stderr,
+                     "  min_kb: total TPA the program needs, in KB.\n");
+      (void)fprintf (stderr,
+                     "          0 (the default) means do not check.\n");
 
       return 1;
     }
@@ -57,6 +86,11 @@ main (int argc, char **argv)
   if (argc >= 4)
     {
       load = (uint32_t)strtoul (argv [3], NULL, 0);
+    }
+
+  if (argc >= 5)
+    {
+      min_kb = (uint32_t)strtoul (argv [4], NULL, 0);
     }
 
   f = fopen (in, "rb");
@@ -107,9 +141,20 @@ main (int argc, char **argv)
    * and load_off in the header places it at TPA+0x100.
    */
 
-  hdr [0] = load;
-  hdr [1] = (uint32_t)sz;
-  hdr [2] = load; /* entry = load */
+  for (i = 0; i < CPM386_HDR_SIZE; i++)
+    {
+      hdr [i] = 0;
+    }
+
+  put32 (hdr + 0, CPM386_MAGIC);
+  hdr [4] = CPM386_VERSION;
+  hdr [5] = CPM386_HDR_SIZE;
+  /* hdr[6..7] flags, reserved, left zero */
+  put32 (hdr + 8, load);
+  put32 (hdr + 12, (uint32_t)sz);
+  put32 (hdr + 16, load); /* entry = load */
+  put32 (hdr + 20, min_kb);
+  /* hdr[24..31] reserved, left zero */
 
   f = fopen (out, "wb");
 
@@ -121,7 +166,7 @@ main (int argc, char **argv)
       return 1;
     }
 
-  if (fwrite (hdr, 4, 3, f) != 3
+  if (fwrite (hdr, 1, CPM386_HDR_SIZE, f) != CPM386_HDR_SIZE
       || (sz && fwrite (buf, 1, (size_t)sz, f) != (size_t)sz))
     {
       (void)fprintf (stderr, "write failed\n");
