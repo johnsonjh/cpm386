@@ -18,8 +18,6 @@ this section as *wishlist* and not a *roadmap*!
   * DOS‑PLUS (enhanced VT52) compatible VGA console (with optional ADM3A mode)
   * Enhance filesystem with CP/M‑Plus parity (timestamps, passwords, etc.)
   * Extend user area support from 16 to 32 user areas per disk
-  * Extend direct video support for mode switching and framebuffer
-    (Doom port!)
   * Support for non‑PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)
   * ZCPR TCAP‑like standard terminal capability database
   * DOS‑PLUS / CP/M‑Plus style status line with user customization
@@ -49,7 +47,6 @@ this section as *wishlist* and not a *roadmap*!
     * Allow nested SUBMIT scripts
     * Allow early exit from SUBMIT scripts depending on return codes
     * Refactor CCP to eliminate the `dirflag` global
-    * Eliminate SUBMIT temporary file usage and run completely from memory
     * ZCPR+SUPERSUB‑style conditional control (`IF`/`ELSE`/`FI`, etc.)
     * SUPERSUB‑style interactive user input for SUBMIT scripts
 
