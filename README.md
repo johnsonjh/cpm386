@@ -155,13 +155,11 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 * [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
   kernel (recommended):
-
   ```sh
   qemu-system-i386 -m 2M -serial stdio -monitor none -kernel "cpm386.elf"
   ```
 
 * Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
-
   ```sh
   qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img" -boot a
   ```
@@ -300,12 +298,12 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>475</th>
-                <th>60</th>
+                <th>473</th>
+                <th>58</th>
                 <th>0</th>
                 <th>415</th>
                 <th>0</th>
-                <th>21617</th>
+                <th>21615</th>
                 <th>374</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -331,12 +329,12 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>97</th>
-                <th>36682</th>
-                <th>7067</th>
+                <th>36680</th>
+                <th>7065</th>
                 <th>5869</th>
                 <th>23746</th>
                 <th>4600</th>
-                <th>926600</th>
+                <th>926598</th>
                 <th>13800</th>
         </tr></tfoot></table>
 <!-- scc-end -->
