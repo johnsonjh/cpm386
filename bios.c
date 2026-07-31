@@ -954,8 +954,8 @@ void cpm386_init(void) {
     if (lmrt->length == 0) {
       const char *why =
         !bios_mem_a20_ok()
-          ? "A20 gate is not enabled - cannot address memory above 1MB"
-          : "no usable RAM found above 1MB (2MB or more is required)";
+          ? "\r\nA20 gate is NOT enabled!  Cannot address memory above 1MB."
+          : "\r\nNo usable memory above 1MB!  2MB or more RAM is required.";
 
       bios_conout('\r');
       bios_conout('\n');
@@ -963,7 +963,7 @@ void cpm386_init(void) {
       while (*why)
         bios_conout((unsigned char)*why++);
 
-      why = "\r\nCP/M-386 halted.\r\n";
+      why = "\r\n\r\nCP/M-386 fatal error; system halted.\r\n\r\n";
 
       while (*why)
         bios_conout((unsigned char)*why++);
