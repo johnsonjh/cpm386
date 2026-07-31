@@ -149,12 +149,47 @@ puthex32 (ULONG v)
 
 /*****************************************************************************/
 
-/* Print n bytes as KB (rounded down) with unit. */
-static void
-put_kb (ULONG bytes)
+static int
+put_size (ULONG bytes)
 {
-  putu (bytes / 1024UL);
-  puts ("K");
+  ULONG kb = bytes / 1024UL;
+  ULONG div;
+  const char *unit;
+  ULONG frac;
+
+  if (kb < 1024UL)
+    {
+      putu (kb);
+      puts ("K");
+
+      return 0;
+    }
+
+  if (kb < 1024UL * 1024UL)
+    {
+      div = 1024UL;
+      unit = "M";
+    }
+  else
+    {
+      div = 1024UL * 1024UL;
+      unit = "G";
+    }
+
+  putu (kb / div);
+  putch ('.');
+
+  frac = ((kb % div) * 100UL) / div;
+
+  if (frac < 10UL)
+    {
+      putch ('0');
+    }
+
+  putu (frac);
+  puts (unit);
+
+  return 1;
 }
 
 /*****************************************************************************/
@@ -168,7 +203,7 @@ put_region (const char *label, ULONG start, ULONG end)
   puts (" -> ");
   puthex32 (end);
   puts (" (");
-  put_kb (end > start ? end - start : 0);
+  (void)put_size (end > start ? end - start : 0);
   puts (")\r\n");
 }
 
@@ -279,7 +314,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   puts ("\r\n");
 
   puts ("TPA size:              ");
-  put_kb (tpa_len);
+  (void)put_size (tpa_len);
   puts (" (");
   putu (tpa_len);
   puts (" bytes)\r\n");
@@ -293,8 +328,17 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
   puts ("Program load:          TPA+0x100\r\n");
   puts ("Approximate free RAM:  ");
-  put_kb (free_prog);
-  puts (" (TPA minus base page)\r\n");
+
+  if (put_size (free_prog))
+    {
+      puts (" (");
+      putu (free_prog / 1024UL);
+      puts ("K TPA minus base page)\r\n");
+    }
+  else
+    {
+      puts (" (TPA minus base page)\r\n");
+    }
 
   (void)bdos (0, 0);
 }
