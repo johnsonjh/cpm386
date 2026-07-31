@@ -270,6 +270,45 @@ build_frame (void)
 
 /*****************************************************************************/
 
+/*
+ * Read a sample of the framebuffer back through the selector and compare
+ * it with what was sent.  The pattern itself needs eyes on a screen, but
+ * this part does not: it proves the mode, the selector, the pitch and the
+ * blit all agree, and it is what catches a wrong stride rather than a
+ * wrong colour.  The step sizes are coprime with the width so the samples
+ * do not all land in the same column.
+ */
+
+static unsigned g_checked;
+static unsigned g_bad;
+static UWORD g_palrc = VIDR_OK;
+
+static void
+verify_frame (unsigned short sel, unsigned long pitch)
+{
+  unsigned y, x;
+
+  g_checked = 0;
+  g_bad = 0;
+
+  for (y = 0; y < H; y += 7)
+    {
+      for (x = 0; x < W; x += 11)
+        {
+          UBYTE got = vgafb_load8 (sel, (unsigned long)y * pitch + x);
+
+          g_checked++;
+
+          if (got != frame [y * W + x])
+            {
+              g_bad++;
+            }
+        }
+    }
+}
+
+/*****************************************************************************/
+
 /* Wait n seconds, or until a key is pressed. */
 
 static void
@@ -466,7 +505,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       p.data = (ULONG)(unsigned long)pal;
       p.first = 0;
       p.count = 256;
-      (void)bdos (BDOS_VID_PALETTE, (LONG)(ULONG)&p);
+      g_palrc = bdos (BDOS_VID_PALETTE, (LONG)(ULONG)&p);
 
       /*
        * One row at a time, because a mode wider than the pattern has a
@@ -479,6 +518,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           vgafb_blit (v.sel, (unsigned long)i * v.pitch, &frame [i * W], W);
         }
 
+      verify_frame (v.sel, v.pitch);
       wait_secs (SHOW_SECS);
     }
 
@@ -486,7 +526,40 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   s.action = VIDA_REVERT;
   (void)bdos (BDOS_VID_SET, (LONG)(ULONG)&s);
 
-  puts ("\r\nGFXTEST done.\r\n");
+  puts ("\r\nGFXTEST: ");
+  putu ((ULONG)(g_checked - g_bad));
+  putch ('/');
+  putu ((ULONG)g_checked);
+  puts (" sampled pixels read back correctly\r\n");
+
+  if (g_bad)
+    {
+      puts ("GFXTEST: FRAMEBUFFER MISMATCH\r\n");
+    }
+
+  /*
+   * A rejected palette leaves the BIOS default in the DAC, which still
+   * shows something - but silently discarding the result would hide a
+   * real failure, and a wrong palette is one way a correct framebuffer
+   * still looks wrong.
+   */
+
+  if (g_palrc != VIDR_OK)
+    {
+      puts ("GFXTEST: palette rejected, status 0x");
+      {
+        static const char h [] = "0123456789ABCDEF";
+        int k;
+
+        for (k = 3; k >= 0; k--)
+          {
+            putch (h [(g_palrc >> (k * 4)) & 0xF]);
+          }
+      }
+      puts ("\r\n");
+    }
+
+  puts ("GFXTEST done.\r\n");
 
   (void)bdos (0, 0);
 }
