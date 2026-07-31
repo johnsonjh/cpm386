@@ -45,6 +45,8 @@
 #define DIRSCMD         9
 #define SEARCH          10
 #define GOCMD           11      /* re-run last TPA program (ZCPR-style) */
+#define QUIETCMD        15      /* submit echo control (ZCPR3 QUIET)    */
+#define QUIETPFX        '@'
 
 #ifdef RLI
 # define RLI_EXIT 12

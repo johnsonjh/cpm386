@@ -47,7 +47,6 @@ this section as *wishlist* and not a *roadmap*!
   * ALIAS/UNALIAS internal commands
   * Enhance SUBMIT:
     * Allow nested SUBMIT scripts
-    * Allow suppressing SUBMIT command echoing (*i.e.*, `@` and `ECHO ON`/`OFF`)
     * Allow early exit from SUBMIT scripts depending on return codes
     * Refactor CCP to eliminate the `dirflag` global
     * Eliminate SUBMIT temporary file usage and run completely from memory

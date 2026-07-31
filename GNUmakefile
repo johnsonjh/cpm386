@@ -984,7 +984,7 @@ ramdisk.bin: \
 		> /tmp/cpmd/ENV.DAT
 	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L BIG.*\r\nBIG\r\nLRBC BIG.386\r\nTRUNCTST\r\nALVTST\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\n; Run again from program still existing in TPA\r\nGO\r\n; End of DEMO.SUB\r\n\x1a' \
 		> /tmp/cpmd/DEMO.SUB
-	$(PRINTF) 'VER\r\n' > /tmp/cpmd/PROFILE.SUB
+	$(PRINTF) '@QUIET ON\r\nVER\r\n\x1a' > /tmp/cpmd/PROFILE.SUB
 	$(CP) -f ./aclockdv.386 /tmp/cpmd/ACLOCKDV.386
 	$(CP) -f ./aclockvt.386 /tmp/cpmd/ACLOCKVT.386
 	$(CP) -f ./alvtst.386 /tmp/cpmd/ALVTST.386

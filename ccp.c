@@ -71,6 +71,7 @@ struct _cmd_tbl cmd_tbl [] =
         {"USER",UCMD},
         {"SUBMIT",SUBCMD},
         {"GO",GOCMD},           /* re-exec last .386 still in the TPA */
+        {"QUIET",QUIETCMD},     /* submit echo control; no-op interactive */
 #ifdef RLI
         {"EXIT",RLI_EXIT},
         {"IMPORT",RLI_IMPORT},
@@ -129,6 +130,7 @@ BYTE load_try;                  /* flag to mark a load try      */
 BYTE first_sub;                 /* flag to save current cmd ptr */
 BYTE chain_sub;                 /* submit chaining flag         */
 BYTE submit = 0;                /* submit file flag             */
+BYTE quiet = 0;                 /* submit echo suppress (QUIET) */
 BYTE end_of_file;               /* submit end of file flag      */
 BYTE dirflag;                   /* used by fill_fcb(? or blanks)*/
 BYTE subprompt;                 /* submit file was prompted for */
@@ -170,7 +172,8 @@ UWORD (*ldrpgm)(BYTE *); /* ptr to load func, inited? or stub */
 extern UWORD load68k();         /* this returns a word(1-3)     */
 #endif
 /*BYTE *scan_cmd();             // bare */
-UWORD strcmp(BYTE *s1, BYTE *s2);       /* this returns a word          */
+UWORD strcmp(BYTE *s1, BYTE *s2);       /* this returns a word      */
+BYTE *skip_at(BYTE *cmd);               /* step over the '@' prefix */
 /*UWORD decode();                       // bare, use implicit + def */
 /*UWORD delim();                        // bare */
 /*BYTE true_char();             // bare */
@@ -281,13 +284,37 @@ VOID prompt()                   /*   print the CCP prompt       */
 
 
 
-                                /********************************/
-VOID echo_cmd(cmd,mode)         /* echo any multiple commands   */
-                                /* or any illegal commands      */
-                                /********************************/
+                                /******************************/
+BYTE *skip_at(cmd)              /* step over the ZCPR-3 style */
+                                /* '@' echo-suppress prefix.  */
+                                /* Returns cmd unchanged when */
+                                /* there is no prefix, so the */
+                                /* caller can also use the    */
+                                /* result to test for one.    */
+                                /******************************/
+REG BYTE *cmd;
+{
+        REG BYTE *c;
+
+        c = cmd;
+        while(*c == ' ' || *c == TAB)
+                c++;
+        if(*c != QUIETPFX)
+                return(cmd);
+        c++;
+        while(*c == ' ' || *c == TAB)
+                c++;
+        return(c);
+}
+                                /******************************/
+VOID echo_cmd(cmd,mode)         /* echo any multiple commands */
+                                /* or any illegal commands    */
+                                /******************************/
 REG BYTE *cmd;
 REG UWORD mode;
 {
+        if(mode == GOOD && submit && (quiet || skip_at(cmd) != cmd))
+                return;
         if(mode == GOOD && (!(autost && autorom)))
                 prompt();
         while(*cmd && *cmd != EXLIMPT)
@@ -379,6 +406,7 @@ REG BYTE *tcmd;                         /************************/
                                 /* console command to exec  */
                         {       /*--------------------------*/
                                 submit = FALSE;
+                                quiet = FALSE;  /* echo back on at end */
                                 if(*user_ptr)
                                         morecmds = TRUE;
                         }
@@ -1065,6 +1093,7 @@ UWORD mode;
                         subfcb[i] = cmdfcb[i];
                    if(mode == SEARCH) subprompt = FALSE;
                    submit = TRUE;
+                   quiet = FALSE; /* each script starts with echoing on */
                    end_of_file = FALSE;
                 }
                 else if(mode != SUB_FILE)
@@ -1147,7 +1176,11 @@ REG BYTE *com_index;
                         if(mode == FILL)
                                 subcom[j++] = *p1++;
                         else
-                                bdos(CONSOLE_OUTPUT,(long)*p1++);
+                        {       /* NOFILL is the comment echo path */
+                                if(!quiet)
+                                        bdos(CONSOLE_OUTPUT,(long)*p1);
+                                p1++;
+                        }
                 k++;
         }
         else
@@ -1177,7 +1210,9 @@ REG BYTE *com_index;
         REG UWORD done;
 
         done = FALSE;
-        prompt();
+
+        if(!quiet)
+                prompt();
         do
         {
                 while(k < CMD_LEN     &&
@@ -1190,7 +1225,11 @@ REG BYTE *com_index;
                                 k = dollar(k,NOFILL,com_index);
                         }
                         else
-                                bdos(CONSOLE_OUTPUT,(long)subdma[k++]);
+                        {
+                                if(!quiet)
+                                        bdos(CONSOLE_OUTPUT,(long)subdma[k]);
+                                k++;
+                        }
                 }
                 /* k==CMD_LEN: full sector consumed without Cr/EOF; refill.
                  * Do not index subdma[CMD_LEN] (array is [0..CMD_LEN-1]). */
@@ -1395,6 +1434,34 @@ REG BYTE *cmd;
 #endif
 
                 /*
+                 * QUIET - suppress the CCP's echo of submit file commands and
+                 * comments the way way that ZCPR3 QUIET or DOS ECHO OFF works
+                 */
+                case QUIETCMD:
+                        {
+                                REG BYTE *a;
+
+                                a = &parm[1][0];
+                                if(strcmp(a,"ON") == MATCH   ||
+                                   strcmp(a,"TRUE") == MATCH ||
+                                   strcmp(a,"1") == MATCH)
+                                {
+                                        if(submit)
+                                                quiet = TRUE;
+                                }
+                                else if(strcmp(a,"OFF") == MATCH   ||
+                                        strcmp(a,"FALSE") == MATCH ||
+                                        strcmp(a,"0") == MATCH)
+                                {
+                                        if(submit)
+                                                quiet = FALSE;
+                                }
+                                else
+                                        echo_cmd(a,BAD);
+                        }
+                        break;
+
+                /*
                  * GO - ZCPR-style one-step recall: re-enter the last .386 still
                  * resident in the TPA without re-reading the disk.  Optional
                  * args after GO become the new default FCBs / command tail
@@ -1589,6 +1656,7 @@ REG BYTE *cmd;
                                                                             cmdfcb[oi];
                                                                 subprompt = FALSE;
                                                                 submit = TRUE;
+                                                                quiet = FALSE;
                                                                 end_of_file =
                                                                     FALSE;
                                                                 opened_sub = TRUE;
@@ -1641,15 +1709,15 @@ static VOID try_cold_profile(void)
         for (i = 0; i < FCB_LEN; i++)
                 fcb[i] = 0;
         fcb[0] = 1; /* drive A: */
-        /* name PROFILE  type SUB */
-        fcb[1] = 'P'; fcb[2] = 'R'; fcb[3] = 'O'; fcb[4] = 'F';
-        fcb[5] = 'I'; fcb[6] = 'L'; fcb[7] = 'E'; fcb[8] = ' ';
+        /* name PROFILE, type SUB */
+        fcb[1] = 'P'; fcb[2]  = 'R'; fcb[3]  = 'O'; fcb[4] = 'F';
+        fcb[5] = 'I'; fcb[6]  = 'L'; fcb[7]  = 'E'; fcb[8] = ' ';
         fcb[9] = 'S'; fcb[10] = 'U'; fcb[11] = 'B';
 
         sav_user = bdos(GET_USER_NO, (long)255);
         sav_disk = bdos(RET_CUR_DISK, (long)0);
-        bdos(SELECT_DISK, (long)0);     /* A: */
-        bdos(GET_USER_NO, (long)0);     /* user 0 */
+        bdos(SELECT_DISK, (long)0); /* A: */
+        bdos(GET_USER_NO, (long)0); /* user 0 */
 
         r = bdos(OPEN_FILE, (long)(unsigned long)fcb);
 
@@ -1714,6 +1782,7 @@ ccp()
                                 {
                                    com_index = user_ptr;
                                    submit = FALSE;
+                                   quiet = FALSE;
                                    break;
                                 }
                                 else submit_cmd(save_sub);
@@ -1750,6 +1819,11 @@ ccp()
 
         while(*com_index)
         {                                 /*--------------------*/
+                com_index = skip_at(com_index); /* drop '@' so  */
+                                          /* the command itself */
+                                          /* still executes; the*/
+                                          /* echo was already   */
+                                          /* suppressed above   */
                 glb_index = com_index;    /* save for use in    */
                                           /* check_cmd call     */
                 get_parms(com_index);     /* parse command line */
@@ -1780,6 +1854,7 @@ ccp()
                                 {
                                         com_index = user_ptr;
                                         submit = FALSE;
+                                        quiet = FALSE;
                                         break;
                                 }
                                 else
