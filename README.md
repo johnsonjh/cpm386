@@ -13,7 +13,6 @@
 - [Overview](#overview)
 - [Hardware support](#hardware-support)
 - [CP/M compatibility](#cpm-compatibility)
-- [Screenshots](#screenshots)
 - [Build requirements](#build-requirements)
 - [Downloads](#downloads)
 - [Compilation](#compilation)
@@ -78,36 +77,6 @@ The system currently reports **BDOS 2.2** to applications.
     single‑user **CP/M** implementation.
 * Unique **CP/M‑386**‑specific BDOS extensions have been added to accommodate
   new features like direct video access and high‑resolution timing.
-
-## Screenshots
-
-<table style="width:100%; border-collapse:collapse;">
- <tr>
-  <td style="width:50%; padding:10px; text-align:center;">
-   <a href=".img/4.png">
-    <img src=".img/4.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="1">
-   </a>
-  </td>
-  <td style="width:50%; padding:10px; text-align:center;">
-   <a href=".img/2.png">
-    <img src=".img/2.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="2">
-   </a>
-  </td>
- </tr>
- <tr>
-  <td style="width:50%; padding:10px; text-align:center;">
-   <a href=".img/3.png">
-    <img src=".img/3.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="3">
-   </a>
-  </td>
-  <td style="width:50%; padding:10px; text-align:center;">
-   <a href=".img/1.png">
-    <img src=".img/1.png" style="width:100%; box-shadow:0 0 8px #0003;" alt="4">
-   </a>
-  </td>
- </tr>
-</table>
-
 
 ## Build requirements
 
@@ -221,7 +190,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `ENV.DAT`      | Environment data file                                                                              |
 | `FPARSE.386`   | F_PARSE test ([BDOS 152](https://www.seasip.info/Cpm/bdos.html#152))                               |
 | `GETSN.386`    | Display serial number ([BDOS 107](https://www.seasip.info/Cpm/bdos.html#107))                      |
-| `GFXTEST.386`  | Graphics mode and framebuffer access demo (BDOS 229/230/231/233)                                   |
+| `GFXTEST.386`  | Graphics and framebuffer demo (BDOS 229/230/231/233)                                               |
 | `HD.386`       | Hex dump utility                                                                                   |
 | `HELLO.386`    | Hello world (the very first **CP/M‑386** program!)                                                 |
 | `ILLEGAL.386`  | Ring‑3 protection and exception handler test                                                       |
@@ -334,13 +303,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>508</th>
-                <th>65</th>
+                <th>477</th>
+                <th>62</th>
                 <th>0</th>
-                <th>443</th>
+                <th>415</th>
                 <th>0</th>
-                <th>22459</th>
-                <th>391</th>
+                <th>21598</th>
+                <th>374</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -365,13 +334,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>97</th>
-                <th>36715</th>
-                <th>7072</th>
+                <th>36684</th>
+                <th>7069</th>
                 <th>5869</th>
-                <th>23774</th>
+                <th>23746</th>
                 <th>4600</th>
-                <th>927442</th>
-                <th>13817</th>
+                <th>926581</th>
+                <th>13800</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
