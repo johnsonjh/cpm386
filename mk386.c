@@ -12,15 +12,6 @@
 /*****************************************************************************/
 
 /*
- * Header (12 bytes LE) of:
- *   load_off   - TPA-relative load offset (usually 0x100)
- *   img_size   - image byte length
- *   entry_off  - TPA-relative entry (usually same as load_off)
- */
-
-/*****************************************************************************/
-
-/*
  * Usage: mk386 input.bin output.386 [load_off_hex]
  */
 
