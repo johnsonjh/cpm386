@@ -286,7 +286,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>201</th>
                 <th>1069</th>
                 <th>331</th>
-                <th>52811</th>
+                <th>52823</th>
                 <th>773</th>
         </tr><tr>
                 <th>Assembly</th>
@@ -301,13 +301,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>477</th>
+                <th>478</th>
                 <th>58</th>
                 <th>0</th>
-                <th>419</th>
+                <th>420</th>
                 <th>0</th>
-                <th>21834</th>
-                <th>377</th>
+                <th>21907</th>
+                <th>378</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -332,13 +332,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>100</th>
-                <th>37861</th>
+                <th>37862</th>
                 <th>7330</th>
                 <th>6094</th>
-                <th>24437</th>
+                <th>24438</th>
                 <th>4701</th>
-                <th>954831</th>
-                <th>14145</th>
+                <th>954916</th>
+                <th>14146</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
