@@ -9,6 +9,8 @@
 
 bits 32
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 section .text
 
 ; -----------------------------------------------------------------------------
@@ -49,6 +51,8 @@ enter_ring3:
     iretd
     ; not reached
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; -----------------------------------------------------------------------------
 ; return_to_kernel - abandon int-stack, resume enter_ring3 caller (ring 0)
 ; -----------------------------------------------------------------------------
@@ -67,6 +71,8 @@ return_to_kernel:
     pop     ebp
     xor     eax, eax
     ret
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; -----------------------------------------------------------------------------
 ; bdos_irq - IDT vector 0x30 (DPL=3 interrupt gate)
@@ -127,6 +133,8 @@ bdos_irq:
     pop     ds
     iretd
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; -----------------------------------------------------------------------------
 ; CPU exception stubs (vectors 0-31)
 ; No-error-code: push fake 0, then vector, then common.
@@ -183,6 +191,8 @@ EXC_NOERR 31
 
 extern fault_handler_c
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; Stack layout after this prologue (struct fault_frame in pmode.c):
 ;   [esp+ 0] ebp  [ 4] edi  [ 8] esi  [12] edx
 ;   [esp+16] ecx  [20] ebx  [24] eax
@@ -224,6 +234,8 @@ exc_common:
     hlt
     jmp     .hang
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; Table of stub addresses for pmode_init (vectors 0..31)
 global exc_stub_table
 align 4
@@ -234,8 +246,25 @@ exc_stub_table:
 %assign i i+1
 %endrep
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 section .data
 align 4
 global resume_esp
 resume_esp:
     dd 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Local Variables:
+; mode: asm
+; indent-tabs-mode: nil
+; tab-width: 4
+; fill-column: 80
+; eval: (setq-local display-fill-column-indicator-column 80)
+; eval: (display-fill-column-indicator-mode 1)
+; End:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; vim: set ft=asm ts=4 sw=4 tw=0 ai expandtab cc=80 :
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

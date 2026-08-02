@@ -7,7 +7,11 @@
 
 ; mbentry.s - Multiboot 1 header + entry point for cpm386.elf
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 bits 32
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 section .multiboot
 align 4
@@ -15,6 +19,8 @@ mb_header_start:
     dd 0x1BADB002                   ; magic
     dd 0x00000003                   ; flags: bit0=align modules, bit1=provide meminfo (and mmap if avail)
     dd 0xE4524FFB                   ; checksum = -(magic + flags)  (must be exact)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; --- Actual entry code
 section .text.start
@@ -86,6 +92,8 @@ _start:
     hlt
     jmp .hang
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; ---------------------------------------------------------------------
 ; Data
 ; ---------------------------------------------------------------------
@@ -94,11 +102,15 @@ align 4
 mb_info_ptr:
     dd 0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; small bootstrap stack for before we zero BSS and pick real stack
 section .bss
 align 16
     resb 8192
 early_stack_top:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; flat 32-bit GDT (code 0x08, data 0x10)
 section .data
@@ -114,3 +126,18 @@ gdt_end:
 gdt_desc:
     dw gdt_end - gdt - 1
     dd gdt
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Local Variables:
+; mode: asm
+; indent-tabs-mode: nil
+; tab-width: 4
+; fill-column: 80
+; eval: (setq-local display-fill-column-indicator-column 80)
+; eval: (display-fill-column-indicator-mode 1)
+; End:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; vim: set ft=asm ts=4 sw=4 tw=0 ai expandtab cc=80 :
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

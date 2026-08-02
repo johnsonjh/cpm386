@@ -187,6 +187,11 @@ vid_blob_end:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+%assign CODE_SIZE ($ - $$)
+%warning info: vidbios code size is CODE_SIZE bytes
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; Local Variables:
 ; mode: asm
 ; indent-tabs-mode: nil
