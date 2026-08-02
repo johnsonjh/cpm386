@@ -306,6 +306,17 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   put_region ("Ring-0 stack:          ", m.kernel_end, m.lowmem_top);
   put_region ("Video & ROM shadow:    ", 0xA0000UL, 0x100000UL);
 
+  if (base == m.tpa_base)
+    {
+      puts ("\r\nERROR: Detected TPA base ");
+      puthex32(base);
+      puts (" != ");
+      puthex32(m.tpa_base);
+      puts ("; aborting!\r\n");
+
+      (void)bdos (0, 0);
+    }
+
   puts ("TPA base:              ");
   puthex32 (base);
   puts ("\r\n");
