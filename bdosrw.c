@@ -25,7 +25,7 @@
  *               bdosrw()    - sequential and random disk I/O    *
  *                                                               *
  *                                                               *
- *       Compiled with Alcyon C on the VAX                       *
+ *       Configured (originally) for Alcyon C on the VAX         *
  *                                                               *
  *****************************************************************/
 

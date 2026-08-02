@@ -30,7 +30,7 @@
 *               rdwrt()     - read/write disk sector            *
 *                                                               *
 *                                                               *
-*       Configured for Alcyon C on the VAX                      *
+*       Configured (originally) for Alcyon C on the VAX         *
 *                                                               *
 ****************************************************************/
 

@@ -26,7 +26,7 @@
  *       The BDOS can potentially return a pointer, long word,   *
  *       or word                                                 *
  *                                                               *
- *       Configured for Alcyon C on the VAX                      *
+ *       Configured (originally) for Alcyon C on the VAX         *
  *                                                               *
  *****************************************************************/
 
@@ -44,9 +44,9 @@
 
 /*****************************************************************************/
 
-#include "platform.h" /* VGA text geometry for BDOS 224 */
+#include "platform.h" /* VGA text geometry for BDOS 224    */
 #include "vidmode.h"  /* video mode table for BDOS 229-231 */
-#include "vgacon.h"   /* live console geometry              */
+#include "vgacon.h"   /* live console geometry             */
 
 /*****************************************************************************/
 

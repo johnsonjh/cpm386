@@ -34,7 +34,7 @@
  *         move()        - general purpose byte mover        *
  *                                                           *
  *                                                           *
- * Compiled with Alcyon C on the VAX                         *
+ * Configured (originally) for Alcyon C on the VAX           *
  *                                                           *
  * Modified 2/5/84 sw Allow odd DMA on get free space        *
  *                                                           *

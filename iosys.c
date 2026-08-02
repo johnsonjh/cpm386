@@ -20,11 +20,11 @@
 *       This module translates from the packet oriented I/O     *
 *       passed from the other BDOS modules into BIOS calls.     *
 *                                                               *
-*       It includes only one external entry point:
+*       It includes only one external entry point:              *
 *               do_phio()   - do physical i/o                   *
 *                                                               *
 *                                                               *
-*       Configured for Alcyon C on the VAX                      *
+*       Configured (originally) for Alcyon C on the VAX         *
 *                                                               *
 ****************************************************************/
 
