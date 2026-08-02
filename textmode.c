@@ -25,6 +25,8 @@ typedef unsigned char UBYTE;
 
 #define BDOS_INT 0x30
 
+/*****************************************************************************/
+
 #define BDOS_CONIN 1
 #define BDOS_CONST 11
 #define BDOS_GET_TICKS 225
@@ -34,8 +36,6 @@ typedef unsigned char UBYTE;
 
 /*****************************************************************************/
 
-/* Must match vidmode.h */
-
 #define VIDM_TEXT 0x0001
 #define VIDM_GRAPHICS 0x0002
 #define VIDM_CURRENT 0x0004
@@ -44,10 +44,14 @@ typedef unsigned char UBYTE;
 #define VIDM_LFB 0x0020
 #define VIDM_VESA 0x0040
 
+/*****************************************************************************/
+
 #define VIDA_TRANSIENT 0
 #define VIDA_CONSOLE 1
 #define VIDA_COMMIT 2
 #define VIDA_REVERT 3
+
+/*****************************************************************************/
 
 #define VIDR_OK 0x0000
 #define VIDR_FAILED 0xFFFB
@@ -61,7 +65,7 @@ typedef unsigned char UBYTE;
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
 /* Seconds the mode change is held before it is undone. */
-#define CONFIRM_SECS 5
+#define CONFIRM_SECS 9
 
 /*****************************************************************************/
 
@@ -87,6 +91,8 @@ struct vidmode
   ULONG fb_phys;
 };
 
+/*****************************************************************************/
+
 /* Must match struct cpm_vidset in bdosdef.h */
 struct vidset
 {
@@ -95,6 +101,8 @@ struct vidset
   UWORD flags;
   UWORD pad;
 };
+
+/*****************************************************************************/
 
 /* Must match struct cpm_ticks in bdosdef.h */
 struct cpm_ticks

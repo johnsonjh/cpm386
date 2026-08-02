@@ -29,6 +29,8 @@ typedef unsigned char UBYTE;
 
 #define BDOS_INT 0x30
 
+/*****************************************************************************/
+
 #define BDOS_CONST 11
 #define BDOS_GET_TICKS 225
 #define BDOS_VID_QUERY 229
@@ -45,8 +47,12 @@ typedef unsigned char UBYTE;
 #define VIDM_CURRENT 0x0004
 #define VIDM_VESA 0x0040
 
+/*****************************************************************************/
+
 #define VIDA_TRANSIENT 0
 #define VIDA_REVERT 3
+
+/*****************************************************************************/
 
 #define VIDR_OK 0x0000
 #define VIDR_NOMORE 0xFFFC
@@ -56,12 +62,16 @@ typedef unsigned char UBYTE;
 
 #define CMD_TAIL ((UBYTE *)abs_ptr (0x80))
 
+/*****************************************************************************/
+
 /* 320x200 packed pixel; the frame buffer we compose into. */
 #define W 320
 #define H 200
 
+/*****************************************************************************/
+
 /* How long the pattern is left on screen before returning to text. */
-#define SHOW_SECS 5
+#define SHOW_SECS 10
 
 /*****************************************************************************/
 
@@ -87,6 +97,8 @@ struct vidmode
   ULONG fb_phys;
 };
 
+/*****************************************************************************/
+
 /* Must match struct cpm_vidset in bdosdef.h */
 struct vidset
 {
@@ -95,6 +107,8 @@ struct vidset
   UWORD flags;
   UWORD pad;
 };
+
+/*****************************************************************************/
 
 /* Must match struct cpm_vidpal in bdosdef.h */
 struct vidpal
@@ -105,6 +119,8 @@ struct vidpal
   UWORD flags;
   UWORD pad;
 };
+
+/*****************************************************************************/
 
 /* Must match struct cpm_ticks in bdosdef.h */
 struct cpm_ticks
@@ -282,7 +298,7 @@ build_frame (void)
 static unsigned g_checked;
 static unsigned g_bad;
 static UWORD g_palrc = VIDR_OK;
-static int g_bykey;
+static int g_bykey = 0;
 
 static void
 verify_frame (unsigned short sel, unsigned long pitch)
@@ -318,8 +334,8 @@ verify_frame (unsigned short sel, unsigned long pitch)
 static int
 wait_secs (int n)
 {
-  struct cpm_ticks t;
-  ULONG hz, start, now;
+  struct cpm_ticks t = { 0 };
+  ULONG hz = 0, start = 0, now = 0;
   int drain = 0;
 
   while (bdos (BDOS_CONST, 0) != 0 && drain++ < 64)
