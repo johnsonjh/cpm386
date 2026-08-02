@@ -53,6 +53,11 @@ stage2_entry:
     mov si, KERNEL_LBA
     mov di, SECTORS_TO_LOAD
 
+    mov ah, 0x0e
+    mov al, ' '
+    mov bh, 0
+    int 0x10
+
 .load_one:
     test di, di
     jz .loaded
@@ -80,6 +85,27 @@ stage2_entry:
     mov cl, ah
     inc cl
     and cl, 0x3f
+
+    push ax
+    push bx
+    push si
+    mov al, [spin_idx]
+    inc al
+    and al, 3
+    mov [spin_idx], al
+    mov bl, al
+    mov si, spinner
+    mov ah, 0x0e
+    mov al, 8
+    mov bh, 0
+    int 0x10
+    mov al, [si + bx]
+    mov ah, 0x0e
+    mov bh, 0
+    int 0x10
+    pop si
+    pop bx
+    pop ax
 
     mov ax, 0x0201
     mov dl, [boot_dl]
@@ -464,6 +490,8 @@ boot_dl db 0
 bootmsg db "OK.",13,10,"CP/M-386 stage 2 loader 0.1 (", BUILDDATE, ")",13,10,"Loading CP/M-386 ... ",13,10,13,10,0
 errmsg  db "CP/M-386 stage 2 boot failed, system halted!",0
 a20msg  db 13,10,"CP/M-386 cannot enable the A20 gate, system halted!",13,10,0
+spinner db '|' , '/' , '-' , 0x5C
+spin_idx db 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
