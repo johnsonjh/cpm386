@@ -651,6 +651,7 @@ extern void (*exc_stub_table [32]) (void);
 #define ARGLEN_VIDSET 8   /* struct cpm_vidset               */
 #define ARGLEN_VIDFONT 12 /* struct cpm_vidfont              */
 #define ARGLEN_VIDPAL 12  /* struct cpm_vidpal               */
+#define ARGLEN_RNGSEED 8  /* struct cpm_rng_seed             */
 
 static unsigned long
 bdos_arg_len (WORD func)
@@ -711,6 +712,9 @@ bdos_arg_len (WORD func)
     case 233: /* BDOS_VID_PALETTE */
       return ARGLEN_VIDPAL;
 
+    case 254: /* BDOS_RNG_SEED */
+      return ARGLEN_RNGSEED;
+
     default:
       return 0;
     }
@@ -764,6 +768,7 @@ bdos_arg_is_ptr (WORD func)
     case 231: /* BDOS_VID_SET   - read cpm_vidset     */
     case 232: /* BDOS_VID_FONT  - read cpm_vidfont    */
     case 233: /* BDOS_VID_PALETTE - read cpm_vidpal   */
+    case 254: /* BDOS_RNG_SEED   - read cpm_rng_seed  */
       return 1;
 
     default:
@@ -866,6 +871,12 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
   {
     extern void pit_init (void);
     pit_init ();
+  }
+
+  /* RNG: gather PIT jitter and seed the initial pool */
+  {
+    extern void salsa20rng_auto_seed_pit (void);
+    salsa20rng_auto_seed_pit ();
   }
 
   /* Null */

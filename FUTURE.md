@@ -8,9 +8,9 @@ I hope to eventually implement the following features in **CP/M‑386**.  Treat
 this section as *wishlist* and not a *roadmap*!
 
 * OS enhancements:
+  * Support and use Multiboot 2 specification (we are Multiboot 1 right now)
   * Fix `testbdos` when building with Clang
   * Drivers for floppy disk, hard disk, and parallel printer
-  * PRNG (based on interrupt timer/PIT first, detect RDRAND/RDSEED later)
   * Better keyboard support (Alt+nnn‑style 8‑bit input, numeric keypad,
     function keys, arrow/motion keys, etc.)
   * User‑defined configurable first‑class RAM disk (default to M:)
@@ -20,6 +20,7 @@ this section as *wishlist* and not a *roadmap*!
   * Enhance filesystem with CP/M‑Plus parity (timestamps, passwords, etc.)
   * Extend user area support from 16 to 32 user areas per disk
   * Support for non‑PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)
+  * Improve PRNG (seeding only via PIT now, we should support RDRAND/RDSEED)
   * ZCPR TCAP‑like standard terminal capability database
   * DOS‑PLUS / CP/M‑Plus style status line with user customization
   * GSX graphics (mostly standard GSX‑stack of GDD, GIOS, GDOS, etc.)

@@ -76,7 +76,7 @@ The system currently reports **BDOS 2.2** to applications.
     message queuing, and process control calls that don't apply to a
     single‑user **CP/M** implementation.
 * Unique **CP/M‑386**‑specific BDOS extensions have been added to accommodate
-  new features like direct video access and high‑resolution timing.
+  new features like direct video access, high‑resolution timing, PRNG, etc.
 
 ## Build requirements
 
@@ -202,6 +202,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `OD.386`       | Octal dump utility                                                                                 |
 | `PAUSE.386`    | Wait for keypress                                                                                  |
 | `PRINTENV.386` | Print environment and system data                                                                  |
+| `PRNG.386`     | PRNG test and demo utility (BDOS 253/254)                                                          |
 | `PROFILE.SUB`  | SUBMIT script (automatically executed at boot)                                                     |
 | `RC.386`       | Return code test and query ([BDOS 108](https://www.seasip.info/Cpm/bdos.html#108))                 |
 | `README.TXT`   | Sample text file                                                                                   |
@@ -259,34 +260,34 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>63</th>
-                <th>30224</th>
-                <th>5939</th>
-                <th>4267</th>
-                <th>20018</th>
-                <th>4261</th>
-                <th>710221</th>
-                <th>10383</th>
+                <th>65</th>
+                <th>31160</th>
+                <th>6146</th>
+                <th>4379</th>
+                <th>20635</th>
+                <th>4356</th>
+                <th>730364</th>
+                <th>10665</th>
         </tr><tr>
                 <th>C Header</th>
-                <th>21</th>
-                <th>2951</th>
-                <th>533</th>
-                <th>1167</th>
-                <th>1251</th>
+                <th>22</th>
+                <th>3054</th>
+                <th>551</th>
+                <th>1233</th>
+                <th>1270</th>
                 <th>13</th>
-                <th>108234</th>
-                <th>1519</th>
+                <th>111663</th>
+                <th>1558</th>
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1548</th>
-                <th>295</th>
-                <th>198</th>
-                <th>1055</th>
-                <th>327</th>
-                <th>52056</th>
-                <th>766</th>
+                <th>1570</th>
+                <th>300</th>
+                <th>201</th>
+                <th>1069</th>
+                <th>331</th>
+                <th>52811</th>
+                <th>773</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>6</th>
@@ -300,13 +301,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>475</th>
+                <th>477</th>
                 <th>58</th>
                 <th>0</th>
-                <th>417</th>
+                <th>419</th>
                 <th>0</th>
-                <th>21625</th>
-                <th>374</th>
+                <th>21834</th>
+                <th>377</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -330,14 +331,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>97</th>
-                <th>36798</th>
-                <th>7100</th>
-                <th>5913</th>
-                <th>23785</th>
-                <th>4602</th>
-                <th>930295</th>
-                <th>13817</th>
+                <th>100</th>
+                <th>37861</th>
+                <th>7330</th>
+                <th>6094</th>
+                <th>24437</th>
+                <th>4701</th>
+                <th>954831</th>
+                <th>14145</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

@@ -1164,6 +1164,81 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
 
       break;
 
+    /*
+     * BDOS 253 (RNG_GET): get 16 bits of randomness.
+     * DE is ignored.
+     * AX = 0..0xFFFE (random), or 0xFFFF if the RNG is not seeded.
+     */
+
+    case 253:
+      {
+        extern unsigned short salsa20rng_get16 (void);
+
+        rtnval = (UWORD)salsa20rng_get16 ();
+      }
+
+      break;
+
+    /*
+     * BDOS 254 (RNG_SEED): fold seed material into the CSPRNG pool.
+     * DE -> struct cpm_rng_seed (TPA-relative).
+     * .data is itself TPA-relative, pointing to .len bytes (1..64).
+     * AX = 0 on success, 0xFFFF on bad pointer / length.
+     */
+
+    case 254:
+      {
+        extern unsigned short salsa20rng_seed (const unsigned char *,
+                                               unsigned long);
+        REG struct cpm_rng_seed *sp = (struct cpm_rng_seed *)infop;
+        const UBYTE *seedp = 0;
+
+        if (!sp)
+          {
+            rtnval = 0xFFFF;
+
+            break;
+          }
+
+        if (sp->len == 0 || sp->len > 64)
+          {
+            rtnval = 0xFFFF;
+
+            break;
+          }
+
+        /* validate embedded data pointer TPA-relative */
+        {
+          extern int pmode_active (void);
+          extern unsigned long pmode_tpa_base (void);
+          extern unsigned long pmode_tpa_len (void);
+
+          if (pmode_active ())
+            {
+              unsigned long off = (unsigned long)sp->data;
+              unsigned long need = (unsigned long)sp->len;
+
+              if (off >= pmode_tpa_len () || need > pmode_tpa_len () - off)
+                {
+                  rtnval = 0xFFFF;
+
+                  break;
+                }
+
+              seedp = (const UBYTE *)(pmode_tpa_base () + off);
+            }
+          else
+            {
+              seedp = (const UBYTE *)(unsigned long)sp->data;
+            }
+        }
+
+        rtnval = (UWORD)salsa20rng_seed ((const unsigned char *)seedp,
+                                         (unsigned long)sp->len);
+      }
+
+      break;
+
     default:
       return -1; /* bad function number */
                  /* break; */

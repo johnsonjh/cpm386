@@ -413,9 +413,10 @@ VIDBIOS_OBJS = vidbios.o vidbiosasm.o
 VIDMODE_OBJ = vidmode.o
 RTC_OBJ = rtc.o
 PIT_OBJ = pit.o
+RNG_OBJ = cpmrng.o
 OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
 	$(MEMMAP_OBJ) $(VGACON_OBJ) $(VIDBIOS_OBJS) $(VIDMODE_OBJ) \
-	$(RTC_OBJ) $(PIT_OBJ) mbentry.o mltiboot.o
+	$(RTC_OBJ) $(PIT_OBJ) $(RNG_OBJ) mbentry.o mltiboot.o
 
 ################################################################################
 
@@ -924,6 +925,14 @@ ticks.386: ticks.bin $(MK386)
 
 ################################################################################
 
+prng.386: prng.bin $(MK386)
+	./$(MK386) ./prng.bin ./prng.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 big.bin: big.c user.ld
 	$(CC) $(CFLAGS) -c -o ./big.o ./big.c
 	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
@@ -986,6 +995,7 @@ ramdisk.bin: \
 			od.386 \
 			pause.386 \
 			printenv.386 \
+			prng.386 \
 			rc.386 \
 			reboot.386 \
 			rm.386 \
@@ -1041,6 +1051,7 @@ ramdisk.bin: \
 	$(CP) -f ./od.386 /tmp/cpmd/OD.386
 	$(CP) -f ./pause.386 /tmp/cpmd/PAUSE.386
 	$(CP) -f ./printenv.386 /tmp/cpmd/PRINTENV.386
+	$(CP) -f ./prng.386 /tmp/cpmd/PRNG.386
 	$(CP) -f ./rc.386 /tmp/cpmd/RC.386
 	$(CP) -f ./reboot.386 /tmp/cpmd/REBOOT.386
 	$(CP) -f ./rm.386 /tmp/cpmd/RM.386
@@ -1090,6 +1101,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/OD.386 \
 	  /tmp/cpmd/PAUSE.386 \
 	  /tmp/cpmd/PRINTENV.386 \
+	  /tmp/cpmd/PRNG.386 \
 	  /tmp/cpmd/PROFILE.SUB \
 	  /tmp/cpmd/RC.386 \
 	  /tmp/cpmd/README.TXT \
@@ -1138,7 +1150,7 @@ ramdisk.bin: \
 
 ################################################################################
 
-bringup.o: bringup.c ramdisk.bin bringup.h bdosinc.h biosdef.h bdosdef.h
+$(BRINGUP_OBJ): bringup.c ramdisk.bin bringup.h bdosinc.h biosdef.h bdosdef.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1154,7 +1166,7 @@ bringup.o: bringup.c ramdisk.bin bringup.h bdosinc.h biosdef.h bdosdef.h
 
 ################################################################################
 
-bios.o: bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h absaddr.h \
+$(BIOS_OBJ): bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h absaddr.h \
 	memmap.h io.h vgacon.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
@@ -1163,7 +1175,7 @@ bios.o: bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h absaddr.h \
 
 ################################################################################
 
-memmap.o: memmap.c memmap.h absaddr.h
+$(MEMMAP_OBJ): memmap.c memmap.h absaddr.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1171,7 +1183,7 @@ memmap.o: memmap.c memmap.h absaddr.h
 
 ################################################################################
 
-vgacon.o: vgacon.c vgacon.h io.h absaddr.h platform.h
+$(VGACON_OBJ): vgacon.c vgacon.h io.h absaddr.h platform.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1187,7 +1199,7 @@ vidbios.o: vidbios.c vidbios.h absaddr.h
 
 ################################################################################
 
-vidmode.o: vidmode.c vidmode.h vidbios.h vgacon.h absaddr.h
+$(VIDMODE_OBJ): vidmode.c vidmode.h vidbios.h vgacon.h absaddr.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1225,11 +1237,13 @@ fileio.o: fileio.c $(BDOS_HDRS)
 dskutil.o: dskutil.c $(BDOS_HDRS)
 iosys.o: iosys.c $(BDOS_HDRS)
 
-ccp.o: ccp.c ccpdef.h diverge.h bdosinc.h bdosdef.h
+################################################################################
+
+$(CCP_OBJ): ccp.c ccpdef.h diverge.h bdosinc.h bdosdef.h
 
 ################################################################################
 
-rtc.o: rtc.c rtc.h
+$(RTC_OBJ): rtc.c rtc.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1237,7 +1251,15 @@ rtc.o: rtc.c rtc.h
 
 ################################################################################
 
-pit.o: pit.c pit.h
+$(PIT_OBJ): pit.c pit.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+$(RNG_OBJ): cpmrng.c cpmrng.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1373,7 +1395,7 @@ clean distclean:
 ################################################################################
 
 testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
-	dskutil.o iosys.o ccp.o bringup.o
+	dskutil.o iosys.o $(CCP_OBJ) $(BRINGUP_OBJ)
 	$(CC) $(CSTD) -m32 $(LTO_FLAGS) $(OPTFLAGS) -Wl,--build-id=none -I. \
 	-o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB) -Wl,--build-id=none \
 	-fno-asynchronous-unwind-tables -fno-builtin -fno-pic -fno-pie -fno-plt \

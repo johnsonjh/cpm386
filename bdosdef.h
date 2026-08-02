@@ -142,6 +142,8 @@
 # define BDOS_VID_SET 231       /* set / commit / revert a video mode */
 # define BDOS_VID_FONT 232      /* load console glyphs / restore ROM  */
 # define BDOS_VID_PALETTE 233   /* load DAC palette entries           */
+# define BDOS_RNG_GET 253       /* get 16 bits of randomness from RNG */
+# define BDOS_RNG_SEED 254      /* seed / reseed the RNG              */
 
 /*****************************************************************************/
 
@@ -297,6 +299,25 @@ struct cpm_vidpal
   UWORD count; /* number of entries        */
   UWORD flags; /* reserved, must be 0      */
   UWORD pad;
+};
+
+/*****************************************************************************/
+
+/*
+ * CSPRNG seed block (BDOS 254; DE -> this, TPA-relative).
+ *
+ * data is a TPA-relative pointer to len bytes of seed material
+ * (1..64).  The material is XORed into the existing CSPRNG pool and
+ * then diffused via a Salsa20/20 permutation, so it always folds innew
+ * entropy in rather than replacing the pool state.
+ *
+ * Returns 0, or 0xFFFF if DE or the data pointer is out of range.
+ */
+
+struct cpm_rng_seed
+{
+  ULONG data; /* TPA-relative pointer to seed bytes */
+  ULONG len;  /* byte count, 1..64                  */
 };
 
 /*****************************************************************************/
