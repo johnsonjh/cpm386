@@ -205,6 +205,7 @@ zero (void *p, int n)
 
   for (i = 0; i < n; i++)
     {
+      /*cppcheck-suppress useStandardLibrary*/
       ((UBYTE *)p) [i] = 0;
     }
 }
