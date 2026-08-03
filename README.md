@@ -311,13 +311,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
-                <th>169</th>
-                <th>34</th>
+                <th>199</th>
+                <th>38</th>
                 <th>0</th>
-                <th>135</th>
+                <th>161</th>
                 <th>0</th>
-                <th>3923</th>
-                <th>82</th>
+                <th>4809</th>
+                <th>91</th>
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
@@ -332,13 +332,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>100</th>
-                <th>37862</th>
-                <th>7330</th>
+                <th>37892</th>
+                <th>7334</th>
                 <th>6094</th>
-                <th>24438</th>
+                <th>24464</th>
                 <th>4701</th>
-                <th>954672</th>
-                <th>14145</th>
+                <th>955558</th>
+                <th>14148</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
