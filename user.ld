@@ -60,5 +60,18 @@ SECTIONS
 }
 
 /*****************************************************************************/
+
+/*
+ * Local Variables:
+ * mode: LD-Script
+ * indent-tabs-mode: nil
+ * tab-width: 4
+ * fill-column: 80
+ * eval: (setq-local display-fill-column-indicator-column 80)
+ * eval: (display-fill-column-indicator-mode 1)
+ * End:
+ */
+
+/*****************************************************************************/
 /* vim: set ft=ld ts=4 sw=4 tw=4 ai expandtab cc=80 : */
 /*****************************************************************************/
