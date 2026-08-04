@@ -113,25 +113,27 @@ pit_poll (void)
 /*****************************************************************************/
 
 static uint64_t
-pit_now64 (void)
+pit_now64(void)
 {
-  uint16_t now;
+    uint16_t now1, now2;
 
-  if (!pit_ready)
+    if (!pit_ready)
+        pit_init();
+
+    now1 = pit_raw();
+    now2 = pit_raw();
+
+    if (now2 <= now1)
     {
-      pit_init ();
+        pit_last = now2;
+    }
+    else
+    {
+        pit_wraps++;
+        pit_last = now2;
     }
 
-  now = pit_raw ();
-
-  if (now > pit_last)
-    {
-      pit_wraps++;
-    }
-
-  pit_last = now;
-
-  return ((uint64_t)pit_wraps << 16) + (uint16_t)(0u - now);
+    return ((uint64_t)pit_wraps << 16) + (uint16_t)(0u - pit_last);
 }
 
 /*****************************************************************************/
