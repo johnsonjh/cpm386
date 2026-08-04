@@ -230,7 +230,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 * Do **not** open pull requests with large amounts of LLM‑generated code.
   These will be immediately rejected.
-* There is currently **no** AI‑generated code in the operating system at this
+* There is **no** AI‑generated code in the operating system proper at this
   time (though there *are* some AI tests, comments, and analysis), as the
   project is intended to be as much of a learning experience for me as it is
   a useful OS port.
@@ -306,7 +306,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>420</th>
                 <th>0</th>
-                <th>21907</th>
+                <th>21904</th>
                 <th>378</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -337,7 +337,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>6094</th>
                 <th>24464</th>
                 <th>4701</th>
-                <th>955558</th>
+                <th>955555</th>
                 <th>14148</th>
         </tr></tfoot></table>
 <!-- scc-end -->
