@@ -1012,9 +1012,9 @@ ramdisk.bin: \
 			trunctst.386 \
 			tsec.386 \
 			ver.386 \
+			vgafont.386 \
 			vgaoff.386 \
 			vgaon.386 \
-			vgafont.386 \
 			vgatext.386
 	$(RM) -f /tmp/ramdisk.tmp
 	$(RM) -rf /tmp/cpmd
@@ -1068,9 +1068,9 @@ ramdisk.bin: \
 	$(CP) -f ./trunctst.386 /tmp/cpmd/TRUNCTST.386
 	$(CP) -f ./tsec.386 /tmp/cpmd/TSEC.386
 	$(CP) -f ./ver.386 /tmp/cpmd/VER.386
+	$(CP) -f ./vgafont.386 /tmp/cpmd/VGAFONT.386
 	$(CP) -f ./vgaoff.386 /tmp/cpmd/VGAOFF.386
 	$(CP) -f ./vgaon.386 /tmp/cpmd/VGAON.386
-	$(CP) -f ./vgafont.386 /tmp/cpmd/VGAFONT.386
 	$(CP) -f ./vgatext.386 /tmp/cpmd/VGATEXT.386
 	mkfs.cpm -f $(CPMFS) /tmp/ramdisk.tmp
 	cpmcp -f $(CPMFS) /tmp/ramdisk.tmp \
@@ -1120,9 +1120,9 @@ ramdisk.bin: \
 	  /tmp/cpmd/TRUNCTST.386 \
 	  /tmp/cpmd/TSEC.386 \
 	  /tmp/cpmd/VER.386 \
+	  /tmp/cpmd/VGAFONT.386 \
 	  /tmp/cpmd/VGAOFF.386 \
 	  /tmp/cpmd/VGAON.386 \
-	  /tmp/cpmd/VGAFONT.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
 	./$(SHOLE) -w /tmp/ramdisk.tmp BIG.386
