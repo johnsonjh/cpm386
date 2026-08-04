@@ -131,6 +131,9 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 []()
 * It is recommended to use **GCC** as **Clang**‑compiled i386 code is larger.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
+* You may need to adjust the `make -j` argument depending on your operating
+  system (*.e.g.*, `gnproc`, `sysctl -n hw.ncpu`, `getconf NPROCESSORS_ONLN`,
+  `psrinfo -p`).
 * 32‑bit support libraries are required to run the test suite (`make test`).
 * <sup>‡</sup>At the time of writing, **FreeBSD** is shipping non‑functional
   `cpmtools2` packages with broken `mkfs.cpm` functionality.  To successfully
@@ -300,13 +303,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>477</th>
+                <th>480</th>
                 <th>58</th>
                 <th>0</th>
-                <th>419</th>
+                <th>422</th>
                 <th>0</th>
-                <th>21892</th>
-                <th>377</th>
+                <th>22063</th>
+                <th>380</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -331,13 +334,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>100</th>
-                <th>37891</th>
+                <th>37894</th>
                 <th>7334</th>
                 <th>6094</th>
-                <th>24463</th>
+                <th>24466</th>
                 <th>4701</th>
-                <th>955543</th>
-                <th>14147</th>
+                <th>955714</th>
+                <th>14150</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
