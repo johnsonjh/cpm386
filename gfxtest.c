@@ -336,9 +336,14 @@ static int
 wait_secs (int n)
 {
   struct cpm_ticks t = { 0 };
-  ULONG hz = 0, start = 0, now = 0;
+  ULONG hz = 0;
+  ULONG start_lo = 0, start_hi = 0;
+  ULONG now_lo = 0, now_hi = 0;
+  ULONG elapsed = 0;
+  ULONG total_ticks = 0;
   int drain = 0;
 
+  /* Throw away anything already typed ahead! */
   while (bdos (BDOS_CONST, 0) != 0 && drain++ < 64)
     {
       (void)bdos (6, 0xFF);
@@ -352,14 +357,21 @@ wait_secs (int n)
     }
 
   hz = t.hz;
-  start = t.lo;
+
+  if (hz == 0)
+    {
+      return 0;
+    }
+
+  start_lo = t.lo;
+  start_hi = t.hi;
+  total_ticks = hz * (ULONG)n;
 
   for (;;)
     {
       if (bdos (BDOS_CONST, 0) != 0)
         {
           (void)bdos (6, 0xFF);
-
           return 1;
         }
 
@@ -370,9 +382,25 @@ wait_secs (int n)
           return 0;
         }
 
-      now = t.lo - start;
+      now_lo = t.lo;
+      now_hi = t.hi;
 
-      if (now >= hz * (ULONG)n)
+      if (now_hi < start_hi ||
+          (now_hi == start_hi && now_lo < start_lo))
+        {
+          continue;
+        }
+
+      if (now_hi == start_hi)
+        {
+          elapsed = now_lo - start_lo;
+        }
+      else
+        {
+          elapsed = (0xFFFFFFFFUL - start_lo) + 1 + now_lo;
+        }
+
+      if (elapsed >= total_ticks)
         {
           return 0;
         }
@@ -586,9 +614,9 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts ("\r\n");
     }
 
-  puts (g_bykey ? "GFXTEST: ended by keypress\r\n"
-                : "GFXTEST: displayed for the full 5 seconds\r\n");
-  puts ("GFXTEST done.\r\n");
+  puts (g_bykey ? "GFXTEST: ended early by keypress\r\n"
+                : "GFXTEST: displayed for the full duration\r\n");
+  puts ("GFXTEST: done.\r\n");
 
   (void)bdos (0, 0);
 }

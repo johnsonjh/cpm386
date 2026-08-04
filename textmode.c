@@ -380,27 +380,6 @@ show_modes (int all)
 
 /*****************************************************************************/
 
-static ULONG
-now_lo (ULONG *hz)
-{
-  struct cpm_ticks t;
-
-  zero (&t, sizeof (t));
-
-  if (bdos (BDOS_GET_TICKS, (LONG)(ULONG)&t) != 0)
-    {
-      *hz = 0;
-
-      return 0;
-    }
-
-  *hz = t.hz;
-
-  return t.lo;
-}
-
-/*****************************************************************************/
-
 /* Overwrite the prompt line; ANSI cannot be assumed on the VGA path. */
 static void
 clear_line (void)
@@ -423,8 +402,13 @@ static int
 confirm (void)
 {
   ULONG hz;
-  int secs;
   int drain = 0;
+  struct cpm_ticks t;
+  ULONG start_lo, start_hi;
+  ULONG now_lo, now_hi;
+  ULONG elapsed;
+  ULONG total_ticks;
+  ULONG last_secs = (ULONG)CONFIRM_SECS;
 
   /* Throw away anything already typed ahead! */
   while (bdos (BDOS_CONST, 0) != 0 && drain++ < 64)
@@ -432,45 +416,83 @@ confirm (void)
       (void)bdos (6, 0xFF);
     }
 
-  (void)now_lo (&hz);
+  zero (&t, sizeof (t));
+
+  if (bdos (BDOS_GET_TICKS, (LONG)(ULONG)&t) != 0)
+    {
+      return 0;
+    }
+
+  hz = t.hz;
 
   if (hz == 0)
     {
       return 0;
     }
 
-  for (secs = CONFIRM_SECS; secs > 0; secs--)
+  start_lo = t.lo;
+  start_hi = t.hi;
+  total_ticks = hz * (ULONG)CONFIRM_SECS;
+
+  clear_line ();
+  puts ("Mode changed correctly [y/N] (");
+  putu (last_secs + 1);
+  puts ("s)? ");
+
+  for (;;)
     {
-      ULONG start;
-      ULONG dummy;
-      ULONG elapsed;
-
-      clear_line ();
-      puts ("Mode changed correctly [y/N] (");
-      putu ((ULONG)secs);
-      puts ("s)? ");
-
-      start = now_lo (&dummy);
-
-      for (;;)
+      if (bdos (BDOS_CONST, 0) != 0)
         {
-          if (bdos (BDOS_CONST, 0) != 0)
-            {
-              int c = (int)bdos (6, 0xFF) & 0xFF;
+          int c = (int)bdos (6, 0xFF) & 0xFF;
 
-              clear_line ();
+          clear_line ();
 
-              return (c == 'y' || c == 'Y');
-            }
-
-          /* Unsigned arithmetic so the 32-bit wrap takes care of itself */
-          elapsed = now_lo (&dummy) - start;
-
-          if (elapsed >= hz)
-            {
-              break;
-            }
+          return (c == 'y' || c == 'Y');
         }
+
+      zero (&t, sizeof (t));
+
+      if (bdos (BDOS_GET_TICKS, (LONG)(ULONG)&t) != 0)
+        {
+          return 0;
+        }
+
+      now_lo = t.lo;
+      now_hi = t.hi;
+
+      if (now_hi < start_hi ||
+          (now_hi == start_hi && now_lo < start_lo))
+        {
+          continue;
+        }
+
+      if (now_hi == start_hi)
+        {
+          elapsed = now_lo - start_lo;
+        }
+      else
+        {
+          elapsed = (0xFFFFFFFFUL - start_lo) + 1 + now_lo;
+        }
+
+      if (elapsed >= total_ticks)
+        {
+          break;
+        }
+
+      {
+        ULONG remaining_secs = (total_ticks - elapsed) / hz;
+
+        if (remaining_secs != last_secs)
+          {
+            last_secs = remaining_secs;
+
+            clear_line ();
+            puts ("Mode changed correctly [y/N] (");
+            putu (last_secs + 1);
+            puts ("s)? ");
+          }
+      }
     }
 
   clear_line ();
