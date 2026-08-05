@@ -330,24 +330,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
-                <th>80</th>
+                <th>81</th>
                 <th>6</th>
                 <th>15</th>
-                <th>59</th>
+                <th>60</th>
                 <th>0</th>
-                <th>3196</th>
-                <th>63</th>
+                <th>3239</th>
+                <th>64</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>105</th>
-                <th>47137</th>
+                <th>47138</th>
                 <th>8766</th>
                 <th>8907</th>
-                <th>29464</th>
+                <th>29465</th>
                 <th>5652</th>
-                <th>1379242</th>
-                <th>18959</th>
+                <th>1379285</th>
+                <th>18960</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
