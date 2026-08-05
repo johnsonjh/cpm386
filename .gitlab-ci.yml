@@ -43,6 +43,7 @@ pages:
     - dnf -y clean all || true
     - rpmconf -au use_maintainer || true
     - rpmconf -acu use_maintainer || true
+    - mkdir -p /etc/apt/apt.conf.d || true
     - echo -e "section_end:`date +%s`:Setup_section\r\e[0K" || true
     - |
       #
