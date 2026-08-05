@@ -21,6 +21,7 @@
 #include "bringup.h" /* ramdisk, dph0, cpm_bringup(), struct dpb/dph defs */
 #include "pmode.h"   /* ring-3 GDT/IDT/TSS + enter_ring3                  */
 #include "absaddr.h" /* abs. addr                                         */
+#include "disk.h"    /* V86 int 13h disk server                           */
 #include "memmap.h"  /* loader memory descriptor + A20 / RAM verification */
 #include "io.h"      /* shared port I/O primitives                        */
 #include "vgacon.h"  /* VGA text console primitives                       */
@@ -332,10 +333,19 @@ void bios_wboot(void) {
 }
 
 unsigned short int bios_const(void) {
+
+  /*
+   * Waiting on the console is the systems idle state;
+   * give the floppy motor gets a chance to spin down.
+   * No-op unless actually turning.
+   */
+
+  disk_poll();
+
   /*
    * Only report ready when a real character is available.
-   * Input stays available even if that device's *output* is disabled
-   * (so SERON can still be typed after SEROFF on a serial-only box).
+   * Input stays available even if that devices *output* is disabled
+   * (SERON can still be typed after SEROFF on a serial-only box!).
    */
 
   if (kbd_stat())
@@ -349,6 +359,13 @@ unsigned short int bios_const(void) {
 
 unsigned char bios_conin(void) {
   for (;;) {
+    /*
+     * The system spends its idle life in this loop, so it is where
+     * the floppy motor gets timed out; no-op unless one is turning.
+     */
+
+    disk_poll();
+
     if (kbd_stat()) {
       unsigned char ch = kbd_in();
 
@@ -479,107 +496,6 @@ unsigned char bios_reader(void)
 #if 0
 void bios_home(void) { /* no-op for ram */ }
 #endif
-
-static unsigned short cur_trk = 0, cur_sec = 0;
-static void *cur_dma_ptr = 0;
-static void *current_dph = 0;
-/* track last selected for spt etc, avoid direct dpb0 use */
-
-void *bios_seldsk(unsigned char drive, unsigned char logged) {
-  (void)logged;
-  cur_trk = cur_sec = 0;
-
-  if (drive < 16) {
-    /*
-     * always return our ram dph for drives 0-15;
-     * prevents fileio seldsk's while(!error(3)) path
-     * on null dphp for unsupported drives
-     * (single-drive ramdisk emulates A:)
-     * CCP normal flow stays clean
-     */
-
-    current_dph = &dph0;
-
-    return &dph0;
-  }
-
-  current_dph = 0;
-
-  return 0;
-}
-
-void bios_settrk(unsigned short int track) { cur_trk = track; }
-void bios_setsec(unsigned short int sector) { cur_sec = sector; }
-void bios_setdma(void *dmaaddress) { cur_dma_ptr = dmaaddress; }
-
-unsigned short int bios_read(void) {
-  unsigned short spt = 32; /* fallback (match 4mb-hd) */
-
-  if (current_dph) {
-    struct dph *hdr = (struct dph *)current_dph;
-    if (hdr->dpbp)
-      spt = hdr->dpbp->spt;
-  }
-
-  unsigned long off = ((unsigned long)cur_trk * spt + cur_sec) * 128UL;
-
-  if (off + 128 > RAMDISK_SIZE)
-    return 1; /* error */
-
-  if (cur_dma_ptr) {
-    int i;
-
-    unsigned char *src = &ramdisk [off];
-    unsigned char *dst = (unsigned char *)cur_dma_ptr;
-
-    for (i = 0; i < 128; i++)
-      dst [i] = src [i];
-  }
-
-  return 0; /* ok */
-}
-
-unsigned short int bios_write(unsigned short int typecode) {
-  (void)typecode;
-
-  unsigned short spt = 32; /* fallback (match 4mb-hd) */
-
-  if (current_dph) {
-    struct dph *hdr = (struct dph *)current_dph;
-
-    if (hdr->dpbp) spt = hdr->dpbp->spt;
-  }
-
-  unsigned long off = ((unsigned long)cur_trk * spt + cur_sec) * 128UL;
-
-  if (off + 128 > RAMDISK_SIZE)
-    return 1;
-
-  if (cur_dma_ptr) {
-    int i;
-    unsigned char *src = (unsigned char *)cur_dma_ptr;
-    unsigned char *dst = &ramdisk [off];
-
-    for (i = 0; i < 128; i++)
-      dst [i] = src [i];
-  }
-
-  return 0;
-}
-
-#if 0
-unsigned short int bios_listst(void)
-{
-  return 0;
-}
-#endif
-
-unsigned short int bios_sectran(unsigned short int sec, void *table)
-{
-  (void)table;
-
-  return sec; /* no xlt */
-}
 
 /*
  * Classic CP/M base page in the TPA (offsets relative to TPA base / user DS).
@@ -974,11 +890,16 @@ void cpm386_init(void) {
     bdos(9, (LONG)buf);
   }
 
+  /* Bring up the V86 int 13h server and say what BIOS drives it found. */
+  disk_report();
+
   ccp();
 }
 
-/* Provide other externs expected by bdos sources that are BIOS mapped or internal */
-/* (removed warmboot/conin/conout to avoid multiple def with bdosmisc/conbdos) */
+/*
+ * Provide other externs expected by BDOS
+ * sources that are BIOS mapped or internal
+ */
 
 #ifndef HOST_TEST
 /*

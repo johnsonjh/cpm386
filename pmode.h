@@ -56,7 +56,53 @@ void pmode_init (unsigned long tpa_base, unsigned long tpa_len);
  * Returns only when the program exits via BDOS function 0 (int 0x30).
  */
 
-void enter_ring3 (unsigned long entry_off, unsigned long user_esp);
+void enter_ring3 (unsigned long entry_eip, unsigned long user_esp);
+
+/*****************************************************************************/
+
+/*
+ * Virtual-8086 task state.  One instance (v86_state, in pmode.s) holds the
+ * entire machine state of the V86 disk server between yields, and doubles as
+ * the register block for the real-mode call it is asked to make.  The field
+ * order is fixed: it is exactly a PUSHAD frame followed by the V86 IRETD
+ * frame, so the entry stub can snapshot it with a single REP MOVSD.
+ *
+ * DO NOT REORDER WITHOUT CHANGING pmode.s.
+ */
+
+struct v86_state
+{
+  unsigned long edi, esi, ebp, esp_unused, ebx, edx, ecx, eax;
+  unsigned long eip, cs, eflags, esp, ss, es, ds, fs, gs;
+};
+
+extern struct v86_state v86_state;
+
+/* EFLAGS for a V86 task: VM=1, IOPL=3, IF=1, reserved bit 1 set. */
+# define V86_EFLAGS 0x00023202UL
+
+/* Software interrupt the V86 task uses to yield back to the kernel. */
+# define V86_YIELD_INT 0x31
+
+/*
+ * Run the V86 task from v86_state until it executes int V86_YIELD_INT, then
+ * return with v86_state updated.  Also returns (with v86_state stale) if the
+ * task faults, in which case v86_faulted() is nonzero.
+ */
+
+void v86_resume (void);
+
+/* Nonzero if the last v86_resume ended in a fault rather than a yield. */
+int v86_faulted (void);
+void v86_clear_fault (void);
+
+/*
+ * Open the TSS I/O permission bitmap to the V86 task, or close it again.
+ * Must be closed whenever a ring-3 program can run: a present bitmap
+ * overrides IOPL, and this one allows every port.
+ */
+
+void pmode_v86_io (int allow);
 
 /*****************************************************************************/
 

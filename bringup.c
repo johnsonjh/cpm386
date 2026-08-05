@@ -63,9 +63,18 @@ static UBYTE alv [256];
  * Physical image is only RAMDISK_SIZE; used blocks stay in that range
  */
 
+/*
+ * EXM is 0 not 1!  Over 255 blocks the allocation map holds 16-bit block
+ * numbers, so a directory entry carries eight of them, and 8 x 2 KiB is
+ * exactly one 16 KiB logical extent - which is what EXM=0 means.  Telling
+ * the BDOS otherwise makes it try to fit two extents into an entry that has
+ * room for one, and files longer than 128 records come back mis-sized with
+ * their middle extents overwritten.
+ */
+
 struct dpb dpb0 = {
   32,       /* spt                                            */
-  4, 15, 1, /* bsh blm exm (2k blocks)                        */
+  4, 15, 0, /* bsh blm exm (2k blocks, one extent per dirent) */
   0, 2047,  /* dsm: word-mode maps (cpmtools 4mb-hd)          */
   255,      /* drm: 256 directory entries                     */
   0x000F,   /* dir_al: first 4 blocks for directory (typical) */

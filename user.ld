@@ -46,7 +46,15 @@ SECTIONS
         *(.data*)
     } :data
 
+    /*
+     * The loader reads the flat image and nothing more, so .bss arrives as
+     * whatever the previous transient left in the TPA.  Programs that rely
+     * on zero-initialised statics clear it themselves between these two
+     * symbols; the rest cost nothing by their being defined.
+     */
+
     .bss : {
+        __bss_start = .;
         *(.bss*)
         *(COMMON)
         _end = .;
