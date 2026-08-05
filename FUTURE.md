@@ -10,7 +10,8 @@ this section as *wishlist* and not a *roadmap*!
 * OS enhancements:
   * Support and use Multiboot 2 specification (we are Multiboot 1 right now)
   * Fix `testbdos` when building with Clang
-  * Drivers for floppy disk, hard disk, and parallel printer
+  * Support filesystems on partitions
+  * Drivers for ATA/UDMA/NVME hard disks, ATAPI, and parallel printer
   * Better keyboard support (Alt+nnn‑style 8‑bit input, numeric keypad,
     function keys, arrow/motion keys, etc.)
   * User‑defined configurable first‑class RAM disk (default to M:)
@@ -63,8 +64,6 @@ this section as *wishlist* and not a *roadmap*!
     executable header.  SAVE should be able to take a range to save, as well
     as the ability to autodetect a range (`CLEARTPA` could be useful here).
   * Extend STAT to query and also set the LRBC
-  * Digital Research ED (port Zilog CP/M‑Z8000 ED 08/1982)
-  * Digital Research PIP (port Zilog CP/M‑Z8000 PIP 1.0A 01/03/1984) +LRBC
   * Digital Research HELP clone (VMS‑style HELP tool)
   * [wumpus](https://gitlab.com/esr/wumpus/-/raw/master/wumpus.c) or
     [this one](https://codeberg.org/EtchedPixels/FUZIX/src/commit/c80213af16cd4c948e0afb3477fe5584762aa1a7/Applications/V7/games/wump.c)

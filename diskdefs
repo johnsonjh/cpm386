@@ -1,0 +1,47 @@
+################################################################################
+# CP/M-386 - diskdefs
+# Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+# SPDX-License-Identifier: MIT
+# scspell-id: f485fc14-9104-11f1-8229-80ee73e9b8e7
+################################################################################
+
+diskdef 4mb-hd
+  seclen 128
+  tracks 1024
+  sectrk 32
+  blocksize 2048
+  maxdir 256
+  skew 1
+  boottrk 0
+  os p2dos
+end
+
+################################################################################
+
+diskdef cpm386-hd8
+  seclen 128
+  tracks 2048
+  sectrk 32
+  blocksize 2048
+  maxdir 512
+  skew 1
+  boottrk 0
+  os p2dos
+end
+
+################################################################################
+
+diskdef cpm386-fd144
+  seclen 128
+  tracks 160
+  sectrk 72
+  blocksize 2048
+  maxdir 256
+  skew 1
+  boottrk 0
+  os p2dos
+end
+
+################################################################################
+# vim: set noexpandtab cc=80 :
+################################################################################

@@ -33,11 +33,14 @@ enter_ring3:
     mov     ebx, [esp + 24]     ; user_esp
 
     ; Build iretd frame: SS, ESP, EFLAGS, CS, EIP
-    ; Keep IF=0: no PIC handlers yet; timer IRQ0 (vec 8) would hang.
+    ;
+    ; EFLAGS is built from nothing rather than copied from the kernel's:
+    ; only bit 1 (always set) is wanted.  IF=0 because the PIC is masked and
+    ; no ring-3 IRQ handler exists, DF=0 as the ABI expects, and above all
+    ; IOPL=0 - inheriting a raised IOPL would hand the program the I/O ports.
     push    dword 0x23          ; SS = user data | RPL3
     push    ebx                 ; ESP
-    pushf
-    and     dword [esp], 0xFFFFFDFF  ; clear IF
+    push    dword 0x00000002    ; EFLAGS
     push    dword 0x1B          ; CS = user code | RPL3
     push    eax                 ; EIP
 
@@ -50,6 +53,142 @@ enter_ring3:
 
     iretd
     ; not reached
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; -----------------------------------------------------------------------------
+; V86 task support (see disk.c / disk_v86.s)
+;
+; A single V86 task acts as a disk server: it runs real-mode BIOS int 13h on
+; the kernel's behalf and yields back with int 0x31.  The whole machine state
+; of that task lives in v86_state, which is also the register block C code
+; fills in before a call and reads results out of afterwards.
+;
+;   v86_state layout (17 dwords, matches pushad + the V86 iretd frame):
+;     +0  EDI  +4  ESI  +8  EBP  +12 (esp, ignored)
+;     +16 EBX  +20 EDX  +24 ECX  +28 EAX
+;     +32 EIP  +36 CS   +40 EFLAGS +44 ESP
+;     +48 SS   +52 ES   +56 DS   +60 FS   +64 GS
+; -----------------------------------------------------------------------------
+
+TSS_ESP0    equ 4               ; offsetof(struct tss_with_iomap, esp0)
+
+extern tss
+
+; -----------------------------------------------------------------------------
+; void v86_resume (void)
+;
+; Run the V86 task from the context in v86_state.  Returns when the task
+; executes int 0x31, with v86_state updated to its state at that point.
+; -----------------------------------------------------------------------------
+global v86_resume
+v86_resume:
+    push    ebp
+    push    ebx
+    push    esi
+    push    edi
+
+    ; Own resume slot: a ring-3 program can be mid-BDOS-call above us, and
+    ; its resume_esp must survive for the eventual enter_ring3 unwind.
+    mov     [v86_resume_esp], esp
+
+    ; The task's int 0x31 is a privilege change, so the CPU takes the ring-0
+    ; SS:ESP from the TSS.  The fixed ring0_stack is no good here: a BDOS call
+    ; from ring 3 is already running on it, and reusing it would smash that
+    ; frame.  Point ESP0 at our own stack instead, below everything live.
+    mov     eax, [tss + TSS_ESP0]
+    mov     [saved_tss_esp0], eax
+    mov     [tss + TSS_ESP0], esp
+
+    ; iretd frame, pushed high-to-low: GS, FS, DS, ES, SS, ESP, EFLAGS, CS, EIP
+    push    dword [v86_state + 64]      ; GS
+    push    dword [v86_state + 60]      ; FS
+    push    dword [v86_state + 56]      ; DS
+    push    dword [v86_state + 52]      ; ES
+    push    dword [v86_state + 48]      ; SS
+    push    dword [v86_state + 44]      ; ESP
+    push    dword [v86_state + 40]      ; EFLAGS (VM must be set)
+    push    dword [v86_state + 36]      ; CS
+    push    dword [v86_state + 32]      ; EIP
+
+    mov     eax, [v86_state + 28]
+    mov     ecx, [v86_state + 24]
+    mov     edx, [v86_state + 20]
+    mov     ebx, [v86_state + 16]
+    mov     ebp, [v86_state +  8]
+    mov     esi, [v86_state +  4]
+    mov     edi, [v86_state +  0]
+
+    iretd
+    ; not reached
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; -----------------------------------------------------------------------------
+; v86_irq - IDT vector 0x31 (DPL=3 interrupt gate): the task's yield back to
+; the kernel.  Snapshots the task's full state into v86_state, then unwinds
+; to the v86_resume caller.
+; -----------------------------------------------------------------------------
+global v86_irq
+v86_irq:
+    pushad                      ; 8 dwords, directly below the 9-dword frame
+
+    ; The gate has to be DPL 3 for the V86 task to reach it, which means a
+    ; ring-3 program can execute int 0x31 too.  That must not unwind the
+    ; kernel to a stale v86_resume frame, so check the pushed EFLAGS for VM
+    ; and quietly ignore the interrupt if it did not come from the task.
+    test    dword [esp + 40], 0x00020000
+    jnz     .from_v86
+
+    popad
+    iretd
+
+.from_v86:
+    ; Entering protected mode from V86 leaves DS/ES/FS/GS loaded with the null
+    ; selector, so nothing may be addressed until we reload them.
+    mov     ax, 0x10
+    mov     ds, ax
+    mov     es, ax
+    cld
+
+    mov     esi, esp
+    mov     edi, v86_state
+    mov     ecx, 17
+    rep movsd
+
+    ; fall through
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; -----------------------------------------------------------------------------
+; v86_return - abandon the int stack, resume the v86_resume caller (ring 0)
+; -----------------------------------------------------------------------------
+global v86_return
+v86_return:
+    mov     ax, 0x10
+    mov     ds, ax
+    mov     es, ax
+    mov     fs, ax
+    mov     gs, ax
+    mov     ss, ax
+
+    ; An interrupt gate clears VM, IF, TF and NT on the way in but leaves
+    ; IOPL alone, so the kernel would otherwise carry the task's IOPL=3 back
+    ; out with it.  Put it back to 0 before anything can inherit it.
+    pushfd
+    and     dword [esp], ~0x3000
+    popfd
+
+    mov     eax, [saved_tss_esp0]
+    mov     [tss + TSS_ESP0], eax
+
+    mov     esp, [v86_resume_esp]
+    pop     edi
+    pop     esi
+    pop     ebx
+    pop     ebp
+    xor     eax, eax
+    ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -189,6 +328,20 @@ EXC_NOERR 29
 EXC_NOERR 30
 EXC_NOERR 31
 
+; Vectors 32-255 get the same treatment.  Nothing in protected mode uses
+; them, but the V86 task does: an INT executed in virtual-8086 mode goes
+; through this IDT rather than the real mode vector table, so the ROM's own
+; `int 1ch` out of its timer tick handler - and anything else it calls -
+; arrives here to be reflected back down.  See fault_handler_c.
+%assign i 32
+%rep 224
+exc_stub_%+i:
+    push    dword 0
+    push    dword i
+    jmp     exc_common
+%assign i i+1
+%endrep
+
 extern fault_handler_c
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -224,8 +377,14 @@ exc_common:
     call    fault_handler_c
     add     esp, 4
 
+    ; eax == 3: V86 software interrupt reflected; resume the task
+    ; eax == 2: abort the V86 task back to the v86_resume caller
     ; eax == 1: abort ring-3 program back to enter_ring3 caller
     ; eax == 0: unrecoverable (kernel) fault
+    cmp     eax, 3
+    je      .resume
+    cmp     eax, 2
+    je      v86_return
     test    eax, eax
     jnz     return_to_kernel
 
@@ -234,15 +393,124 @@ exc_common:
     hlt
     jmp     .hang
 
+    ; fault_handler_c rewrote CS:EIP, EFLAGS and the V86 SS:ESP in the frame
+    ; to divert the task into a real mode handler; the IRETD performs it.
+.resume:
+    pop     ebp
+    pop     edi
+    pop     esi
+    pop     edx
+    pop     ecx
+    pop     ebx
+    pop     eax
+    pop     gs
+    pop     fs
+    pop     es
+    pop     ds
+    add     esp, 8              ; drop vec and err
+    iretd
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Table of stub addresses for pmode_init (vectors 0..31)
+; Table of stub addresses for pmode_init (all 256 vectors)
 global exc_stub_table
 align 4
 exc_stub_table:
 %assign i 0
-%rep 32
+%rep 256
     dd exc_stub_%+i
+%assign i i+1
+%endrep
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; -----------------------------------------------------------------------------
+; Hardware IRQ stubs, PIC vectors 0x20-0x2F.
+;
+; These exist for one reason: the ROM's int 13h floppy code waits on IRQ 6.
+; The IRQs are unmasked only for the duration of a V86 disk call (disk.c), so
+; in practice every one of these arrives with the V86 server interrupted, and
+; irq_handler_c reflects it into the real mode handler that knows what to do
+; with it - including the EOI.  The frame layout matches exc_common's so the
+; same struct fault_frame describes both.
+; -----------------------------------------------------------------------------
+
+%macro IRQ_STUB 1
+irq_stub_%1:
+    push    dword 0             ; no error code
+    push    dword %1            ; IRQ number, in the vec slot
+    jmp     irq_common
+%endmacro
+
+IRQ_STUB 0
+IRQ_STUB 1
+IRQ_STUB 2
+IRQ_STUB 3
+IRQ_STUB 4
+IRQ_STUB 5
+IRQ_STUB 6
+IRQ_STUB 7
+IRQ_STUB 8
+IRQ_STUB 9
+IRQ_STUB 10
+IRQ_STUB 11
+IRQ_STUB 12
+IRQ_STUB 13
+IRQ_STUB 14
+IRQ_STUB 15
+
+extern irq_handler_c
+
+irq_common:
+    push    ds
+    push    es
+    push    fs
+    push    gs
+    push    eax
+    push    ebx
+    push    ecx
+    push    edx
+    push    esi
+    push    edi
+    push    ebp
+
+    mov     ax, 0x10
+    mov     ds, ax
+    mov     es, ax
+    mov     fs, ax
+    mov     gs, ax
+    cld
+
+    push    esp                 ; &fault_frame
+    call    irq_handler_c
+    add     esp, 4
+
+    ; irq_handler_c may have rewritten CS:EIP, EFLAGS and the V86 SS:ESP in
+    ; the frame to divert the task into a real mode handler; the IRETD below
+    ; is what actually performs that diversion.
+    pop     ebp
+    pop     edi
+    pop     esi
+    pop     edx
+    pop     ecx
+    pop     ebx
+    pop     eax
+    pop     gs
+    pop     fs
+    pop     es
+    pop     ds
+    add     esp, 8              ; drop vec and err
+    iretd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Table of stub addresses for pmode_init (IRQ 0..15)
+global irq_stub_table
+align 4
+irq_stub_table:
+%assign i 0
+%rep 16
+    dd irq_stub_%+i
 %assign i i+1
 %endrep
 
@@ -251,8 +519,17 @@ exc_stub_table:
 section .data
 align 4
 global resume_esp
-resume_esp:
-    dd 0
+resume_esp:     dd 0            ; enter_ring3 unwind point
+v86_resume_esp: dd 0            ; v86_resume unwind point
+saved_tss_esp0: dd 0            ; tss.esp0 to put back on V86 exit
+
+; Full machine state of the V86 disk task; also the register block used to
+; pass an int 13h call in and its results out.  See struct v86_state in
+; pmode.h - the two must stay in step.
+global v86_state
+align 4
+v86_state:
+    times 17 dd 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

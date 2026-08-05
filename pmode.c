@@ -57,8 +57,28 @@ struct dt_ptr
 
 /*****************************************************************************/
 
-/* 32-bit TSS */
-struct tss32
+/*
+ * 32-bit TSS, with a full I/O permission bitmap appended (LLM explaining)
+ *
+ * IOPL does not gate port access in virtual-8086 mode - the bitmap always
+ * does - so the V86 disk server can only touch the FDC and IDE registers if
+ * one is present.  It is left all-zero, meaning every port is allowed: the
+ * server runs stock ROM code, and the kernel is the only thing that puts it
+ * there.  The trailing 0xFF byte is the terminator the CPU requires.
+ *
+ * The map must not be visible to ring-3 programs, though.  A present map
+ * overrides IOPL for them too, and an all-zero one would hand every user
+ * program the I/O ports.  So iomap_base is parked past the segment limit -
+ * the encoding for "no map at all", which denies I/O to anything above
+ * IOPL - and only moved onto the map for the duration of a V86 call.  The
+ * CPU reads the field out of the TSS on each I/O instruction, so the switch
+ * is a single 16-bit store.  See pmode_v86_io().
+ */
+
+#define TSS_IOMAP_BYTES (65536 / 8)
+#define TSS_NO_IOMAP 0xFFFFu
+
+struct tss_with_iomap
 {
   uint32_t prev_tss;
   uint32_t esp0;
@@ -70,11 +90,24 @@ struct tss32
   uint32_t cr3;
   uint32_t eip;
   uint32_t eflags;
-  uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-  uint32_t es, cs, ss, ds, fs, gs;
+  uint32_t eax;
+  uint32_t ecx;
+  uint32_t edx;
+  uint32_t ebx;
+  uint32_t esp;
+  uint32_t ebp;
+  uint32_t esi;
+  uint32_t edi;
+  uint32_t es;
+  uint32_t cs;
+  uint32_t ss;
+  uint32_t ds;
+  uint32_t fs;
+  uint32_t gs;
   uint32_t ldt;
   uint16_t trap;
   uint16_t iomap_base;
+  uint8_t iomap [TSS_IOMAP_BYTES + 1];
 } __attribute__ ((packed));
 
 /*****************************************************************************/
@@ -92,7 +125,7 @@ struct tss32
 
 static struct gdt_entry gdt [GDT_COUNT];
 static struct idt_entry idt [IDT_COUNT];
-static struct tss32 tss;
+struct tss_with_iomap tss;
 static struct dt_ptr gdtp, idtp;
 
 /*****************************************************************************/
@@ -116,8 +149,31 @@ static int pmode_ready;
 
 /*****************************************************************************/
 
+/* EFLAGS bits we care about in a V86 frame. */
+#define EFL_TF 0x00000100u
+#define EFL_IF 0x00000200u
+#define EFL_VM 0x00020000u
+
+/*****************************************************************************/
+
+/* Where the PICs are remapped to; see pmode_init. */
+#define PIC_VECTOR_BASE 0x20
+
+/*****************************************************************************/
+
+static int v86_fault;
+
+/*****************************************************************************/
+
 extern void bdos_irq (void);
+extern void v86_irq (void);
 extern void return_to_kernel (void);
+
+/*****************************************************************************/
+
+struct fault_frame;
+static void v86_inject_int (struct fault_frame *f, unsigned int vec);
+static int v86_reflect_int (struct fault_frame *f);
 extern UWORD _bdos (WORD func, UWORD info, UBYTE *infop);
 
 /*****************************************************************************/
@@ -306,18 +362,6 @@ idt_set (int vec, void (*handler) (void), uint8_t type)
 
 /*****************************************************************************/
 
-/* Fallback for IRQ vectors etc.: freeze (PIC is masked; should be rare). */
-static void
-fault_hang (void)
-{
-  for (;;)
-    {
-      __asm__ volatile ("cli; hlt");
-    }
-}
-
-/*****************************************************************************/
-
 /* Print via BIOS console (serial + VGA as configured). Safe from ring 0. */
 extern void bios_conout (unsigned char c);
 
@@ -440,10 +484,23 @@ uint32_t
 fault_handler_c (struct fault_frame *f)
 {
   uint32_t cr0, cr2, cr3;
-  int from_user = ((f->cs & 3u) == 3u);
+  int from_v86 = ((f->eflags & EFL_VM) != 0);
+  int from_user = from_v86 || ((f->cs & 3u) == 3u);
   uint32_t esp_at_fault;
   uint32_t ss_at_fault;
 
+  /*
+   * The overwhelmingly common V86 fault, and not an error at all: the disk
+   * server, or the ROM code it is running, executed an INT.  Send it where
+   * an 8086 would have sent it and carry on.
+   */
+
+  if (from_v86 && f->vec == 13u && v86_reflect_int (f))
+    {
+      return 3;
+    }
+
+  /* V86 has CPL 3 too, so the CPU pushed the interrupted SS:ESP either way. */
   if (from_user)
     {
       esp_at_fault = f->uesp;
@@ -608,9 +665,36 @@ fault_handler_c (struct fault_frame *f)
   fault_put_pair (" CR3=", cr3);
   fault_puts ("\r\n");
 
+  /*
+   * A fault inside the V86 disk server is a driver bug, not a dead machine:
+   * dump the offending real-mode instruction bytes, then unwind to the
+   * v86_resume caller so the disk request can be failed cleanly.
+   */
+
+  if (from_v86)
+    {
+      const unsigned char *ip
+          = (const unsigned char *)((f->cs << 4) + (f->eip & 0xFFFFu));
+      int i;
+
+      fault_puts ("V86 opcode ");
+
+      for (i = 0; i < 6; i++)
+        {
+          fault_puthex (ip [i], 2);
+          fault_puts (" ");
+        }
+
+      fault_puts ("\r\nV86 task aborted.\r\n");
+      v86_fault = 1;
+
+      return 2;
+    }
+
   if (from_user)
     {
       fault_puts ("Ring-3 protection fault - program aborted.\r\n");
+
       return 1;
     }
 
@@ -621,8 +705,166 @@ fault_handler_c (struct fault_frame *f)
 
 /*****************************************************************************/
 
-/* Exception entry stubs (pmode.S); one pointer per vector 0..31 */
-extern void (*exc_stub_table [32]) (void);
+int
+v86_faulted (void)
+{
+  return v86_fault;
+}
+
+void
+v86_clear_fault (void)
+{
+  v86_fault = 0;
+}
+
+/*****************************************************************************/
+
+/*
+ * Expose (or hide) the TSS I/O permission bitmap.  Exposed, every port is
+ * open, which is what the V86 server needs to run ROM disk code; hidden,
+ * there is no map and both ring 3 and V86 are denied I/O outright.
+ * Kept exposed only for the duration of a V86 call.
+ */
+
+void
+pmode_v86_io (int allow)
+{
+  tss.iomap_base
+      = allow ? (uint16_t)(sizeof (tss) - sizeof (tss.iomap)) : TSS_NO_IOMAP;
+}
+
+/*****************************************************************************/
+
+/*
+ * Push a real-mode interrupt frame onto the V86 task's own stack and point
+ * it at the handler in the real-mode IVT - exactly what an 8086 does for an
+ * INT.  The task then resumes inside the ROM's handler, whose IRET pops the
+ * frame and carries on where it left off.  Nothing else has to be arranged:
+ * IOPL is 3, so that IRET runs natively.
+ */
+
+static void
+v86_inject_int (struct fault_frame *f, unsigned int vec)
+{
+  volatile uint16_t *ivt = (volatile uint16_t *)(unsigned long)(vec * 4u);
+  uint32_t sp = (f->uesp - 6u) & 0xFFFFu;
+  volatile uint16_t *stk
+      = (volatile uint16_t *)(unsigned long)(((f->uss & 0xFFFFu) << 4) + sp);
+
+  stk [0] = (uint16_t)(f->eip & 0xFFFFu);
+  stk [1] = (uint16_t)(f->cs & 0xFFFFu);
+  stk [2] = (uint16_t)(f->eflags & 0xFFFFu);
+
+  f->uesp = sp;
+  f->eip = ivt [0];
+  f->cs = ivt [1];
+
+  /* An INT clears IF and TF; VM and IOPL must survive untouched. */
+  f->eflags &= ~(EFL_IF | EFL_TF);
+}
+
+/*****************************************************************************/
+
+/*
+ * Reflect a software interrupt executed by the V86 task.
+ *
+ * A real-mode program's INT has to reach the handler in the real mode
+ * vector table, but in virtual-8086 mode INT goes through this IDT instead,
+ * and since the task runs at CPL 3 while the gates are DPL 0, it does not
+ * even get that far: the CPU raises #GP(0) on the instruction itself.  That
+ * is the hook.  Decode what was attempted and deliver it downwards.
+ *
+ * Returns 0 if the faulting instruction was not an INT after all, which
+ * means the task really has gone wrong.
+ */
+
+#define EFL_OF 0x00000800u
+
+static int
+v86_reflect_int (struct fault_frame *f)
+{
+  const unsigned char *ip
+      = (const unsigned char *)((f->cs << 4) + (f->eip & 0xFFFFu));
+  unsigned int vec;
+  unsigned int len;
+
+  switch (ip [0])
+    {
+    case 0xCD: /* INT imm8 */
+      vec = ip [1];
+      len = 2;
+      break;
+
+    case 0xCC: /* INT 3 */
+      vec = 3;
+      len = 1;
+      break;
+
+    case 0xCE: /* INTO - nothing to do unless OF is set */
+      if (!(f->eflags & EFL_OF))
+        {
+          f->eip = (f->eip + 1u) & 0xFFFFu;
+
+          return 1;
+        }
+
+      vec = 4;
+      len = 1;
+      break;
+
+    default:
+      return 0;
+    }
+
+  f->eip = (f->eip + len) & 0xFFFFu;
+  v86_inject_int (f, vec);
+
+  return 1;
+}
+
+/*****************************************************************************/
+
+/*
+ * Hardware interrupt, PIC vectors 0x20-0x2F.  These are unmasked only while
+ * the V86 disk server is running (disk.c), because the only thing that wants
+ * them is the ROM's int 13h floppy code waiting on IRQ 6.  Hand the
+ * interrupt to the real-mode handler that owns it; that handler issues the
+ * EOI, as it would on a real machine.
+ */
+
+void
+irq_handler_c (struct fault_frame *f)
+{
+  unsigned int irq = f->vec;
+
+  if (f->eflags & EFL_VM)
+    {
+      v86_inject_int (f, irq < 8 ? 0x08u + irq : 0x70u + (irq - 8u));
+
+      return;
+    }
+
+  /*
+   * Not from the V86 task, so nothing here knows how to service it and no
+   * real-mode handler is going to acknowledge it.  EOI and drop it, rather
+   * than wedge the PIC.
+   */
+
+  if (irq >= 8)
+    {
+      outb (0xA0, 0x20);
+    }
+
+  outb (0x20, 0x20);
+}
+
+/*****************************************************************************/
+
+/* Exception entry stubs (pmode.s); one pointer per vector 0..255 */
+extern void (*exc_stub_table [256]) (void);
+
+/* Hardware IRQ entry stubs (pmode.s); one pointer per IRQ 0..15 */
+extern void (*irq_stub_table [16]) (void);
 
 /*****************************************************************************/
 
@@ -639,19 +881,19 @@ extern void (*exc_stub_table [32]) (void);
  * the BDOS write past the end of the ring-3 segment.
  */
 
-#define ARGLEN_FCB 36     /* struct fcb                      */
-#define ARGLEN_DMA 128    /* one CP/M record                 */
-#define ARGLEN_DPB 16     /* struct dpb                      */
-#define ARGLEN_TPA 12     /* struct set_tpa_struct           */
-#define ARGLEN_SERIAL 6   /* S_SERIAL number                 */
-#define ARGLEN_VGATEXT 16 /* struct cpm_vga_text             */
-#define ARGLEN_TICKS 12   /* struct cpm_ticks                */
-#define ARGLEN_MEMLAY 36  /* struct cpm_memlayout            */
-#define ARGLEN_VIDMODE 32 /* struct cpm_vidmode              */
-#define ARGLEN_VIDSET 8   /* struct cpm_vidset               */
-#define ARGLEN_VIDFONT 12 /* struct cpm_vidfont              */
-#define ARGLEN_VIDPAL 12  /* struct cpm_vidpal               */
-#define ARGLEN_RNGSEED 8  /* struct cpm_rng_seed             */
+#define ARGLEN_FCB 36     /* struct fcb            */
+#define ARGLEN_DMA 128    /* one CP/M record       */
+#define ARGLEN_DPB 16     /* struct dpb            */
+#define ARGLEN_TPA 12     /* struct set_tpa_struct */
+#define ARGLEN_SERIAL 6   /* S_SERIAL number       */
+#define ARGLEN_VGATEXT 16 /* struct cpm_vga_text   */
+#define ARGLEN_TICKS 12   /* struct cpm_ticks      */
+#define ARGLEN_MEMLAY 36  /* struct cpm_memlayout  */
+#define ARGLEN_VIDMODE 32 /* struct cpm_vidmode    */
+#define ARGLEN_VIDSET 8   /* struct cpm_vidset     */
+#define ARGLEN_VIDFONT 12 /* struct cpm_vidfont    */
+#define ARGLEN_VIDPAL 12  /* struct cpm_vidpal     */
+#define ARGLEN_RNGSEED 8  /* struct cpm_rng_seed   */
 
 static unsigned long
 bdos_arg_len (WORD func)
@@ -763,12 +1005,12 @@ bdos_arg_is_ptr (WORD func)
     case 225: /* BDOS_GET_TICKS - fill cpm_ticks */
     case 226: /* BDOS_SLEEP_UNTIL - read cpm_ticks target */
     case 228: /* BDOS_MEM_LAYOUT - fill cpm_memlayout */
-    case 229: /* BDOS_VID_QUERY - fill cpm_vidmode    */
-    case 230: /* BDOS_VID_ENUM  - fill cpm_vidmode    */
-    case 231: /* BDOS_VID_SET   - read cpm_vidset     */
-    case 232: /* BDOS_VID_FONT  - read cpm_vidfont    */
-    case 233: /* BDOS_VID_PALETTE - read cpm_vidpal   */
-    case 254: /* BDOS_RNG_SEED   - read cpm_rng_seed  */
+    case 229: /* BDOS_VID_QUERY - fill cpm_vidmode */
+    case 230: /* BDOS_VID_ENUM  - fill cpm_vidmode */
+    case 231: /* BDOS_VID_SET   - read cpm_vidset */
+    case 232: /* BDOS_VID_FONT  - read cpm_vidfont */
+    case 233: /* BDOS_VID_PALETTE - read cpm_vidpal */
+    case 254: /* BDOS_RNG_SEED   - read cpm_rng_seed */
       return 1;
 
     default:
@@ -789,6 +1031,12 @@ bdos_syscall_c (WORD func, unsigned long info, unsigned long user_cs)
   {
     extern void pit_poll (void);
     pit_poll ();
+  }
+
+  /* let the ROM time out the floppy motor even in a console-quiet program */
+  {
+    extern void disk_poll (void);
+    disk_poll ();
   }
 
   /* Program exit from ring 3: resume kernel after enter_ring3 */
@@ -860,9 +1108,29 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
   g_tpa_len = tpa_len;
 
   /*
-   * Mask all PIC IRQs - we poll console and have no IRQ handlers yet.
-   * Leaving them unmasked with IF=1 in ring-3 would vector to fault_hang.
+   * Move the PIC off the vectors the BIOS left it on.  IRQ 0-7 sit on
+   * 0x08-0x0F out of POST, right on top of #DF, #TS, #NP, #SS, #GP and #PF,
+   * so a hardware interrupt would be indistinguishable from a fault.  Then
+   * mask everything: the console is polled, and the only IRQ anything wants
+   * is IRQ 6, which the V86 disk server unmasks around its own calls.
    */
+
+  outb (0x20, 0x11); /* ICW1: cascade, expect ICW4 */
+  io_delay ();
+  outb (0xA0, 0x11);
+  io_delay ();
+  outb (0x21, PIC_VECTOR_BASE); /* ICW2: vector base */
+  io_delay ();
+  outb (0xA1, PIC_VECTOR_BASE + 8);
+  io_delay ();
+  outb (0x21, 0x04); /* ICW3: slave on IRQ 2 */
+  io_delay ();
+  outb (0xA1, 0x02);
+  io_delay ();
+  outb (0x21, 0x01); /* ICW4: 8086 mode */
+  io_delay ();
+  outb (0xA1, 0x01);
+  io_delay ();
 
   outb (0x21, 0xFF);
   outb (0xA1, 0xFF);
@@ -947,27 +1215,36 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
 
   tss.ss0 = SEL_KDATA;
   tss.esp0 = (uint32_t)(unsigned long)(ring0_stack + sizeof (ring0_stack));
-  tss.iomap_base = sizeof (tss);
+  tss.iomap_base = TSS_NO_IOMAP;      /* no map: ring 3 gets no I/O at all */
+  tss.iomap [TSS_IOMAP_BYTES] = 0xFF; /* required terminator byte          */
 
   gdtp.limit = sizeof (gdt) - 1;
   gdtp.base = (uint32_t)(unsigned long)&gdt;
 
   /*
-   * IDT: CPU exceptions 0-31 have recover-capable stubs; rest hang.
-   * BDOS int 0x30 is DPL3 so ring-3 may call it.
+   * IDT.  Every vector gets a stub, not just the 32 the CPU can raise: an
+   * INT executed in virtual-8086 mode is delivered here rather than through
+   * the real mode vector table, and the ROM code the disk server runs makes
+   * plenty of them.  fault_handler_c sorts out which is which.
+   *
+   * All DPL 0 except the two the outside world is meant to reach:
+   * BDOS on int 0x30, and the V86 server's yield on int 0x31.
    */
 
   for (i = 0; i < IDT_COUNT; i++)
     {
-      idt_set (i, fault_hang, 0x8E); /* present, DPL0, 32-bit interrupt gate */
-    }
-
-  for (i = 0; i < 32; i++)
-    {
+      /* present, DPL0, 32-bit interrupt gate */
       idt_set (i, (void (*) (void))exc_stub_table [i], 0x8E);
     }
 
+  for (i = 0; i < 16; i++)
+    {
+      idt_set (PIC_VECTOR_BASE + i, (void (*) (void))irq_stub_table [i], 0x8E);
+    }
+
   idt_set (BDOS_INT, bdos_irq, 0xEE); /* present, DPL3 */
+
+  idt_set (V86_YIELD_INT, v86_irq, 0xEE); /* present, DPL3 */
 
   idtp.limit = sizeof (idt) - 1;
   idtp.base = (uint32_t)(unsigned long)&idt;

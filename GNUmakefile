@@ -416,7 +416,7 @@ PIT_OBJ = pit.o
 RNG_OBJ = cpmrng.o
 OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
 	$(MEMMAP_OBJ) $(VGACON_OBJ) $(VIDBIOS_OBJS) $(VIDMODE_OBJ) \
-	$(RTC_OBJ) $(PIT_OBJ) $(RNG_OBJ) mbentry.o mltiboot.o
+	$(RTC_OBJ) $(PIT_OBJ) $(RNG_OBJ) mbentry.o mltiboot.o disk.o disk_v86.o
 
 ################################################################################
 
@@ -445,7 +445,7 @@ CPMFS:=4mb-hd
 
 .PHONY: all
 
-all: $(TARGET) stage1.bin stage2.bin os.bin floppy.img
+all: $(TARGET) stage1.bin stage2.bin os.bin floppy.img disks
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Build completed successfully."
 	@tput sgr0 2> /dev/null || :
@@ -627,6 +627,22 @@ julia.386: julia.bin $(MK386)
 
 ver.386: ver.bin $(MK386)
 	./$(MK386) ./ver.bin ./ver.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+ed.386: ed.bin $(MK386)
+	./$(MK386) ./ed.bin ./ed.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+pip.386: pip.bin $(MK386)
+	./$(MK386) ./pip.bin ./pip.386 0x100
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -979,6 +995,7 @@ ramdisk.bin: \
 			delay.386 \
 			dumpdir.386 \
 			dumpfcb.386 \
+			ed.386 \
 			fparse.386 \
 			getsn.386 \
 			gfxtest.386 \
@@ -994,6 +1011,7 @@ ramdisk.bin: \
 			more.386 \
 			od.386 \
 			pause.386 \
+			pip.386 \
 			printenv.386 \
 			prng.386 \
 			rc.386 \
@@ -1035,6 +1053,7 @@ ramdisk.bin: \
 	$(CP) -f ./delay.386 /tmp/cpmd/DELAY.386
 	$(CP) -f ./dumpdir.386 /tmp/cpmd/DUMPDIR.386
 	$(CP) -f ./dumpfcb.386 /tmp/cpmd/DUMPFCB.386
+	$(CP) -f ./ed.386 /tmp/cpmd/ED.386
 	$(CP) -f ./fparse.386 /tmp/cpmd/FPARSE.386
 	$(CP) -f ./getsn.386 /tmp/cpmd/GETSN.386
 	$(CP) -f ./gfxtest.386 /tmp/cpmd/GFXTEST.386
@@ -1050,6 +1069,7 @@ ramdisk.bin: \
 	$(CP) -f ./more.386 /tmp/cpmd/MORE.386
 	$(CP) -f ./od.386 /tmp/cpmd/OD.386
 	$(CP) -f ./pause.386 /tmp/cpmd/PAUSE.386
+	$(CP) -f ./pip.386 /tmp/cpmd/PIP.386
 	$(CP) -f ./printenv.386 /tmp/cpmd/PRINTENV.386
 	$(CP) -f ./prng.386 /tmp/cpmd/PRNG.386
 	$(CP) -f ./rc.386 /tmp/cpmd/RC.386
@@ -1085,6 +1105,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/DUMPDIR.386 \
 	  /tmp/cpmd/DUMPFCB.386 \
 	  /tmp/cpmd/ENV.DAT \
+	  /tmp/cpmd/ED.386 \
 	  /tmp/cpmd/FPARSE.386 \
 	  /tmp/cpmd/GETSN.386 \
 	  /tmp/cpmd/GFXTEST.386 \
@@ -1100,6 +1121,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/MORE.386 \
 	  /tmp/cpmd/OD.386 \
 	  /tmp/cpmd/PAUSE.386 \
+	  /tmp/cpmd/PIP.386 \
 	  /tmp/cpmd/PRINTENV.386 \
 	  /tmp/cpmd/PRNG.386 \
 	  /tmp/cpmd/PROFILE.SUB \
@@ -1166,8 +1188,8 @@ $(BRINGUP_OBJ): bringup.c ramdisk.bin bringup.h bdosinc.h biosdef.h bdosdef.h
 
 ################################################################################
 
-$(BIOS_OBJ): bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h absaddr.h \
-	memmap.h io.h vgacon.h
+$(BIOS_OBJ): bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h \
+		absaddr.h memmap.h io.h vgacon.h disk.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1268,6 +1290,22 @@ $(RNG_OBJ): cpmrng.c cpmrng.h
 ################################################################################
 
 pmode.o: pmode.c pmode.h bdosinc.h platform.h io.h vidbios.h vidmode.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+disk_v86.o: disk_v86.s
+	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -l ./${@:.o=.lst} -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+disk.o: disk.c disk.h bringup.h bdosinc.h biosdef.h io.h pit.h pmode.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1376,6 +1414,32 @@ floppy.img: stage1.bin stage2.bin os.bin
 		$$(("$$($(OD) -A x -t x2 ./floppy.img | $(GREP) -v '^*$$' | \
 		tail -2 | head -1 | $(AWK) '{ print "0x"a$$1 }')" / 1024)) || :
 	@tput sgr0 2> /dev/null || :
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+.PHONY: disks
+
+disks: hd.img fd.img
+
+################################################################################
+
+hd.img: diskdefs
+	$(DD) if="/dev/zero" bs="1024" count="8192" 2>/dev/null | \
+		$(TR) '\0' '\345' > "$@"
+	mkfs.cpm -f cpm386-hd8 "$@"
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+fd.img: diskdefs
+	$(DD) if="/dev/zero" bs="1024" count="1440" 2>/dev/null | \
+		$(TR) '\0' '\345' > "$@"
+	mkfs.cpm -f cpm386-fd144 "$@"
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :

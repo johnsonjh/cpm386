@@ -43,7 +43,7 @@
 * Supports [VGA text](https://en.wikipedia.org/wiki/VGA_text_mode) (`0xB8000`)
   and/or [COM1 serial](https://en.wikipedia.org/wiki/Serial_port)
   (9600/N/8/1, `0x3F8`) consoles.
-* **No floppy/hard disk/CD/USB/network/sound/other drivers** (**yet**).
+* **No CD/USB/network/sound/other drivers** (**yet**).
 
 ## Hardware support
 
@@ -172,6 +172,11 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 * Use `-nographic -display none -vga none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
+* Use `make disks` to create empty disk images.  To attach them to QEMU:
+  ```sh
+  -drive if=floppy,format=raw,file="fd.img"
+  -drive if=ide,format=raw,file="hd.img",index=0
+  ```
 
 ## Included utilities
 
@@ -187,6 +192,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `DUMPDIR.386`  | Directory entry dump utility ([BDOS 17](https://www.seasip.info/Cpm/bdos.html#17)/[18](https://www.seasip.info/Cpm/bdos.html#18)) |
 | `DUMPFCB.386`  | File control block dump utility ([BDOS 15](https://www.seasip.info/Cpm/bdos.html#15))              |
 | `ENV.DAT`      | Environment data file                                                                              |
+| `ED.386`       | ED (A port of the DRI *CP/M Context Editor* 08/1982)                                               |
 | `FPARSE.386`   | F_PARSE test ([BDOS 152](https://www.seasip.info/Cpm/bdos.html#152))                               |
 | `GETSN.386`    | Display serial number ([BDOS 107](https://www.seasip.info/Cpm/bdos.html#107))                      |
 | `GFXTEST.386`  | Graphics and framebuffer demo (BDOS 229/230/231/233)                                               |
@@ -202,6 +208,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `MEM.386`      | Memory map utility (BDOS 227/228)                                                                  |
 | `MORE.386`     | UNIX `more`‑style pager                                                                            |
 | `OD.386`       | Octal dump utility                                                                                 |
+| `PIP.386`      | PIP (A port of Zilog **CP/M-Z8000** PIP v1.0A 01/03/1984)                                          |
 | `PAUSE.386`    | Wait for keypress                                                                                  |
 | `PRINTENV.386` | Print environment and system data                                                                  |
 | `PRNG.386`     | PRNG test and demo utility (BDOS 253/254)                                                          |
@@ -212,7 +219,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `RM.386`       | UNIX `rm`‑like interactive file deletion utility                                                   |
 | `SEROFF.386`   | Disable serial console (BDOS 223)                                                                  |
 | `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
-| `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C 01/03/84)                                          |
+| `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C 01/03/1984)                                        |
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
 | `TEXTMODE.386` | Query and set the console text mode (BDOS 229/230/231)                                             |
@@ -232,10 +239,10 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 * Do **not** open pull requests with large amounts of LLM‑generated code.
   These will be immediately rejected.
-* There is **no** AI‑generated code in the operating system proper at this
-  time (though there *are* some AI tests, comments, and analysis), as the
-  project is intended to be as much of a learning experience for me as it is
-  a useful OS port.
+* There is **no** AI‑generated code in the core operating system proper at
+  this time (though there *are* some AI‑generated tests, comments, and
+  analysis), as the project is intended to be as much of a learning experience
+  for me as it is a useful OS port.
 * Usage of AI (artificial intelligence) tools by contributors *is* currently
   permitted, subject to the same terms and conditions as the
   [LLVM AI Tool Use Policy](https://llvm.org/docs/AIToolPolicy.html), but
@@ -262,64 +269,64 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>65</th>
-                <th>31212</th>
-                <th>6149</th>
-                <th>4378</th>
-                <th>20685</th>
-                <th>4371</th>
-                <th>731386</th>
-                <th>10680</th>
+                <th>68</th>
+                <th>39838</th>
+                <th>7476</th>
+                <th>6987</th>
+                <th>25375</th>
+                <th>5295</th>
+                <th>1135050</th>
+                <th>15215</th>
         </tr><tr>
                 <th>C Header</th>
-                <th>22</th>
-                <th>3054</th>
-                <th>551</th>
-                <th>1233</th>
-                <th>1270</th>
+                <th>23</th>
+                <th>3190</th>
+                <th>584</th>
+                <th>1311</th>
+                <th>1295</th>
                 <th>13</th>
-                <th>111619</th>
-                <th>1557</th>
+                <th>116202</th>
+                <th>1612</th>
+        </tr><tr>
+                <th>Assembly</th>
+                <th>7</th>
+                <th>1702</th>
+                <th>288</th>
+                <th>386</th>
+                <th>1028</th>
+                <th>1</th>
+                <th>42401</th>
+                <th>876</th>
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1570</th>
-                <th>300</th>
-                <th>201</th>
-                <th>1069</th>
-                <th>331</th>
-                <th>52823</th>
-                <th>773</th>
-        </tr><tr>
-                <th>Assembly</th>
-                <th>6</th>
-                <th>1351</th>
-                <th>235</th>
-                <th>266</th>
-                <th>850</th>
-                <th>1</th>
-                <th>30970</th>
-                <th>700</th>
+                <th>1634</th>
+                <th>315</th>
+                <th>208</th>
+                <th>1111</th>
+                <th>343</th>
+                <th>54861</th>
+                <th>794</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>480</th>
+                <th>486</th>
                 <th>58</th>
                 <th>0</th>
-                <th>422</th>
+                <th>428</th>
                 <th>0</th>
-                <th>22063</th>
-                <th>380</th>
+                <th>22395</th>
+                <th>385</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
-                <th>199</th>
-                <th>38</th>
+                <th>207</th>
+                <th>39</th>
                 <th>0</th>
-                <th>161</th>
+                <th>168</th>
                 <th>0</th>
-                <th>4809</th>
-                <th>91</th>
+                <th>5137</th>
+                <th>95</th>
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
@@ -333,14 +340,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>100</th>
-                <th>37946</th>
-                <th>7337</th>
-                <th>6093</th>
-                <th>24516</th>
-                <th>4716</th>
-                <th>956866</th>
-                <th>14166</th>
+                <th>105</th>
+                <th>47137</th>
+                <th>8766</th>
+                <th>8907</th>
+                <th>29464</th>
+                <th>5652</th>
+                <th>1379242</th>
+                <th>18959</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
