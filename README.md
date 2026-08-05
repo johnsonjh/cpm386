@@ -192,7 +192,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `DUMPDIR.386`  | Directory entry dump utility ([BDOS 17](https://www.seasip.info/Cpm/bdos.html#17)/[18](https://www.seasip.info/Cpm/bdos.html#18)) |
 | `DUMPFCB.386`  | File control block dump utility ([BDOS 15](https://www.seasip.info/Cpm/bdos.html#15))              |
 | `ENV.DAT`      | Environment data file                                                                              |
-| `ED.386`       | ED (A port of the DRI *CP/M Context Editor* 08/1982)                                               |
+| `ED.386`       | ED (A port of the DRI CP/M Context Editor 08/1982)                                                 |
 | `FPARSE.386`   | F_PARSE test ([BDOS 152](https://www.seasip.info/Cpm/bdos.html#152))                               |
 | `GETSN.386`    | Display serial number ([BDOS 107](https://www.seasip.info/Cpm/bdos.html#107))                      |
 | `GFXTEST.386`  | Graphics and framebuffer demo (BDOS 229/230/231/233)                                               |
