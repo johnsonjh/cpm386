@@ -426,21 +426,21 @@ char    signon[] = "CP/M-386 PIP v1.0 08/06/2026";
 /*          -----------------------------------------                       */
 /*                                                                          */
 /*      Everything below stands in for the CP/M-68K C startup and the       */
-/*      portab.h / bdos.h / basepage.h / setjmp.h headers this program was   */
-/*      written against.  There is no C library: the only way out of the     */
+/*      portab.h / bdos.h / basepage.h / setjmp.h headers this program was  */
+/*      written against.  There is no C library: the only way out of the    */
 /*      program is a direct BDOS call, which is what __BDOS() below is.     */
 /*                                                                          */
 /****************************************************************************/
 
 /*--------------------------- portab.h ------------------------------------*/
 
-#define BYTE char               /* Signed byte                              */
-#define BOOLEAN char            /* 2 valued (true/false)                    */
-#define WORD short              /* Signed word (16 bits)                    */
-#define UWORD unsigned short    /* Unsigned word (16 bits)                  */
-#define LONG long               /* Signed long (32 bits)                    */
-#define ULONG unsigned long     /* Unsigned long                            */
-#define UBYTE unsigned char     /* Unsigned byte                            */
+#define BYTE char            /* Signed byte             */
+#define BOOLEAN char         /* 2 valued (true/false)   */
+#define WORD short           /* Signed word (16 bits)   */
+#define UWORD unsigned short /* Unsigned word (16 bits) */
+#define LONG long            /* Signed long (32 bits)   */
+#define ULONG unsigned long  /* Unsigned long           */
+#define UBYTE unsigned char  /* Unsigned byte           */
 #define REG register
 #define LOCAL auto
 #define EXTERN extern
@@ -466,62 +466,61 @@ char    signon[] = "CP/M-386 PIP v1.0 08/06/2026";
 
 /*--------------------------- bdos.h --------------------------------------*/
 
-#define XADDR long                      /* 32-bit address data type         */
-
-#define EXIT 0                          /* Exit to BDOS                     */
-#define CONIN 1                         /* Single char input with echo      */
-#define CONOUT 2                        /* Direct console output            */
-#define READER 3                        /* Paper tape input                 */
-#define PUNCH 4                         /* Paper tape output                */
-#define LSTOUT 5                        /* Direct list device output        */
-#define CONIO 6                         /* Direct console I/O               */
-#define GET_IOB 7                       /* Get I/O byte                     */
-#define SET_IOB 8                       /* Set I/O byte                     */
-#define PRINT 9                         /* Print $-terminated line          */
-#define CONBUF 10                       /* Read console buffer              */
-#define CONSTAT 11                      /* Check if input char waiting      */
-#define VERSION 12                      /* Return version number            */
-#define RS_DISK 13                      /* Reset disk system                */
-#define SEL_DISK 14                     /* Select disk                      */
-#define OPEN 15                         /* Open a disk file                 */
-#define CLOSE 16                        /* Close a disk file                */
-#define SRCH_1ST 17                     /* Search 1st filename match        */
-#define SRCH_NEXT 18                    /* Search next match                */
-#define DELETE 19                       /* Delete a disk file               */
-#define S_READ 20                       /* Sequential read from file        */
-#define S_WRITE 21                      /* Sequential write to file         */
-#define CREATE 22                       /* Create a disk file               */
-#define RENAME 23                       /* Rename a file                    */
-#define RET_LOGIN 24                    /* Return login vector              */
-#define RET_CDISK 25                    /* Return current disk              */
-#define SETDMA 26                       /* Set DMA address                  */
-#define GET_ALLOC 27                    /* Get allocation vector            */
-#define WR_PROTD 28                     /* Write protect disk               */
-#define GET_RO 29                       /* Get read-only vector             */
-#define SET_ATT 30                      /* Set file attributes              */
-#define GET_DPB 31                      /* Get disk parameters              */
-#define GSET_UCODE 32                   /* Get/set user code                */
-#define B_READ 33                       /* Read random record               */
-#define B_WRITE 34                      /* Write random record              */
-#define FILSIZ 35                       /* Compute file size                */
-#define SET_RAND 36                     /* Set random record                */
-#define RS_DRIVE 37                     /* Reset specified drive            */
-#define B_WRZF 40                       /* Write random, zero fill          */
-#define SETMSC 44                       /* Set multi-sector count           */
-#define RET_ERRORS 45                   /* Set error return mode            */
-#define GET_DFS 46                      /* Get free disk space              */
-#define CHAIN 47                        /* Chain to program via CCP         */
-#define FLUSH 48                        /* Flush buffers to disk            */
-#define GSET_SCB 49                     /* Get/set system control block     */
-#define BIOS_CALL 50                    /* Direct call to BIOS              */
-#define PROG_LOAD 59                    /* Program load                     */
-#define SET_EXV 61                      /* Set exception vector             */
-#define SET_SUP 62                      /* Set supervisor state             */
-#define SET_LABEL 100                   /* Set directory label              */
-#define GET_LABEL 101                   /* Get directory label              */
-#define GET_XFCB 102                    /* Get extended FCB                 */
-#define SET_XFCB 103                    /* Set extended FCB                 */
-#define COND_LST 161                    /* Conditionally attach LST:        */
+#define XADDR long    /* 32-bit address data type     */
+#define EXIT 0        /* Exit to BDOS                 */
+#define CONIN 1       /* Single char input with echo  */
+#define CONOUT 2      /* Direct console output        */
+#define READER 3      /* Paper tape input             */
+#define PUNCH 4       /* Paper tape output            */
+#define LSTOUT 5      /* Direct list device output    */
+#define CONIO 6       /* Direct console I/O           */
+#define GET_IOB 7     /* Get I/O byte                 */
+#define SET_IOB 8     /* Set I/O byte                 */
+#define PRINT 9       /* Print $-terminated line      */
+#define CONBUF 10     /* Read console buffer          */
+#define CONSTAT 11    /* Check if input char waiting  */
+#define VERSION 12    /* Return version number        */
+#define RS_DISK 13    /* Reset disk system            */
+#define SEL_DISK 14   /* Select disk                  */
+#define OPEN 15       /* Open a disk file             */
+#define CLOSE 16      /* Close a disk file            */
+#define SRCH_1ST 17   /* Search 1st filename match    */
+#define SRCH_NEXT 18  /* Search next match            */
+#define DELETE 19     /* Delete a disk file           */
+#define S_READ 20     /* Sequential read from file    */
+#define S_WRITE 21    /* Sequential write to file     */
+#define CREATE 22     /* Create a disk file           */
+#define RENAME 23     /* Rename a file                */
+#define RET_LOGIN 24  /* Return login vector          */
+#define RET_CDISK 25  /* Return current disk          */
+#define SETDMA 26     /* Set DMA address              */
+#define GET_ALLOC 27  /* Get allocation vector        */
+#define WR_PROTD 28   /* Write protect disk           */
+#define GET_RO 29     /* Get read-only vector         */
+#define SET_ATT 30    /* Set file attributes          */
+#define GET_DPB 31    /* Get disk parameters          */
+#define GSET_UCODE 32 /* Get/set user code            */
+#define B_READ 33     /* Read random record           */
+#define B_WRITE 34    /* Write random record          */
+#define FILSIZ 35     /* Compute file size            */
+#define SET_RAND 36   /* Set random record            */
+#define RS_DRIVE 37   /* Reset specified drive        */
+#define B_WRZF 40     /* Write random, zero fill      */
+#define SETMSC 44     /* Set multi-sector count       */
+#define RET_ERRORS 45 /* Set error return mode        */
+#define GET_DFS 46    /* Get free disk space          */
+#define CHAIN 47      /* Chain to program via CCP     */
+#define FLUSH 48      /* Flush buffers to disk        */
+#define GSET_SCB 49   /* Get/set system control block */
+#define BIOS_CALL 50  /* Direct call to BIOS          */
+#define PROG_LOAD 59  /* Program load                 */
+#define SET_EXV 61    /* Set exception vector         */
+#define SET_SUP 62    /* Set supervisor state         */
+#define SET_LABEL 100 /* Set directory label          */
+#define GET_LABEL 101 /* Get directory label          */
+#define GET_XFCB 102  /* Get extended FCB             */
+#define SET_XFCB 103  /* Set extended FCB             */
+#define COND_LST 161  /* Conditionally attach LST:    */
 
 /*
  * The CP/M-386 BDOS entry point: function in EAX, parameter in EDX, result
@@ -605,19 +604,19 @@ long parm_info;
 #define _set_xfcb(a)    (__BDOS (SET_XFCB, (long) (a)))
 #define _cond_lst()     (__BDOS (COND_LST, (long) 0))
 
-struct fcbtab                           /* File control block               */
+struct fcbtab /* File control block */
 {
-  BYTE drive;                           /* Disk drive field                 */
-  BYTE fname[8];                        /* File name                        */
-  BYTE ftype[3];                        /* File type                        */
-  BYTE extent;                          /* Current extent number            */
-  BYTE s1, s2;                          /* "system reserved"                */
-  BYTE reccnt;                          /* Record counter                   */
-  BYTE resvd[16];                       /* More "system reserved"           */
-  LONG record;                          /* Overlaps the current record      */
-};                                      /*   field to make this useful      */
+  BYTE drive;     /* Disk drive field            */
+  BYTE fname[8];  /* File name                   */
+  BYTE ftype[3];  /* File type                   */
+  BYTE extent;    /* Current extent number       */
+  BYTE s1, s2;    /* "system reserved"           */
+  BYTE reccnt;    /* Record counter              */
+  BYTE resvd[16]; /* More "system reserved"      */
+  LONG record;    /* Overlaps the current record */
+};                /*   field to make this useful */
 
-#define fcb fcbtab                      /* A useful synonym                 */
+#define fcb fcbtab /* A useful synonym */
 
 /*
  * The FCB's 24-bit random record number lives in the three bytes after the
@@ -860,8 +859,7 @@ _start ()
 struct fcbtab   *fcb;                           /* Default file control blk */
 char            *buff;                          /* Default DMA buffer       */
 
-char            copyright[] =
-        " (10/04/82) Portable CP/M PIP vers 1.0 ";
+char            copyright[] = " (10/04/82) Portable CP/M PIP vers 1.0 ";
 
 /****************************************************************************/
 /*                        Version dependencies                              */
