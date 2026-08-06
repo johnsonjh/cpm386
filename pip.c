@@ -48,7 +48,6 @@
 /*                                                                          */
 /****************************************************************************/
 
-
 /****************************************************************************/
 /*                                                                          */
 /*      Signon message - Please modify version and date with each change    */
@@ -64,7 +63,7 @@ char    signon[] = "Zilog CP/M-Z8000 PIP v1.0A 01/03/84";
 /*      === To be supplied later for Z8000-based systems ===                */
 /*                                                                          */
 /****************************************************************************/
-
+
 /****************************************************************************/
 /*                                                                          */
 /*         W H A T   I T   D O E S   A N D   H O W   I T   W O R K S        */
@@ -414,7 +413,7 @@ char    signon[] = "Zilog CP/M-Z8000 PIP v1.0A 01/03/84";
 /*                                      Dominic Dunlop, Zilog Inc. 821022   */
 /*                                                                          */
 /****************************************************************************/
-
+
 /****************************************************************************/
 /*                                                                          */
 /*         E X T E R N A L   A N D    B D O S   I N T E R F A C E           */
@@ -869,7 +868,6 @@ char            *buff;                          /* Default DMA buffer       */
 char            copyright[] =
         " (10/04/82) Portable CP/M PIP vers 1.0 ";
 
-
 /****************************************************************************/
 /*                        Version dependencies                              */
 /****************************************************************************/
@@ -889,7 +887,6 @@ char            copyright[] =
 #define HAS_XFCBS(x)    ((((x) & 0xff00) == MPM) || (((x) & 0xf0) >= THREE_X))
 #define VOID_GET_DPB(x) (((x) & 0xff00) == PCPM)
 
-
 /****************************************************************************/
 /*                                                                          */
 /*                 G E N E R A L   D E F I N I T I O N S                    */
@@ -899,7 +896,6 @@ char            copyright[] =
 /*            adjacent to the definition of the structure                   */
 /*                                                                          */
 /****************************************************************************/
-
 
 /****************************************************************************/
 /* Useful charcaters                                                        */
@@ -912,7 +908,6 @@ char            copyright[] =
 #define ENDFILE         0x1a                    /* CP/M end of file mark    */
 #define WILD            '?'                     /* Filename wildcard        */
 
-
 /****************************************************************************/
 /* Lengths of filename fields                                               */
 /****************************************************************************/
@@ -920,7 +915,6 @@ char            copyright[] =
 #define L_NAME          8                       /* Length of filename       */
 #define L_PASS          8                       /* Length of password       */
 #define L_TYPE          3                       /* Length of file type      */
-
 
 /****************************************************************************/
 /* Types for source and destination in copy                                 */
@@ -939,8 +933,6 @@ char            copyright[] =
 #define ERR             10                      /* Error type               */
 #define DISKNAME        11                      /* Diskname letter          */
 
-
-
 /****************************************************************************/
 /* Constants associated with disk layout etc.                               */
 /****************************************************************************/
@@ -955,7 +947,6 @@ char            copyright[] =
                                                 /*   sector return to bytes */
 #define SECMSK          ~0x7f                   /* Ignore low-order bits    */
 #define SECSIZE         128                     /* No of bytes in record    */
-
 
 /****************************************************************************/
 /* File attribute fields in FCB                                             */
@@ -972,7 +963,6 @@ char            copyright[] =
 #define SYSTEM          ftype[1]                /* "Invisible" file         */
 #define ARC             ftype[2]                /* Archived file            */
 
-
 /****************************************************************************/
 /* Any other business                                                       */
 /****************************************************************************/
@@ -988,14 +978,12 @@ char            copyright[] =
 #define SAFETY          1024                    /* Stack margin in sbrk call*/
 #define SEARFCB         fcb                     /* Search fcb in multi copy */
 
-
 /****************************************************************************/
 /*                                                                          */
 /*                       G L O B A L   D A T A                              */
 /*                       ---------------------                              */
 /*                                                                          */
 /****************************************************************************/
-
 
 /****************************************************************************/
 /* Simple types                                                             */
@@ -1056,7 +1044,7 @@ UWORD           ver;                            /* CP/M version number      */
 
 long            filsize;                        /* File size (24 bits only) */
 long            line_no;                        /* Line count on printer    */
-
+
 /****************************************************************************/
 /* Character arrays                                                         */
 /****************************************************************************/
@@ -1092,7 +1080,6 @@ char            cont[26];                       /*   some letters unused)   */
 #define WRROF           cont[22]                /* Write to r/o file        */
 #define ZEROP           cont[25]                /* Zero parity on input     */
 
-
 /****************************************************************************/
 /* Standard and extended error messages                                     */
 /****************************************************************************/
@@ -1125,7 +1112,6 @@ char    *errmsg[] =                             /* Standard messages        */
                 "OBSOLETE FEATURE"              /*  23                      */
         };
 
-
 char    *extmsg[] =                             /* Extended error messages  */
         {
                 "",                             /*   0                      */
@@ -1143,7 +1129,6 @@ char    *extmsg[] =                             /* Extended error messages  */
         };
 
 #define NUMMSGS         (sizeof extmsg / sizeof (char *))
-
 
 /****************************************************************************/
 /* Option - transfer type mapping table                                     */
@@ -1183,7 +1168,6 @@ char    optype[26] =
                 CHRT                            /* Z option                 */
         };
 
-
 /****************************************************************************/
 /* Logical device name table                                                */
 /****************************************************************************/
@@ -1193,24 +1177,23 @@ char    optype[26] =
 
 char    io[] [DEVLEN] =                         /* Logical device names     */
         {
-                'O', 'U', 'T',
-                'P', 'R', 'N',
-                'L', 'S', 'T',
-                'A', 'X', 'O',
-                 0,   0,   0,                   /* Dummy for file type      */
-                'C', 'O', 'N',
-                'A', 'X', 'I',
-                'I', 'N', 'P',
-                'N', 'U', 'L',
-                'E', 'O', 'F',
+                { 'O', 'U', 'T' },
+                { 'P', 'R', 'N' },
+                { 'L', 'S', 'T' },
+                { 'A', 'X', 'O' },
+                {  0,   0,   0  },              /* Dummy for file type      */
+                { 'C', 'O', 'N' },
+                { 'A', 'X', 'I' },
+                { 'I', 'N', 'P' },
+                { 'N', 'U', 'L' },
+                { 'E', 'O', 'F' },
         };
-
+
 /****************************************************************************/
 /* Structures                                                               */
 /****************************************************************************/
 
 jmp_buf         main_stack;                     /* Used in error recovery */
-
 
 /****************************************************************************/
 /* Console command buffer                                                   */
@@ -1223,7 +1206,6 @@ struct  {
                 UWORD   cbp;                    /* Command buffer pointer   */
         } combuf;
 
-
 /****************************************************************************/
 /* File control blocks, expanded to carry password and device type data     */
 /****************************************************************************/
@@ -1235,8 +1217,10 @@ struct flctlb
                 BYTE    pwmode;
                 BYTE    user;
                 BYTE    type;
+                char    globnam[L_NAME];        /* Name pattern as typed,   */
+                char    globtyp[L_TYPE];        /*   and type pattern, both */
+                BYTE    globbed;                /*   blank padded           */
         } source;                               /* Source file description  */
-
 
 struct flctlb   dest;                           /* Temporary destination    */
                                                 /*   file (scratch file)    */
@@ -1248,21 +1232,30 @@ MLOCAL UBYTE    srclrbc;                        /* CP/M-386: source file's  */
 struct fcbtab   dxfcb;                          /* Extended FCB (XFCB) for  */
                                                 /*   destination file       */
 
-
 struct flctlb   empty_fcb =                     /* Empty for initialization */
         {
-                0,                              /* Drive, name,             */
-                ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                ' ', ' ', ' ',                  /*   type, extent, s1, s2,  */
-                0, 0, 0, 0,                     /*   record,  reserved,     */
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0,                              /*   current & random record*/
-                ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                1,                              /*   password, passwd mode, */
+                {                               /* File control block:      */
+                        0,                      /*   drive,                 */
+                        { ' ', ' ', ' ', ' ',
+                          ' ', ' ', ' ', ' ' }, /*   name,                  */
+                        { ' ', ' ', ' ' },      /*   type,                  */
+                        0, 0, 0,                /*   extent, s1, s2,        */
+                        0,                      /*   record count,          */
+                        { 0, 0, 0, 0, 0, 0, 0, 0,
+                          0, 0, 0, 0, 0, 0, 0, 0 }, /* reserved,            */
+                        0                       /*   random record          */
+                },
+                { ' ', ' ', ' ', ' ',
+                  ' ', ' ', ' ', ' ' },         /*   password,              */
+                1,                              /*   password mode,         */
                 0,                              /*   user number,           */
-                ERR                             /*   file type              */
+                ERR,                            /*   file type,             */
+                { ' ', ' ', ' ', ' ',
+                  ' ', ' ', ' ', ' ' },         /*   name pattern,          */
+                { ' ', ' ', ' ' },              /*   type pattern,          */
+                FALSE                           /*   not a pattern          */
         };
-
+
 /****************************************************************************/
 /*                                                                          */
 /*                  L O W   L E V E L   F U N C T I O N S                   */
@@ -1278,7 +1271,6 @@ struct flctlb   empty_fcb =                     /* Empty for initialization */
 
 #define getch(a)        (a = gnc())             /*  get a char in a with gnc*/
 
-
                 /********************************/
                 /*                              */
                 /*           C R L F            */
@@ -1291,7 +1283,6 @@ crlf()                                          /*   feed to console         */
         _conout(LF);
         _conout(CR);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1307,7 +1298,6 @@ register char *a;
                 _conout(*a++);
 }
 
-
                 /********************************/
                 /*                              */
                 /*          P R I N T           */
@@ -1322,7 +1312,6 @@ char *a;                                        /*   on the console         */
         printx(a);
 }
 
-
                 /********************************/
                 /*                              */
                 /*          R D C O M           */
@@ -1335,7 +1324,6 @@ rdcom()                                         /*   the console into combuf*/
         combuf.maxlen = sizeof combuf.comline;  /* 128 characters maximum   */
         _conbuf(&combuf);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1363,7 +1351,6 @@ struct fcbtab *fcba;
         }
 }
 
-
                 /********************************/
                 /*                              */
                 /*           O P E N            */
@@ -1387,7 +1374,6 @@ struct flctlb   *fcba;                          /* Returns error code       */
         return (dcnt &= 0xff);                  /*   of error code          */
 }
 
-
                 /********************************/
                 /*                              */
                 /*          C L O S E           */
@@ -1402,7 +1388,6 @@ struct flctlb   *flcb;
         exten = dcnt >> 8;
         return (dcnt &= 0xff);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1419,7 +1404,6 @@ struct flctlb   *flcb;                          /*   that in flcb           */
         return (dcnt &= 0xff);                  /* Returns index/error code */
 }
 
-
                 /********************************/
                 /*                              */
                 /*        S E A R C H N         */
@@ -1434,7 +1418,6 @@ searchn()                                       /*   with a name matching   */
         exten = dcnt >> 8;                      /*   current DMA buffer     */
         return (dcnt &= 0xff);                  /* Returns index/error code */
 }
-
 
                 /********************************/
                 /*                              */
@@ -1453,7 +1436,6 @@ struct flctlb   *flcb;                          /*   be necessary           */
         return (dcnt &= 0xff);
 }
 
-
                 /********************************/
                 /*                              */
                 /*         D I S K R D          */
@@ -1468,7 +1450,6 @@ struct flctlb   *flcb;                          /*   by last call to       */
         exten = dcnt >> 8;                      /* Returns error code      */
         return (dcnt &= 0xff);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1485,7 +1466,6 @@ struct flctlb   *flcb;                          /*   by last call to       */
         return (dcnt &= 0xff);
 }
 
-
                 /********************************/
                 /*                              */
                 /*           M A K E            */
@@ -1497,6 +1477,7 @@ make(fcba)                                      /*   assigning password if  */
 struct flctlb   *fcba;                          /*   necessary              */
 {                                               /* Returns error code       */
         if (HAS_XFCBS(ver))                     /* Password allowed?        */
+        {
                 if (fcba->pwnam[0] == 0)        /* Yes: wanted?             */
                         fcba->flfcb.ASSIGN_PW &= 0x7f;  /* No               */
                 else                            /* Password is wanted       */
@@ -1504,11 +1485,11 @@ struct flctlb   *fcba;                          /*   necessary              */
                         fcba->flfcb.ASSIGN_PW |= 0x80;
                         _setdma(fcba->pwnam);   /* Show where it is         */
                 }
+        }
         dcnt = _create(fcba);
         exten = dcnt >> 8;
         return (dcnt &= 0xff);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1527,7 +1508,6 @@ struct flctlb   *flcb;                          /*   necessary              */
         return (dcnt &= 0xff);
 }
 
-
                 /********************************/
                 /*                              */
                 /*         S E T A T T          */
@@ -1543,7 +1523,6 @@ struct flctlb   *flcb;                          /*   word already set up if */
         return (dcnt &= 0xff);
 }
 
-
                 /********************************/
                 /*                              */
                 /*        S E T U S E R         */
@@ -1558,7 +1537,6 @@ BYTE    user;
         if (last_user != user)                  /* Only call BDOS if user   */
                 _gset_ucode(last_user = user);  /*   has changed            */
 }
-
 
                 /********************************/
                 /*                              */
@@ -1578,7 +1556,6 @@ UWORD   cnt;
                 _setmsc(last_count = cnt);      /*   count differs from last*/
 }
 
-
                 /********************************/
                 /*                              */
                 /*           M O V E            */
@@ -1595,14 +1572,13 @@ register UWORD  n;
                 *d++ = *s++;
         while (--n);
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*                    E R R O R   R E P O R T I N G                         */
 /*                    -----------------------------                         */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -1651,7 +1627,6 @@ struct flctlb   *fileadr;                       /*   cleans up and returns  */
         longjmp(main_stack, TRUE);              /* Restart from top of main()*/
 }
 
-
                 /********************************/
                 /*                              */
                 /*  N O N F I L E _ E R R O R   */
@@ -1664,14 +1639,13 @@ UWORD errtype;                                  /*   first parameter        */
 {
         error(errtype, NONE, FALSE, (struct flctlb *) 0);
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*                F I L E   I N P U T  /  O U T P U T                       */
 /*                -----------------------------------                       */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -1716,7 +1690,6 @@ setupdest()                                     /*   file                   */
         CURREC(&dest.flfcb) = 0;                /* Current record is 0      */
         made = TRUE;                            /* Show temp file now made  */
 }
-
 
                 /********************************/
                 /*                              */
@@ -1775,7 +1748,6 @@ setupsource()                                   /*   file                   */
         nsource = FORCE_READ;                   /* Force read from source   */
 }                                               /*   before write to dest   */
 
-
                 /********************************/
                 /*                              */
                 /*       W R I T E D E S T      */
@@ -1798,7 +1770,7 @@ writedest()                                     /*   buffer to destination  */
         tdest = 0;                              /* Bytes written so far     */
         setuser(odest.user);                    /* Set destination user     */
 
-        if (sparfil |= insparc)                 /* Is this a sparse file    */
+        if ((sparfil |= insparc))               /* Is this a sparse file    */
         {                                       /*   (fewer physical than   */
                                                 /*    virtual records)?     */
                 multsect(1);                    /* Yes: write one sector at */
@@ -1857,7 +1829,7 @@ writedest()                                     /*   buffer to destination  */
                         setranrec(&dest.flfcb, ranrec(&dest.flfcb) + 1);
                                                 /* Perform comparison       */
                         for (j = 0; j < SECSIZE; j++)
-                                if (dataok |= (buff[j] == dbase[tdest + j]))
+                                if ((dataok |= (buff[j] == dbase[tdest + j])))
                                         break;
 
                         tdest += SECSIZE;
@@ -1871,7 +1843,6 @@ writedest()                                     /*   buffer to destination  */
                                                 /*   to buffer start        */
         move(&dbase[tdest], dbase, (UWORD)(BYTE)(ndest -= tdest));
 }
-
 
                 /********************************/
                 /*                              */
@@ -1944,7 +1915,7 @@ fillsource()                                    /*   from the current source*/
                                                 /* Is this sparse file (less*/
                                                 /*   data than virtual size */
                                                 /*   suggests is in file)?  */
-                if (insparc = (ranrec(&source.flfcb) != filsize))
+                if ((insparc = (ranrec(&source.flfcb) != filsize)))
                                                 /* Yes.  May not be allowed */
                     {if (concat || (! fastcopy))
                         error(18, 0, FALSE, &source);
@@ -1956,14 +1927,13 @@ fillsource()                                    /*   from the current source*/
             } ;                                 /* End of error handling    */
         }                                       /* End of read loop         */
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*             N O N - F I L E   D A T A   H A N D L I N G                  */
 /*             -------------------------------------------                  */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -2015,7 +1985,6 @@ register int    b;                              /*   odest.type             */
         }
 }
 
-
                 /********************************/
                 /*                              */
                 /*        P U T D S T C         */
@@ -2039,7 +2008,6 @@ char    b;                                      /*   tabs                   */
         if (b == CR)                            /* Zero column on CR        */
                 column = 0;
 }
-
 
                 /********************************/
                 /*                              */
@@ -2068,7 +2036,6 @@ newline()                                       /* Output a new line number */
         }
         printx((NUMB == 1) ? ": " : "\t");      /* NUMB value selects       */
 }                                               /*   separator              */
-
 
                 /********************************/
                 /*                              */
@@ -2107,7 +2074,6 @@ int     b;                                      /*   tabs and newlines      */
         putnum = (b == LF);                     /* Next to go on new line?  */
 }
 
-
                 /********************************/
                 /*                              */
                 /*          U T R A N           */
@@ -2128,7 +2094,6 @@ int     b;                                      /*   upper case             */
 {
         return ((('A' <= b) && (b <= 'Z')) ? b | 0x20 : b);
 }
-
 
                 /********************************/
                 /*                              */
@@ -2159,11 +2124,24 @@ getsrcc()                                       /*   current source device  */
                                                 /*   separate, or dest not a*/
                                 nsbuf = 0;      /*   file, just clear index */
                         else                    /* Source buff is dest buff:*/
-                        {                       /* Empty it unless read from*/
-                                                /*   first read from source */
+                        {
+                                /*
+                                 * Flush the destination first, unless this
+                                 * is the forced first read from the source,
+                                 * where there is nothing written yet.
+                                 *
+                                 * The nsbuf assignment is deliberately
+                                 * outside the if, as in the original: the
+                                 * source data always begins after whatever
+                                 * writedest() left behind, and on the first
+                                 * read ndest is still zero, so it lands at
+                                 * the base of the buffer either way.
+                                 */
+
                                 if (nsource != FORCE_READ)
-                                        writedest();   /* XXX - no parens?? */
-                                        nsbuf = ndest; /* XXX - this a bug? */
+                                        writedest();
+
+                                nsbuf = ndest;
                         }
                         fillsource();           /* Fill source buffer       */
                 }
@@ -2207,7 +2185,6 @@ getsrcc()                                       /*   current source device  */
         return ((LOWER) ? ltran(b) : b);        /*   case if requested      */
 }
 
-
                 /********************************/
                 /*                              */
                 /*           M A T C H          */
@@ -2215,12 +2192,12 @@ getsrcc()                                       /*   current source device  */
                 /********************************/
 
 BOOLEAN                                         /* Match start, quit strings*/
-match(b, ch)                                    /*   (used in transferring  */
+match(b, mch)                                   /*   (used in transferring  */
 int     b;                                      /*   that part of a file    */
-int     ch;                                     /*   between delimiter pair)*/
+int     mch;                                    /*   between delimiter pair)*/
 {                                               /* b indexes start of match */
         int     c;                              /*   string in command buff */
-                                                /* ch is current char in    */
+                                                /* mch is current char in   */
                                                 /*  file, not cmd line.     */
                                                 /* Have we reached end of   */
                                                 /*   match string?          */
@@ -2228,18 +2205,17 @@ int     ch;                                     /*   between delimiter pair)*/
         if ((c = combuf.comline[b += matchlen]) == ENDFILE
             || c == ']' || c == CR )            /* Allow ] or CR to end str */
         {                                       /* Yes: success!  Save char */
-                combuf.comline[b] = ch;         /*   for output following   */
+                combuf.comline[b] = mch;        /*   for output following   */
                 return (TRUE);                  /*   match string, return   */
         }
 
-        if (c == ch)                            /* OK so far?               */
+        if (c == mch)                           /* OK so far?               */
                 matchlen++;
         else
                 matchlen = 0;
 
         return (FALSE);                         /* No cigar (so far)        */
 }
-
 
                 /********************************/
                 /*                              */
@@ -2294,7 +2270,6 @@ getsrc()                                        /* May be from source device*/
         }                                       /* End of FOREVER           */
 }
 
-
                 /********************************/
                 /*                              */
                 /*         R D _ E O F          */
@@ -2310,14 +2285,13 @@ rd_eof()                                        /*   TRUE if end of file    */
 
         return (ch == ENDFILE);                 /* On ASCII, is char ENDFILE*/
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*     F U N C T I O N S   H A N D L I N G   I N T E L   H E X   D A T A    */
 /*     -----------------------------------------------------------------    */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -2335,7 +2309,6 @@ int a;                                          /*   return corresponding   */
                 return (a - 'A' + 0xa);
         error(13, 0, FALSE, &source);           /* Invalid hex digit: abort */
 }
-
 
                 /********************************/
                 /*                              */
@@ -2359,7 +2332,7 @@ hexrecord()                                     /*   Intel hex format,      */
         {                                       /*   of file reached        */
             if (! inrec)                        /* Perform no checks on data*/
             {                                   /*   outside records        */
-                if (inrec = (chr == ':'))       /*Record start?     */
+                if ((inrec = (chr == ':')))     /*Record start?     */
                     checksum = count = 0;
                 else                            /* Not record start: copy to*/
                     putdest(chr);               /*   dest                   */
@@ -2406,14 +2379,13 @@ hexrecord()                                     /*   Intel hex format,      */
         if (inrec || (! zerorec))               /* End of file.  Expected?  */
             error(15, NONE, FALSE, &source);    /* Error if not             */
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*        S T A R T ,   E N D   O F   F I L E   F U N C T I O N S           */
 /*        -------------------------------------------------------           */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -2429,7 +2401,6 @@ ck_strings()                                    /*   string not found in    */
         if (QUITS > 0)                          /* Similarly for end...     */
                 nonfile_error(12);
 }
-
 
                 /********************************/
                 /*                              */
@@ -2523,7 +2494,6 @@ closedest()                                     /*   file, flushing buffer  */
         }
 }
 
-
                 /********************************/
                 /*                              */
                 /*    S I Z E _ M E M O R Y     */
@@ -2545,7 +2515,8 @@ size_memory()                                   /*   source and destination*/
                                                 /*   in megabytes here, so */
                                                 /*   ask the shim for what */
                                                 /*   a UWORD can index     */
-                allocated = (_membytes() - SAFETY) & (SECMSK << 1);
+                allocated = (_membytes() - SAFETY)
+                            & ((unsigned) SECMSK << 1);
                 if (sbrk(allocated) == (BYTE *) -1)
                 {
                         print("Can't allocate memory");
@@ -2568,7 +2539,6 @@ size_memory()                                   /*   source and destination*/
         }
 }
 
-
                 /********************************/
                 /*                              */
                 /*       S E T U P E O B        */
@@ -2590,7 +2560,6 @@ setupeob()                                      /*   in the last sector of  */
                         return;
         nsbuf++;                                /* Point beyond last sector */
 }
-
 
                 /********************************/
                 /*                              */
@@ -2637,14 +2606,13 @@ chkrandom()                                     /*   record containing data */
             }
         }
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*               D A T A   C O P Y I N G   F U N C T I O N S                */
 /*               -------------------------------------------                */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -2721,7 +2689,6 @@ simplecopy()                                    /*   an output (concaten-  */
             closedest();                        /*   close it               */
 }
 
-
                 /********************************/
                 /*                              */
                 /*          A R C H K           */
@@ -2752,7 +2719,6 @@ archck()                                        /*   clear in any extent of */
         }
         return (FALSE);                         /* All extents archived     */
 }
-
 
                 /********************************/
                 /*                              */
@@ -2791,6 +2757,93 @@ int beyond;                                     /*   ory entry indexed by   */
         return(ndcnt);                          /* Return index to match    */
 }
 
+                /********************************/
+                /*                              */
+                /*         F L D L E N          */
+                /*                              */
+                /********************************/
+
+MLOCAL int                                      /* Significant length of a  */
+fldlen(f, width)                                /*   blank padded field,    */
+register char   *f;                             /*   ignoring the attribute */
+register int    width;                          /*   bits the directory     */
+{                                               /*   keeps in the top bit   */
+        while ((width > 0) && ((f[width - 1] & 0x7f) == ' '))
+                width--;
+
+        return (width);
+}
+
+                /********************************/
+                /*                              */
+                /*     G L O B M A T C H        */
+                /*                              */
+                /********************************/
+
+BOOLEAN                                         /* Shell style match of two */
+globmatch(pat, plen, str, slen)                 /*   counted strings.  Runs */
+register char   *pat;                           /*   iteratively, so a      */
+int             plen;                           /*   pattern like *a*b*c*d  */
+register char   *str;                           /*   cannot run away with   */
+int             slen;                           /*   the stack              */
+{
+        register int    p, t;
+        int             star, mark;
+
+        p = t = 0;
+        star = -1;                              /* No * seen yet            */
+        mark = 0;
+
+        while (t < slen)
+        {
+            if ((p < plen)
+               && ((pat[p] == '?')
+                  || ((pat[p] & 0x7f) == (str[t] & 0x7f))))
+            {                                   /* Literal or ? : consume   */
+                p++;
+                t++;
+            }
+            else if ((p < plen) && (pat[p] == '*'))
+            {
+                star = p++;                     /* Remember the * and how   */
+                mark = t;                       /*   little it has eaten    */
+            }
+            else if (star >= 0)
+            {                                   /* Mismatch after a *: let  */
+                p = star + 1;                   /*   it swallow one more    */
+                t = ++mark;                     /*   character and retry    */
+            }
+            else
+                return (FALSE);                 /* Mismatch, nothing to undo*/
+        }
+
+        while ((p < plen) && (pat[p] == '*'))   /* A trailing * may match   */
+            p++;                                /*   nothing at all         */
+
+        return (p == plen);
+}
+
+                /********************************/
+                /*                              */
+                /*         G L O B O K          */
+                /*                              */
+                /********************************/
+
+MLOCAL BOOLEAN                                  /* TRUE if the entry that   */
+globok()                                        /*   next_file() turned up  */
+{                                               /*   matches what was typed */
+        if (! source.globbed)                   /* Nothing ambiguous: the   */
+                return (TRUE);                  /*   search was exact       */
+
+        return (globmatch(source.globnam,
+                          fldlen(source.globnam, L_NAME),
+                          source.flfcb.fname,
+                          fldlen(source.flfcb.fname, L_NAME))
+             && globmatch(source.globtyp,
+                          fldlen(source.globtyp, L_TYPE),
+                          source.flfcb.ftype,
+                          fldlen(source.flfcb.ftype, L_TYPE)));
+}
 
                 /********************************/
                 /*                              */
@@ -2801,7 +2854,13 @@ int beyond;                                     /*   ory entry indexed by   */
 VOID                                            /* Copy mutiple files to a  */
 multcopy()                                      /*   a named drive or user  */
 {
-        int     nextdir, ncopied;
+        /*
+         * Static because a retry re-enters multcopy() through the error
+         * longjmp: the counters have to survive that, which is exactly what
+         * the eretry test below is relying on.
+         */
+
+        static int      nextdir = 0, ncopied = 0;
 
         if (! eretry)                           /* Unless retrying following*/
             nextdir = ncopied = 0;              /*   error, clear counters  */
@@ -2822,6 +2881,9 @@ multcopy()                                      /*   a named drive or user  */
             }
 
                                                 /* We have a filename match */
+            if (! globok())                     /* The FCB search is looser */
+                continue;                       /*   than the pattern typed */
+
             if (! archck())                     /* Ignore it if archived and*/
                 continue;                       /*   A option in force      */
 
@@ -2846,14 +2908,13 @@ multcopy()                                      /*   a named drive or user  */
             simplecopy();                       /* Do the copy              */
         }
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*             C O M M A N D   P A R S I N G   F U N C T I O N S            */
 /*             -------------------------------------------------            */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -2867,7 +2928,6 @@ ck_disk()                                       /* Abort if source and dest */
            && (odest.flfcb.drive == source.flfcb.drive))
                 nonfile_error(8);
 }
-
 
                 /********************************/
                 /*                              */
@@ -2884,7 +2944,6 @@ gnc()                                           /*   command line or CR at  */
                 CR : (utran(combuf.comline[combuf.cbp])));
 }
 
-
                 /********************************/
                 /*                              */
                 /*         D E B L A N K        */
@@ -2897,7 +2956,6 @@ deblank()                                       /*   command line character */
         if (ch == CR) return;
         while (getch(ch) == ' ') ;
 }
-
 
                 /********************************/
                 /*                              */
@@ -2912,7 +2970,6 @@ ck_eol()                                        /*   follows a complete cmd */
         if (ch != CR)
                 nonfile_error(8);
 }
-
 
                 /********************************/
                 /*                              */
@@ -2933,7 +2990,6 @@ int     c;
         return (FALSE);
 }
 
-
                 /********************************/
                 /*                              */
                 /*         A _ T O _ I          */
@@ -2953,7 +3009,6 @@ a_to_i()                                        /* Returns result           */
         combuf.cbp--;                           /* "Push back" terminator   */
         return (decimal);
 }
-
 
                 /********************************/
                 /*                              */
@@ -3008,7 +3063,6 @@ struct flctlb *fcba;                            /*   brackets               */
         }
 }
 
-
                 /********************************/
                 /*                              */
                 /*           T O K E N          */
@@ -3025,8 +3079,6 @@ token()                                         /*   next command token,    */
                                                 /*   delimiter.  ch contains*/
         return (len);                           /*   and cbp indexes, the   */
 }                                               /*   delimiter on exit      */
-
-
 
                 /********************************/
                 /*                              */
@@ -3054,6 +3106,80 @@ get_dev()                                       /*   matches a valid device,*/
         return (TYPES);                         /* No match                 */
 }
 
+                /********************************/
+                /*                              */
+                /*      S C A N _ F I E L D     */
+                /*                              */
+                /********************************/
+
+MLOCAL int                                      /* Read one wildcard capable*/
+scan_field(pat, fld, width, length)             /*   field.  Returns 1 if a */
+register char   *pat;                           /*   wildcard was used, 0   */
+register char   *fld;                           /*   if not, -1 if it will  */
+int             width;                          /*   not fit the field.     */
+int             length;                         /* length is the token      */
+{                                               /*   already collected      */
+        register int    i;
+        int             n, wild;
+
+        n = 0;
+        wild = 0;
+
+        FOREVER                                 /* * is a delimiter, so a   */
+        {                                       /*   field like V*T arrives */
+            for (i = combuf.cbp - length; i < combuf.cbp; i++)
+                combuf.comline[i] =             /*   in more than one piece */
+                    utran(combuf.comline[i]);   /* Upper case as we go      */
+
+            for (i = combuf.cbp - length; i < combuf.cbp; i++)
+            {
+                if (n >= width)
+                    return (-1);                /* Longer than the field    */
+
+                pat[n++] = combuf.comline[i];
+
+                if (combuf.comline[i] == '?')
+                    wild = 1;
+            }
+
+            if (ch != '*')                      /* Only a * splits a field  */
+                break;
+
+            if (n >= width)
+                return (-1);
+
+            pat[n++] = '*';
+            wild = 1;
+            getch(ch);                          /* Step over the *          */
+            length = token();                   /*   and collect what       */
+        }                                       /*   follows it             */
+
+        /*
+         * Build the FCB the BDOS will search with: the literal characters
+         * up to the first *, then ?s to the end of the field.  That is as
+         * close as a CP/M directory search can get; globok() narrows the
+         * result to what was actually asked for.
+         */
+
+        for (i = 0; (i < n) && (i < width); i++)
+        {
+            if (pat[i] == '*')
+                break;
+
+            fld[i] = pat[i];
+        }
+
+        if (i < n)                              /* Stopped on a *: the rest */
+        {                                       /*   of the field is open   */
+            while (i < width)
+                fld[i++] = '?';
+        }
+
+        while (n < width)                       /* Blank pad the pattern    */
+            pat[n++] = ' ';
+
+        return (wild);
+}
 
                 /********************************/
                 /*                              */
@@ -3066,6 +3192,7 @@ scan(fcba)                                      /* If file name, put in fcba*/
 struct flctlb *fcba;                            /* Set up any options       */
 {
         register UWORD  i, length;
+        int             wild;                   /* scan_field() result      */
 
         *fcba = empty_fcb;                      /* Clear out FCB            */
         fcba->flfcb.drive = cdisk + 1;          /* Initialize to current    */
@@ -3140,20 +3267,15 @@ struct flctlb *fcba;                            /* Set up any options       */
         if (length > L_NAME)                    /* Too long for             */
             goto parse_error;                   /*   filename?              */
 
-        if ((ch == '*') && (length == 0))       /* Wildcard in filename?    */
-        {                                       /* Yes: fill with ?'s       */
-            move("????????", fcba->flfcb.fname, L_NAME);
-            getch(ch);
-            token();                            /* Skip to next delimiter   */
+        wild = scan_field(fcba->globnam, fcba->flfcb.fname, L_NAME, length);
+
+        if (wild < 0)
+            goto parse_error;
+
+        if (wild)                               /* Wildcards were used      */
+        {
+            fcba->globbed = TRUE;
             ambig = TRUE;                       /* Name is ambiguous        */
-        }
-        else                                    /* Not wildcard:            */
-        {                                       /*   copy to FCB            */
-            for( i = combuf.cbp - length; i < combuf.cbp; i++)
-                combuf.comline[i] =             /* Translate filename to    */
-                    utran(combuf.comline[i]);   /*   upper case           */
-            move(&combuf.comline[combuf.cbp - length],
-                 fcba->flfcb.fname, length);
         }
 
         if (ch == '.')                          /* Does a type follow name? */
@@ -3162,19 +3284,16 @@ struct flctlb *fcba;                            /* Set up any options       */
             if ((length = token()) > L_TYPE)    /* Error if too long        */
                 goto parse_error;
 
-            if ((ch == '*') && (length == 0))   /* Wildcard in type?        */
-            {                                   /* Yes: fill with ?'s       */
-                move("???", fcba->flfcb.ftype, L_TYPE);
-                getch(ch);
-                token();                        /* Skip to next delimiter   */
-                ambig = TRUE;                   /* Name is ambiguous        */
-            }
-            else {                              /* O K: copy to FCB         */
-                for( i = combuf.cbp - length; i < combuf.cbp; i++)
-                    combuf.comline[i] =         /* Translate filename to    */
-                        utran(combuf.comline[i]);/*   upper case            */
-                move(&combuf.comline[combuf.cbp - length],
-                     fcba->flfcb.ftype, length);
+            wild = scan_field(fcba->globtyp, fcba->flfcb.ftype, L_TYPE,
+                              length);
+
+            if (wild < 0)
+                goto parse_error;
+
+            if (wild)                           /* Wildcards were used      */
+            {
+                fcba->globbed = TRUE;
+                ambig = TRUE;                   /* Type is ambiguous        */
             }
         }
 
@@ -3209,14 +3328,13 @@ parse_error:
         combuf.cbp -= length;                   /* Step back to first char  */
         return;                                 /*   of bad token           */
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*        U T I L I T Y   F U N C T I O N S   F O R   M A I N ( )           */
 /*        -------------------------------------------------------           */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -3254,7 +3372,6 @@ get_cmd()                                       /* Return TRUE if not empty */
                                                 /* Tell caller if cmd empty */
 }
 
-
                 /********************************/
                 /*                              */
                 /*       D S T _ D I S K        */
@@ -3287,8 +3404,6 @@ dst_disk()                                      /*   copy file(s) to it     */
         }
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*   D I S K _ T O _ F I L E    */
@@ -3312,7 +3427,6 @@ disk_to_file()                                  /*   unique=X:              */
         source.user = su;
         simplecopy();                           /* Copy the file            */
 }
-
 
                 /********************************/
                 /*                              */
@@ -3365,7 +3479,7 @@ copy_source()                                   /*   source file to the     */
         ck_strings();                           /* Abort if start, end      */
                                                 /*   string not found       */
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*                     M A I N   F U N C T I O N                            */
@@ -3378,7 +3492,6 @@ copy_source()                                   /*   source file to the     */
 /*       of the standard I/O package - which are not required by PIP        */
 /*                                                                          */
 /****************************************************************************/
-
 
 VOID
 _main()
@@ -3397,7 +3510,7 @@ _main()
             if (HAS_RETERR(ver = _version()))   /* Get CP/M version, set    */
                 _ret_errors(0xff);              /*   error return mode      */
 
-            if (multcom = (combuf.comlen == 0)) /* If cmd line tail empty,  */
+            if ((multcom = (combuf.comlen == 0))) /* If cmd line tail empty,*/
                                                 /*   interactive mode:      */
                 {                               /*   announce ourselves     */
                 print(signon);

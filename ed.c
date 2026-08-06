@@ -54,7 +54,7 @@
 /****************************************************************************/
 
 char    date[] = "8/82";
-
+
 /****************************************************************************/
 /*                                                                          */
 /*              M O D I F I C A T I O N   L O G                             */
@@ -89,7 +89,7 @@ char    date[] = "8/82";
 /*        The H command now works with new files. (sets newfile = FALSE)    */
 /*                                                                          */
 /****************************************************************************/
-
+
 /****************************************************************************/
 /*                                                                          */
 /*           P R O G R A M   D E S C R I P T I O N                          */
@@ -231,7 +231,7 @@ char    date[] = "8/82";
 /*   scanned when the error occurred.                                       */
 /*                                                                          */
 /****************************************************************************/
-
+
 /****************************************************************************/
 /*                                                                          */
 /*          H E A D E R   F I L E S ,    C O N F I G U R A T I O N          */
@@ -453,6 +453,7 @@ struct fcbtab                           /* File control block               */
 
 #define CURREC(f) (((UBYTE *) &(f)->record)[0])
 
+#if 0
 static long
 ranrec (fcbp)                           /* Read the random record number   */
 struct fcbtab *fcbp;
@@ -473,6 +474,8 @@ long n;
   b[2] = (UBYTE) (n >> 8);
   b[3] = (UBYTE) n;
 }
+#endif
+
 #define SECSIZ 128                      /* Size of CP/M sector              */
 #define _MAXSXFR 1                      /* Max # sectors transferable       */
 #define _MAXSHFT 12                     /* Shift right BDOS return value    */
@@ -683,10 +686,7 @@ _start ()
 #define CPM3            0x30                    /* requires 3.0 CP/M        */
 #define SECTSIZE        0x80                    /* sector size              */
 
-
-/* CP/M-386: setjmp, longjmp and sbrk come from the shim above.  brk was
-   never called. */
-
+/* CP/M-386's setjmp, longjmp, and sbrk come from the shim above. */
 
 /****************************************************************************/
 /*                                                                          */
@@ -694,7 +694,6 @@ _start ()
 /*        --------------------------------------------------                */
 /*                                                                          */
 /****************************************************************************/
-
 
 #define SFCB    fcb1                            /* source fcb = default fcb */
                                                 /*   (see below)            */
@@ -737,7 +736,6 @@ _start ()
 
 #define TIME            3500                    /* See time() function below*/
 
-
 /****************************************************************************/
 /*                                                                          */
 /* The two following variables are initialized on startup to point to the   */
@@ -747,8 +745,6 @@ _start ()
 
 struct fcbtab   *fcb1;                          /* 1st basepage FCB         */
 char    *buff;                                  /* Basepage DMA buffer      */
-
-
 
 jmp_buf main_env;                               /* Used in error recovery   */
 
@@ -760,12 +756,15 @@ UWORD   hmax;                                   /* max/2 (halfway up memory)*/
 struct fcbtab   rfcb    =                       /* reader file control block*/
         {
                 0,                              /* "disk"                   */
-                ' ', ' ', ' ', ' ',
-                ' ', ' ', ' ', ' ',             /* filename                 */
-                'L', 'I', 'B',                  /* filename extension       */
+                { ' ', ' ', ' ', ' ',
+                  ' ', ' ', ' ', ' ' },         /* filename                 */
+                { 'L', 'I', 'B' },              /* filename extension       */
                 0,                              /* extent                   */
                 0,                              /* (reserved)               */
-                0                               /* (reserved)               */
+                0,                              /* (reserved)               */
+                0,                              /* record count             */
+                { 0 },                          /* (reserved)               */
+                0                               /* random record            */
         };
 
 UWORD   rbp;                                    /* index into read buffer    */
@@ -773,14 +772,15 @@ UWORD   rbp;                                    /* index into read buffer    */
 struct fcbtab   xfcb    =                       /* xfer file control block  */
         {
                 0,
-                'X', '$', '$', '$',
-                '$', '$', '$', '$',             /* filename                 */
-                'L', 'I', 'B',                  /* filename extension       */
+                { 'X', '$', '$', '$',
+                  '$', '$', '$', '$' },         /* filename                 */
+                { 'L', 'I', 'B' },              /* filename extension       */
                 0,                              /* extent                   */
                 0,                              /* (reserved)               */
                 0,                              /* (reserved)               */
                 0,                              /* record count             */
-                0, 0, 0                         /* (more reserved stuff)    */
+                { 0, 0, 0 },                    /* (more reserved stuff)    */
+                0                               /* random record            */
         };
 
 BYTE    xfcbext = 0;                            /* save extent for appends  */
@@ -825,9 +825,15 @@ char    dtype   [3];                            /* destination file type    */
 struct fcbtab   libfcb  =                       /* default lib name         */
         {
                 0,
-                'X', '$', '$', '$',
-                '$', '$', '$', '$',             /* filename                 */
-                'L', 'I', 'B'                   /* filename extension       */
+                { 'X', '$', '$', '$',
+                  '$', '$', '$', '$' },         /* filename                 */
+                { 'L', 'I', 'B' },              /* filename extension       */
+                0,                              /* extent                   */
+                0,                              /* (reserved)               */
+                0,                              /* (reserved)               */
+                0,                              /* record count             */
+                { 0 },                          /* (reserved)               */
+                0                               /* random record            */
         };
 
 char    tempfl  []      = "$$$";                /* temporary file type      */
@@ -839,11 +845,11 @@ int     scolumn         = 8;                    /* start column in "i" mode */
 
 int     dcnt;                                   /* CP/M call return code    */
 
-
-
 struct  con                                     /* console command buffer   */
         {
-                char    maxlen, comlen, comline[128], cbp;
+                UBYTE   maxlen, comlen;         /* 0..128: not a signed  */
+                char    comline[128];           /*   char's range        */
+                UBYTE   cbp;
         } combuf =
         {
                         0, 0, {0}, 0
@@ -854,7 +860,6 @@ struct  con                                     /* console command buffer   */
 UWORD   baseline;                               /* current line             */
 UWORD   relline;                                /* relative line in typeout */
 
-
 char    macro[MACSIZE];                         /* Macro command buffer     */
 char    scratch[SCRSIZE];                       /* scratch space for F, N, S*/
 UWORD   wbp, wbe;                               /* end of F , S or J string */
@@ -864,7 +869,6 @@ UWORD   mi;                                     /* "miscellaneous index"    */
 UWORD   xp;                                     /* index into macro buffer  */
 
 UWORD   mt;                                     /* number of times for macro*/
-
 
 /* Global variables used by file parsing routines                           */
 
@@ -877,7 +881,6 @@ int     delimiter;                              /* Latest delimiter char    */
 UWORD   front, back, first, lastc;              /* indices to edit buffer   */
 
 int     lpp     = 23;                           /* lines per "page" (screen)*/
-
 
 char    pb [2]  =                               /* Argument to CPM 3 when   */
         {                                       /*   reading lines/page     */
@@ -893,7 +896,6 @@ char    not_found[]     = "file not found$";
 char    invalid[]       = "invalid filename$";
 char    pwd_err[]       = "creating password$";
 char    notavail[]      = "file not available$";
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -901,9 +903,6 @@ char    notavail[]      = "file not available$";
 /*              ---------------------------------------------               */
 /*                                                                          */
 /****************************************************************************/
-
-
-
 
                 /********************************/
                 /*                              */
@@ -925,7 +924,6 @@ char ch;
         _conout(ch);
 }
 
-
                 /********************************/
                 /*                              */
                 /*        T T Y C H             */
@@ -941,7 +939,6 @@ char    ch;                                     /*  track of current column */
                 column = 0;
         printch(ch);
 }
-
 
                 /********************************/
                 /*                              */
@@ -959,7 +956,6 @@ backspace()                                     /* Overprint last displayed */
         column -= 2;
 }
 
-
                 /********************************/
                 /*                              */
                 /*      P R I N T A B S         */
@@ -969,7 +965,6 @@ VOID
 printabs(ch)                                    /* Print a character        */
 char    ch;
 {
-         register int j;
                                                 /* Expand tabs (tabs are    */
         if (ch == TAB)                          /*   fixed at every eight   */
         {                                       /*   columns - 0, 8, 16 etc)*/
@@ -980,7 +975,6 @@ char    ch;
         else
                 ttych(ch);
 }
-
 
                 /********************************/
                 /*                              */
@@ -995,7 +989,6 @@ char    ch;
                 return(TRUE);
         return ((ch==CR) | (ch==LF) | (ch==TAB));
 }
-
 
                 /********************************/
                 /*                              */
@@ -1014,7 +1007,6 @@ char    ch;                                     /*   presenting non-print   */
         printabs(ch);
 }
 
-
                 /********************************/
                 /*                              */
                 /*           C R L F            */
@@ -1026,7 +1018,6 @@ crlf()                                          /* Move to new line         */
         printc(CR);                             /* zero by ttych()          */
         printc(LF);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1041,7 +1032,6 @@ char    *a;                                     /*   print a string         */
         _print(a);
 }
 
-
                 /********************************/
                 /*                              */
                 /*         P E R R O R          */
@@ -1055,7 +1045,6 @@ char    *a;
         _print(a);
         crlf();
 }
-
 
                 /********************************/
                 /*                              */
@@ -1074,7 +1063,6 @@ struct fcbtab   *fcb;                           /*   library files          */
         }
 }
 
-
                 /********************************/
                 /*                              */
                 /*         R E A D C O M        */
@@ -1086,7 +1074,6 @@ readcom()                                       /* Read console input line  */
         combuf.maxlen = 128;
         _conbuf(&combuf);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1101,7 +1088,6 @@ break_key()                                     /* Return TRUE if character */
 }                                               /*   return FALSE.  Any     */
                                                 /*   character read is lost */
 
-
                 /********************************/
                 /*                              */
                 /*          M O V E             */
@@ -1114,7 +1100,6 @@ register UWORD  count;                          /*   where types not suited */
 {                                               /*   for struct assignment  */
         for (; count--; *dest++ = *source++);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1129,7 +1114,6 @@ struct fcbtab   *fcb;
         if (_set_xfcb(fcb) == 0xff)
                 perror(pwd_err);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1158,8 +1142,6 @@ time()                                          /*   25 milliseconds.  Tune */
         downer = TIME;
         while (downer--);
 }
-
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -1167,13 +1149,11 @@ time()                                          /*   25 milliseconds.  Tune */
 /*                                                                          */
 /****************************************************************************/
 
-
                 /********************************/
                 /*                              */
                 /*  I / O   B U F F E R I N G   */
                 /*                              */
                 /********************************/
-
 
                 /********************************/
                 /*                              */
@@ -1188,7 +1168,6 @@ char    *a;                                     /*   then abort ED          */
         reboot();
 }
 
-
                 /********************************/
                 /*                              */
                 /*           F E R R            */
@@ -1200,8 +1179,6 @@ ferr()                                          /* Abort when directory full*/
         _close(&dfcb);                          /* Try to close file so it  */
         abort(dirfull);                         /*   can be recovered later */
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -1215,7 +1192,6 @@ ferr()                                          /* Abort when directory full*/
 
 #define setpwd()        if (has_bdos3) _setdma(pwd);
 
-
                 /********************************/
                 /*                              */
                 /*     D E L E T E _ F I L E    */
@@ -1228,7 +1204,6 @@ struct fcbtab   *fcb;                           /*   -ed by the arument     */
         setpwd();
         _delete(fcb);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1244,7 +1219,6 @@ struct fcbtab   *fcb;                           /*   by the argument        */
         _rename(fcb);                           /* Now do rename            */
 }
 
-
                 /********************************/
                 /*                              */
                 /*      M A K E _ F I L E       */
@@ -1259,7 +1233,6 @@ struct fcbtab   *fcb;                           /*   by the argument        */
         dcnt = _create(fcb);                    /* Now create file          */
 }
 
-
                 /********************************/
                 /*                              */
                 /*           F I L L            */
@@ -1272,7 +1245,6 @@ register int    c;                              /*   character s            */
 {
         for (; c--; *s++ = f);
 }
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -1280,8 +1252,6 @@ register int    c;                              /*   character s            */
 /*              -------------------------------------------                 */
 /*                                                                          */
 /****************************************************************************/
-
-
 
                 /********************************/
                 /*                              */
@@ -1297,7 +1267,6 @@ char    *a;                                     /*   pointed at by a        */
         move(3, a, fcb->ftype);
 }
 
-
                 /********************************/
                 /*                              */
                 /*        S E T X D M A         */
@@ -1307,7 +1276,6 @@ char    *a;                                     /*   pointed at by a        */
                                                 /* Set DMA to transfer buff */
                                                 /* NOTE: this is a macro    */
 #define setxdma()       _setdma(xbuff)
-
 
                 /********************************/
                 /*                              */
@@ -1334,7 +1302,6 @@ fillsource()                                    /* Fill the source buffer   */
         nsource = 0;                            /* Point to buff start again*/
 }
 
-
                 /********************************/
                 /*                              */
                 /*       G E T S O U R C E      */
@@ -1353,7 +1320,6 @@ getsource()                                     /* Get next character in    */
                 nsource++;                      /*   point to next char     */
         return (b);                             /* Return char (may be      */
 }                                               /*   ENDFILE)               */
-
 
                 /********************************/
                 /*                              */
@@ -1396,7 +1362,7 @@ writedest()                                     /* Write output buffer      */
                 _setdma(&dbuffadr[ndest]);      /*   successful.            */
                 if (_s_write(&dfcb) == 0)
                     break;
-                if (! erase_bak)                /* If write fails, try to   */
+                if (! erase_bak ())             /* If write fails, try to   */
                 {                               /*   make space & try again */
                     if (ndest != 0)             /* If erase fails, move     */
                     {                           /*   unwritten data to base */
@@ -1413,7 +1379,6 @@ writedest()                                     /* Write output buffer      */
         ndest = 0;                              /* Point to base of buffer  */
 }
 
-
                 /********************************/
                 /*                              */
                 /*         P U T D E S T        */
@@ -1426,7 +1391,6 @@ char    b;                                      /*   buffer.  If buffer is  */
         if (ndest >= bufflength) writedest();   /*   onto disk first        */
         dbuffadr[ndest++] = b;
 }
-
 
                 /********************************/
                 /*                              */
@@ -1446,7 +1410,7 @@ char    c;                                      /*   transfer buffer.  If   */
                 xfcbrec = xfcb.record;          /*   for later appends      */
                 if (_s_write(&xfcb) == 0)       /* Leave loop if write OK   */
                     break;
-                if (! erase_bak)                /* Not OK: try to make space*/
+                if (! erase_bak ())             /* Not OK: try to make space*/
                     longjmp(main_env, DISK_ERR);/* Erase failure - give up  */
             }                                   /* NOTE: xfer file left open*/
 
@@ -1454,7 +1418,6 @@ char    c;                                      /*   transfer buffer.  If   */
         }
         xbuff[xbp++] = c;                       /* Put character in buffer  */
 }
-
 
                 /********************************/
                 /*                              */
@@ -1473,7 +1436,6 @@ close_xfer()                                    /* Flush transfer buffer to */
         _close(&xfcb);
 }
 
-
                 /********************************/
                 /*                              */
                 /*   C O M P A R E _ X F E R    */
@@ -1490,7 +1452,6 @@ compare_xfer()                                  /* Return TRUE if xfcb and  */
                         return (FALSE);
         return (TRUE);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1511,7 +1472,6 @@ append_xfer()                                   /* Restore xfer file        */
                         if (xbuff[xbp] == ENDFILE) return;
         }                                       /* On exit xbp points to    */
 }                                               /*   ENDFILE in buffer      */
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -1519,7 +1479,6 @@ append_xfer()                                   /* Restore xfer file        */
 /*          -------------------------------------------------               */
 /*                                                                          */
 /****************************************************************************/
-
 
                 /********************************/
                 /*                              */
@@ -1532,7 +1491,6 @@ struct fcbtab   *fcb;                           /*   correct position for   */
 {                                               /*   use by rename call     */
         move(16, (char *) fcb, fcb->resvd);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1581,8 +1539,6 @@ finis()                                         /* Finish edit, close files,*/
                                                 /*   final name by now.     */
         set_lrbc((int) dfcb.resvd[0], (BYTE *) &dfcb.resvd[1], lrbc);
 }
-
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -1590,8 +1546,6 @@ finis()                                         /* Finish edit, close files,*/
 /*                  -------------------------------                         */
 /*                                                                          */
 /****************************************************************************/
-
-
 
                 /********************************/
                 /*                              */
@@ -1604,7 +1558,6 @@ finis()                                         /* Finish edit, close files,*/
                                                 /* NOTE: this is a macro    */
 #define prtnmac(ch)     if (! mp) printc(ch);
 
-
                 /********************************/
                 /*                              */
                 /*       L O W E R C A S E      */
@@ -1616,7 +1569,6 @@ finis()                                         /* Finish edit, close files,*/
                                                 /* NOTE: this is a macro    */
 #define lowercase(ch)   ((LCA <= ch) && (ch <= LCZ))
 
-
                 /********************************/
                 /*                              */
                 /*          U C A S E           */
@@ -1624,11 +1576,10 @@ finis()                                         /* Finish edit, close files,*/
                 /********************************/
 int
 ucase(ch)                                       /* Translate character to   */
-{                                               /*   upper case if it is a  */
+int     ch;                                     /*   upper case if it is a  */
+{                                               /*   lower case letter      */
         return (lowercase(ch) ? ch & 0x5f : ch);/*   lower case letter      */
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -1662,6 +1613,8 @@ retry:
                     break;                      /*   previous character     */
                   case CTL_C:
                     reboot();                   /* Exit from ED at once     */
+                                                /* reboot() does not return */
+                                                /* FALLTHROUGH              */
                   default:
                     if (c >= ' ')               /* Printable?  Put in passwd*/
                         pwd[j++] = c;
@@ -1671,7 +1624,6 @@ retry:
 way_out:
         c = (char) break_key();                 /* Clear raw I/O mode       */
 }
-
 
                 /********************************/
                 /*                              */
@@ -1685,7 +1637,6 @@ int     c;                                      /*   if translate flag set  */
         if (c == ESC) return (ENDFILE);         /* Translate ESC to ENDFILE */
         return ((translate) ? ucase(c) : c);
 }
-
 
                 /********************************/
                 /*                              */
@@ -1713,7 +1664,6 @@ UWORD   v;                                      /*   unsigned decimal value */
         }
 }
 
-
                 /********************************/
                 /*                              */
                 /*      P R I N T L I N E       */
@@ -1730,7 +1680,6 @@ UWORD   v;                                      /*   "12345:  " if inserting*/
         printc((inserting) ? ' ' : '*');
 }
 
-
                 /********************************/
                 /*                              */
                 /*     P R I N T B A S E        */
@@ -1741,7 +1690,6 @@ UWORD   v;                                      /*   "12345:  " if inserting*/
                                                 /*   (baseline)             */
                                                 /* NOTE: this is a macro    */
 #define printbase()     printline(baseline)
-
 
                 /********************************/
                 /*                              */
@@ -1754,7 +1702,6 @@ UWORD   v;                                      /*   "12345:  " if inserting*/
                                                 /* NOTE: this is a macro    */
 #define printnmbase()   if (! mp) printline(baseline)
 
-
                 /********************************/
                 /*                              */
                 /*          G E T C M D         */
@@ -1765,7 +1712,6 @@ UWORD   v;                                      /*   "12345:  " if inserting*/
                                                 /*   buffer or CR if none   */
                                                 /* NOTE: this is a macro    */
 #define getcmd()        ((buff[ncmd + 1] != 0) ? buff[++ncmd] : CR)
-
 
                 /********************************/
                 /*                              */
@@ -1812,12 +1758,11 @@ readc()                                         /* Read next input character*/
             column = 0;
         }
                                                 /* Buffer loaded: get char  */
-        if (readbuff = (combuf.cbp == combuf.comlen))
+        if ((readbuff = (combuf.cbp == combuf.comlen)))
             combuf.comline[combuf.cbp] = CR;    /* If last, return CR;      */
                                                 /*   reload buffer next time*/
         return (utran(combuf.comline[combuf.cbp++]));
 }
-
 
                 /********************************/
                 /*                              */
@@ -1829,7 +1774,6 @@ get_uc()                                        /* Get upper case char from */
 {                                               /*   buffer or command line */
         chr = ucase((tail) ? getcmd() : readc());
 }
-
 
                 /********************************/
                 /*                              */
@@ -1857,8 +1801,6 @@ delim()                                         /* TRUE if chr is delimiter */
         }
         return (FALSE);
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -1947,8 +1889,6 @@ err:
         return (flag = FALSE);                  /*   filename               */
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*        C O P Y D E S T       */
@@ -1960,8 +1900,6 @@ err:
                                                 /* NOTE: this is a macro    */
 
 #define copydest()      move(16, (char *) fcb1, (char *) &dfcb)
-
-
 
                 /********************************/
                 /*                              */
@@ -1997,8 +1935,6 @@ setdest()                                       /* Set up the destination   */
         move(3, dfcb.ftype, dtype);             /* save destination type   */
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*       S E T R D M A          */
@@ -2010,7 +1946,6 @@ setdest()                                       /* Set up the destination   */
                                                 /* NOTE: this is a macro    */
 
 #define setrdma()       _setdma(buff)
-
 
                 /********************************/
                 /*                              */
@@ -2029,7 +1964,6 @@ readfile()                                      /* Read a character from a  */
         }
         return (utran(buff[rbp++]));            /* Return current character */
 }
-
 
                 /********************************/
                 /*                              */
@@ -2059,8 +1993,6 @@ wrt_xfer()                                      /* Write lines to transfer  */
         setlimits();                            /* Map line cnt to pointers */
         for (j = first; j <= lastc; putxfer(base[j++]));/* Write out to file*/
 }
-
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -2068,8 +2000,6 @@ wrt_xfer()                                      /* Write lines to transfer  */
 /*                      ---------------------------                         */
 /*                                                                          */
 /****************************************************************************/
-
-
 
                 /********************************/
                 /*                              */
@@ -2146,7 +2076,7 @@ setup()                                         /* Start up edit session    */
         ndest = 0;
         baseline = 1;                           /* Start with line 1        */
 }
-
+
 /****************************************************************************/
 /*                                                                          */
 /*             E D I T   B U F F E R   M A N A G E M E N T                  */
@@ -2202,7 +2132,6 @@ setup()                                         /* Start up edit session    */
 /*      current line number by counting line-feeds as they are encountered. */
 /*      Note that deleting data after the Current Pointer does not affect   */
 /*      the current line number.                                            */
-
 /*      Most ED operations affect either data before the Current Pointer    */
 /*      (direction backward), on or after it (direction forward) but not    */
 /*      both.  The two operations which operate somewhere else - Append     */
@@ -2231,8 +2160,6 @@ setup()                                         /* Start up edit session    */
 /*                                                                          */
 /****************************************************************************/
 
-
-
                 /********************************/
                 /*                              */
                 /*      D I S T N Z E R O       */
@@ -2248,8 +2175,6 @@ distnzero()                                     /* If non-zero distance     */
         }
         return (FALSE);                         /* distance == 0            */
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -2308,7 +2233,6 @@ setlimits()                                     /* Set memory limits over   */
         }
 }
 
-
                 /********************************/
                 /*                              */
                 /*       D E C F R O N T        */
@@ -2321,8 +2245,6 @@ setlimits()                                     /* Set memory limits over   */
                                                 /* NOTE: this is a macro    */
 
 #define decfront() if (base[--front] == LF) baseline--
-
-
 
                 /********************************/
                 /*                              */
@@ -2367,8 +2289,6 @@ BOOLEAN moveflag;                               /*   character at base[back]*/
         back = tback;                           /*   globals                */
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*         M O V E R            */
@@ -2379,8 +2299,6 @@ BOOLEAN moveflag;                               /*   character at base[back]*/
                                                 /* NOTE: this is a macro    */
 
 #define mover() mem_move(TRUE)
-
-
 
                 /********************************/
                 /*                              */
@@ -2394,8 +2312,6 @@ BOOLEAN moveflag;                               /*   character at base[back]*/
 
 #define setptrs() mem_move(FALSE)
 
-
-
                 /********************************/
                 /*                              */
                 /*      M O V E L I N E S       */
@@ -2406,8 +2322,6 @@ BOOLEAN moveflag;                               /*   character at base[back]*/
                                                 /* NOTE: this is a macro    */
 
 #define movelines()     {setlimits(); mover();}
-
-
 
                 /********************************/
                 /*                              */
@@ -2421,8 +2335,6 @@ UWORD   newfront;                               /*   value, deleting chars  */
         while (front != newfront)               /*   (used by S & J cmds)   */
                 decfront();
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -2443,7 +2355,6 @@ setclimits()                                    /* Set memory move limits   */
                 lastc = (distance >= max - back) ? maxm : back + distance;
         }
 }
-
 
                 /********************************/
                 /*                              */
@@ -2473,9 +2384,6 @@ readline()                                      /* Read line of user input  */
         }
 }
 
-
-
-
                 /********************************/
                 /*                              */
                 /*      W R I T E L I N E       */
@@ -2502,9 +2410,6 @@ writeline()                                     /* Write a single line out */
         }
 }
 
-
-
-
                 /********************************/
                 /*                              */
                 /*         W R H A L F          */
@@ -2522,8 +2427,6 @@ wrhalf()                                        /* Write lines until the    */
                         writeline();
         }
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -2548,9 +2451,6 @@ writeout()                                      /* Write number of lines    */
         }
 }
 
-
-
-
                 /********************************/
                 /*                              */
                 /*        C L E A R M E M       */
@@ -2562,9 +2462,6 @@ writeout()                                      /* Write number of lines    */
                                                 /* NOTE: this is a macro    */
 
 #define clearmem()      {distance = 0xffff; writeout();}
-
-
-
 
                 /********************************/
                 /*                              */
@@ -2580,8 +2477,6 @@ terminate()                                     /* Clear buffers before     */
                         putdest(chr);
         finis();
 }
-
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -2589,9 +2484,6 @@ terminate()                                     /* Clear buffers before     */
 /*                -----------------------------------                       */
 /*                                                                          */
 /****************************************************************************/
-
-
-
 
                 /********************************/
                 /*                              */
@@ -2607,8 +2499,6 @@ insert()                                        /* Insert a character into  */
                 baseline++;
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*       S C A N N I N G        */
@@ -2620,7 +2510,6 @@ scanning()                                      /* Read a character.  Return*/
         return (((chr = readc()) != ENDFILE)    /*   not CR.  When inserting*/
                && ((chr != CR) || inserting));  /*   CR also returns TRUE   */
 }
-
 
                 /********************************/
                 /*                              */
@@ -2646,8 +2535,6 @@ collect()                                       /* Read characters from     */
                         longjmp(main_env, OVERFLOW);
         }                                       /* wbe indexes next free    */
 }                                               /*   byte on exit           */
-
-
 
                 /********************************/
                 /*                              */
@@ -2686,8 +2573,6 @@ UWORD   p1, p2;                                 /*   start of a string in   */
         return (match);
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*         S E T F I N D        */
@@ -2701,7 +2586,6 @@ setfind()                                       /* Set up search string for */
         wbp = wbe;                              /* Index buffer end         */
 }
 
-
                 /********************************/
                 /*                              */
                 /*       C H K F O U N D        */
@@ -2713,8 +2597,6 @@ chkfound()                                      /* Flag error if string not */
         if (! find(0, wbp))
                 longjmp(main_env, OVERCOUNT);
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -2740,8 +2622,6 @@ struct fcbtab   *fcbadr;                        /* Parse a filename string  */
                 move(8, libfcb.fname, fcbadr->fname);
         return (b);
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -2784,8 +2664,6 @@ typelines()                                     /* Type out lines (T and    */
         }
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*            P A G E           */
@@ -2808,8 +2686,6 @@ page()                                          /* Page command: move N     */
         distance = ((lastc == maxm) || (first == 1)) ? 0 : tdist;
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*           W A I T            */
@@ -2824,8 +2700,6 @@ wait()                                          /* Half-second wait (Z cmd) */
                 if (break_key())                /* Allow user to abort      */
                         longjmp(main_env, RESET);
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -2843,8 +2717,6 @@ apphalf()                                       /* Append until buffer is   */
         }
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*       I N S C R L F          */
@@ -2858,8 +2730,6 @@ inscrlf()                                       /* Insert CR LF characters  */
         chr = LF;
         insert();
 }
-
-
 
                 /********************************/
                 /*                              */
@@ -2875,7 +2745,6 @@ inscrlf()                                       /* Insert CR LF characters  */
 #define ins_error_chk() if ((tcolumn == 255) || (front == 1))\
                                 longjmp(main_env, RESET);
 
-
                 /********************************/
                 /*                              */
                 /*   I N S E R T _ C H A R S    */
@@ -2886,8 +2755,8 @@ insert_chars()                                  /* Insert characters into   */
 {                                               /*   buffer (I command)     */
         int     tcolumn, qcolumn;               /* temps during backspace    */
 
-        if (inserting = (combuf.cbp == combuf.comlen)
-                        && (mp == 0))
+        if ((inserting = ((combuf.cbp == combuf.comlen)
+                          && (mp == 0))))
         {                                       /* I<CR>? Enter line insert */
             tcolumn = 255;                      /* Stop backspace working   */
             distance = 0;                       /*   temporarily            */
@@ -2969,6 +2838,7 @@ insert_chars()                                  /* Insert characters into   */
                     inscrlf();
                     break;                      /* NOTE: falls through to   */
                 }                               /*   default if inserting!  */
+                                                /* FALLTHROUGH              */
 
               default:                          /* End of special cases     */
 
@@ -2990,8 +2860,6 @@ insert_chars()                                  /* Insert characters into   */
             crlf();                             /* Go to new line           */
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*       R E A D _ L I B        */
@@ -3003,7 +2871,7 @@ read_lib()                                      /* Read library file: R cmd */
         static BOOLEAN  reading = FALSE;        /* TRUE if reading rfcb     */
 
         setrdma();                              /* Tell BDOS where data goes*/
-        if (flag = parse_lib(&rfcb))            /* Is it R<filename> command*/
+        if ((flag = parse_lib(&rfcb)))          /* Is it R<filename> command*/
                 reading = FALSE;                /* If so, must open file    */
         if (! reading)                          /* Need to open file?       */
         {
@@ -3020,7 +2888,6 @@ read_lib()                                      /* Read library file: R cmd */
         reading = FALSE;
         _close(&rfcb);
 }
-
 
                 /********************************/
                 /*                              */
@@ -3066,7 +2933,6 @@ juxt()                                          /*   search for first string*/
         }                                       /*   inserted string        */
 }
 
-
                 /********************************/
                 /*                              */
                 /*           N E X T            */
@@ -3099,8 +2965,6 @@ next()                                          /*   whole file for a match,*/
                 }
         }
 }
-
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -3108,9 +2972,6 @@ next()                                          /*   whole file for a match,*/
 /*                     -----------------------------                        */
 /*                                                                          */
 /****************************************************************************/
-
-
-
 
                 /********************************/
                 /*                              */
@@ -3133,8 +2994,6 @@ readctran()                                     /* Get a char, translate to */
         translate = (upper || (!t));            /* Translate following      */
 }                                               /*   characters to u/c?     */
 
-
-
                 /********************************/
                 /*                              */
                 /*        S N G L C O M         */
@@ -3147,8 +3006,6 @@ readctran()                                     /* Get a char, translate to */
                                                 /* NOTE: this is a macro    */
 
 #define snglcom(c)      ((chr == (c)) && (combuf.comlen == 1) && (mp == 0))
-
-
 
                 /********************************/
                 /*                              */
@@ -3179,8 +3036,6 @@ snglrcom()                                      /* Return TRUE if user      */
         }
 }
 
-
-
                 /********************************/
                 /*                              */
                 /*         N U M B E R          */
@@ -3199,7 +3054,6 @@ number()                                        /* Set distance to the      */
                 readctran();
         }
 }
-
 
                 /********************************/
                 /*                              */
@@ -3220,7 +3074,6 @@ reldistance()                                   /* Change to distance from  */
                 distance = baseline - distance;
         }
 }
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -3228,8 +3081,6 @@ reldistance()                                   /* Change to distance from  */
 /*                     -----------------------------                        */
 /*                                                                          */
 /****************************************************************************/
-
-
 
                 /********************************/
                 /*                              */
@@ -3260,8 +3111,9 @@ simple()                                        /* Actions the "simple"     */
         {                                       /*   action for command     */
           case 'E':                             /* End edit normally        */
                 terminate();                    /* Write & rename O/P file  */
-                _exit(0);                       /* Reboot CP/M              */
-
+                _exit(0);                       /* Reboot to CP/M           */
+                                                /* _exit() does not return  */
+                                                /* FALLTHROUGH              */
 
           case 'H':                             /* Go to top (head).  This  */
                 terminate();                    /*   is like ending edit    */
@@ -3301,9 +3153,6 @@ simple()                                        /* Actions the "simple"     */
                 _exit(0);                       /* Reboot CP/M              */
         }
 }
-
-
-
 
                 /********************************/
                 /*                              */
@@ -3402,7 +3251,6 @@ controlled()                                    /* Actions the "controlled" */
                 break;
         }
 }
-
 
                 /********************************/
                 /*                              */
@@ -3518,7 +3366,6 @@ repeated()                                      /* Actions the "repeated"   */
         }
 }
 
-
 /****************************************************************************/
 /*                                                                          */
 /*                      I N I T I A L I Z A T I O N                         */
@@ -3558,8 +3405,6 @@ repeated()                                      /* Actions the "repeated"   */
 /*      |                               |                                   */
 /*                                                                          */
 /****************************************************************************/
-
-
 
                 /********************************/
                 /*                              */
@@ -3601,7 +3446,6 @@ allocate_memory()                               /* Carve up free memory     */
         dbuffadr = &sbuffadr[bufflength];       /*   & dest buff at dbuffadr*/
 }
 
-
                 /********************************/
                 /*                              */
                 /*   S E T _ U P _ F I L E S    */
@@ -3633,7 +3477,6 @@ set_up_files()                                  /* Determine source and     */
         setdest();                              /* Parse destination file   */
         tail = FALSE;                           /* Finished with cmd line   */
 
-
         /* If source and destination disks differ, check for an existing    */
         /*   source file on the destination disk - there could be a fatal   */
         /*   error condition which could destroy a file if the user happened*/
@@ -3644,7 +3487,6 @@ set_up_files()                                  /* Determine source and     */
            && (_open(&dfcb) != 255))            /* Try to open output file  */
                 abort("output file exists, erase it$");
 }
-
 
 /****************************************************************************/
 /*                                                                          */
@@ -3672,7 +3514,6 @@ _main()
         fcb1 = &_base->fcb1;                    /* Initialize pointers to   */
         buff = _base->buff;                     /*   basepage structures    */
         set_up_files();
-
 
                 /********************************/
                 /*                              */
@@ -3747,7 +3588,6 @@ _main()
 
         readbuff = TRUE;                        /* Need to read new command */
         mp = 0;                                 /* Forget about any macro   */
-
 
                 /********************************/
                 /*                              */
@@ -3782,7 +3622,7 @@ _main()
                 simple();                       /* Go honor command         */
                 continue;                       /* Return to FOREVER        */
             }
-
+
                 /********************************/
                 /*                              */
                 /*     Not a simple command     */
@@ -3828,7 +3668,7 @@ _main()
 
             if (distance == 0)
                 direction = BACKWARD;
-
+
             switch(chr)                         /* Should be at command now */
             {
               case 0:                           /* Could be null left by    */
@@ -3851,13 +3691,11 @@ _main()
             /*                                                              */
             /****************************************************************/
 
-
               case 'B': case 'C': case 'D': case 'K': case 'L':
               case 'P': case 'T': case 'U': case 'V': case CR:
 
                 controlled();                   /* Execute the command      */
                 break;                          /* Go back to FOREVER       */
-
 
             /****************************************************************/
             /*                                                              */
@@ -3885,7 +3723,7 @@ _main()
                     break;                      /* Go back to FOREVER       */
                 }                               /* NOTE: else case falls    */
                                                 /*   thru to default below  */
-
+                                                /* FALLTHROUGH              */
 
             /****************************************************************/
             /*                                                              */
