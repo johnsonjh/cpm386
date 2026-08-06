@@ -12,12 +12,10 @@ this section as *wishlist* and not a *roadmap*!
   * Fix `testbdos` when building with Clang
   * Support filesystems on partitions
   * Drivers for ATA/UDMA/NVME hard disks, ATAPI, and parallel printer
-  * Better keyboard support (Alt+nnn‑style 8‑bit input, numeric keypad,
-    function keys, arrow/motion keys, etc.)
   * User‑defined configurable first‑class RAM disk (default to M:)
   * Disk caching
   * Drivers for networking (with CP/Net NDOS and generic packet interface)
-  * DOS‑PLUS (enhanced VT52) compatible VGA console (with optional ADM3A mode)
+  * Optional ADM‑3A VGA console mode
   * Enhance filesystem with CP/M‑Plus parity (timestamps, passwords, etc.)
   * Extend user area support from 16 to 32 user areas per disk
   * Support for non‑PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)

@@ -44,6 +44,10 @@ static struct
   unsigned char attr;
   unsigned row;
   unsigned col;
+  unsigned char cur_start; /* CRTC 0x0A scan line, w/o disable bit */
+  unsigned char cur_end;   /* CRTC 0x0B scan line                  */
+  unsigned char cur_shown;
+  unsigned char cur_blink;
 } vc = {
   (volatile unsigned short *)VGACON_DEF_BASE,
   VGACON_DEF_COLS,
@@ -54,8 +58,83 @@ static struct
   VGACON_DEF_CRTC,
   VGACON_DEF_ATTR,
   0,
-  0
+  0,
+  13,
+  14,
+  1,
+  1
 };
+
+/*****************************************************************************/
+
+/* Software cursor. */
+
+static struct
+{
+  unsigned char active;
+  unsigned row;
+  unsigned col;
+  unsigned short painted;
+  unsigned short saved;
+} swc;
+
+/*****************************************************************************/
+
+static void vgacon_cursor_adopt (void);
+
+/*****************************************************************************/
+
+static void
+swcur_lift (void)
+{
+  unsigned long off;
+
+  if (!swc.active)
+    {
+      return;
+    }
+
+  swc.active = 0;
+
+  if (swc.row >= vc.rows || swc.col >= vc.cols)
+    {
+      return;
+    }
+
+  off = (unsigned long)swc.row * vc.cols + swc.col;
+
+  /* Only undo what is still ours. */
+  if (vc.mem [off] == swc.painted)
+    {
+      vc.mem [off] = swc.saved;
+    }
+}
+
+/*****************************************************************************/
+
+static void
+swcur_place (unsigned row, unsigned col)
+{
+  unsigned long off;
+  unsigned short cell;
+
+  if (row >= vc.rows || col >= vc.cols)
+    {
+      return;
+    }
+
+  off = (unsigned long)row * vc.cols + col;
+  cell = vc.mem [off];
+
+  swc.row = row;
+  swc.col = col;
+  swc.saved = cell;
+  swc.painted = (unsigned short)((cell & 0x00FF)
+                                 | (unsigned short)((cell & 0x0F00) << 4)
+                                 | (unsigned short)((cell & 0xF000) >> 4));
+  vc.mem [off] = swc.painted;
+  swc.active = 1;
+}
 
 /*****************************************************************************/
 
@@ -71,6 +150,38 @@ unsigned
 vgacon_rows (void)
 {
   return vc.rows;
+}
+
+/*****************************************************************************/
+
+unsigned
+vgacon_row (void)
+{
+  return vc.row;
+}
+
+/*****************************************************************************/
+
+unsigned
+vgacon_col (void)
+{
+  return vc.col;
+}
+
+/*****************************************************************************/
+
+unsigned char
+vgacon_attr (void)
+{
+  return vc.attr;
+}
+
+/*****************************************************************************/
+
+void
+vgacon_set_attr (unsigned char attr)
+{
+  vc.attr = attr;
 }
 
 /*****************************************************************************/
@@ -192,6 +303,15 @@ vgacon_geometry (unsigned cols, unsigned rows, unsigned cell_h,
     {
       vc.map_size = (unsigned long)CPM386_VGA_TEXT_SIZE;
     }
+
+  /*
+   * A new mode means a new cell height, so the cached cursor scan lines are
+   * stale: an underline at 13..14 is off the bottom of an eight line cell.
+   * Take the shape the video BIOS just programmed instead.  The visibility
+   * and blink settings are policy and are left alone.
+   */
+
+  vgacon_cursor_adopt ();
 }
 
 /*****************************************************************************/
@@ -224,9 +344,49 @@ vgacon_cell (unsigned row, unsigned col, unsigned char ch, unsigned char attr)
       return;
     }
 
+  swcur_lift ();
+
   vc.mem [row * vc.cols + col]
       = (unsigned short)((unsigned short)ch
                          | ((unsigned short)attr << 8));
+}
+
+/*****************************************************************************/
+
+void
+vgacon_read_cell (unsigned row, unsigned col, unsigned char *ch,
+                  unsigned char *attr)
+{
+  unsigned short cell;
+
+  if (row >= vc.rows || col >= vc.cols)
+    {
+      if (ch)
+        {
+          *ch = ' ';
+        }
+
+      if (attr)
+        {
+          *attr = vc.attr;
+        }
+
+      return;
+    }
+
+  swcur_lift ();
+
+  cell = vc.mem [row * vc.cols + col];
+
+  if (ch)
+    {
+      *ch = (unsigned char)(cell & 0xFF);
+    }
+
+  if (attr)
+    {
+      *attr = (unsigned char)((cell >> 8) & 0xFF);
+    }
 }
 
 /*****************************************************************************/
@@ -238,6 +398,8 @@ vgacon_fill (unsigned r0, unsigned c0, unsigned r1, unsigned c1,
   unsigned short cell
       = (unsigned short)((unsigned short)ch | ((unsigned short)attr << 8));
   unsigned r, c;
+
+  swcur_lift ();
 
   if (r1 >= vc.rows)
     {
@@ -261,31 +423,45 @@ vgacon_fill (unsigned r0, unsigned c0, unsigned r1, unsigned c1,
 /*****************************************************************************/
 
 void
-vgacon_scroll (int n)
+vgacon_scroll_region (unsigned top, unsigned bot, int n, unsigned char attr)
 {
   unsigned short blank
-      = (unsigned short)(' ' | ((unsigned short)vc.attr << 8));
+      = (unsigned short)(' ' | ((unsigned short)attr << 8));
   unsigned lines;
+  unsigned span;
   unsigned r, c;
 
-  if (n == 0)
+  if (n == 0 || vc.rows == 0)
     {
       return;
     }
 
+  swcur_lift ();
+
+  if (bot >= vc.rows)
+    {
+      bot = vc.rows - 1;
+    }
+
+  if (top > bot)
+    {
+      return;
+    }
+
+  span = bot - top + 1;
   lines = (unsigned)((n < 0) ? -n : n);
 
-  if (lines >= vc.rows)
+  if (lines >= span)
     {
-      vgacon_fill (0, 0, vc.rows - 1, vc.cols - 1, ' ', vc.attr);
+      vgacon_fill (top, 0, bot, vc.cols - 1, ' ', attr);
 
       return;
     }
 
   if (n > 0)
     {
-      /* Content moves toward row 0; blank rows appear at the bottom. */
-      for (r = 0; r + lines < vc.rows; r++)
+      /* Content moves toward `top`; blank rows appear at `bot`. */
+      for (r = top; r + lines <= bot; r++)
         {
           for (c = 0; c < vc.cols; c++)
             {
@@ -294,7 +470,7 @@ vgacon_scroll (int n)
             }
         }
 
-      for (r = vc.rows - lines; r < vc.rows; r++)
+      for (r = bot + 1 - lines; r <= bot; r++)
         {
           for (c = 0; c < vc.cols; c++)
             {
@@ -304,8 +480,8 @@ vgacon_scroll (int n)
     }
   else
     {
-      /* Content moves toward the last row; blank rows appear at the top. */
-      for (r = vc.rows; r-- > lines;)
+      /* Content moves toward `bot`; blank rows appear at `top`. */
+      for (r = bot + 1; r-- > top + lines;)
         {
           for (c = 0; c < vc.cols; c++)
             {
@@ -314,13 +490,96 @@ vgacon_scroll (int n)
             }
         }
 
-      for (r = 0; r < lines; r++)
+      for (r = top; r < top + lines; r++)
         {
           for (c = 0; c < vc.cols; c++)
             {
               vc.mem [r * vc.cols + c] = blank;
             }
         }
+    }
+}
+
+/*****************************************************************************/
+
+void
+vgacon_scroll (int n)
+{
+  if (vc.rows == 0)
+    {
+      return;
+    }
+
+  vgacon_scroll_region (0, vc.rows - 1, n, vc.attr);
+}
+
+/*****************************************************************************/
+
+void
+vgacon_ins_chars (unsigned row, unsigned col, unsigned n, unsigned char attr)
+{
+  unsigned short blank
+      = (unsigned short)(' ' | ((unsigned short)attr << 8));
+  volatile unsigned short *line;
+  unsigned c;
+
+  if (row >= vc.rows || col >= vc.cols || n == 0)
+    {
+      return;
+    }
+
+  swcur_lift ();
+
+  if (n > vc.cols - col)
+    {
+      n = vc.cols - col;
+    }
+
+  line = vc.mem + (unsigned long)row * vc.cols;
+
+  for (c = vc.cols; c-- > col + n;)
+    {
+      line [c] = line [c - n];
+    }
+
+  for (c = col; c < col + n; c++)
+    {
+      line [c] = blank;
+    }
+}
+
+/*****************************************************************************/
+
+void
+vgacon_del_chars (unsigned row, unsigned col, unsigned n, unsigned char attr)
+{
+  unsigned short blank
+      = (unsigned short)(' ' | ((unsigned short)attr << 8));
+  volatile unsigned short *line;
+  unsigned c;
+
+  if (row >= vc.rows || col >= vc.cols || n == 0)
+    {
+      return;
+    }
+
+  swcur_lift ();
+
+  if (n > vc.cols - col)
+    {
+      n = vc.cols - col;
+    }
+
+  line = vc.mem + (unsigned long)row * vc.cols;
+
+  for (c = col; c + n < vc.cols; c++)
+    {
+      line [c] = line [c + n];
+    }
+
+  for (c = vc.cols - n; c < vc.cols; c++)
+    {
+      line [c] = blank;
     }
 }
 
@@ -341,6 +600,8 @@ vgacon_cursor (unsigned row, unsigned col)
       col = vc.cols;
     }
 
+  swcur_lift ();
+
   vc.row = row;
   vc.col = col;
 
@@ -350,6 +611,11 @@ vgacon_cursor (unsigned row, unsigned col)
   outb ((unsigned short)(vc.crtc + 1), (unsigned char)((pos >> 8) & 0xFF));
   outb (vc.crtc, 0x0F); /* cursor location low */
   outb ((unsigned short)(vc.crtc + 1), (unsigned char)(pos & 0xFF));
+
+  if (vc.cur_shown && !vc.cur_blink)
+    {
+      swcur_place (row, col);
+    }
 }
 
 /*****************************************************************************/
@@ -359,6 +625,150 @@ vgacon_clear (void)
 {
   vgacon_fill (0, 0, vc.rows - 1, vc.cols - 1, ' ', vc.attr);
   vgacon_cursor (0, 0);
+}
+
+/*****************************************************************************/
+
+/* Push the cached shape and visibility back out to CRTC 0x0A / 0x0B. */
+
+static void
+vgacon_cursor_program (void)
+{
+  unsigned char start = (unsigned char)(vc.cur_start & 0x1F);
+
+  /*
+   * The hardware cursor is only used when it is both wanted and allowed to
+   * blink; a steady cursor is painted into the plane by swcur_place().
+   */
+
+  if (!vc.cur_shown || !vc.cur_blink)
+    {
+      start |= 0x20; /* CRTC 0x0A bit 5 blanks the cursor */
+    }
+
+  outb (vc.crtc, 0x0A);
+  outb ((unsigned short)(vc.crtc + 1), start);
+  outb (vc.crtc, 0x0B);
+  outb ((unsigned short)(vc.crtc + 1), (unsigned char)(vc.cur_end & 0x1F));
+
+  if (vc.cur_shown && !vc.cur_blink)
+    {
+      swcur_place (vc.row, vc.col);
+    }
+  else
+    {
+      swcur_lift ();
+    }
+}
+
+/*****************************************************************************/
+
+void
+vgacon_cursor_visible (int on)
+{
+  vc.cur_shown = (unsigned char)(on ? 1 : 0);
+  vgacon_cursor_program ();
+}
+
+/*****************************************************************************/
+
+int
+vgacon_cursor_shown (void)
+{
+  return vc.cur_shown ? 1 : 0;
+}
+
+/*****************************************************************************/
+
+void
+vgacon_cursor_blink (int on)
+{
+  vc.cur_blink = (unsigned char)(on ? 1 : 0);
+  vgacon_cursor_program ();
+}
+
+/*****************************************************************************/
+
+int
+vgacon_cursor_blinks (void)
+{
+  return vc.cur_blink ? 1 : 0;
+}
+
+/*****************************************************************************/
+
+void
+vgacon_cursor_shape (unsigned start, unsigned end)
+{
+  if (end >= vc.cell_h)
+    {
+      end = vc.cell_h ? vc.cell_h - 1 : 0;
+    }
+
+  if (start > end)
+    {
+      start = end;
+    }
+
+  vc.cur_start = (unsigned char)(start & 0x1F);
+  vc.cur_end = (unsigned char)(end & 0x1F);
+  vgacon_cursor_program ();
+}
+
+/*****************************************************************************/
+
+unsigned
+vgacon_cursor_start (void)
+{
+  return vc.cur_start;
+}
+
+/*****************************************************************************/
+
+unsigned
+vgacon_cursor_end (void)
+{
+  return vc.cur_end;
+}
+
+/*****************************************************************************/
+
+/*
+ * Latch the cursor shape the BIOS programmed for the current mode.  Doing
+ * this rather than assuming an underline means ESC f / ESC[?25l can hide
+ * the cursor and ESC e / ESC[?25h can put back exactly what was there,
+ * whatever the cell height turns out to be.
+ */
+
+static void
+vgacon_cursor_adopt (void)
+{
+  unsigned char a, b;
+
+  outb (vc.crtc, 0x0A);
+  a = inb ((unsigned short)(vc.crtc + 1));
+  outb (vc.crtc, 0x0B);
+  b = inb ((unsigned short)(vc.crtc + 1));
+
+  vc.cur_start = (unsigned char)(a & 0x1F);
+  vc.cur_end = (unsigned char)(b & 0x1F);
+
+  /*
+   * A hidden or nonsensical cursor is replaced by a two scan line underline
+   * at the bottom of the cell, which is what every text mode BIOS uses.
+   */
+
+  if ((a & 0x20) != 0 || vc.cur_end == 0 || vc.cur_start > vc.cur_end
+      || vc.cur_end >= vc.cell_h)
+    {
+      unsigned h = (vc.cell_h >= 2 && vc.cell_h <= 32) ? vc.cell_h : 16;
+
+      vc.cur_end = (unsigned char)(h - 1);
+      vc.cur_start = (unsigned char)(h - 2);
+    }
+
+  swc.active = 0; /* the mode set wiped whatever we had painted */
+  vgacon_cursor_program ();
 }
 
 /*****************************************************************************/
@@ -375,6 +785,9 @@ vgacon_init (void)
   outb (vc.crtc, 0x0D);
   outb ((unsigned short)(vc.crtc + 1), 0);
 
+  vc.cur_shown = 1;
+  vc.cur_blink = 1;
+  vgacon_cursor_adopt ();
   vgacon_cursor (0, 0);
 }
 

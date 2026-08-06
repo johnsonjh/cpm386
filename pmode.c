@@ -58,7 +58,7 @@ struct dt_ptr
 /*****************************************************************************/
 
 /*
- * 32-bit TSS, with a full I/O permission bitmap appended (LLM explaining)
+ * 32-bit TSS, with a full I/O permission bitmap appended (AI/LLM explaining)
  *
  * IOPL does not gate port access in virtual-8086 mode - the bitmap always
  * does - so the V86 disk server can only touch the FDC and IDE registers if
@@ -893,6 +893,8 @@ extern void (*irq_stub_table [16]) (void);
 #define ARGLEN_VIDSET 8   /* struct cpm_vidset     */
 #define ARGLEN_VIDFONT 12 /* struct cpm_vidfont    */
 #define ARGLEN_VIDPAL 12  /* struct cpm_vidpal     */
+#define ARGLEN_VIDCUR 16  /* struct cpm_vidcursor  */
+#define ARGLEN_KBDLOCK 8  /* struct cpm_kbdlock    */
 #define ARGLEN_RNGSEED 8  /* struct cpm_rng_seed   */
 
 static unsigned long
@@ -954,6 +956,12 @@ bdos_arg_len (WORD func)
     case 233: /* BDOS_VID_PALETTE */
       return ARGLEN_VIDPAL;
 
+    case 234: /* BDOS_VID_CURSOR */
+      return ARGLEN_VIDCUR;
+
+    case 236: /* BDOS_KBD_LOCK */
+      return ARGLEN_KBDLOCK;
+
     case 254: /* BDOS_RNG_SEED */
       return ARGLEN_RNGSEED;
 
@@ -1010,6 +1018,8 @@ bdos_arg_is_ptr (WORD func)
     case 231: /* BDOS_VID_SET   - read cpm_vidset */
     case 232: /* BDOS_VID_FONT  - read cpm_vidfont */
     case 233: /* BDOS_VID_PALETTE - read cpm_vidpal */
+    case 234: /* BDOS_VID_CURSOR  - read/fill cpm_vidcursor */
+    case 236: /* BDOS_KBD_LOCK    - read/fill cpm_kbdlock   */
     case 254: /* BDOS_RNG_SEED   - read cpm_rng_seed */
       return 1;
 

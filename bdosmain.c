@@ -1165,6 +1165,184 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       break;
 
     /*
+     * BDOS 234 (VID_CURSOR): console cursor shape, visibility, and blinking.
+     * DE -> struct cpm_vidcursor (TPA-relative).
+     * AX = 0, or VIDR_* (see vidmode.h).
+     */
+
+    case 234:
+      {
+        REG struct cpm_vidcursor *cp = (struct cpm_vidcursor *)infop;
+        extern int bios_vga_present (void);
+        unsigned h;
+
+        if (!cp)
+          {
+            rtnval = VIDR_BADPTR;
+
+            break;
+          }
+
+        if (!bios_vga_present ())
+          {
+            rtnval = VIDR_NOHW;
+
+            break;
+          }
+
+        h = vgacon_cell_h ();
+
+        if (h < 2)
+          {
+            h = 2;
+          }
+
+        if (cp->flags & VIDC_SET_SHAPE)
+          {
+            unsigned s, e;
+
+            switch (cp->shape)
+              {
+              case VIDC_SHAPE_BLOCK:
+                s = 0;
+                e = h - 1;
+
+                break;
+
+              case VIDC_SHAPE_UNDERLINE:
+                s = h - 2;
+                e = h - 1;
+
+                break;
+
+              case VIDC_SHAPE_HALF:
+                s = h / 2;
+                e = h - 1;
+
+                break;
+
+              case VIDC_SHAPE_EXPLICIT:
+                s = (unsigned)cp->start;
+                e = (unsigned)cp->end;
+
+                break;
+
+              default: /* VIDC_SHAPE_KEEP */
+                s = vgacon_cursor_start ();
+                e = vgacon_cursor_end ();
+
+                break;
+              }
+
+            vgacon_cursor_shape (s, e);
+          }
+
+        if (cp->flags & VIDC_SET_BLINK)
+          {
+            vgacon_cursor_blink (cp->blink ? 1 : 0);
+          }
+
+        if (cp->flags & VIDC_SET_VISIBLE)
+          {
+            vgacon_cursor_visible (cp->visible ? 1 : 0);
+          }
+
+        cp->start = (UWORD)vgacon_cursor_start ();
+        cp->end = (UWORD)vgacon_cursor_end ();
+        cp->visible = (UWORD)vgacon_cursor_shown ();
+        cp->blink = (UWORD)vgacon_cursor_blinks ();
+        cp->cell_h = (UWORD)vgacon_cell_h ();
+        cp->flags = 0;
+        cp->pad = 0;
+
+        if (cp->start == 0 && cp->end + 1 >= vgacon_cell_h ())
+          {
+            cp->shape = VIDC_SHAPE_BLOCK;
+          }
+        else if (cp->start + 2 == vgacon_cell_h ())
+          {
+            cp->shape = VIDC_SHAPE_UNDERLINE;
+          }
+        else
+          {
+            cp->shape = VIDC_SHAPE_EXPLICIT;
+          }
+
+        rtnval = VIDR_OK;
+      }
+
+      break;
+
+    /*
+     * BDOS 235 (KBD_CAPS): Caps-Lock key control.
+     * DE = 0 normal, 1 disabled, 2 left Ctrl, 3 swap w/Ctrl, 0xFFFF to query.
+     * AX = the mode now in effect, or 0xFFFF if DE was not one of these.
+     */
+
+    case 235:
+      {
+        extern void kbd_caps_mode (unsigned);
+        extern unsigned kbd_caps_get (void);
+
+        if (info != 0xFFFF)
+          {
+            if (info > 3)
+              {
+                rtnval = 0xFFFF;
+
+                break;
+              }
+
+            kbd_caps_mode ((unsigned)info);
+          }
+
+        rtnval = (UWORD)kbd_caps_get ();
+      }
+
+      break;
+
+    /*
+     * BDOS 236 (KBD_LOCK): keyboard lock states and lights.
+     * DE -> struct cpm_kbdlock (TPA-relative).
+     * AX = 0, or 0xFFFF on a bad pointer.
+     */
+
+    case 236:
+      {
+        extern unsigned kbd_locks (void);
+        extern void kbd_set_locks (unsigned);
+        extern unsigned kbd_led_mask (void);
+        extern void kbd_set_led_mask (unsigned);
+        REG struct cpm_kbdlock *kp = (struct cpm_kbdlock *)infop;
+
+        if (!kp)
+          {
+            rtnval = 0xFFFF;
+
+            break;
+          }
+
+        if (kp->flags & KBDL_SET_LOCKS)
+          {
+            kbd_set_locks ((unsigned)kp->locks);
+          }
+
+        if (kp->flags & KBDL_SET_LEDS)
+          {
+            kbd_set_led_mask ((unsigned)kp->leds);
+          }
+
+        kp->flags = 0;
+        kp->locks = (UWORD)kbd_locks ();
+        kp->leds = (UWORD)kbd_led_mask ();
+        kp->pad = 0;
+
+        rtnval = 0;
+      }
+
+      break;
+
+    /*
      * BDOS 253 (RNG_GET): get 16 bits of randomness.
      * DE is ignored.
      * AX = 0..0xFFFE (random), or 0xFFFF if the RNG is not seeded.

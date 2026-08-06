@@ -304,6 +304,66 @@ struct cpm_vidpal
 /*****************************************************************************/
 
 /*
+ * Console cursor (BDOS 234; DE -> this, TPA-relative).
+ *
+ * flags for which of shape/visible/blinking to apply; the rest of the
+ * block is ignored and filled with the resulting state, so 0 is query.
+ *
+ * A full steady cursor cannot be done with pure VGA hardwarem, so
+ * non-blinking is drawn into the text plane directly.
+ *
+ * returns 0, VIDR_NOHW when no adapter is fitted, or VIDR_BADPTR.
+ */
+
+# define VIDC_SET_SHAPE 0x0001
+# define VIDC_SET_VISIBLE 0x0002
+# define VIDC_SET_BLINK 0x0004
+
+# define VIDC_SHAPE_KEEP 0
+# define VIDC_SHAPE_BLOCK 1
+# define VIDC_SHAPE_UNDERLINE 2
+# define VIDC_SHAPE_HALF 3
+# define VIDC_SHAPE_EXPLICIT 4 /* use .start and .end verbatim */
+
+struct cpm_vidcursor
+{
+  UWORD flags;   /* VIDC_SET_*                                    */
+  UWORD shape;   /* VIDC_SHAPE_*                                  */
+  UWORD start;   /* first scan line of the cursor within the cell */
+  UWORD end;     /* last scan line                                */
+  UWORD visible; /* 0 hidden, 1 shown                             */
+  UWORD blink;   /* 0 steady, 1 blinking                          */
+  UWORD cell_h;  /* out: cell height in scan lines                */
+  UWORD pad;
+};
+
+/*****************************************************************************/
+
+/*
+ * Keyboard locks (BDOS 236; DE -> this, TPA-relative).
+ *
+ * flags for which of locks/leds to apply, 0 is a query.
+ *
+ * Returns 0, or 0xFFFF on a bad pointer.
+ */
+
+# define KBDL_SET_LOCKS 0x0001
+# define KBDL_SET_LEDS 0x0002
+# define KBDL_SCROLL 0x0001
+# define KBDL_NUM 0x0002
+# define KBDL_CAPS 0x0004
+
+struct cpm_kbdlock
+{
+  UWORD flags; /* KBDL_SET_*                                  */
+  UWORD locks; /* KBDL_SCROLL / KBDL_NUM / KBDL_CAPS, set = on */
+  UWORD leds;  /* the same bits: which lamps may illuminate    */
+  UWORD pad;
+};
+
+/*****************************************************************************/
+
+/*
  * CSPRNG seed block (BDOS 254; DE -> this, TPA-relative).
  *
  * data is a TPA-relative pointer to len bytes of seed material

@@ -124,12 +124,14 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 []()
 * **Clang** build:
   ```sh
-  make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang"
+  make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang" OPTFLAGS="-O1"
   ```
 []()
 
 []()
 * It is recommended to use **GCC** as **Clang**‑compiled i386 code is larger.
+  * **Clang**‑compiled builds will need to use `-O1` (or `-Os`) to avoid
+    running out of space on the 384K ramdisk.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 * You may need to adjust the `make -j` argument depending on your operating
   system (*.e.g.*, `gnproc`, `sysctl -n hw.ncpu`, `getconf NPROCESSORS_ONLN`,
@@ -184,15 +186,17 @@ You can [download](#downloads) pre‑compiled binaries above.
 |---------------:|:---------------------------------------------------------------------------------------------------|
 | `ACLOCKDV.386` | [aclock](https://github.com/tenox7/aclock) (VGA text console version)                              |
 | `ACLOCKVT.386` | [aclock](https://github.com/tenox7/aclock) (ANSI terminal version)                                 |
+| `ALVTST.386`   | Get Allocation Vector test ([BDOS 27](https://www.seasip.info/Cpm/bdos.html))                      |
 | `BIG.386`      | Multi‑extent loading test executable                                                               |
+| `CAPSLOCK.386` | Caps‑Lock key behavior utility (BDOS 235)                                                          |
 | `CLEARTPA.386` | Clears (zeros) and optionally verifies the TPA                                                     |
 | `CLS.386`      | Clear screen (BDOS 221)                                                                            |
 | `DELAY.386`    | Delay test ([BDOS 141](https://www.seasip.info/Cpm/bdos.html#141))                                 |
 | `DEMO.SUB`     | SUBMIT demonstration                                                                               |
 | `DUMPDIR.386`  | Directory entry dump utility ([BDOS 17](https://www.seasip.info/Cpm/bdos.html#17)/[18](https://www.seasip.info/Cpm/bdos.html#18)) |
 | `DUMPFCB.386`  | File control block dump utility ([BDOS 15](https://www.seasip.info/Cpm/bdos.html#15))              |
-| `ENV.DAT`      | Environment data file                                                                              |
 | `ED.386`       | ED (A port of the DRI CP/M Context Editor 08/1982)                                                 |
+| `ENV.DAT`      | Environment data file                                                                              |
 | `FPARSE.386`   | F_PARSE test ([BDOS 152](https://www.seasip.info/Cpm/bdos.html#152))                               |
 | `GETSN.386`    | Display serial number ([BDOS 107](https://www.seasip.info/Cpm/bdos.html#107))                      |
 | `GFXTEST.386`  | Graphics and framebuffer demo (BDOS 229/230/231/233)                                               |
@@ -204,12 +208,12 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `LRBC.386`     | Query and/or set Last Record Byte Count                                                            |
 | `LS.386`       | List files (with sizes)                                                                            |
 | `MANDEL.386`   | Draw a Mandelbrot set fractal (terminal version)                                                   |
-| `ALVTST.386`   | Get Allocation Vector test ([BDOS 27](https://www.seasip.info/Cpm/bdos.html))                      |
 | `MEM.386`      | Memory map utility (BDOS 227/228)                                                                  |
 | `MORE.386`     | UNIX `more`‑style pager                                                                            |
+| `NUMLOCK.386`  | Num‑Lock key behavior utility (BDOS 236)                                                           |
 | `OD.386`       | Octal dump utility                                                                                 |
-| `PIP.386`      | PIP (A port of Zilog **CP/M-Z8000** PIP v1.0A 01/03/1984)                                          |
 | `PAUSE.386`    | Wait for keypress                                                                                  |
+| `PIP.386`      | PIP (A port of Zilog **CP/M-Z8000** PIP v1.0A 01/03/1984)                                          |
 | `PRINTENV.386` | Print environment and system data                                                                  |
 | `PRNG.386`     | PRNG test and demo utility (BDOS 253/254)                                                          |
 | `PROFILE.SUB`  | SUBMIT script (automatically executed at boot)                                                     |
@@ -221,8 +225,9 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
 | `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C 01/03/1984)                                        |
 | `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
+| `TERMTEST.386` | Terminal and keyboard test utility                                                                 |
 | `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
-| `TEXTMODE.386` | Query and set the console text mode (BDOS 229/230/231)                                             |
+| `TEXTMODE.386` | Query and/or set the text mode and cursor state (BDOS 229/230/231/234)                             |
 | `TICKS.386`    | High‑resolution timer tests (BDOS 225/226)                                                         |
 | `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104)/[105](https://www.seasip.info/Cpm/bdos.html#105)) |
 | `TOUCH.386`    | Create an empty file                                                                               |

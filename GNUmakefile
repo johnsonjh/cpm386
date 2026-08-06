@@ -403,20 +403,30 @@ endif
 ################################################################################
 
 BDOS_OBJS = bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil.o iosys.o
-CCP_OBJ = ccp.o
 BIOS_OBJ = bios.o
 BRINGUP_OBJ = bringup.o
-PMODE_OBJS = pmode.o pmodeasm.o
+CCP_OBJ = ccp.o
+DISK_OBJ = disk.o
+DISK_V86_OBJ = disk_v86.o
+KBD_OBJ = kbd.o
+MBENTRY_OBJ = mbentry.o
 MEMMAP_OBJ = memmap.o
+MLTIBOOT_OBJ = mltiboot.o
+PIT_OBJ = pit.o
+PMODE_OBJS = pmode.o pmodeasm.o
+RNG_OBJ = cpmrng.o
+RTC_OBJ = rtc.o
 VGACON_OBJ = vgacon.o
+VGATERM_OBJ = vgaterm.o
 VIDBIOS_OBJS = vidbios.o vidbiosasm.o
 VIDMODE_OBJ = vidmode.o
-RTC_OBJ = rtc.o
-PIT_OBJ = pit.o
-RNG_OBJ = cpmrng.o
+
+################################################################################
+
 OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
-	$(MEMMAP_OBJ) $(VGACON_OBJ) $(VIDBIOS_OBJS) $(VIDMODE_OBJ) \
-	$(RTC_OBJ) $(PIT_OBJ) $(RNG_OBJ) mbentry.o mltiboot.o disk.o disk_v86.o
+	$(MEMMAP_OBJ) $(VGACON_OBJ) $(VGATERM_OBJ) $(KBD_OBJ) $(VIDBIOS_OBJS) \
+	$(VIDMODE_OBJ) $(RTC_OBJ) $(PIT_OBJ) $(RNG_OBJ) $(MBENTRY_OBJ) \
+	$(MLTIBOOT_OBJ) $(DISK_OBJ) $(DISK_V86_OBJ)
 
 ################################################################################
 
@@ -925,6 +935,30 @@ vgatext.386: vgatext.bin $(MK386)
 
 ################################################################################
 
+capslock.386: capslock.bin $(MK386)
+	./$(MK386) ./capslock.bin ./capslock.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+numlock.386: numlock.bin $(MK386)
+	./$(MK386) ./numlock.bin ./numlock.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+termtest.386: termtest.bin $(MK386)
+	./$(MK386) ./termtest.bin ./termtest.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 textmode.386: textmode.bin $(MK386)
 	./$(MK386) ./textmode.bin ./textmode.386 0x100
 	@tput setaf 2 2> /dev/null || :
@@ -990,6 +1024,7 @@ ramdisk.bin: \
 			aclockvt.386 \
 			alvtst.386 \
 			big.386 \
+			capslock.386 \
 			cleartpa.386 \
 			cls.386 \
 			delay.386 \
@@ -1009,6 +1044,7 @@ ramdisk.bin: \
 			mandel.386 \
 			mem.386 \
 			more.386 \
+			numlock.386 \
 			od.386 \
 			pause.386 \
 			pip.386 \
@@ -1021,6 +1057,7 @@ ramdisk.bin: \
 			seron.386 \
 			stat.386 \
 			sync.386 \
+			termtest.386 \
 			test211.386 \
 			textmode.386 \
 			ticks.386 \
@@ -1048,6 +1085,7 @@ ramdisk.bin: \
 	$(CP) -f ./aclockvt.386 /tmp/cpmd/ACLOCKVT.386
 	$(CP) -f ./alvtst.386 /tmp/cpmd/ALVTST.386
 	$(CP) -f ./big.386 /tmp/cpmd/BIG.386
+	$(CP) -f ./capslock.386 /tmp/cpmd/CAPSLOCK.386
 	$(CP) -f ./cleartpa.386 /tmp/cpmd/CLEARTPA.386
 	$(CP) -f ./cls.386 /tmp/cpmd/CLS.386
 	$(CP) -f ./delay.386 /tmp/cpmd/DELAY.386
@@ -1067,6 +1105,7 @@ ramdisk.bin: \
 	$(CP) -f ./mandel.386 /tmp/cpmd/MANDEL.386
 	$(CP) -f ./mem.386 /tmp/cpmd/MEM.386
 	$(CP) -f ./more.386 /tmp/cpmd/MORE.386
+	$(CP) -f ./numlock.386 /tmp/cpmd/NUMLOCK.386
 	$(CP) -f ./od.386 /tmp/cpmd/OD.386
 	$(CP) -f ./pause.386 /tmp/cpmd/PAUSE.386
 	$(CP) -f ./pip.386 /tmp/cpmd/PIP.386
@@ -1079,6 +1118,7 @@ ramdisk.bin: \
 	$(CP) -f ./seron.386 /tmp/cpmd/SERON.386
 	$(CP) -f ./stat.386 /tmp/cpmd/STAT.386
 	$(CP) -f ./sync.386 /tmp/cpmd/SYNC.386
+	$(CP) -f ./termtest.386 /tmp/cpmd/TERMTEST.386
 	$(CP) -f ./test211.386 /tmp/cpmd/TEST211.386
 	$(CP) -f ./textmode.386 /tmp/cpmd/TEXTMODE.386
 	$(CP) -f ./ticks.386 /tmp/cpmd/TICKS.386
@@ -1098,14 +1138,15 @@ ramdisk.bin: \
 	  /tmp/cpmd/ACLOCKVT.386 \
 	  /tmp/cpmd/ALVTST.386 \
 	  /tmp/cpmd/BIG.386 \
+	  /tmp/cpmd/CAPSLOCK.386 \
 	  /tmp/cpmd/CLEARTPA.386 \
 	  /tmp/cpmd/CLS.386 \
 	  /tmp/cpmd/DELAY.386 \
 	  /tmp/cpmd/DEMO.SUB \
 	  /tmp/cpmd/DUMPDIR.386 \
 	  /tmp/cpmd/DUMPFCB.386 \
-	  /tmp/cpmd/ENV.DAT \
 	  /tmp/cpmd/ED.386 \
+	  /tmp/cpmd/ENV.DAT \
 	  /tmp/cpmd/FPARSE.386 \
 	  /tmp/cpmd/GETSN.386 \
 	  /tmp/cpmd/GFXTEST.386 \
@@ -1119,6 +1160,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/MANDEL.386 \
 	  /tmp/cpmd/MEM.386 \
 	  /tmp/cpmd/MORE.386 \
+	  /tmp/cpmd/NUMLOCK.386 \
 	  /tmp/cpmd/OD.386 \
 	  /tmp/cpmd/PAUSE.386 \
 	  /tmp/cpmd/PIP.386 \
@@ -1133,6 +1175,7 @@ ramdisk.bin: \
 	  /tmp/cpmd/SERON.386 \
 	  /tmp/cpmd/STAT.386 \
 	  /tmp/cpmd/SYNC.386 \
+	  /tmp/cpmd/TERMTEST.386 \
 	  /tmp/cpmd/TEST211.386 \
 	  /tmp/cpmd/TEXTMODE.386 \
 	  /tmp/cpmd/TICKS.386 \
@@ -1189,7 +1232,7 @@ $(BRINGUP_OBJ): bringup.c ramdisk.bin bringup.h bdosinc.h biosdef.h bdosdef.h
 ################################################################################
 
 $(BIOS_OBJ): bios.c bdosinc.h bdosdef.h biosdef.h bringup.h pmode.h \
-		absaddr.h memmap.h io.h vgacon.h disk.h
+		absaddr.h memmap.h io.h vgacon.h vgaterm.h kbd.h disk.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1206,6 +1249,22 @@ $(MEMMAP_OBJ): memmap.c memmap.h absaddr.h
 ################################################################################
 
 $(VGACON_OBJ): vgacon.c vgacon.h io.h absaddr.h platform.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+$(VGATERM_OBJ): vgaterm.c vgaterm.h vgacon.h kbd.h
+	$(CC) $(CFLAGS) -c -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+$(KBD_OBJ): kbd.c kbd.h io.h absaddr.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1237,7 +1296,7 @@ vidbiosasm.o: vidbios.s
 
 ################################################################################
 
-mltiboot.o: mltiboot.c mltiboot.h memmap.h absaddr.h bdosinc.h biosdef.h
+$(MLTIBOOT_OBJ): mltiboot.c mltiboot.h memmap.h absaddr.h bdosinc.h biosdef.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1297,7 +1356,7 @@ pmode.o: pmode.c pmode.h bdosinc.h platform.h io.h vidbios.h vidmode.h
 
 ################################################################################
 
-disk_v86.o: disk_v86.s
+$(DISK_V86_OBJ): disk_v86.s
 	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -l ./${@:.o=.lst} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1305,7 +1364,7 @@ disk_v86.o: disk_v86.s
 
 ################################################################################
 
-disk.o: disk.c disk.h bringup.h bdosinc.h biosdef.h io.h pit.h pmode.h
+$(DISK_OBJ): disk.c disk.h bringup.h bdosinc.h biosdef.h io.h pit.h pmode.h
 	$(CC) $(CFLAGS) -c -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1321,7 +1380,7 @@ pmodeasm.o: pmode.s
 
 ################################################################################
 
-mbentry.o: mbentry.s mltiboot.h
+$(MBENTRY_OBJ): mbentry.s mltiboot.h
 	$(NASM) $(NASMFLAGS) $(NASMDEBUG) -I. -l ./${@:.o=.lst} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
