@@ -1756,6 +1756,20 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
 /*****************************************************************************/
 
+#if defined(__clang__) || defined(__clang_version__)
+void *
+memcpy(void *dst, const void *src, unsigned long n)
+{
+    unsigned char *d = dst;
+    const unsigned char *s = src;
+    while (n--)
+        *d++ = *s++;
+    return dst;
+}
+#endif
+
+/*****************************************************************************/
+
 /*
  * Local Variables:
  * mode: c

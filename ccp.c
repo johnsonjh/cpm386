@@ -475,7 +475,7 @@ REG long max_chars;
         REG BYTE *c;
 
         max_chars += ((int)cmd - 1);
-        dma[0] = CMD_LEN;         /* set maximum chars to read  */
+        dma[0] = (BYTE)CMD_LEN;   /* set maximum chars to read  */
         bdos(READ_CONS_BUF,dma);  /* then read console          */
         if(dma[1] != 0 && dma[2] != ';')
                 cr_lf();
@@ -599,12 +599,9 @@ REG BYTE *ch;
         return(' ');                    /* pad field with blank */
 }
                                         /************************/
-UWORD fill_fcb(which_parm,fcb)          /* fill the fields of   */
-                                        /* the file control blk */
+UWORD fill_fcb(REG UWORD which_parm,    /* fill the fields of   */
+               REG BYTE *fcb)           /* the file control blk */
                                         /************************/
-
-REG UWORD which_parm;
-REG BYTE  *fcb;
 {
         REG BYTE  *ptr;
         REG BYTE  fillch;
@@ -1610,6 +1607,7 @@ REG BYTE *cmd;
                                                 cmdfcb[10] = '8';
                                                 cmdfcb[11] = '6';
                                         }
+                                        sav_disk = bdos(RET_CUR_DISK, (LONG)0);
                                         bdos(SELECT_DISK, (LONG)(cmdfcb[0] - 1));
                                         if (bdos(OPEN_FILE, cmdfcb) <= 3) {
                                                 BYTE argfcb1[FCB_LEN];
@@ -1658,8 +1656,11 @@ REG BYTE *cmd;
                                                                 }
                                                         }
                                                 }
+                                                bdos(SELECT_DISK,
+                                                     (LONG)sav_disk);
                                                 break;
                                         }
+                                        bdos(SELECT_DISK, (LONG)sav_disk);
                                         /* explicit .386 missing */
                                         if (is_386) {
                                                 echo_cmd(parm, BAD);
@@ -1813,7 +1814,7 @@ ccp()
         {                                /*sw Yes.              */
           com_index = chainp + 1;        /*sw Set-um pointer    */
           com_index[((WORD)(*chainp))&0xff] = NULL; /*sw Add null*/
-          chainp = NULL;                 /*sw Clear chain flag  */
+          chainp = 0;                    /*sw Clear chain flag  */
         }                                /*sw *******************/
         else                             /*sw Submit or normal  */
         {                                /*---------------------*/

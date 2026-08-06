@@ -178,11 +178,6 @@ UBYTE dchksum()
 *  dirscan entry point  *
 ************************/
 
-UWORD dirscan(funcp, fcbp, parms)
-DIRSCAN_FN funcp; /* pointer to Boolean match/action function */
-UBYTE *fcbp;      /* pointer to FCB (often struct fcb *)      */
-REG UWORD parms;  /* parms is 16 bit set of bit parameters    */
-
 /* Parms & 1  = 0 to start at beginning of dir, 1 to continue from last */
 /* Parms & 2  = 0 to stop when *funcp is true, 1 to go until end        */
 /* Parms & 4  = 0 to check the dir checksum, 1 to store new checksum    */
@@ -192,6 +187,10 @@ REG UWORD parms;  /* parms is 16 bit set of bit parameters    */
 #define full     2
 #define initckv  4
 #define pasthw   8
+
+UWORD dirscan(DIRSCAN_FN funcp, /* Boolean match/action function        */
+              UBYTE *fcbp,      /* FCB (often struct fcb *)             */
+              REG UWORD parms)  /* 16 bit set of bit parameters         */
 {
     REG UWORD   i;              /* loop counter         */
     REG struct dpb *dparmp;     /* pointer to disk parm block */

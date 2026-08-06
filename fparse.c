@@ -230,6 +230,22 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 
 /*****************************************************************************/
 
+#if defined(__clang__) || defined(__clang_version__)
+void *
+memset(void *s, int c, unsigned long n)
+{
+  unsigned char *p = s;
+
+  while (n--)
+      *p++ = (unsigned char)c;
+
+  return s;
+}
+#endif
+
+/*****************************************************************************/
+
+
 /*
  * Local Variables:
  * mode: c

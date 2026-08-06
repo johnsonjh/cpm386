@@ -7,7 +7,7 @@
 
 /*****************************************************************************/
 
-/* textmode.c - query and set the console text mode (BDOS 229/230/231) */
+/* textmode.c - console text mode and cursor (BDOS 229/230/231/234) */
 
 /*****************************************************************************/
 
@@ -33,6 +33,7 @@ typedef unsigned char UBYTE;
 #define BDOS_VID_QUERY 229
 #define BDOS_VID_ENUM 230
 #define BDOS_VID_SET 231
+#define BDOS_VID_CURSOR 234
 
 /*****************************************************************************/
 
@@ -99,6 +100,32 @@ struct vidset
   UWORD mode;
   UWORD action;
   UWORD flags;
+  UWORD pad;
+};
+
+/*****************************************************************************/
+
+/* Must match struct cpm_vidcursor and the VIDC_* values in bdosdef.h */
+
+#define VIDC_SET_SHAPE 0x0001
+#define VIDC_SET_VISIBLE 0x0002
+#define VIDC_SET_BLINK 0x0004
+
+#define VIDC_SHAPE_KEEP 0
+#define VIDC_SHAPE_BLOCK 1
+#define VIDC_SHAPE_UNDERLINE 2
+#define VIDC_SHAPE_HALF 3
+#define VIDC_SHAPE_EXPLICIT 4
+
+struct vidcursor
+{
+  UWORD flags;
+  UWORD shape;
+  UWORD start;
+  UWORD end;
+  UWORD visible;
+  UWORD blink;
+  UWORD cell_h;
   UWORD pad;
 };
 
@@ -262,13 +289,215 @@ report (UWORD r)
 static void
 usage (void)
 {
-  puts ("Usage: TEXTMODE [-h] [-a] [-y] [-t] [mode]\r\n");
+  puts ("Usage: TEXTMODE [-h] [-a] [-y] [-t] [-c shape] [-b on|off] "
+        "[mode]\r\n");
   puts ("  (no args)  print the current mode and the available modes\r\n");
   puts ("  mode       set the mode (asks for confirmation)\r\n");
   puts ("  -a         list graphics modes as well as text modes\r\n");
+  puts ("  -b arg     cursor blink: on/off (or 1/0, true/false)\r\n");
+  puts ("  -c type    cursor type: block, underline, half, or first,last\r\n");
   puts ("  -h         show this help text\r\n");
   puts ("  -t         set as a transient mode (reset at program exit)\r\n");
   puts ("  -y         set without asking; the mode is kept immediately\r\n");
+}
+
+/*****************************************************************************/
+
+static int
+streq_ci (const char *a, const char *b)
+{
+  while (*a && *b)
+    {
+      char x = *a++;
+      char y = *b++;
+
+      if (x >= 'A' && x <= 'Z')
+        {
+          x = (char)(x + 32);
+        }
+
+      if (y >= 'A' && y <= 'Z')
+        {
+          y = (char)(y + 32);
+        }
+
+      if (x != y)
+        {
+          return 0;
+        }
+    }
+
+  return *a == 0 && *b == 0;
+}
+
+/*****************************************************************************/
+
+static int
+parse_bool (const char *s)
+{
+  if (streq_ci (s, "on") || streq_ci (s, "enable") || streq_ci (s, "enabled")
+      || streq_ci (s, "1") || streq_ci (s, "true") || streq_ci (s, "yes"))
+    {
+      return 1;
+    }
+
+  if (streq_ci (s, "off") || streq_ci (s, "disable")
+      || streq_ci (s, "disabled") || streq_ci (s, "0")
+      || streq_ci (s, "false") || streq_ci (s, "no"))
+    {
+      return 0;
+    }
+
+  return -1;
+}
+
+/*****************************************************************************/
+
+/*
+ * Cursor shape: a name, or an explicit first,last scan line pair.  Returns
+ * VIDC_SHAPE_* and fills *first / *last for the explicit form, or -1.
+ */
+
+static int
+parse_shape (const char *s, UWORD *first, UWORD *last)
+{
+  if (streq_ci (s, "block") || streq_ci (s, "b") || streq_ci (s, "full"))
+    {
+      return VIDC_SHAPE_BLOCK;
+    }
+
+  if (streq_ci (s, "underline") || streq_ci (s, "under")
+      || streq_ci (s, "line") || streq_ci (s, "u"))
+    {
+      return VIDC_SHAPE_UNDERLINE;
+    }
+
+  if (streq_ci (s, "half") || streq_ci (s, "h"))
+    {
+      return VIDC_SHAPE_HALF;
+    }
+
+  if (*s >= '0' && *s <= '9')
+    {
+      unsigned a = 0, b = 0;
+
+      while (*s >= '0' && *s <= '9')
+        {
+          a = a * 10 + (unsigned)(*s++ - '0');
+        }
+
+      if (*s != ',' && *s != '-' && *s != ':')
+        {
+          return -1;
+        }
+
+      s++;
+
+      if (!(*s >= '0' && *s <= '9'))
+        {
+          return -1;
+        }
+
+      while (*s >= '0' && *s <= '9')
+        {
+          b = b * 10 + (unsigned)(*s++ - '0');
+        }
+
+      if (*s || a > 31 || b > 31 || a > b)
+        {
+          return -1;
+        }
+
+      *first = (UWORD)a;
+      *last = (UWORD)b;
+
+      return VIDC_SHAPE_EXPLICIT;
+    }
+
+  return -1;
+}
+
+/*****************************************************************************/
+
+static void
+show_cursor (const struct vidcursor *c)
+{
+  puts ("Cursor: ");
+
+  if (!c->visible)
+    {
+      puts ("hidden");
+    }
+  else
+    {
+      switch (c->shape)
+        {
+        case VIDC_SHAPE_BLOCK:
+          puts ("block");
+
+          break;
+
+        case VIDC_SHAPE_UNDERLINE:
+          puts ("underline");
+
+          break;
+
+        default:
+          puts ("scan lines ");
+          putu (c->start);
+          putch (',');
+          putu (c->end);
+
+          break;
+        }
+
+      puts (c->blink ? ", blinking" : ", steady");
+    }
+
+  puts (" (cell height ");
+  putu (c->cell_h);
+  puts (")\r\n");
+}
+
+/*****************************************************************************/
+
+/*
+ * Apply the cursor options.  shape < 0 and blink < 0 mean "leave alone", so
+ * TEXTMODE -c and TEXTMODE -b are independent of each other and of the mode.
+ */
+
+static void
+set_cursor (int shape, UWORD first, UWORD last, int blink)
+{
+  struct vidcursor c;
+  UWORD r;
+
+  zero (&c, sizeof (c));
+
+  if (shape >= 0)
+    {
+      c.flags |= VIDC_SET_SHAPE;
+      c.shape = (UWORD)shape;
+      c.start = first;
+      c.end = last;
+    }
+
+  if (blink >= 0)
+    {
+      c.flags |= VIDC_SET_BLINK;
+      c.blink = (UWORD)blink;
+    }
+
+  r = bdos (BDOS_VID_CURSOR, (LONG)(ULONG)&c);
+
+  if (r != VIDR_OK)
+    {
+      report (r);
+
+      return;
+    }
+
+  show_cursor (&c);
 }
 
 /*****************************************************************************/
@@ -296,7 +525,20 @@ show_modes (int all)
   putu (v.cols);
   puts ("x");
   putu (v.rows);
-  puts (")\r\n\r\n");
+  puts (")\r\n");
+
+  {
+    struct vidcursor c;
+
+    zero (&c, sizeof (c));
+
+    if (bdos (BDOS_VID_CURSOR, (LONG)(ULONG)&c) == VIDR_OK)
+      {
+        show_cursor (&c);
+      }
+  }
+
+  puts ("\r\n");
 
   puts ("Mode  Size          Flags\r\n");
   puts ("----  ------------  -----------------------\r\n");
@@ -503,11 +745,58 @@ confirm (void)
 /*****************************************************************************/
 
 static void
+report_mode (void)
+{
+  struct vidmode v;
+
+  zero (&v, sizeof (v));
+
+  if (bdos (BDOS_VID_QUERY, (LONG)(ULONG)&v) == VIDR_OK)
+    {
+      puts ("Console mode is now ");
+      putu (v.mode);
+      puts (" (");
+      putu (v.cols);
+      puts ("x");
+      putu (v.rows);
+      puts (")\r\n");
+    }
+}
+
+/*****************************************************************************/
+
+static void
 set_mode (unsigned mode, int assume_yes, int transient)
 {
   struct vidset s;
-  struct vidmode v;
   UWORD r;
+
+  if (!transient)
+    {
+      struct vidmode cur;
+
+      zero (&cur, sizeof (cur));
+
+      if (bdos (BDOS_VID_QUERY, (LONG)(ULONG)&cur) == VIDR_OK
+          && cur.mode == (UWORD)mode)
+        {
+          if (!(cur.flags & VIDM_CONSOLE))
+            {
+              zero (&s, sizeof (s));
+              s.mode = (UWORD)mode;
+              s.action = VIDA_CONSOLE;
+              (void)bdos (BDOS_VID_SET, (LONG)(ULONG)&s);
+
+              zero (&s, sizeof (s));
+              s.action = VIDA_COMMIT;
+              (void)bdos (BDOS_VID_SET, (LONG)(ULONG)&s);
+            }
+
+          report_mode ();
+
+          return;
+        }
+    }
 
   zero (&s, sizeof (s));
   s.mode = (UWORD)mode;
@@ -545,17 +834,46 @@ set_mode (unsigned mode, int assume_yes, int transient)
   s.action = VIDA_COMMIT;
   (void)bdos (BDOS_VID_SET, (LONG)(ULONG)&s);
 
-  zero (&v, sizeof (v));
+  report_mode ();
+}
 
-  if (bdos (BDOS_VID_QUERY, (LONG)(ULONG)&v) == VIDR_OK)
+/*****************************************************************************/
+
+/* Split the command tail into NUL-terminated words. */
+
+#define MAX_ARGS 16
+
+static char *argv [MAX_ARGS];
+static int argc;
+
+static void
+split_tail (char *tail)
+{
+  int i = 0;
+
+  argc = 0;
+
+  for (;;)
     {
-      puts ("Console mode is now ");
-      putu (v.mode);
-      puts (" (");
-      putu (v.cols);
-      puts ("x");
-      putu (v.rows);
-      puts (")\r\n");
+      while (tail [i] == ' ' || tail [i] == '\t')
+        {
+          tail [i++] = 0;
+        }
+
+      if (!tail [i])
+        {
+          return;
+        }
+
+      if (argc < MAX_ARGS)
+        {
+          argv [argc++] = &tail [i];
+        }
+
+      while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
+        {
+          i++;
+        }
     }
 }
 
@@ -566,11 +884,15 @@ _start (void) /*cppcheck-suppress unusedFunction*/
 {
   char tail [128];
   unsigned tlen, i;
+  int a;
   int assume_yes = 0;
   int transient = 0;
   int list_all = 0;
   int have_mode = 0;
   unsigned mode = 0;
+  int shape = -1;
+  int blink = -1;
+  UWORD first = 0, last = 0;
 
   tlen = CMD_TAIL [0];
 
@@ -585,68 +907,132 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     }
 
   tail [tlen] = 0;
+  split_tail (tail);
 
-  i = 0;
-
-  while (tail [i])
+  for (a = 0; a < argc; a++)
     {
-      while (tail [i] == ' ' || tail [i] == '\t')
-        {
-          i++;
-        }
+      char *w = argv [a];
 
-      if (!tail [i])
+      if (w [0] == '-' || w [0] == '/')
         {
-          break;
-        }
+          int j = 1;
 
-      if (tail [i] == '-' || tail [i] == '/')
-        {
-          i++;
-
-          while (tail [i] && tail [i] != ' ' && tail [i] != '\t')
+          while (w [j])
             {
-              char c = tail [i++];
+              char c = w [j++];
 
-              if (c >= 'a' && c <= 'z')
+              if (c >= 'A' && c <= 'Z')
                 {
-                  c = (char)(c - 32);
+                  c = (char)(c + 32);
                 }
 
-              if (c == 'Y')
+              if (c == 'c' || c == 'b')
+                {
+                  const char *arg;
+
+                  if (w [j] == '=' || w [j] == ':')
+                    {
+                      j++;
+                    }
+
+                  if (w [j])
+                    {
+                      arg = &w [j];
+
+                      while (w [j])
+                        {
+                          j++;
+                        }
+                    }
+                  else if (a + 1 < argc)
+                    {
+                      arg = argv [++a];
+                    }
+                  else
+                    {
+                      usage ();
+                      (void)bdos (0, 0);
+
+                      return;
+                    }
+
+                  if (c == 'c')
+                    {
+                      shape = parse_shape (arg, &first, &last);
+
+                      if (shape < 0)
+                        {
+                          puts ("\r\nUnknown cursor shape: ");
+                          puts (arg);
+                          puts ("\r\n\r\n");
+                          usage ();
+                          (void)bdos (0, 0);
+
+                          return;
+                        }
+                    }
+                  else
+                    {
+                      blink = parse_bool (arg);
+
+                      if (blink < 0)
+                        {
+                          puts ("\r\nExpected on or off, got: ");
+                          puts (arg);
+                          puts ("\r\n\r\n");
+                          usage ();
+                          (void)bdos (0, 0);
+
+                          return;
+                        }
+                    }
+
+                  continue;
+                }
+
+              if (c == 'y')
                 {
                   assume_yes = 1;
                 }
-              else if (c == 'T')
+              else if (c == 't')
                 {
                   transient = 1;
                 }
-              else if (c == 'A')
+              else if (c == 'a')
                 {
                   list_all = 1;
                 }
-              else if (c == 'H')
-                {
-                  usage ();
-                  (void)bdos (0, 0);
-                }
               else
                 {
+                  puts ("\r\n");
                   usage ();
                   (void)bdos (0, 0);
+
+                  return;
                 }
             }
 
           continue;
         }
 
-      if (tail [i] >= '0' && tail [i] <= '9')
+      if (w [0] >= '0' && w [0] <= '9')
         {
+          int j = 0;
+
           mode = 0;
 
-          while (tail [i] >= '0' && tail [i] <= '9')
+          while (w [j] >= '0' && w [j] <= '9')
             {
-              mode = mode * 10 + (unsigned)(tail [i++] - '0');
+              mode = mode * 10 + (unsigned)(w [j++] - '0');
+            }
+
+          if (w [j])
+            {
+              puts ("\r\n");
+              usage ();
+              (void)bdos (0, 0);
+
+              return;
             }
 
           have_mode = 1;
@@ -654,19 +1040,27 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           continue;
         }
 
+      puts ("\r\n");
       usage ();
       (void)bdos (0, 0);
+
+      return;
     }
 
   puts ("\r\n");
 
-  if (!have_mode)
-    {
-      show_modes (list_all);
-    }
-  else
+  if (have_mode)
     {
       set_mode (mode, assume_yes, transient);
+    }
+
+  if (shape >= 0 || blink >= 0)
+    {
+      set_cursor (shape, first, last, blink);
+    }
+  else if (!have_mode)
+    {
+      show_modes (list_all);
     }
 
   (void)bdos (0, 0);

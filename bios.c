@@ -24,7 +24,9 @@
 #include "disk.h"    /* V86 int 13h disk server                           */
 #include "memmap.h"  /* loader memory descriptor + A20 / RAM verification */
 #include "io.h"      /* shared port I/O primitives                        */
+#include "kbd.h"     /* AT/PS-2 keyboard decoding                         */
 #include "vgacon.h"  /* VGA text console primitives                       */
+#include "vgaterm.h" /* VT102 / VT52 / DRI terminal emulation             */
 #include "vidbios.h" /* real mode int 10h thunk                           */
 #include "vidmode.h" /* video mode table + console restore                */
 
@@ -102,8 +104,12 @@ static void com_init(void) {
   if (!vga_present && !com_present)
     vga_present = 1;
 
-  if (vga_present)
+  if (vga_present) {
     vgacon_init();
+    vgaterm_reset();
+  }
+
+  kbd_init();
 }
 
 static int com_stat(void) {
@@ -152,6 +158,14 @@ static unsigned char com_in(void) {
 
 static int have_kbd_input = 0; /* once we see PS/2 input, ignore serial input */
 
+/*
+ * Console output enables (BDOS 222/223).
+ * Both start disabled and are set from the probes in cpm386_init.
+ */
+
+static int con_vga_en = 0;
+static int con_ser_en = 0;
+
 int bios_vga_present(void)
 {
   return vga_present;
@@ -162,138 +176,65 @@ int bios_com_present(void)
   return com_present;
 }
 
-/* Basic PS/2 scancode set1 to ASCII (no numpad yet, basic shifts) */
-
-static int kbd_shift = 0;
-static int kbd_ctrl = 0;
-
-static unsigned char kbd_map [128] = {
-  0, 0x1b, '1','2','3','4','5','6','7','8','9','0','-','=', '\b',
-  '\t','q','w','e','r','t','y','u','i','o','p','[',']','\n', 0,
-  'a','s','d','f','g','h','j','k','l',';','\'','`', 0,'\\',
-  'z','x','c','v','b','n','m',',','.','/', 0, 0, 0, ' ', 0,
-  /* rest 0 for F1 etc */
-};
-
-static unsigned char kbd_map_shift [128] = {
-  0, 0x1b, '!','@','#','$','%','^','&','*','(',')','_','+', '\b',
-  '\t','Q','W','E','R','T','Y','U','I','O','P','{','}','\n', 0,
-  'A','S','D','F','G','H','J','K','L',':','"','~', 0,'|',
-  'Z','X','C','V','B','N','M','<','>','?', 0, 0, 0, ' ', 0,
-};
-
 /*
- * -1 = no ASCII pending.  Scancodes that are not mapped (breaks, shift, ...)
- * must not make bios_const() true - otherwise conbrk() calls bios_conin()
- * which used to spin until a real key arrived (looked like "press Enter
- * to continue" during HD/OD dumps)
+ * If the VGA console is the output, the emulator in vgaterm.c is the
+ * terminal and its modes decide on codes, but with only the serial
+ * console enabled there is a real terminal at the far end that we
+ * have not configured, so the plain ASCII ANSI forms are used.
  */
 
-static int kbd_peek = -1;
-
-/* Consume one scancode from the controller; return ASCII or 0. */
-
-static unsigned char kbd_scancode_to_ascii(void)
+int kbd_term_vt52(void)
 {
-  uint8_t sc;
-  unsigned char ch;
-
-  sc = inb(0x60);
-
-  if (sc & 0x80) { /* break */
-    if (sc == 0xaa || sc == 0xb6)
-      kbd_shift = 0; /* left/right shift release */
-    if (sc == 0x9d)
-      kbd_ctrl = 0; /* Ctrl release */
-
-    return 0;
-  }
-
-  if (sc == 0x2a || sc == 0x36) {
-    kbd_shift = 1;
-
-    return 0;
-  }
-
-  if (sc == 0x1d) { /* left Ctrl (right is E0 1D; treat 1D as Ctrl) */
-    kbd_ctrl = 1;
-
-    return 0;
-  }
-
-  if (sc >= 128)
-    return 0;
-
-  ch = kbd_shift ? kbd_map_shift [sc] : kbd_map [sc];
-
-  if (!ch)
-    return 0;
-
-  /* Ctrl+letter -> 0x01..0x1A (so Ctrl-Z is ENDFILE for ED, etc.) */
-  if (kbd_ctrl) {
-    unsigned char u = ch;
-
-    if (u >= 'a' && u <= 'z')
-      u = (unsigned char)(u - 'a' + 'A');
-
-    if (u >= 'A' && u <= 'Z')
-      return (unsigned char)(u - '@'); /* A->1 ... Z->0x1A */
-
-    if (u == ' ')
-      return 0; /* Ctrl-Space: ignore */
-
-    if (u == '[')
-      return 0x1b; /* often ESC */
-
-    return 0;
-  }
-
-  return ch;
+  return (con_vga_en && vga_present) ? vgaterm_is_vt52() : 0;
 }
 
-/* Drain PS/2 output buffer into kbd_peek (first real ASCII char only). */
-static void kbd_drain(void)
+int kbd_term_appcursor(void)
 {
-  int spins = 0;
-
-  while (kbd_peek < 0 && (inb(0x64) & 0x01) && spins++ < 64) {
-    unsigned char ch = kbd_scancode_to_ascii();
-
-    if (ch)
-      kbd_peek = (int)ch;
-  }
+  return (con_vga_en && vga_present) ? vgaterm_appcursor() : 0;
 }
 
-static int kbd_stat(void)
+int kbd_term_appkeypad(void)
 {
-  kbd_drain();
-
-  return (kbd_peek >= 0) ? 0x00FF : 0;
+  return (con_vga_en && vga_present) ? vgaterm_appkeypad() : 0;
 }
 
-static unsigned char kbd_in(void)
+/*
+ * Terminal replies (DSR, DA, DECID) get injected into the input stream
+ * only when the VGA console is the only output.  With the serial console
+ * attached there is a real terminal answering the same query and two
+ * replies would probably be bad.
+ */
+
+static int term_reply_owned(void)
 {
-  unsigned char ch;
+  return con_vga_en && vga_present && !(con_ser_en && com_present);
+}
 
-  for (;;) {
-    kbd_drain();
+static int term_reply_stat(void)
+{
+  return term_reply_owned() && vgaterm_reply_avail();
+}
 
-    if (kbd_peek >= 0) {
-      ch = (unsigned char)kbd_peek;
-      kbd_peek = -1;
+/* Non-blocking console input: -1 when nothing is pending. */
 
-      return ch;
-    }
+static int kbd_input_get(void)
+{
+  kbd_poll();
 
-    { /* Block for a scancode (bounded idle poll). */
-      int spins = 0;
+  if (term_reply_stat())
+    return vgaterm_reply_get();
 
-      while ((inb(0x64) & 0x01) == 0 && ++spins < 1000000);
+  return kbd_get();
+}
 
-      if (!(inb(0x64) & 0x01))
-        return 0; /* no controller / timeout */
-    }
-  }
+static int kbd_input_stat(void)
+{
+  kbd_poll();
+
+  if (term_reply_stat())
+    return 1;
+
+  return kbd_stat();
 }
 
 /* Memory region table for TPA dynamic sized to end of memory after kernel */
@@ -307,14 +248,6 @@ typedef struct {
 static mrt_t mrt;
 
 /* --- BIOS entry points, some to be completed) --- */
-
-/*
- * Console output enables (BDOS 222/223).
- * Both start disabled and are set from the probes in cpm386_init.
- */
-
-static int con_vga_en = 0;
-static int con_ser_en = 0;
 
 void bios_wboot(void) {
   extern void ccp(void);
@@ -348,7 +281,7 @@ unsigned short int bios_const(void) {
    * (SERON can still be typed after SEROFF on a serial-only box!).
    */
 
-  if (kbd_stat())
+  if (kbd_input_stat())
     return 0x00FF;
 
   if (com_stat())
@@ -359,6 +292,7 @@ unsigned short int bios_const(void) {
 
 unsigned char bios_conin(void) {
   for (;;) {
+
     /*
      * The system spends its idle life in this loop, so it is where
      * the floppy motor gets timed out; no-op unless one is turning.
@@ -366,13 +300,13 @@ unsigned char bios_conin(void) {
 
     disk_poll();
 
-    if (kbd_stat()) {
-      unsigned char ch = kbd_in();
+    if (kbd_input_stat()) {
+      int ch = kbd_input_get();
 
-      if (ch) {
+      if (ch >= 0) {
         have_kbd_input = 1;
 
-        return ch;
+        return (unsigned char)ch;
       }
 
       continue;
@@ -389,7 +323,7 @@ void bios_conout(unsigned char c)
     com_out(c);
 
   if (con_vga_en)
-    vgacon_putc(c);
+    vgaterm_putc(c);
 }
 
 /*
@@ -430,7 +364,7 @@ void bios_con_clear(void)
   }
 
   if (con_vga_en)
-      vgacon_clear();
+    vgaterm_clear();
 }
 
 /*
@@ -1025,6 +959,11 @@ static UWORD pgm_read_rec(UBYTE rec [128], void *vctx)
 static unsigned long g_go_entry_off;
 static int g_go_valid;
 
+/* Logged in drive and user for when a program is started. */
+
+static UBYTE pgm_saved_drive;
+static UBYTE pgm_saved_user;
+
 /* Common post-exit / pre-return cleanup (disk session + TPA limits). */
 
 static void pgm_after_exit(void)
@@ -1045,11 +984,15 @@ static void pgm_after_exit(void)
   tpa_lt = tpa_lp;
   tpa_ht = tpa_hp;
 
-  /* XXX hax */
-  bdos(13, 0); /* reset disk system */
-  bdos(32, 0); /* user 0 */
+  /*
+   * BDOS 13 logs every drive out and leaves the default at A: with user 0,
+   * so the drive and user the CCP had have to be put back afterwards.
+   */
+
+  bdos(13, 0);                        /* reset disk system              */
+  bdos(32, (LONG)pgm_saved_user);     /* restore the CCP's user number  */
   bdos(26, (LONG)(unsigned long)kdma);
-  bdos(14, 0); /* select A: */
+  bdos(14, (LONG)pgm_saved_drive);    /* restore the CCP's drive        */
 }
 
 /* Enter ring 3 at TPA-relative entry_off; returns after BDOS(0). */
@@ -1075,6 +1018,10 @@ static UWORD pgm_enter(unsigned long entry_off)
    */
 
   user_esp = (ulen & ~0xFFFUL) - 16;
+
+  pgm_saved_drive = (UBYTE)bdos(25, 0);
+  pgm_saved_user = (UBYTE)bdos(32, 0xFF);
+
   enter_ring3(entry_off, user_esp);
   pgm_after_exit();
 

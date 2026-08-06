@@ -17,17 +17,18 @@
 /*****************************************************************************/
 
 /*
- * The console is split into two layers on purpose.
+ * The console done into two layers:
  *
  *   - The primitives below (cell / fill / scroll / cursor) know about the
  *     text plane and nothing else.  They are done so that an escape
  *     sequence interpreter needs: fill() serves ESC[J and ESC[K, a signed
  *     scroll() serves ESC[L and ESC[M, cursor() serves ESC[H.
  *
- *   - vgacon_putc() is the byte stream handler.  Today it does what the old
- *     vga_putc() did (CR, LF, BS, TAB, printable); when VT102/VT52 support
- *     gets added only its body becomes a state machine and nothing below it
- *     changes!
+ *   - vgacon_putc() is the byte stream handler.  It does what the old
+ *     vga_putc() did (CR, LF, BS, TAB, printable) and nothing more; the
+ *     VT102/VT52/DRI interpreter in vgaterm.c sits on top of the
+ *     primitives instead, so this remains the "no emulation" path used by
+ *     boot diagnostics and by anything that wants raw glyph output.
  *
  * Geometry is runtime state, not compile-time constants, so a mode change
  * is just a call to vgacon_geometry().
@@ -91,27 +92,73 @@ void vgacon_adopt_bda (void);
 
 void vgacon_cell (unsigned row, unsigned col, unsigned char ch,
                   unsigned char attr);
+void vgacon_read_cell (unsigned row, unsigned col, unsigned char *ch,
+                       unsigned char *attr);
 void vgacon_fill (unsigned r0, unsigned c0, unsigned r1, unsigned c1,
                   unsigned char ch, unsigned char attr);
 
 /* n > 0 scrolls up (content moves toward row 0), n < 0 scrolls down. */
 void vgacon_scroll (int n);
 
+/*
+ * The same, confined to rows top..bot inclusive and filling the vacated
+ * rows with attr.  This is what a DECSTBM scrolling region, ESC[L (IL) and
+ * ESC[M (DL) all reduce to; vgacon_scroll() is this over the whole screen
+ * with the current attribute.
+ */
+
+void vgacon_scroll_region (unsigned top, unsigned bot, int n,
+                           unsigned char attr);
+
+/*
+ * Character insert / delete within one row, from col to the right margin.
+ * Vacated cells are filled with a blank in attr.  ESC[@ (ICH) and ESC[P
+ * (DCH).
+ */
+
+void vgacon_ins_chars (unsigned row, unsigned col, unsigned n,
+                       unsigned char attr);
+void vgacon_del_chars (unsigned row, unsigned col, unsigned n,
+                       unsigned char attr);
+
 void vgacon_cursor (unsigned row, unsigned col);
 void vgacon_clear (void);
 
+/*
+ * Cursor visibility, blink and shape.  The shape is the CRTC scan line pair
+ * (0x0A/0x0B); vgacon_init() latches whatever the BIOS left there so that
+ * hiding and re-showing the cursor restores the original block/underline
+ * rather than guessing at one.
+ *
+ * VGA cannot stop the hardware cursor blinking, so a steady cursor is drawn
+ * in the plane instead: the hardware cursor is hidden and the cell under the
+ * logical cursor is rendered with its attribute nibbles swapped.
+ */
+
+void vgacon_cursor_visible (int on);
+int vgacon_cursor_shown (void);
+void vgacon_cursor_blink (int on);
+int vgacon_cursor_blinks (void);
+void vgacon_cursor_shape (unsigned start, unsigned end);
+unsigned vgacon_cursor_start (void);
+unsigned vgacon_cursor_end (void);
+
 /*****************************************************************************/
 
-/* Byte stream - becomes the VT102/VT52 state machine entry point. */
+/* Byte stream - CR / LF / BS / TAB / printable, no escape interpretation. */
 
 void vgacon_putc (unsigned char c);
 
 /*****************************************************************************/
 
-/* Live state, for BDOS 224 and the mode code. */
+/* Live state, for BDOS 224, the mode code and the terminal emulator. */
 
 unsigned vgacon_cols (void);
 unsigned vgacon_rows (void);
+unsigned vgacon_row (void);
+unsigned vgacon_col (void);
+unsigned char vgacon_attr (void);
+void vgacon_set_attr (unsigned char attr);
 unsigned vgacon_cell_h (void);
 unsigned vgacon_cell_bytes (void);
 unsigned long vgacon_base (void);
