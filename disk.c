@@ -735,9 +735,9 @@ disk_report (void)
           disk_puts ("/");
           disk_putu (d->secs);
           disk_puts (" (");
-          disk_putu (d->cyls * d->heads * d->secs);
+          disk_putu ((unsigned long)d->cyls * d->heads * d->secs);
           disk_puts (" sectors), ");
-          disk_putu ((d->cyls * d->heads * d->secs * 512) / 1024);
+          disk_putu ((((unsigned long)d->cyls * d->heads * d->secs) * 512UL) / 1024UL);
           disk_puts ("K");
         }
 
