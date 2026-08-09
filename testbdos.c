@@ -807,13 +807,15 @@ main (void)
   printf ("post-read fcb cur_rec=%u ran=%u%u%u\n", fcb[32], fcb[33], fcb[34],
           fcb[35]);
 
-  if (mock_disk_selected == 0 && mock_read_count > 0 && firstc == 'T'
+  if (mock_disk_selected == 0 && mock_read_count > 0 && firstc == 'M'
       && read_ret == 0 /* read success */)
     {
       printf ("disk side effects (select/read/dma content) observed\n");
     }
   else
     {
+      printf ("UNIT HARD FAIL: disk ");
+      printf ("disk side effects (select/read/dma content) NOT observed\n");
       ok = 0;
     }
 
@@ -822,7 +824,7 @@ main (void)
    * alloc block), cur_rec advanced, ran untouched (seq vs rand distinct)
    */
 
-  if (open_ret > 3 || read_ret != 0 || firstc != 'T' || fcb[32] != 1 || fcb[33]
+  if (open_ret > 3 || read_ret != 0 || firstc != 'M' || fcb[32] != 1 || fcb[33]
       || fcb[34] || fcb[35])
     {
       printf ("UNIT HARD FAIL: open=%u read=%u dma0=%c cur_rec=%u ran=%u%u%u "
