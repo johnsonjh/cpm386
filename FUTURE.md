@@ -8,8 +8,8 @@ I hope to eventually implement the following features in **CP/M‑386**.  Treat
 this section as *wishlist* and not a *roadmap*!
 
 * OS enhancements:
-  * Add utility to optionally swap the Escape and Tilde keyboard keys.
-  * Add support for full keyboard remapping and keyboard macros.
+  * Add utility to optionally swap the Escape and Tilde keyboard keys
+  * Add support for full keyboard remapping and keyboard macros
   * Support and use Multiboot 2 specification (we are Multiboot 1 right now)
   * Fix `testbdos` when building with Clang
   * Support filesystems on partitions
@@ -62,7 +62,7 @@ this section as *wishlist* and not a *roadmap*!
   * Expand LS to show timestamps
   * Add SAVE program to write TPA to disk, and to optionally add a `.386`
     executable header.  SAVE should be able to take a range to save, as well
-    as the ability to autodetect a range (`CLEARTPA` could be useful here).
+    as the ability to autodetect a range (`CLEARTPA` could be useful here)
   * Extend STAT to query and also set the LRBC
   * Digital Research HELP clone (VMS‑style HELP tool)
   * [wumpus](https://gitlab.com/esr/wumpus/-/raw/master/wumpus.c) or
