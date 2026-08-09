@@ -32,10 +32,10 @@
 
 static const int never = 0;
 
-# define FREE(p) \
-  do {           \
-    free((p));   \
-    (p) = NULL;  \
+#define FREE(p) \
+  do {          \
+    free((p));  \
+    (p) = NULL; \
   } while(never)
 
 /*****************************************************************************/
