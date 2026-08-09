@@ -149,14 +149,15 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 ## Build output
 
 * The build produces four primary artifacts:
-
   |         File | Description                              |
   |-------------:|:-----------------------------------------|
   | `cpm386.elf` | Multiboot kernel image                   |
   | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image   |
   | `fd.img`     | Blank CP/M 3.5" 1.44MB floppy disk image |
   | `hd.img`     | Blank CP/M 8MB hard disk image           |
+[]()
 
+[]()
 * The [`mboot.sh`](mboot.sh) convenience script (tested on GNU/Linux systems
   with GRUB2) can be used to create bootable multiboot media (such as a USB
   drive or SD card) using the `cpm386.elf` file.
@@ -325,12 +326,12 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>511</th>
-                <th>58</th>
+                <th>512</th>
+                <th>57</th>
                 <th>0</th>
-                <th>453</th>
+                <th>455</th>
                 <th>0</th>
-                <th>23706</th>
+                <th>23715</th>
                 <th>406</th>
         </tr><tr>
                 <th>Shell</th>
@@ -366,12 +367,12 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>113</th>
-                <th>53995</th>
-                <th>10136</th>
+                <th>53996</th>
+                <th>10135</th>
                 <th>10049</th>
-                <th>33810</th>
+                <th>33812</th>
                 <th>6380</th>
-                <th>1540805</th>
+                <th>1540814</th>
                 <th>21630</th>
         </tr></tfoot></table>
 <!-- scc-end -->
