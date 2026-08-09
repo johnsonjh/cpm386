@@ -109,10 +109,9 @@ versions may *appear* to work but have several known bugs.
 Building **CP/M‑386** is supported on current releases of **NetBSD** and
 **FreeBSD**<sup>‡</sup>, and most recent **Linux** distributions.
 
-The following are the minimum versions of Linux distributions that have been
-verified to build **CP/M‑386** successfully: CentOS Stream 9, Fedora 36,
-Debian 12, Ubuntu 18.04 (with `gcc-16` from `ppa:ubuntu-toolchain-r/test`),
-Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
+Red Hat Enterprise Linux 9 (or later), CentOS Stream 9 (or later), and
+Fedora 36 (or later) have been verified to build **CP/M‑386** successfully.
+
 []()
 
 []()
@@ -326,13 +325,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>512</th>
-                <th>57</th>
+                <th>511</th>
+                <th>58</th>
                 <th>0</th>
-                <th>455</th>
+                <th>453</th>
                 <th>0</th>
-                <th>23719</th>
-                <th>406</th>
+                <th>23590</th>
+                <th>404</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -367,13 +366,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>113</th>
-                <th>53997</th>
-                <th>10135</th>
+                <th>53996</th>
+                <th>10136</th>
                 <th>10049</th>
-                <th>33813</th>
+                <th>33811</th>
                 <th>6380</th>
-                <th>1540604</th>
-                <th>21631</th>
+                <th>1540475</th>
+                <th>21629</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
