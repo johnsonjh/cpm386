@@ -117,7 +117,6 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 []()
 * **GCC** build (recommended):
-
   ```sh
   make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
   ```
@@ -125,7 +124,6 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 []()
 * **Clang** build:
-
   ```sh
   make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang" OPTFLAGS="-O1"
   ```
@@ -172,7 +170,6 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 * [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
   kernel (recommended):
-
   ```sh
   qemu-system-i386 -m 2M -serial stdio -monitor none -kernel "cpm386.elf"
   ```
@@ -180,7 +177,6 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 []()
 * Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
-
   ```sh
   qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img" -boot a
   ```
@@ -190,7 +186,6 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 * Use `-nographic -display none -vga none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
 * Use `make disks` to create empty disk images.  To attach them to QEMU:
-
   ```sh
   -drive if=floppy,format=raw,file="fd.img"
   -drive if=ide,format=raw,file="hd.img",index=0
@@ -330,12 +325,12 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>516</th>
-                <th>63</th>
+                <th>511</th>
+                <th>58</th>
                 <th>0</th>
                 <th>453</th>
                 <th>0</th>
-                <th>23711</th>
+                <th>23706</th>
                 <th>406</th>
         </tr><tr>
                 <th>Shell</th>
@@ -371,12 +366,12 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>113</th>
-                <th>54000</th>
-                <th>10141</th>
+                <th>53995</th>
+                <th>10136</th>
                 <th>10049</th>
                 <th>33810</th>
                 <th>6380</th>
-                <th>1540810</th>
+                <th>1540805</th>
                 <th>21630</th>
         </tr></tfoot></table>
 <!-- scc-end -->
