@@ -151,6 +151,12 @@ TR:=$(shell \
 
 ################################################################################
 
+LZ4:=$(shell \
+	command -v lz4 2> /dev/null || \
+	$(PRINTF) '%s' "lz4")
+
+################################################################################
+
 GOBJ=$(shell $(OBJCOPY) --version 2>&1 | $(GREP) '^GNU objcopy' || :)
 ifneq "$(findstring objcopy,$(GOBJ))" ""
  OBJCOPY+= -v
@@ -434,6 +440,10 @@ TARGET = cpm386.elf
 ################################################################################
 
 MK386 = mk386
+
+################################################################################
+
+MKLZ4RAW = mklz4raw
 
 ################################################################################
 
@@ -1332,7 +1342,7 @@ $(MBENTRY_OBJ): mbentry.s mltiboot.h
 
 ################################################################################
 
-bss.inc: $(TARGET)
+bss.inc: $(TARGET) os.bin.lz4raw
 	$(NM) ./$(TARGET) 2>&1 | $(GREP) -q "no symbols" 2> /dev/null && { \
 		$(RM) -f ./$(TARGET) && "$${MAKE:-$(MAKE)}" $(TARGET); } || :
 	$(NM) ./$(TARGET) | \
@@ -1343,11 +1353,10 @@ bss.inc: $(TARGET)
 		$(AWK) '/__kernel_end/ { print "kernel_end equ 0x" $$1 }' >> ./bss.inc
 	$(NM) ./$(TARGET) | \
 		$(AWK) '/ _start$$/ { print "kernel_entry equ 0x" $$1 }' >> ./bss.inc
-	ke=$$($(NM) $(TARGET) | \
-		$(AWK) '/__kernel_end/ { print $$1 }'); \
-			bytes=$$((0x$$ke - 0x10000)); \
-			sec=$$(( (bytes + 511) / 512 + 2 )); \
-			$(PRINTF) '%s\n' "SECTORS_TO_LOAD equ $$sec" >> ./bss.inc
+	cbytes=$$(wc -c < ./os.bin.lz4raw | tr -d ' '); \
+		sec=$$(( (cbytes + 511) / 512 + 2 )); \
+		$(PRINTF) '%s\n' "SECTORS_TO_LOAD equ $$sec" >> ./bss.inc; \
+		$(PRINTF) '%s\n' "COMPRESSED_SIZE equ $$cbytes" >> ./bss.inc
 	@ke=$$($(NM) $(TARGET) | \
 		$(AWK) '/__kernel_end/ { print $$1 }'); \
 		top=$$((0x$$ke + 0x4000)); \
@@ -1374,7 +1383,7 @@ stage1.bin: stage1.s layout.inc
 
 ################################################################################
 
-stage2.bin: stage2.s layout.inc bss.inc
+stage2.bin: stage2.s layout.inc bss.inc lz4dec.inc
 	$(NM) ./$(TARGET) 2>&1 | $(GREP) -q "no symbols" 2> /dev/null && { \
 		$(RM) -f ./$(TARGET) && "$${MAKE:-$(MAKE)}" $(TARGET); } || :
 	$(NASM) $(NASMFLAGS2) $(NASMDEBUG) -f bin \
@@ -1393,6 +1402,36 @@ os.bin: $(TARGET)
 
 ################################################################################
 
+$(MKLZ4RAW): mklz4raw.c
+	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+os.bin.lz4: os.bin
+	$(LZ4) --best --favor-decSpeed --no-frame-crc -f ./$< ./$@
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+os.bin.lz4raw: os.bin.lz4 $(MKLZ4RAW)
+	./$(MKLZ4RAW) ./$< ./$@
+	@tput setaf 6 2> /dev/null || :
+	@$(PRINTF) '*** lz4 compression: %d bytes -> %d bytes (~%.1f%%)\n' \
+	 $$(wc -c < ./os.bin) $$(wc -c < ./$@) \
+	  $$($(AWK) \
+	   'BEGIN{printf "%.1f",('$$(wc -c < ./$@)'*100.0/'$$(wc -c < ./os.bin)')}')
+	@tput sgr0 2> /dev/null || :
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 $(TARGET): $(OBJS) linker.ld
 	$(CC) $(LDEXTRA) $(LDFLAGS) -o ./$@ ./$(OBJS)
 	@tput setaf 2 2> /dev/null || :
@@ -1401,8 +1440,8 @@ $(TARGET): $(OBJS) linker.ld
 
 ################################################################################
 
-floppy.img: stage1.bin stage2.bin os.bin
-	cat ./stage1.bin ./stage2.bin ./os.bin > ./payload.bin
+floppy.img: stage1.bin stage2.bin os.bin.lz4raw
+	cat ./stage1.bin ./stage2.bin ./os.bin.lz4raw > ./payload.bin
 	$(PRINTF) '\x1a' >> ./payload.bin
 	$(DD) if="/dev/zero" of="$@" bs="1024" count="1440" 2>&1
 	$(DD) if="./payload.bin" of="$@" conv="notrunc" 2>&1
@@ -1453,7 +1492,8 @@ fd.img: diskdefs
 
 clean distclean:
 	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./*.lst \
-		./bss.inc ./testbdos ./*.su ./*.ci ./$(MK386) ./$(TARGET)
+		./bss.inc ./testbdos ./*.su ./*.ci ./$(MK386) ./$(MKLZ4RAW) \
+		./*.lz4 ./*.lz4raw ./$(TARGET)
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Clean completed successfully."

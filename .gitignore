@@ -20,7 +20,10 @@
 /*.img
 /*.log
 /*.lst
+/*.lz4
+/*.lz4raw
 /mk386
+/mklz4raw
 /NOTES.TXT
 /*.o
 /os.bin

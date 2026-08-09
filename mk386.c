@@ -30,6 +30,16 @@
 
 /*****************************************************************************/
 
+static const int never = 0;
+
+# define FREE(p) \
+  do {           \
+    free((p));   \
+    (p) = NULL;  \
+  } while(never)
+
+/*****************************************************************************/
+
 /*
  * The .386 header, described in bdosdef.h.  This is a host tool and cannot
  * include the kernel headers, so the three values it needs are repeated
@@ -122,7 +132,7 @@ main (int argc, char **argv)
   if (! buf || (sz && fread (buf, 1, (size_t)sz, f) != (size_t)sz))
     {
       (void)fprintf (stderr, "read failed\n");
-      free (buf);
+      FREE (buf);
       (void)fclose (f);
 
       return EXIT_FAILURE;
@@ -158,7 +168,7 @@ main (int argc, char **argv)
   if (! f)
     {
       perror (out);
-      free (buf);
+      FREE (buf);
 
       return EXIT_FAILURE;
     }
@@ -168,13 +178,13 @@ main (int argc, char **argv)
     {
       (void)fprintf (stderr, "write failed\n");
       (void)fclose (f);
-      free (buf);
+      FREE (buf);
 
       return EXIT_FAILURE;
     }
 
   (void)fclose (f);
-  free (buf);
+  FREE (buf);
 
   return EXIT_SUCCESS;
 }

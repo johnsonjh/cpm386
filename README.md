@@ -88,6 +88,7 @@ The following dependencies are required to compile **CP/M‑386**:
 * [GNU Coreutils](https://www.gnu.org/software/coreutils/)
 * [GNU GCC](https://gcc.gnu.org/) or [LLVM Clang](https://clang.llvm.org)
 * [GNU Make](https://www.gnu.org/software/make/)
+* [LZ4](https://lz4.org/)
 * [NASM](https://nasm.us/)
 * [QEMU](https://www.qemu.org) (required only for testing)
 []()
@@ -116,6 +117,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 []()
 * **GCC** build (recommended):
+
   ```sh
   make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
   ```
@@ -123,6 +125,7 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 []()
 * **Clang** build:
+
   ```sh
   make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)" CC="clang" OPTFLAGS="-O1"
   ```
@@ -164,6 +167,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 * [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification)
   kernel (recommended):
+
   ```sh
   qemu-system-i386 -m 2M -serial stdio -monitor none -kernel "cpm386.elf"
   ```
@@ -171,6 +175,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 []()
 * Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
+
   ```sh
   qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img" -boot a
   ```
@@ -180,6 +185,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 * Use `-nographic -display none -vga none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
 * Use `make disks` to create empty disk images.  To attach them to QEMU:
+
   ```sh
   -drive if=floppy,format=raw,file="fd.img"
   -drive if=ide,format=raw,file="hd.img",index=0
@@ -279,14 +285,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>71</th>
-                <th>45594</th>
-                <th>8571</th>
-                <th>7819</th>
-                <th>29204</th>
-                <th>5962</th>
-                <th>1264836</th>
-                <th>17418</th>
+                <th>72</th>
+                <th>45823</th>
+                <th>8633</th>
+                <th>7847</th>
+                <th>29343</th>
+                <th>5989</th>
+                <th>1269503</th>
+                <th>17493</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>25</th>
@@ -299,34 +305,34 @@ See [FUTURE.md](FUTURE.md).
                 <th>1778</th>
         </tr><tr>
                 <th>Assembly</th>
-                <th>7</th>
-                <th>1702</th>
-                <th>288</th>
-                <th>386</th>
-                <th>1028</th>
+                <th>8</th>
+                <th>1865</th>
+                <th>327</th>
+                <th>413</th>
+                <th>1125</th>
                 <th>1</th>
-                <th>42401</th>
-                <th>876</th>
+                <th>46692</th>
+                <th>965</th>
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1638</th>
-                <th>319</th>
-                <th>208</th>
-                <th>1111</th>
-                <th>338</th>
-                <th>54743</th>
-                <th>792</th>
+                <th>1678</th>
+                <th>329</th>
+                <th>213</th>
+                <th>1136</th>
+                <th>347</th>
+                <th>56170</th>
+                <th>806</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>506</th>
-                <th>59</th>
+                <th>512</th>
+                <th>64</th>
                 <th>0</th>
-                <th>447</th>
+                <th>448</th>
                 <th>0</th>
-                <th>23405</th>
-                <th>402</th>
+                <th>23437</th>
+                <th>401</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -355,19 +361,19 @@ See [FUTURE.md](FUTURE.md).
                 <th>15</th>
                 <th>60</th>
                 <th>0</th>
-                <th>3250</th>
+                <th>3254</th>
                 <th>64</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>111</th>
-                <th>53557</th>
-                <th>10026</th>
-                <th>9989</th>
-                <th>33542</th>
-                <th>6344</th>
-                <th>1530011</th>
-                <th>21446</th>
+                <th>113</th>
+                <th>53995</th>
+                <th>10142</th>
+                <th>10049</th>
+                <th>33804</th>
+                <th>6380</th>
+                <th>1540432</th>
+                <th>21623</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

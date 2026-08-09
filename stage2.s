@@ -526,6 +526,19 @@ pm_entry:
     mov gs, ax
     mov ss, ax
 
+    mov esp, kernel_end + KSTACK_RESERVE
+
+    mov esi, 0x10000 + COMPRESSED_SIZE - 1
+    mov edi, kernel_end - 1
+    mov ecx, COMPRESSED_SIZE
+    std
+    rep movsb
+    cld
+
+    mov esi, kernel_end - COMPRESSED_SIZE
+    mov edi, 0x10000
+    call lz4_boot_decompress
+
     mov edi, bss_start
     mov ecx, bss_end
     sub ecx, edi
@@ -541,6 +554,10 @@ pm_entry:
     cli
     hlt
     jmp .hang
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+%include "lz4dec.inc"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
