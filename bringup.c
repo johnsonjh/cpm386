@@ -59,8 +59,7 @@ static UBYTE alv [256];
 /*****************************************************************************/
 
 /*
- * dpb0: match cpmtools "4mb-hd" (2k blocks, word block numbers, 256 dirents).
- * Physical image is only RAMDISK_SIZE; used blocks stay in that range
+ * dpb0: match cpmtools "cpm386-384k"; image must be sized to RAMDISK_SIZE.
  */
 
 /*
@@ -73,9 +72,9 @@ static UBYTE alv [256];
  */
 
 struct dpb dpb0 = {
-  32,       /* spt                                            */
-  4, 15, 0, /* bsh blm exm (2k blocks, one extent per dirent) */
-  0, 2047,  /* dsm: word-mode maps (cpmtools 4mb-hd)          */
+  64,       /* spt                                            */
+  4, 15, 7, /* bsh blm exm (2k blocks, one extent per dirent) */
+  0, 191,   /* dsm: word-mode maps (cpmtools 4mb-hd)          */
   255,      /* drm: 256 directory entries                     */
   0x000F,   /* dir_al: first 4 blocks for directory (typical) */
   64,       /* cks: checksum dir sectors                      */

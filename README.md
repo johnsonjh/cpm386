@@ -130,8 +130,8 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 []()
 * It is recommended to use **GCC** as **Clang**‑compiled i386 code is larger.
-  * **Clang**‑compiled builds will need to use `-O1` (or `-Os`) to avoid
-    running out of space on the 384K ramdisk.
+  * **Clang**‑compiled builds will need to use `OPTFLAGS=-O1` (or `-Os` or
+    `-Oz`) to avoid exceeding the 384 KiB allocated for the ramdisk.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 * You may need to adjust the `make -j` argument depending on your operating
   system (*.e.g.*, `gnproc`, `sysctl -n hw.ncpu`, `getconf NPROCESSORS_ONLN`,

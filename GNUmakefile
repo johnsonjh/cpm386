@@ -443,13 +443,12 @@ BIG_IMG_SIZE:=71680
 
 ################################################################################
 
-# Truncate initial ramdisk image to 384K (messy but OK temporary for bringup)
-# maximum size that can be set is 448 (for now!)
+# Initial ramdisk image is 384 KiB (cpm386-384k)
 RAMDISK_KB:=384
 
 ################################################################################
 
-CPMFS:=4mb-hd
+CPMFS:=cpm386-384k
 
 ################################################################################
 
