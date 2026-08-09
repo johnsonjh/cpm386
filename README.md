@@ -150,19 +150,23 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 
 ## Build output
 
-* The build produces two primary artifacts:
+* The build produces four primary artifacts:
 
-  |         File | Description                            |
-  |-------------:|:---------------------------------------|
-  | `cpm386.elf` | Multiboot kernel image                 |
-  | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
+  |         File | Description                              |
+  |-------------:|:-----------------------------------------|
+  | `cpm386.elf` | Multiboot kernel image                   |
+  | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image   |
+  | `fd.img`     | Blank CP/M 3.5" 1.44MB floppy disk image |
+  | `hd.img`     | Blank CP/M 8MB hard disk image           |
 
-The [`mboot.sh`](mboot.sh) convenience script (tested on GNU/Linux systems
-with GRUB2) can be used to create bootable multiboot media (such as a USB
-drive or SD card).  The `floppy.img` can be written directly to a 1.44MB
-floppy disk.
-
-You can [download](#downloads) pre‑compiled binaries above.
+* The [`mboot.sh`](mboot.sh) convenience script (tested on GNU/Linux systems
+  with GRUB2) can be used to create bootable multiboot media (such as a USB
+  drive or SD card) using the `cpm386.elf` file.
+* The `floppy.img` file can be written directly to a 1.44MB floppy disk.
+  * **NOTE**: This disk image does *not* contain a CP/M filesystem.
+    It can be removed from the drive once system is up and running.
+* The blank images are useful because **CP/M‑386** does not yet have a
+  `FORMAT` utility.
 
 ## QEMU testing
 
@@ -326,13 +330,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>512</th>
-                <th>64</th>
+                <th>516</th>
+                <th>63</th>
                 <th>0</th>
-                <th>448</th>
+                <th>453</th>
                 <th>0</th>
-                <th>23372</th>
-                <th>401</th>
+                <th>23711</th>
+                <th>406</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -356,24 +360,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
-                <th>81</th>
+                <th>83</th>
                 <th>6</th>
                 <th>15</th>
-                <th>60</th>
+                <th>62</th>
                 <th>0</th>
-                <th>3279</th>
-                <th>64</th>
+                <th>3414</th>
+                <th>66</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>113</th>
-                <th>53994</th>
-                <th>10142</th>
+                <th>54000</th>
+                <th>10141</th>
                 <th>10049</th>
-                <th>33803</th>
+                <th>33810</th>
                 <th>6380</th>
-                <th>1540336</th>
-                <th>21623</th>
+                <th>1540810</th>
+                <th>21630</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
