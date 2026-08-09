@@ -99,8 +99,8 @@ versions may *appear* to work but have several known bugs.
 
 ## Downloads
 
-* Download the
-[current **CP/M‑386** build](https://johnsonjh.gitlab.io/cpm386/cpm386.zip).
+* **Download the**
+[**current** ***CP/M‑386*** **build**](https://johnsonjh.gitlab.io/cpm386/cpm386.zip).
 * View the
 [GitLab CI/CD](https://gitlab.com/johnsonjh/cpm386/-/pipelines/latest) logs.
 
@@ -331,7 +331,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>455</th>
                 <th>0</th>
-                <th>23715</th>
+                <th>23729</th>
                 <th>406</th>
         </tr><tr>
                 <th>Shell</th>
@@ -372,7 +372,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10049</th>
                 <th>33813</th>
                 <th>6380</th>
-                <th>1540600</th>
+                <th>1540614</th>
                 <th>21631</th>
         </tr></tfoot></table>
 <!-- scc-end -->
