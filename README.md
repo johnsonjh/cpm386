@@ -254,7 +254,7 @@ You can [download](#downloads) pre‑compiled binaries above.
 
 * Do **not** open pull requests with large amounts of LLM‑generated code.
   These will be immediately rejected.
-* There is **no** AI‑generated code in the core operating system proper at
+* There is **no** AI‑generated code in the core operating system at
   this time (though there *are* some AI‑generated tests, comments, and
   analysis), as the project is intended to be as much of a learning experience
   for me as it is a useful OS port.
@@ -330,7 +330,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>447</th>
                 <th>0</th>
-                <th>23310</th>
+                <th>23303</th>
                 <th>400</th>
         </tr><tr>
                 <th>Shell</th>
@@ -371,7 +371,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10049</th>
                 <th>33803</th>
                 <th>6380</th>
-                <th>1540297</th>
+                <th>1540290</th>
                 <th>21622</th>
         </tr></tfoot></table>
 <!-- scc-end -->
