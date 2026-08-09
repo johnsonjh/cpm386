@@ -10,6 +10,7 @@
 /*-core
 /*.core
 /core-*
+/.cpmd/
 /cscope.out
 /*.elf
 /.envrc
@@ -28,6 +29,7 @@
 /*.o
 /os.bin
 /p*.md
+/ramdisk.tmp
 /README.awk
 /README.out
 /RES*.md

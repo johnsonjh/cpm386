@@ -316,13 +316,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1677</th>
+                <th>1678</th>
                 <th>329</th>
                 <th>213</th>
-                <th>1135</th>
+                <th>1136</th>
                 <th>347</th>
-                <th>56122</th>
-                <th>806</th>
+                <th>55915</th>
+                <th>807</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
@@ -367,13 +367,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>113</th>
-                <th>53996</th>
+                <th>53997</th>
                 <th>10135</th>
                 <th>10049</th>
-                <th>33812</th>
+                <th>33813</th>
                 <th>6380</th>
-                <th>1540807</th>
-                <th>21630</th>
+                <th>1540600</th>
+                <th>21631</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

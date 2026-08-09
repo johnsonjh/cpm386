@@ -1028,124 +1028,124 @@ ramdisk.bin: \
 			vgaoff.386 \
 			vgaon.386 \
 			vgatext.386
-	$(RM) -f /tmp/ramdisk.tmp
-	$(RM) -rf /tmp/cpmd
-	mkdir -p /tmp/cpmd
+	$(RM) -f ./ramdisk.tmp
+	$(RM) -rf ./.cpmd
+	mkdir -p ./.cpmd
 	$(PRINTF) 'This is README.TXT from the CP/M-386 RAM disk.\r\n\x1a' \
-		> /tmp/cpmd/README.TXT
+		> ./.cpmd/README.TXT
 	$(PRINTF) '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
-		> /tmp/cpmd/ENV.DAT
+		> ./.cpmd/ENV.DAT
 	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L STAT.*\r\nLRBC STAT.386\r\nTRUNCTST\r\nALVTST\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\nPRNG 128\r\n; Run PRNG again from image existing in TPA\r\nGO 64\r\n; End of DEMO.SUB\r\n\x1a' \
-		> /tmp/cpmd/DEMO.SUB
-	$(PRINTF) '@QUIET ON\r\nVER\r\n\x1a' > /tmp/cpmd/PROFILE.SUB
-	$(CP) -f ./aclockdv.386 /tmp/cpmd/ACLOCKDV.386
-	$(CP) -f ./aclockvt.386 /tmp/cpmd/ACLOCKVT.386
-	$(CP) -f ./alvtst.386 /tmp/cpmd/ALVTST.386
-	$(CP) -f ./capslock.386 /tmp/cpmd/CAPSLOCK.386
-	$(CP) -f ./cleartpa.386 /tmp/cpmd/CLEARTPA.386
-	$(CP) -f ./cls.386 /tmp/cpmd/CLS.386
-	$(CP) -f ./delay.386 /tmp/cpmd/DELAY.386
-	$(CP) -f ./dumpdir.386 /tmp/cpmd/DUMPDIR.386
-	$(CP) -f ./dumpfcb.386 /tmp/cpmd/DUMPFCB.386
-	$(CP) -f ./ed.386 /tmp/cpmd/ED.386
-	$(CP) -f ./fparse.386 /tmp/cpmd/FPARSE.386
-	$(CP) -f ./getsn.386 /tmp/cpmd/GETSN.386
-	$(CP) -f ./gfxtest.386 /tmp/cpmd/GFXTEST.386
-	$(CP) -f ./hd.386 /tmp/cpmd/HD.386
-	$(CP) -f ./hello.386 /tmp/cpmd/HELLO.386
-	$(CP) -f ./illegal.386 /tmp/cpmd/ILLEGAL.386
-	$(CP) -f ./iotest.386 /tmp/cpmd/IOTEST.386
-	$(CP) -f ./julia.386 /tmp/cpmd/JULIA.386
-	$(CP) -f ./lrbc.386 /tmp/cpmd/LRBC.386
-	$(CP) -f ./ls.386 /tmp/cpmd/LS.386
-	$(CP) -f ./mandel.386 /tmp/cpmd/MANDEL.386
-	$(CP) -f ./mem.386 /tmp/cpmd/MEM.386
-	$(CP) -f ./more.386 /tmp/cpmd/MORE.386
-	$(CP) -f ./numlock.386 /tmp/cpmd/NUMLOCK.386
-	$(CP) -f ./od.386 /tmp/cpmd/OD.386
-	$(CP) -f ./pause.386 /tmp/cpmd/PAUSE.386
-	$(CP) -f ./pip.386 /tmp/cpmd/PIP.386
-	$(CP) -f ./printenv.386 /tmp/cpmd/PRINTENV.386
-	$(CP) -f ./prng.386 /tmp/cpmd/PRNG.386
-	$(CP) -f ./rc.386 /tmp/cpmd/RC.386
-	$(CP) -f ./reboot.386 /tmp/cpmd/REBOOT.386
-	$(CP) -f ./rm.386 /tmp/cpmd/RM.386
-	$(CP) -f ./seroff.386 /tmp/cpmd/SEROFF.386
-	$(CP) -f ./seron.386 /tmp/cpmd/SERON.386
-	$(CP) -f ./stat.386 /tmp/cpmd/STAT.386
-	$(CP) -f ./sync.386 /tmp/cpmd/SYNC.386
-	$(CP) -f ./termtest.386 /tmp/cpmd/TERMTEST.386
-	$(CP) -f ./test211.386 /tmp/cpmd/TEST211.386
-	$(CP) -f ./textmode.386 /tmp/cpmd/TEXTMODE.386
-	$(CP) -f ./ticks.386 /tmp/cpmd/TICKS.386
-	$(CP) -f ./tod.386 /tmp/cpmd/TOD.386
-	$(CP) -f ./touch.386 /tmp/cpmd/TOUCH.386
-	$(CP) -f ./truncate.386 /tmp/cpmd/TRUNCATE.386
-	$(CP) -f ./trunctst.386 /tmp/cpmd/TRUNCTST.386
-	$(CP) -f ./tsec.386 /tmp/cpmd/TSEC.386
-	$(CP) -f ./ver.386 /tmp/cpmd/VER.386
-	$(CP) -f ./vgafont.386 /tmp/cpmd/VGAFONT.386
-	$(CP) -f ./vgaoff.386 /tmp/cpmd/VGAOFF.386
-	$(CP) -f ./vgaon.386 /tmp/cpmd/VGAON.386
-	$(CP) -f ./vgatext.386 /tmp/cpmd/VGATEXT.386
-	mkfs.cpm -f $(CPMFS) /tmp/ramdisk.tmp
-	cpmcp -f $(CPMFS) /tmp/ramdisk.tmp \
-	  /tmp/cpmd/ACLOCKDV.386 \
-	  /tmp/cpmd/ACLOCKVT.386 \
-	  /tmp/cpmd/ALVTST.386 \
-	  /tmp/cpmd/CAPSLOCK.386 \
-	  /tmp/cpmd/CLEARTPA.386 \
-	  /tmp/cpmd/CLS.386 \
-	  /tmp/cpmd/DELAY.386 \
-	  /tmp/cpmd/DEMO.SUB \
-	  /tmp/cpmd/DUMPDIR.386 \
-	  /tmp/cpmd/DUMPFCB.386 \
-	  /tmp/cpmd/ED.386 \
-	  /tmp/cpmd/ENV.DAT \
-	  /tmp/cpmd/FPARSE.386 \
-	  /tmp/cpmd/GETSN.386 \
-	  /tmp/cpmd/GFXTEST.386 \
-	  /tmp/cpmd/HD.386 \
-	  /tmp/cpmd/HELLO.386 \
-	  /tmp/cpmd/ILLEGAL.386 \
-	  /tmp/cpmd/IOTEST.386 \
-	  /tmp/cpmd/JULIA.386 \
-	  /tmp/cpmd/LRBC.386 \
-	  /tmp/cpmd/LS.386 \
-	  /tmp/cpmd/MANDEL.386 \
-	  /tmp/cpmd/MEM.386 \
-	  /tmp/cpmd/MORE.386 \
-	  /tmp/cpmd/NUMLOCK.386 \
-	  /tmp/cpmd/OD.386 \
-	  /tmp/cpmd/PAUSE.386 \
-	  /tmp/cpmd/PIP.386 \
-	  /tmp/cpmd/PRINTENV.386 \
-	  /tmp/cpmd/PRNG.386 \
-	  /tmp/cpmd/PROFILE.SUB \
-	  /tmp/cpmd/RC.386 \
-	  /tmp/cpmd/README.TXT \
-	  /tmp/cpmd/REBOOT.386 \
-	  /tmp/cpmd/RM.386 \
-	  /tmp/cpmd/SEROFF.386 \
-	  /tmp/cpmd/SERON.386 \
-	  /tmp/cpmd/STAT.386 \
-	  /tmp/cpmd/SYNC.386 \
-	  /tmp/cpmd/TERMTEST.386 \
-	  /tmp/cpmd/TEST211.386 \
-	  /tmp/cpmd/TEXTMODE.386 \
-	  /tmp/cpmd/TICKS.386 \
-	  /tmp/cpmd/TOD.386 \
-	  /tmp/cpmd/TOUCH.386 \
-	  /tmp/cpmd/TRUNCATE.386 \
-	  /tmp/cpmd/TRUNCTST.386 \
-	  /tmp/cpmd/TSEC.386 \
-	  /tmp/cpmd/VER.386 \
-	  /tmp/cpmd/VGAFONT.386 \
-	  /tmp/cpmd/VGAOFF.386 \
-	  /tmp/cpmd/VGAON.386 \
-	  /tmp/cpmd/VGATEXT.386 \
+		> ./.cpmd/DEMO.SUB
+	$(PRINTF) '@QUIET ON\r\nVER\r\n\x1a' > ./.cpmd/PROFILE.SUB
+	$(CP) -f ./aclockdv.386 ./.cpmd/ACLOCKDV.386
+	$(CP) -f ./aclockvt.386 ./.cpmd/ACLOCKVT.386
+	$(CP) -f ./alvtst.386 ./.cpmd/ALVTST.386
+	$(CP) -f ./capslock.386 ./.cpmd/CAPSLOCK.386
+	$(CP) -f ./cleartpa.386 ./.cpmd/CLEARTPA.386
+	$(CP) -f ./cls.386 ./.cpmd/CLS.386
+	$(CP) -f ./delay.386 ./.cpmd/DELAY.386
+	$(CP) -f ./dumpdir.386 ./.cpmd/DUMPDIR.386
+	$(CP) -f ./dumpfcb.386 ./.cpmd/DUMPFCB.386
+	$(CP) -f ./ed.386 ./.cpmd/ED.386
+	$(CP) -f ./fparse.386 ./.cpmd/FPARSE.386
+	$(CP) -f ./getsn.386 ./.cpmd/GETSN.386
+	$(CP) -f ./gfxtest.386 ./.cpmd/GFXTEST.386
+	$(CP) -f ./hd.386 ./.cpmd/HD.386
+	$(CP) -f ./hello.386 ./.cpmd/HELLO.386
+	$(CP) -f ./illegal.386 ./.cpmd/ILLEGAL.386
+	$(CP) -f ./iotest.386 ./.cpmd/IOTEST.386
+	$(CP) -f ./julia.386 ./.cpmd/JULIA.386
+	$(CP) -f ./lrbc.386 ./.cpmd/LRBC.386
+	$(CP) -f ./ls.386 ./.cpmd/LS.386
+	$(CP) -f ./mandel.386 ./.cpmd/MANDEL.386
+	$(CP) -f ./mem.386 ./.cpmd/MEM.386
+	$(CP) -f ./more.386 ./.cpmd/MORE.386
+	$(CP) -f ./numlock.386 ./.cpmd/NUMLOCK.386
+	$(CP) -f ./od.386 ./.cpmd/OD.386
+	$(CP) -f ./pause.386 ./.cpmd/PAUSE.386
+	$(CP) -f ./pip.386 ./.cpmd/PIP.386
+	$(CP) -f ./printenv.386 ./.cpmd/PRINTENV.386
+	$(CP) -f ./prng.386 ./.cpmd/PRNG.386
+	$(CP) -f ./rc.386 ./.cpmd/RC.386
+	$(CP) -f ./reboot.386 ./.cpmd/REBOOT.386
+	$(CP) -f ./rm.386 ./.cpmd/RM.386
+	$(CP) -f ./seroff.386 ./.cpmd/SEROFF.386
+	$(CP) -f ./seron.386 ./.cpmd/SERON.386
+	$(CP) -f ./stat.386 ./.cpmd/STAT.386
+	$(CP) -f ./sync.386 ./.cpmd/SYNC.386
+	$(CP) -f ./termtest.386 ./.cpmd/TERMTEST.386
+	$(CP) -f ./test211.386 ./.cpmd/TEST211.386
+	$(CP) -f ./textmode.386 ./.cpmd/TEXTMODE.386
+	$(CP) -f ./ticks.386 ./.cpmd/TICKS.386
+	$(CP) -f ./tod.386 ./.cpmd/TOD.386
+	$(CP) -f ./touch.386 ./.cpmd/TOUCH.386
+	$(CP) -f ./truncate.386 ./.cpmd/TRUNCATE.386
+	$(CP) -f ./trunctst.386 ./.cpmd/TRUNCTST.386
+	$(CP) -f ./tsec.386 ./.cpmd/TSEC.386
+	$(CP) -f ./ver.386 ./.cpmd/VER.386
+	$(CP) -f ./vgafont.386 ./.cpmd/VGAFONT.386
+	$(CP) -f ./vgaoff.386 ./.cpmd/VGAOFF.386
+	$(CP) -f ./vgaon.386 ./.cpmd/VGAON.386
+	$(CP) -f ./vgatext.386 ./.cpmd/VGATEXT.386
+	mkfs.cpm -f $(CPMFS) ./ramdisk.tmp
+	cpmcp -f $(CPMFS) ./ramdisk.tmp \
+	  ./.cpmd/ACLOCKDV.386 \
+	  ./.cpmd/ACLOCKVT.386 \
+	  ./.cpmd/ALVTST.386 \
+	  ./.cpmd/CAPSLOCK.386 \
+	  ./.cpmd/CLEARTPA.386 \
+	  ./.cpmd/CLS.386 \
+	  ./.cpmd/DELAY.386 \
+	  ./.cpmd/DEMO.SUB \
+	  ./.cpmd/DUMPDIR.386 \
+	  ./.cpmd/DUMPFCB.386 \
+	  ./.cpmd/ED.386 \
+	  ./.cpmd/ENV.DAT \
+	  ./.cpmd/FPARSE.386 \
+	  ./.cpmd/GETSN.386 \
+	  ./.cpmd/GFXTEST.386 \
+	  ./.cpmd/HD.386 \
+	  ./.cpmd/HELLO.386 \
+	  ./.cpmd/ILLEGAL.386 \
+	  ./.cpmd/IOTEST.386 \
+	  ./.cpmd/JULIA.386 \
+	  ./.cpmd/LRBC.386 \
+	  ./.cpmd/LS.386 \
+	  ./.cpmd/MANDEL.386 \
+	  ./.cpmd/MEM.386 \
+	  ./.cpmd/MORE.386 \
+	  ./.cpmd/NUMLOCK.386 \
+	  ./.cpmd/OD.386 \
+	  ./.cpmd/PAUSE.386 \
+	  ./.cpmd/PIP.386 \
+	  ./.cpmd/PRINTENV.386 \
+	  ./.cpmd/PRNG.386 \
+	  ./.cpmd/PROFILE.SUB \
+	  ./.cpmd/RC.386 \
+	  ./.cpmd/README.TXT \
+	  ./.cpmd/REBOOT.386 \
+	  ./.cpmd/RM.386 \
+	  ./.cpmd/SEROFF.386 \
+	  ./.cpmd/SERON.386 \
+	  ./.cpmd/STAT.386 \
+	  ./.cpmd/SYNC.386 \
+	  ./.cpmd/TERMTEST.386 \
+	  ./.cpmd/TEST211.386 \
+	  ./.cpmd/TEXTMODE.386 \
+	  ./.cpmd/TICKS.386 \
+	  ./.cpmd/TOD.386 \
+	  ./.cpmd/TOUCH.386 \
+	  ./.cpmd/TRUNCATE.386 \
+	  ./.cpmd/TRUNCTST.386 \
+	  ./.cpmd/TSEC.386 \
+	  ./.cpmd/VER.386 \
+	  ./.cpmd/VGAFONT.386 \
+	  ./.cpmd/VGAOFF.386 \
+	  ./.cpmd/VGAON.386 \
+	  ./.cpmd/VGATEXT.386 \
 	  0:
-	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
+	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 ./ramdisk.tmp | \
 		$(GREP) -v '^*$$' | tail -2 | head -1 | \
 		$(AWK) '{ print "0x"a$$1 }')"); \
 		RDS=$$(( (RDS / 1024) + 4 )); \
@@ -1160,9 +1160,9 @@ ramdisk.bin: \
 			exit 2; }
 	$(DD) if="/dev/zero" of="./ramdisk.bin" bs="1024" count="$(RAMDISK_KB)" \
 		2>&1
-	$(DD) if="/tmp/ramdisk.tmp" of="./ramdisk.bin" conv="notrunc" \
+	$(DD) if="./ramdisk.tmp" of="./ramdisk.bin" conv="notrunc" \
 		2>&1
-	$(RM) -rf /tmp/ramdisk.tmp /tmp/cpmd
+	$(RM) -rf ./ramdisk.tmp ./.cpmd
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1492,7 +1492,8 @@ fd.img: diskdefs
 clean distclean:
 	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./*.lst \
 		./bss.inc ./testbdos ./*.su ./*.ci ./$(MK386) ./$(MKLZ4RAW) \
-		./*.lz4 ./*.lz4raw ./$(TARGET)
+		./*.lz4 ./*.lz4raw ramdisk.tmp ./$(TARGET)
+	$(RM) -f -r ./.cpmd
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Clean completed successfully."
