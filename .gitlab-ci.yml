@@ -66,7 +66,7 @@ pages:
     - mkdir -p public/cpm386
     - mv -f fd.img public/cpm386/blankfd.img
     - mv -f hd.img public/cpm386/blankhd.img
-    - mv -f cpm386.elf floppy.img mboot.sh fd.img public/cpm386
+    - mv -f cpm386.elf floppy.img mboot.sh public/cpm386
     - cd public
     - zip -0 -X -D -j "cpm386.zip" cpm386/cpm386.elf cpm386/floppy.img cpm386/mboot.sh cpm386/blankfd.img cpm386/blankhd.img
     - advzip -z4 cpm386.zip
