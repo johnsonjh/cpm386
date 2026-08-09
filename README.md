@@ -16,6 +16,7 @@
 - [Build requirements](#build-requirements)
 - [Downloads](#downloads)
 - [Compilation](#compilation)
+- [Docker build](#docker-build)
 - [Build output](#build-output)
 - [QEMU testing](#qemu-testing)
 - [QEMU notes](#qemu-notes)
@@ -144,6 +145,15 @@ Fedora 36 (or later) have been verified to build **CP/M‑386** successfully.
   linked with `libdsk`.  If you receive a `Disc rejected by driver` error on
   **FreeBSD** from `mkfs.cpm`, your tools are *broken* and *cannot* be used to
   build **CP/M‑386**.
+
+## Docker build
+
+If you are unable to build **CP/M‑386** natively on your Linux distribution,
+a Docker‑based Fedora build is available:
+```sh
+docker build --progress plain -t cpm386/cpm386-build:latest -f Dockerfile .
+docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
+```
 
 ## Build output
 
@@ -320,18 +330,18 @@ See [FUTURE.md](FUTURE.md).
                 <th>213</th>
                 <th>1136</th>
                 <th>347</th>
-                <th>55915</th>
+                <th>55921</th>
                 <th>807</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>511</th>
-                <th>58</th>
+                <th>531</th>
+                <th>60</th>
                 <th>0</th>
-                <th>453</th>
+                <th>471</th>
                 <th>0</th>
-                <th>23590</th>
-                <th>404</th>
+                <th>24196</th>
+                <th>420</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -362,17 +372,27 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>3407</th>
                 <th>66</th>
+        </tr><tr>
+                <th>Dockerfile</th>
+                <th>1</th>
+                <th>24</th>
+                <th>8</th>
+                <th>12</th>
+                <th>4</th>
+                <th>5</th>
+                <th>1275</th>
+                <th>11</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>113</th>
-                <th>53996</th>
-                <th>10136</th>
-                <th>10049</th>
-                <th>33811</th>
-                <th>6380</th>
-                <th>1540475</th>
-                <th>21629</th>
+                <th>114</th>
+                <th>54040</th>
+                <th>10146</th>
+                <th>10061</th>
+                <th>33833</th>
+                <th>6385</th>
+                <th>1542362</th>
+                <th>21652</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

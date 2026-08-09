@@ -1410,7 +1410,7 @@ $(MKLZ4RAW): mklz4raw.c
 ################################################################################
 
 os.bin.lz4: os.bin
-	$(LZ4) --best --favor-decSpeed --no-frame-crc -f ./$< ./$@
+	$(LZ4) --best --favor-decSpeed --no-frame-crc -k -f -q ./$< ./$@
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
