@@ -64,9 +64,9 @@ pages:
       #
       echo -e "section_start:`date +%s`:Deploy_section[collapsed=true]\r\e[0K\033[0;36mDeploy ...\033[0m" || true
     - mkdir -p public/cpm386
-    - mv -f cpm386.elf floppy.img public/cpm386
+    - mv -f cpm386.elf floppy.img mboot.sh public/cpm386
     - cd public
-    - zip -0 -X -D -j "cpm386.zip" cpm386/cpm386.elf cpm386/floppy.img
+    - zip -0 -X -D -j "cpm386.zip" cpm386/cpm386.elf cpm386/floppy.img cpm386/mboot.sh
     - advzip -z4 cpm386.zip
     - rm -r -f ./cpm386 || true
     - echo -e "section_end:`date +%s`:Deploy_section\r\e[0K" || true
