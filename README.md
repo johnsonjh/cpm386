@@ -198,7 +198,6 @@ You can [download](#downloads) pre‑compiled binaries above.
 | `ACLOCKDV.386` | [aclock](https://github.com/tenox7/aclock) (VGA text console version)                              |
 | `ACLOCKVT.386` | [aclock](https://github.com/tenox7/aclock) (ANSI terminal version)                                 |
 | `ALVTST.386`   | Get Allocation Vector test ([BDOS 27](https://www.seasip.info/Cpm/bdos.html))                      |
-| `BIG.386`      | Multi‑extent loading test executable                                                               |
 | `CAPSLOCK.386` | Caps‑Lock key behavior utility (BDOS 235)                                                          |
 | `CLEARTPA.386` | Clears (zeros) and optionally verifies the TPA                                                     |
 | `CLS.386`      | Clear screen (BDOS 221)                                                                            |
@@ -326,13 +325,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>512</th>
+                <th>511</th>
                 <th>64</th>
                 <th>0</th>
-                <th>448</th>
+                <th>447</th>
                 <th>0</th>
-                <th>23432</th>
-                <th>401</th>
+                <th>23310</th>
+                <th>400</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -367,13 +366,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>113</th>
-                <th>53995</th>
+                <th>53994</th>
                 <th>10142</th>
                 <th>10049</th>
-                <th>33804</th>
+                <th>33803</th>
                 <th>6380</th>
-                <th>1540419</th>
-                <th>21623</th>
+                <th>1540297</th>
+                <th>21622</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
