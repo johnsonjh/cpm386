@@ -74,13 +74,14 @@ EXTERN UWORD    crit_dsk;       /* vector of disks in critical state    */
 
 BOOLEAN alloc(fcbp, dirp, dirindx)
 /* Set up allocation vector for directory entry pointed to by dirp */
-
 struct fcb      *fcbp;          /* not used in this function    */
 REG struct dirent *dirp;        /* pointer to directory entry   */
 WORD            dirindx;        /* index into directory for *dirp */
 {
     REG WORD    i;              /* loop counter */
     BSETUP
+
+    (void)fcbp;
 
     if ( UBWORD(dirp->entry) < 0x10 )   /* skip MP/M 2.x and CP/M 3.x XFCBs */
     {
@@ -222,13 +223,14 @@ BOOLEAN openfile(fcbp, dirp, dirindx)
 
 REG struct fcb *fcbp;           /* pointer to fcb for file to open */
 struct dirent  *dirp;           /* pointer to directory entry   */
-WORD    dirindx;
-
+WORD dirindx;
 {
     REG UBYTE fcb_ext;          /* extent field from fcb        */
     REG UBYTE want_lrbc;        /* FCB+32 was 0xFF: return LRBC */
     REG BOOLEAN rtn;
     BSETUP
+
+    (void)dirindx;
 
     if ( (rtn = match(fcbp, dirp, TRUE)) )
     {
@@ -461,6 +463,9 @@ UBYTE   *p1;
 UBYTE   *p2;
 WORD    i;
 {
+    (void)i;
+    (void)p1;
+    (void)p2;
     return(TRUE);
 }
 
@@ -469,6 +474,9 @@ UBYTE   *p1;
 UBYTE   *p2;
 WORD    i;
 {
+    (void)i;
+    (void)p1;
+    (void)p2;
     return(match(p1, p2, TRUE));
 }
 
@@ -705,10 +713,11 @@ BOOLEAN fsize(fcbp, dirp, dirindx)
 REG struct fcb *fcbp;           /* pointer to fcb for file to delete */
 REG struct dirent *dirp;        /* pointer to directory entry   */
 WORD dirindx;                   /* index into directory         */
-
 {
     REG BOOLEAN rtn;
     LONG nrecs;
+
+    (void)dirindx;
 
     if ( (rtn = match(fcbp, dirp, FALSE)) )
     {

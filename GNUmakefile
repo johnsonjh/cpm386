@@ -332,7 +332,6 @@ CFLAGS = \
 	-Wno-pointer-sign \
 	-Wno-return-type \
 	-Wno-sign-compare \
-	-Wno-unused-parameter \
 	-Wshadow
 
 ################################################################################
