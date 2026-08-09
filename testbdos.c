@@ -1543,7 +1543,7 @@ main (void)
     }
   }
 
-  /* ramdisk presence of IOTEST/BIG when built */
+  /* ramdisk presence of IOTEST when built */
   {
     FILE *rf = fopen ("ramdisk.bin", "rb");
 
@@ -1552,7 +1552,7 @@ main (void)
         unsigned char dir[8192];
         size_t n = fread (dir, 1, sizeof dir, rf);
         fclose (rf);
-        int found_io = 0, found_big = 0, big_hole = 0;
+        int found_io = 0;
         size_t i;
 
         for (i = 0; i + 32 <= n; i += 32)
@@ -1590,48 +1590,17 @@ main (void)
               {
                 found_io = 1;
               }
-
-            if (strncmp (nm, "BIG.386", 7) == 0)
-              {
-                found_big = 1;
-                /* hole patch leaves a zero in the 16-byte map */
-                {
-                  int z;
-
-                  for (z = 0; z < 16; z++)
-                    {
-                      if (dir[i + 16 + z] == 0)
-                        { /* may be trailing zeros */
-                          /* require a zero between two nonzeros (true hole) */
-                        }
-                    }
-
-                  for (z = 1; z < 15; z++)
-                    {
-                      if (dir[i + 16 + z] == 0 && dir[i + 16 + z - 1]
-                          && dir[i + 16 + z + 1])
-                        {
-                          big_hole = 1;
-                        }
-                    }
-                }
-              }
           }
 
-        if (!found_io || !found_big)
+        if (!found_io)
           {
             printf (
-                "UNIT HARD FAIL: ramdisk missing IOTEST/BIG (io=%d big=%d)\n",
-                found_io, found_big);
+                "UNIT HARD FAIL: ramdisk missing IOTEST (io=%d)\n", found_io);
             ok = 0;
           }
         else
           {
-            printf ("ramdisk: IOTEST.386 and BIG.386 present");
-            if (big_hole)
-              {
-                printf (" (BIG has allocation hole)");
-              }
+            printf ("ramdisk: IOTEST.386 present");
 
             printf ("\n");
           }

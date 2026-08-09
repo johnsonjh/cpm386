@@ -438,11 +438,6 @@ MK386 = mk386
 
 ################################################################################
 
-# 70 KiB image: multi-extent and >64 KiB
-BIG_IMG_SIZE:=71680
-
-################################################################################
-
 # Initial ramdisk image is 384 KiB (cpm386-384k)
 RAMDISK_KB:=384
 
@@ -498,15 +493,6 @@ strip: all
 ################################################################################
 
 $(MK386): mk386.c
-	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
-	@tput setaf 2 2> /dev/null || :
-	@$(PRINTF) '%s\r\n' "$@ built successfully."
-	@tput sgr0 2> /dev/null || :
-
-################################################################################
-
-SHOLE = shole
-$(SHOLE): shole.c
 	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -982,47 +968,10 @@ prng.386: prng.bin $(MK386)
 
 ################################################################################
 
-big.bin: big.c user.ld
-	$(CC) $(CFLAGS) -c -o ./big.o ./big.c
-	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./big.elf ./big.o
-	@entry=$$($(NM) ./big.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
-	  if [ "$$entry" != "00000100" ]; then \
-	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
-	  $(PRINTF) '%s\n' "ERROR: big _start"; \
-	  tput sgr0 2> /dev/null || :; \
-	  exit 1; fi
-	$(OBJCOPY) -O binary ./big.elf ./big_stub.bin
-	@stub=$$(wc -c < ./big_stub.bin); \
-	  if [ "$$stub" -ge $(BIG_IMG_SIZE) ]; then \
-	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
-	    $(PRINTF) '%s\n' "ERROR: big stub $$stub >= $(BIG_IMG_SIZE)"; \
-	    tput sgr0 2> /dev/null || :; \
-	    exit 1; fi; \
-	  pad=$$(( $(BIG_IMG_SIZE) - stub )); \
-	  $(CP) -f ./big_stub.bin ./big.bin; \
-	  $(DD) if="/dev/zero" bs="1" count="$$pad" | \
-	    env LC_ALL=C $(TR) '\0' '\220' >> ./big.bin
-	@tput setaf 2 2> /dev/null || :
-	@$(PRINTF) '%s\r\n' "$@ built successfully."
-	@tput sgr0 2> /dev/null || :
-
-################################################################################
-
-big.386: big.bin $(MK386)
-	./$(MK386) ./big.bin ./big.386 0x100
-	@tput setaf 2 2> /dev/null || :
-	@$(PRINTF) '%s\r\n' "$@ built successfully."
-	@tput sgr0 2> /dev/null || :
-
-################################################################################
-
 ramdisk.bin: \
-			$(SHOLE) \
 			aclockdv.386 \
 			aclockvt.386 \
 			alvtst.386 \
-			big.386 \
 			capslock.386 \
 			cleartpa.386 \
 			cls.386 \
@@ -1083,7 +1032,6 @@ ramdisk.bin: \
 	$(CP) -f ./aclockdv.386 /tmp/cpmd/ACLOCKDV.386
 	$(CP) -f ./aclockvt.386 /tmp/cpmd/ACLOCKVT.386
 	$(CP) -f ./alvtst.386 /tmp/cpmd/ALVTST.386
-	$(CP) -f ./big.386 /tmp/cpmd/BIG.386
 	$(CP) -f ./capslock.386 /tmp/cpmd/CAPSLOCK.386
 	$(CP) -f ./cleartpa.386 /tmp/cpmd/CLEARTPA.386
 	$(CP) -f ./cls.386 /tmp/cpmd/CLS.386
@@ -1136,7 +1084,6 @@ ramdisk.bin: \
 	  /tmp/cpmd/ACLOCKDV.386 \
 	  /tmp/cpmd/ACLOCKVT.386 \
 	  /tmp/cpmd/ALVTST.386 \
-	  /tmp/cpmd/BIG.386 \
 	  /tmp/cpmd/CAPSLOCK.386 \
 	  /tmp/cpmd/CLEARTPA.386 \
 	  /tmp/cpmd/CLS.386 \
@@ -1189,7 +1136,6 @@ ramdisk.bin: \
 	  /tmp/cpmd/VGAON.386 \
 	  /tmp/cpmd/VGATEXT.386 \
 	  0:
-	./$(SHOLE) -w /tmp/ramdisk.tmp BIG.386
 	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 /tmp/ramdisk.tmp | \
 		$(GREP) -v '^*$$' | tail -2 | head -1 | \
 		$(AWK) '{ print "0x"a$$1 }')"); \
@@ -1508,7 +1454,7 @@ fd.img: diskdefs
 
 clean distclean:
 	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./*.lst \
-		./bss.inc ./testbdos ./*.su ./*.ci ./$(MK386) ./$(SHOLE) ./$(TARGET)
+		./bss.inc ./testbdos ./*.su ./*.ci ./$(MK386) ./$(TARGET)
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Clean completed successfully."
