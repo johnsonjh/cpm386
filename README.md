@@ -38,7 +38,7 @@
   implementation with
   [Ring‑3 TPA](https://en.wikipedia.org/wiki/Protection_ring).
 * Bootable via 3.5" 1.44MB floppy disk
-  [MBR](https://en.wikipedia.org/wiki/Master_boot_record) or GRUB
+  [MBR](https://en.wikipedia.org/wiki/Master_boot_record) or
   [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel.
 * Supports [VGA text](https://en.wikipedia.org/wiki/VGA_text_mode) (`0xB8000`)
   and/or [COM1 serial](https://en.wikipedia.org/wiki/Serial_port)
@@ -291,7 +291,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>7847</th>
                 <th>29343</th>
                 <th>5989</th>
-                <th>1269503</th>
+                <th>1269495</th>
                 <th>17493</th>
         </tr><tr>
                 <th>C Header</th>
@@ -331,7 +331,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>448</th>
                 <th>0</th>
-                <th>23437</th>
+                <th>23432</th>
                 <th>401</th>
         </tr><tr>
                 <th>Shell</th>
@@ -372,7 +372,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10049</th>
                 <th>33804</th>
                 <th>6380</th>
-                <th>1540432</th>
+                <th>1540419</th>
                 <th>21623</th>
         </tr></tfoot></table>
 <!-- scc-end -->
