@@ -154,8 +154,9 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
   | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
 
 The [`mboot.sh`](mboot.sh) convenience script (tested on GNU/Linux systems
-with GRUB2) can be used to create bootable multiboot media (such as an
-SD card).  The `floppy.img` can be written directly to a 1.44MB floppy disk.
+with GRUB2) can be used to create bootable multiboot media (such as a USB
+drive or SD card).  The `floppy.img` can be written directly to a 1.44MB
+floppy disk.
 
 You can [download](#downloads) pre‑compiled binaries above.
 
@@ -319,13 +320,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>505</th>
+                <th>506</th>
                 <th>59</th>
                 <th>0</th>
-                <th>446</th>
+                <th>447</th>
                 <th>0</th>
-                <th>23393</th>
-                <th>401</th>
+                <th>23405</th>
+                <th>402</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -360,13 +361,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>111</th>
-                <th>53556</th>
+                <th>53557</th>
                 <th>10026</th>
                 <th>9989</th>
-                <th>33541</th>
+                <th>33542</th>
                 <th>6344</th>
-                <th>1529999</th>
-                <th>21445</th>
+                <th>1530011</th>
+                <th>21446</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
