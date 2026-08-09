@@ -7,13 +7,7 @@
 
 /*****************************************************************************/
 
-/* mk386.c: wrap a raw binary as a 386 absolute command file. */
-
-/*****************************************************************************/
-
-/*
- * Usage: mk386 <input.bin> <output.386> [load_off [min_kb]]
- */
+/* mk386.c: wrap a raw binary as a 386 absolute command file */
 
 /*****************************************************************************/
 
@@ -21,6 +15,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+/*****************************************************************************/
+
+#ifndef EXIT_SUCCESS
+# define EXIT_SUCCESS 0
+#endif
+
+/*****************************************************************************/
+
+#ifndef EXIT_FAILURE
+# define EXIT_FAILURE 1
+#endif
 
 /*****************************************************************************/
 
@@ -40,7 +46,7 @@ static void
 put32 (unsigned char *p, uint32_t v)
 {
   p [0] = (unsigned char)(v & 0xFF);
-  p [1] = (unsigned char)((v >> 8) & 0xFF);
+  p [1] = (unsigned char)((v >> 8)  & 0xFF);
   p [2] = (unsigned char)((v >> 16) & 0xFF);
   p [3] = (unsigned char)((v >> 24) & 0xFF);
 }
@@ -71,7 +77,7 @@ main (int argc, char **argv)
       return 1;
     }
 
-  in = argv [1];
+  in  = argv [1];
   out = argv [2];
 
   if (argc >= 4)
@@ -86,11 +92,11 @@ main (int argc, char **argv)
 
   f = fopen (in, "rb");
 
-  if (!f)
+  if (! f)
     {
       perror (in);
 
-      return 1;
+      return EXIT_FAILURE;
     }
 
   if (fseek (f, 0, SEEK_END) != 0)
@@ -98,7 +104,7 @@ main (int argc, char **argv)
       perror ("fseek");
       (void)fclose (f);
 
-      return 1;
+      return EXIT_FAILURE;
     }
 
   sz = ftell (f);
@@ -107,19 +113,19 @@ main (int argc, char **argv)
     {
       (void)fclose (f);
 
-      return 1;
+      return EXIT_FAILURE;
     }
 
   rewind (f);
   buf = malloc ((size_t)sz);
 
-  if (!buf || (sz && fread (buf, 1, (size_t)sz, f) != (size_t)sz))
+  if (! buf || (sz && fread (buf, 1, (size_t)sz, f) != (size_t)sz))
     {
       (void)fprintf (stderr, "read failed\n");
       free (buf);
       (void)fclose (f);
 
-      return 1;
+      return EXIT_FAILURE;
     }
 
   (void)fclose (f);
@@ -149,12 +155,12 @@ main (int argc, char **argv)
 
   f = fopen (out, "wb");
 
-  if (!f)
+  if (! f)
     {
       perror (out);
       free (buf);
 
-      return 1;
+      return EXIT_FAILURE;
     }
 
   if (fwrite (hdr, 1, CPM386_HDR_SIZE, f) != CPM386_HDR_SIZE
@@ -164,13 +170,13 @@ main (int argc, char **argv)
       (void)fclose (f);
       free (buf);
 
-      return 1;
+      return EXIT_FAILURE;
     }
 
   (void)fclose (f);
   free (buf);
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 /*****************************************************************************/
