@@ -334,7 +334,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>62</th>
                 <th>142</th>
                 <th>30</th>
-                <th>8271</th>
+                <th>8268</th>
                 <th>113</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -365,7 +365,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>9989</th>
                 <th>33541</th>
                 <th>6344</th>
-                <th>1530002</th>
+                <th>1529999</th>
                 <th>21445</th>
         </tr></tfoot></table>
 <!-- scc-end -->

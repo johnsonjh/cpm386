@@ -21,7 +21,7 @@ command -v printf > /dev/null 2>&1 || {
 ###############################################################################
 
 test -z "$1" && {
-  printf '%s\n' "ERROR: Must specify target device, i.e., \"/dev/sde\"!"
+  printf '%s\n' "ERROR: Must specify target device (e.g., \"/dev/sde\")!"
   exit 1
 }
 
@@ -252,8 +252,8 @@ insmod multiboot
 insmod part_gpt
 
 menuentry "CP/M-386" {
-    multiboot /boot/cpm386.elf
-    boot
+  multiboot /boot/cpm386.elf
+  boot
 }
 EOF
 
