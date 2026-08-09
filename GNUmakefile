@@ -1362,10 +1362,9 @@ bss.inc: $(TARGET) os.bin.lz4raw
 		top=$$((0x$$ke + 0x4000)); \
 		if [ "$$top" -gt $$((0x9E000)) ]; then \
 			tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
-			$(PRINTF) '%s\n' \
+			$(PRINTF) '%s' \
 				"ERROR: kernel end + r0 stack ($$top) overruns conventional"; \
-			$(PRINTF) '%s\n' \
-				"       memory (0x9E000); reduce RAMDISK_KB ($(RAMDISK_KB))"; \
+			$(PRINTF) '%s\n' " memory (0x9E000)!"; \
 			tput sgr0 2> /dev/null || :; \
 			exit 1; fi
 	@tput setaf 2 2> /dev/null || :

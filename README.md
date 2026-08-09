@@ -134,7 +134,8 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
 []()
 * It is recommended to use **GCC** as **Clang**‑compiled i386 code is larger.
   * **Clang**‑compiled builds will need to use `OPTFLAGS=-O1` (or `-Os` or
-    `-Oz`) to avoid exceeding the 384 KiB allocated for the ramdisk.
+    `-Oz`) to avoid exceeding the 384 KiB allocated for the ramdisk, or the
+    kernel size + Ring-0 stack exceeding conventional memory.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 * You may need to adjust the `make -j` argument depending on your operating
   system (*.e.g.*, `gnproc`, `sysctl -n hw.ncpu`, `getconf NPROCESSORS_ONLN`,
@@ -315,23 +316,23 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1678</th>
+                <th>1677</th>
                 <th>329</th>
                 <th>213</th>
-                <th>1136</th>
+                <th>1135</th>
                 <th>347</th>
-                <th>56170</th>
+                <th>56122</th>
                 <th>806</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>511</th>
+                <th>512</th>
                 <th>64</th>
                 <th>0</th>
-                <th>447</th>
+                <th>448</th>
                 <th>0</th>
-                <th>23303</th>
-                <th>400</th>
+                <th>23372</th>
+                <th>401</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -371,8 +372,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>10049</th>
                 <th>33803</th>
                 <th>6380</th>
-                <th>1540315</th>
-                <th>21622</th>
+                <th>1540336</th>
+                <th>21623</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
