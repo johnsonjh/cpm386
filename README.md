@@ -153,6 +153,10 @@ Ubuntu 22.04, Alpine 3.24, and OpenSUSE Leap 15.4.
   | `cpm386.elf` | Multiboot kernel image                 |
   | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image |
 
+The [`mboot.sh`](mboot.sh) convenience script (tested on GNU/Linux systems
+with GRUB2) can be used to create bootable multiboot media (such as an
+SD card).  The `floppy.img` can be written directly to a 1.44MB floppy disk.
+
 You can [download](#downloads) pre‑compiled binaries above.
 
 ## QEMU testing
@@ -274,14 +278,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>73</th>
-                <th>46048</th>
-                <th>8668</th>
-                <th>7887</th>
-                <th>29493</th>
-                <th>6034</th>
-                <th>1275499</th>
-                <th>17564</th>
+                <th>71</th>
+                <th>45585</th>
+                <th>8571</th>
+                <th>7819</th>
+                <th>29195</th>
+                <th>5962</th>
+                <th>1264703</th>
+                <th>17415</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>25</th>
@@ -305,23 +309,33 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1692</th>
-                <th>327</th>
-                <th>213</th>
-                <th>1152</th>
-                <th>353</th>
-                <th>56732</th>
-                <th>817</th>
+                <th>1639</th>
+                <th>319</th>
+                <th>208</th>
+                <th>1112</th>
+                <th>338</th>
+                <th>54768</th>
+                <th>793</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>491</th>
-                <th>58</th>
+                <th>505</th>
+                <th>59</th>
                 <th>0</th>
-                <th>433</th>
+                <th>446</th>
                 <th>0</th>
-                <th>22893</th>
-                <th>390</th>
+                <th>23393</th>
+                <th>401</th>
+        </tr><tr>
+                <th>Shell</th>
+                <th>1</th>
+                <th>290</th>
+                <th>86</th>
+                <th>62</th>
+                <th>142</th>
+                <th>30</th>
+                <th>8271</th>
+                <th>113</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
                 <th>2</th>
@@ -340,19 +354,19 @@ See [FUTURE.md](FUTURE.md).
                 <th>15</th>
                 <th>60</th>
                 <th>0</th>
-                <th>3239</th>
+                <th>3250</th>
                 <th>64</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>112</th>
-                <th>53760</th>
-                <th>10044</th>
-                <th>10000</th>
-                <th>33716</th>
-                <th>6401</th>
-                <th>1533872</th>
-                <th>21500</th>
+                <th>111</th>
+                <th>53548</th>
+                <th>10026</th>
+                <th>9989</th>
+                <th>33533</th>
+                <th>6344</th>
+                <th>1529894</th>
+                <th>21443</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
