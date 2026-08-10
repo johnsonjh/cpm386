@@ -375,24 +375,24 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Dockerfile</th>
                 <th>1</th>
-                <th>52</th>
+                <th>47</th>
                 <th>8</th>
                 <th>12</th>
-                <th>32</th>
-                <th>5</th>
-                <th>1443</th>
-                <th>37</th>
+                <th>27</th>
+                <th>4</th>
+                <th>1310</th>
+                <th>34</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>114</th>
-                <th>54068</th>
+                <th>54063</th>
                 <th>10146</th>
                 <th>10061</th>
-                <th>33861</th>
-                <th>6385</th>
-                <th>1542531</th>
-                <th>21678</th>
+                <th>33856</th>
+                <th>6384</th>
+                <th>1542398</th>
+                <th>21675</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
