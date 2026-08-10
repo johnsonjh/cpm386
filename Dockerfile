@@ -9,7 +9,35 @@ FROM quay.io/fedora/fedora:rawhide
 
 ################################################################################
 
-RUN dnf -y upgrade --allowerasing --setopt=install_weak_deps=True --setopt=keepcache=True && dnf -y install dnf-utils git --allowerasing --setopt=install_weak_deps=True --setopt=keepcache=True && dnf -y install binutils coreutils cpmtools gawk gcc glibc-devel.i686 glibc.i686 libatomic.x86_64 libatomic.i686 lz4 make nasm pigz --allowerasing --setopt=install_weak_deps=True && { dnf -y clean all || true; } && rm -f /var/log/dnf*.log
+RUN \
+  dnf -y upgrade \
+    --allowerasing \
+    --setopt=install_weak_deps=True \
+    --setopt=keepcache=True && \
+  dnf -y install \
+    dnf-utils \
+    git \
+      --allowerasing \
+      --setopt=install_weak_deps=True \
+      --setopt=keepcache=True && \
+  dnf -y install \
+    binutils \
+    coreutils \
+    cpmtools \
+    gawk \
+    gcc \
+    glibc-devel.i686 \
+    glibc.i686 \
+    libatomic.i686 \
+    libatomic.x86_64 \
+    lz4 \
+    make \
+    nasm \
+    pigz \
+      --allowerasing \
+      --setopt=install_weak_deps=True && \
+  { dnf -y clean all || true; } && \
+  rm -f /var/log/dnf*.log
 
 ################################################################################
 
