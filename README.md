@@ -56,7 +56,6 @@
 ## CP/M compatibility
 
 **CP/M‑386** should be highly source‑compatible with other implementations:
-
 |                System | BDOS coverage       |
 |----------------------:|:--------------------|
 | **CP/M‑68K&nbsp;1.3** | **100%**            |
@@ -335,12 +334,12 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>531</th>
-                <th>60</th>
+                <th>530</th>
+                <th>59</th>
                 <th>0</th>
                 <th>471</th>
                 <th>0</th>
-                <th>24197</th>
+                <th>24196</th>
                 <th>420</th>
         </tr><tr>
                 <th>Shell</th>
@@ -386,12 +385,12 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>114</th>
-                <th>54063</th>
-                <th>10146</th>
+                <th>54062</th>
+                <th>10145</th>
                 <th>10061</th>
                 <th>33856</th>
                 <th>6384</th>
-                <th>1542398</th>
+                <th>1542397</th>
                 <th>21675</th>
         </tr></tfoot></table>
 <!-- scc-end -->
