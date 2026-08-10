@@ -15,17 +15,12 @@ RUN \
     --setopt=install_weak_deps=True \
     --setopt=keepcache=True && \
   dnf -y install \
-    dnf-utils \
-    git \
-      --allowerasing \
-      --setopt=install_weak_deps=True \
-      --setopt=keepcache=True && \
-  dnf -y install \
     binutils \
     coreutils \
     cpmtools \
     gawk \
     gcc \
+    git \
     glibc-devel.i686 \
     glibc.i686 \
     libatomic.i686 \
