@@ -106,12 +106,9 @@ versions may *appear* to work but have several known bugs.
 
 ## Compilation
 
-Building **CP/M‑386** is supported on current releases of **NetBSD** and
-**FreeBSD**<sup>‡</sup>, and most recent **Linux** distributions.
-
-Red Hat Enterprise Linux 9 (or later), CentOS Stream 9 (or later), and
-Fedora 36 (or later) have been verified to build **CP/M‑386** successfully.
-
+Building **CP/M‑386** is supported on the current releases of **NetBSD**
+and **FreeBSD**<sup>‡</sup>, as well as Red Hat Enterprise Linux 9 (or later),
+CentOS Stream 9 (or later), and Fedora 36 (or later).
 []()
 
 []()
@@ -334,13 +331,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>530</th>
-                <th>59</th>
+                <th>527</th>
+                <th>57</th>
                 <th>0</th>
-                <th>471</th>
+                <th>470</th>
                 <th>0</th>
-                <th>24196</th>
-                <th>420</th>
+                <th>24112</th>
+                <th>419</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -385,13 +382,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>114</th>
-                <th>54062</th>
-                <th>10145</th>
+                <th>54059</th>
+                <th>10143</th>
                 <th>10061</th>
-                <th>33856</th>
+                <th>33855</th>
                 <th>6384</th>
-                <th>1542397</th>
-                <th>21675</th>
+                <th>1542313</th>
+                <th>21674</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
