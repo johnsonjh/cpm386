@@ -132,7 +132,7 @@ CentOS Stream 9 (or later), and Fedora 36 (or later).
     kernel size + Ring-0 stack exceeding conventional memory.
 * Be sure to `make clean` if switching compilers or adjusting compiler flags.
 * You may need to adjust the `make -j` argument depending on your operating
-  system (*.e.g.*, `gnproc`, `sysctl -n hw.ncpu`, `getconf NPROCESSORS_ONLN`,
+  system (*e.g.*, `gnproc`, `sysctl -n hw.ncpu`, `getconf NPROCESSORS_ONLN`,
   `psrinfo -p`).
 * 32‑bit support libraries are required to run the test suite (`make test`).
 * <sup>‡</sup>At the time of writing, **FreeBSD** is shipping non‑functional
@@ -336,7 +336,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>470</th>
                 <th>0</th>
-                <th>24112</th>
+                <th>24111</th>
                 <th>419</th>
         </tr><tr>
                 <th>Shell</th>
@@ -387,7 +387,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10061</th>
                 <th>33855</th>
                 <th>6384</th>
-                <th>1542313</th>
+                <th>1542312</th>
                 <th>21674</th>
         </tr></tfoot></table>
 <!-- scc-end -->
