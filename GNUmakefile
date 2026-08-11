@@ -8,8 +8,9 @@
 ################################################################################
 
 export LC_ALL=C
-export MAKE=$(shell printf '%s'\
-	"$${MAKE:-$$(command -v gmake 2>&1 || command -v make 2>&1)}")
+export MAKE=$(shell printf '%s' \
+	"$${MAKE:-$$(command -v gmake 2> /dev/null \
+		|| command -v make 2> /dev/null || echo make)}")
 
 ################################################################################
 
