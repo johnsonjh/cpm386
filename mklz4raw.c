@@ -186,7 +186,7 @@ main (int argc, char **argv)
 
   (void)fprintf (stderr,
                  "%s: %ld frame bytes -> %ld raw block bytes"
-                 " (header %d bytes stripped)\n",
+                 " (%d header bytes stripped)\n",
                  argv [0], fsize, out_size, pos);
 
   FREE (buf);
