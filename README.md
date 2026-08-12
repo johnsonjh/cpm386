@@ -361,13 +361,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
-                <th>83</th>
+                <th>86</th>
                 <th>6</th>
                 <th>15</th>
-                <th>62</th>
+                <th>65</th>
                 <th>0</th>
-                <th>3407</th>
-                <th>66</th>
+                <th>3679</th>
+                <th>69</th>
         </tr><tr>
                 <th>Dockerfile</th>
                 <th>1</th>
@@ -382,13 +382,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>114</th>
-                <th>54060</th>
+                <th>54063</th>
                 <th>10143</th>
                 <th>10061</th>
-                <th>33856</th>
+                <th>33859</th>
                 <th>6385</th>
-                <th>1542346</th>
-                <th>21675</th>
+                <th>1542618</th>
+                <th>21678</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
