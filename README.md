@@ -60,7 +60,7 @@
 |----------------------:|:--------------------|
 | **CP/M‑68K&nbsp;1.3** | **100%**            |
 | **CP/M&nbsp;2.2**     | **100%**            |
-| **CP/M‑Plus**         | **71%**             |
+| **CP/M‑Plus**         | **74%**             |
 | **DOS‑Plus**          | **62%**             |
 | **MP/M&nbsp;2.1**     | **50%**             |
 
@@ -199,62 +199,63 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 
 ## Included utilities
 
-|        Program | Description                                                                                        |
-|---------------:|:---------------------------------------------------------------------------------------------------|
-| `ACLOCKDV.386` | [aclock](https://github.com/tenox7/aclock) (VGA text console version)                              |
-| `ACLOCKVT.386` | [aclock](https://github.com/tenox7/aclock) (ANSI terminal version)                                 |
-| `ALVTST.386`   | Get Allocation Vector test ([BDOS 27](https://www.seasip.info/Cpm/bdos.html))                      |
-| `CAPSLOCK.386` | Caps‑Lock key behavior utility (BDOS 235)                                                          |
-| `CLEARTPA.386` | Clears (zeros) and optionally verifies the TPA                                                     |
-| `CLS.386`      | Clear screen (BDOS 221)                                                                            |
-| `DELAY.386`    | Delay test ([BDOS 141](https://www.seasip.info/Cpm/bdos.html#141))                                 |
-| `DEMO.SUB`     | SUBMIT demonstration                                                                               |
-| `DUMPDIR.386`  | Directory entry dump utility ([BDOS 17](https://www.seasip.info/Cpm/bdos.html#17)/[18](https://www.seasip.info/Cpm/bdos.html#18)) |
-| `DUMPFCB.386`  | File control block dump utility ([BDOS 15](https://www.seasip.info/Cpm/bdos.html#15))              |
-| `ED.386`       | ED (A port of the DRI CP/M Context Editor 08/1982)                                                 |
-| `ENV.DAT`      | Environment data file                                                                              |
-| `FPARSE.386`   | F_PARSE test ([BDOS 152](https://www.seasip.info/Cpm/bdos.html#152))                               |
-| `GETSN.386`    | Display serial number ([BDOS 107](https://www.seasip.info/Cpm/bdos.html#107))                      |
-| `GFXTEST.386`  | Graphics and framebuffer demo (BDOS 229/230/231/233)                                               |
-| `HD.386`       | Hex dump utility                                                                                   |
-| `HELLO.386`    | Hello world (the very first **CP/M‑386** program!)                                                 |
-| `ILLEGAL.386`  | Ring‑3 protection and exception handler test                                                       |
-| `IOTEST.386`   | File I/O BDOS tests                                                                                |
-| `JULIA.386`    | Draw a Julia set fractal (terminal version)                                                        |
-| `LRBC.386`     | Query and/or set Last Record Byte Count                                                            |
-| `LS.386`       | List files (with sizes)                                                                            |
-| `MANDEL.386`   | Draw a Mandelbrot set fractal (terminal version)                                                   |
-| `MEM.386`      | Memory map utility (BDOS 227/228)                                                                  |
-| `MORE.386`     | UNIX `more`‑style pager                                                                            |
-| `NUMLOCK.386`  | Num‑Lock key behavior utility (BDOS 236)                                                           |
-| `OD.386`       | Octal dump utility                                                                                 |
-| `PAUSE.386`    | Wait for keypress                                                                                  |
-| `PIP.386`      | PIP (A port of Zilog **CP/M-Z8000** PIP v1.0A 01/03/1984)                                          |
-| `PRINTENV.386` | Print environment and system data                                                                  |
-| `PRNG.386`     | PRNG test and demo utility (BDOS 253/254)                                                          |
-| `PROFILE.SUB`  | SUBMIT script (automatically executed at boot)                                                     |
-| `RC.386`       | Return code test and query ([BDOS 108](https://www.seasip.info/Cpm/bdos.html#108))                 |
-| `README.TXT`   | Sample text file                                                                                   |
-| `REBOOT.386`   | Reboot utility (BDOS 220)                                                                          |
-| `RM.386`       | UNIX `rm`‑like interactive file deletion utility                                                   |
-| `SEROFF.386`   | Disable serial console (BDOS 223)                                                                  |
-| `SERON.386`    | Enable serial console (BDOS 223)                                                                   |
-| `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C 01/03/1984)                                        |
-| `SYNC.386`     | Synchronize disks ([BDOS 48](https://www.seasip.info/Cpm/bdos.html#48))                            |
-| `TERMTEST.386` | Terminal and keyboard test utility                                                                 |
-| `TEST211.386`  | Numeric format test ([BDOS 211](https://www.seasip.info/Cpm/bdos.html#211))                        |
-| `TEXTMODE.386` | Query and/or set the text mode and cursor state (BDOS 229/230/231/234)                             |
-| `TICKS.386`    | High‑resolution timer tests (BDOS 225/226)                                                         |
-| `TOD.386`      | Get (and set) Time of Day clock ([BDOS 104](https://www.seasip.info/Cpm/bdos.html#104)/[105](https://www.seasip.info/Cpm/bdos.html#105)) |
-| `TOUCH.386`    | Create an empty file                                                                               |
-| `TRUNCATE.386` | File truncation utility (LRBC aware)                                                               |
-| `TRUNCTST.386` | Truncation tests ([BDOS 99](https://www.seasip.info/Cpm/bdos.html#99))                             |
-| `TSEC.386`     | Get date and time ([BDOS 155](https://www.seasip.info/Cpm/bdos.html#155))                          |
-| `VER.386`      | Display OS version ([BDOS 163](https://www.seasip.info/Cpm/bdos.html#163))                         |
+|        Program | Description |
+|---------------:|:------------|
+| `ACLOCKDV.386` | [aclock](https://github.com/tenox7/aclock) (VGA text console version) |
+| `ACLOCKVT.386` | [aclock](https://github.com/tenox7/aclock) (ANSI terminal version) |
+| `ALVTST.386`   | Get Allocation Vector test (`DRV_ALLOCVEC`, [BDOS 27](https://www.seasip.info/Cpm/bdos.html)) |
+| `CAPSLOCK.386` | Caps‑Lock key behavior utility (BDOS 235) |
+| `CLEARTPA.386` | Clears (zeros) and optionally verifies the TPA |
+| `CLS.386`      | Clear screen (BDOS 221) |
+| `DELAY.386`    | Delay test (`P_DELAY`, [BDOS 141](https://www.seasip.info/Cpm/bdos.html#141)) |
+| `DEMO.SUB`     | SUBMIT demonstration |
+| `DUMPDIR.386`  | Directory entry dump utility (`F_SFIRST`/`F_SNEXT`, [BDOS 17](https://www.seasip.info/Cpm/bdos.html#17)/[18](https://www.seasip.info/Cpm/bdos.html#18)) |
+| `DUMPFCB.386`  | File control block dump utility (`F_OPEN`, [BDOS 15](https://www.seasip.info/Cpm/bdos.html#15)) |
+| `ED.386`       | ED (A WIP port of the DRI CP/M Context Editor 08/1982) |
+| `ENV.DAT`      | Environment data file |
+| `FPARSE.386`   | Filename parsing test (`F_PARSE`, [BDOS 152](https://www.seasip.info/Cpm/bdos.html#152)) |
+| `GETSN.386`    | Display serial number (`S_SERIAL`, [BDOS 107](https://www.seasip.info/Cpm/bdos.html#107)) |
+| `GFXTEST.386`  | Graphics and framebuffer demo (BDOS 229/230/231/233) |
+| `HD.386`       | Hex dump utility |
+| `HELLO.386`    | Hello world - the very first **CP/M‑386** program! (`C_WRITESTR`, [BDOS 9](https://www.seasip.info/Cpm/bdos.html#9)) |
+| `ILLEGAL.386`  | Ring‑3 protection and exception handler test |
+| `IOTEST.386`   | File I/O BDOS tests |
+| `JULIA.386`    | Draw a Julia set fractal (terminal version) |
+| `LRBC.386`     | Query and/or set Last Record Byte Count |
+| `LS.386`       | List files (with sizes) |
+| `MANDEL.386`   | Draw a Mandelbrot set fractal (terminal version) |
+| `MEM.386`      | Memory map utility (BDOS 227/228) |
+| `MORE.386`     | UNIX `more`‑style pager |
+| `NUMLOCK.386`  | Num‑Lock key behavior utility (BDOS 236) |
+| `OD.386`       | Octal dump utility |
+| `PAUSE.386`    | Wait for keypress (`C_RAWIO`, [BDOS 6](https://www.seasip.info/Cpm/bdos.html#6)) |
+| `PIP.386`      | PIP (A port of Zilog **CP/M-Z8000** PIP v1.0A 01/03/1984) |
+| `PRINTENV.386` | Print environment and system data |
+| `PRNG.386`     | PRNG test and demo utility (BDOS 253/254) |
+| `PROFILE.SUB`  | SUBMIT script (automatically executed at boot) |
+| `RC.386`       | Return code test and query (`P_CODE`, [BDOS 108](https://www.seasip.info/Cpm/bdos.html#108)) |
+| `README.TXT`   | Sample text file |
+| `REBOOT.386`   | Reboot utility (BDOS 220) |
+| `RM.386`       | UNIX `rm`‑like interactive file deletion utility (`F_DELETE`, [BDOS 19](https://www.seasip.info/Cpm/bdos.html#19)) |
+| `SEROFF.386`   | Disable serial console (BDOS 223) |
+| `SERON.386`    | Enable serial console (BDOS 223) |
+| `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C 01/03/1984) |
+| `SYNC.386`     | Synchronize disks (`DRV_FLUSH, [BDOS 48](https://www.seasip.info/Cpm/bdos.html#48)) |
+| `TERMTEST.386` | Terminal and keyboard test utility |
+| `TEST110.386`  | String delimiter test (`C_DELIMIT`, [BDOS 110](https://www.seasip.info/Cpm/bdos.html#110)) |
+| `TEST211.386`  | Numeric format test (`C_DECNUM`, [BDOS 211](https://www.seasip.info/Cpm/bdos.html#211)) |
+| `TEXTMODE.386` | Query and/or set the text mode and cursor state (BDOS 229/230/231/234) |
+| `TICKS.386`    | High‑resolution timer tests (BDOS 225/226) |
+| `TOD.386`      | Get (and set) Time of Day clock (`T_SET`/`T_GET`, [BDOS 104](https://www.seasip.info/Cpm/bdos.html#104)/[105](https://www.seasip.info/Cpm/bdos.html#105)) |
+| `TOUCH.386`    | Create an empty file (`F_MAKE`, [BDOS 22](https://www.seasip.info/Cpm/bdos.html#22)) |
+| `TRUNCATE.386` | File truncation utility (LRBC aware) |
+| `TRUNCTST.386` | Truncation tests (`F_TRUNCATE`, [BDOS 99](https://www.seasip.info/Cpm/bdos.html#99)) |
+| `TSEC.386`     | Get date and time (`T_SECONDS`, [BDOS 155](https://www.seasip.info/Cpm/bdos.html#155)) |
+| `VER.386`      | Display OS version (`S_OSVER`, [BDOS 163](https://www.seasip.info/Cpm/bdos.html#163)) |
 | `VGAFONT.386`  | Load a [text console font](https://github.com/viler-int10h/vga-text-mode-fonts) or restore the ROM font (BDOS 232) |
-| `VGAOFF.386`   | Disable VGA text console (BDOS 222)                                                                |
-| `VGAON.386`    | Enable VGA text console (BDOS 222)                                                                 |
-| `VGATEXT.386`  | VGA text direct access demo (BDOS 224)                                                             |
+| `VGAOFF.386`   | Disable VGA text console (BDOS 222) |
+| `VGAON.386`    | Enable VGA text console (BDOS 222) |
+| `VGATEXT.386`  | VGA text direct access demo (BDOS 224) |
 
 ## Contributing
 
@@ -290,14 +291,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>72</th>
-                <th>45823</th>
-                <th>8633</th>
-                <th>7847</th>
-                <th>29343</th>
-                <th>5989</th>
-                <th>1269495</th>
-                <th>17493</th>
+                <th>73</th>
+                <th>45982</th>
+                <th>8670</th>
+                <th>7882</th>
+                <th>29430</th>
+                <th>5997</th>
+                <th>1273041</th>
+                <th>17522</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>25</th>
@@ -321,23 +322,23 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1679</th>
-                <th>329</th>
-                <th>213</th>
-                <th>1137</th>
-                <th>348</th>
-                <th>55955</th>
-                <th>808</th>
+                <th>1690</th>
+                <th>331</th>
+                <th>214</th>
+                <th>1145</th>
+                <th>350</th>
+                <th>56324</th>
+                <th>813</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>527</th>
+                <th>528</th>
                 <th>57</th>
                 <th>0</th>
-                <th>470</th>
+                <th>471</th>
                 <th>0</th>
-                <th>24111</th>
-                <th>419</th>
+                <th>21812</th>
+                <th>420</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -381,14 +382,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>114</th>
-                <th>54063</th>
-                <th>10143</th>
-                <th>10061</th>
-                <th>33859</th>
-                <th>6385</th>
-                <th>1542618</th>
-                <th>21678</th>
+                <th>115</th>
+                <th>54234</th>
+                <th>10182</th>
+                <th>10097</th>
+                <th>33955</th>
+                <th>6395</th>
+                <th>1544234</th>
+                <th>21713</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

@@ -670,6 +670,25 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       break;
 
     /*
+     * BDOS 110 (C_DELIMIT) - Get/set string delimiter.
+     * DE=0xFFFF -> return current delimiter ASCII value in A.
+     * else      -> set delimiter to ASCII value in E, return in A.
+     */
+
+    case 110:
+      if (info == (UWORD)0xFFFF)
+        {
+          rtnval = (UWORD)GBL.delim;
+        }
+      else
+        {
+          GBL.delim = (UBYTE)info;
+          rtnval = (UWORD)GBL.delim;
+        }
+
+      break;
+
+    /*
      * CP/M-386 private: machine reboot (REBOOT.386).
      * info & 1 = warm (BDA 0x472).
      */

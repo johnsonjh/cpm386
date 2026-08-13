@@ -155,6 +155,7 @@ warmboot (parm)
   if (parm)
     submit = morecmds = FALSE;
   GBL.curdsk = 0xff; /* set current disk to "unknown" */
+  GBL.delim = '$';   /* reset custom delimiter */
   tpa_lt = tpa_lp;
   tpa_ht = tpa_hp;
   initexc (&(GBL.excvec [0]));

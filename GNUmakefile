@@ -518,6 +518,14 @@ hello.386: hello.bin $(MK386)
 
 ################################################################################
 
+test110.386: test110.bin $(MK386)
+	./$(MK386) ./test110.bin ./test110.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 test211.386: test211.bin $(MK386)
 	./$(MK386) ./test211.bin ./test211.386 0x100
 	@tput setaf 2 2> /dev/null || :
@@ -1016,6 +1024,7 @@ ramdisk.bin: \
 			stat.386 \
 			sync.386 \
 			termtest.386 \
+			test110.386 \
 			test211.386 \
 			textmode.386 \
 			ticks.386 \
@@ -1036,7 +1045,7 @@ ramdisk.bin: \
 		> ./.cpmd/README.TXT
 	$(PRINTF) '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
 		> ./.cpmd/ENV.DAT
-	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L STAT.*\r\nLRBC STAT.386\r\nTRUNCTST\r\nALVTST\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\nPRNG 128\r\n; Run PRNG again from image existing in TPA\r\nGO 64\r\n; End of DEMO.SUB\r\n\x1a' \
+	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST110\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L STAT.*\r\nLRBC STAT.386\r\nTRUNCTST\r\nALVTST\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\nPRNG 128\r\n; Run PRNG again from image existing in TPA\r\nGO 64\r\n; End of DEMO.SUB\r\n\x1a' \
 		> ./.cpmd/DEMO.SUB
 	$(PRINTF) '@QUIET ON\r\nVER\r\n\x1a' > ./.cpmd/PROFILE.SUB
 	$(CP) -f ./aclockdv.386 ./.cpmd/ACLOCKDV.386
@@ -1076,6 +1085,7 @@ ramdisk.bin: \
 	$(CP) -f ./stat.386 ./.cpmd/STAT.386
 	$(CP) -f ./sync.386 ./.cpmd/SYNC.386
 	$(CP) -f ./termtest.386 ./.cpmd/TERMTEST.386
+	$(CP) -f ./test110.386 ./.cpmd/TEST110.386
 	$(CP) -f ./test211.386 ./.cpmd/TEST211.386
 	$(CP) -f ./textmode.386 ./.cpmd/TEXTMODE.386
 	$(CP) -f ./ticks.386 ./.cpmd/TICKS.386
@@ -1132,6 +1142,7 @@ ramdisk.bin: \
 	  ./.cpmd/STAT.386 \
 	  ./.cpmd/SYNC.386 \
 	  ./.cpmd/TERMTEST.386 \
+	  ./.cpmd/TEST110.386 \
 	  ./.cpmd/TEST211.386 \
 	  ./.cpmd/TEXTMODE.386 \
 	  ./.cpmd/TICKS.386 \
