@@ -388,6 +388,7 @@ int13 (unsigned long ax, unsigned long bx, unsigned long cx, unsigned long dx,
   v86_state.fs = 0;
   v86_state.gs = 0;
   v86_state.eflags = V86_EFLAGS;
+  v86_state.esp = V86_STACK_TOP;
 
   if (v86_call (0x13) != 0)
     {
@@ -449,6 +450,7 @@ disk_poll (void)
   v86_state.fs = 0;
   v86_state.gs = 0;
   v86_state.eflags = V86_EFLAGS;
+  v86_state.esp = V86_STACK_TOP;
 
   (void)v86_call (0x08);
 
@@ -531,6 +533,19 @@ drive_probe (int drv)
    */
 
   (void)int13 (0x0000, 0, 0, d->bios_num, 0, 0);
+
+  if (d->bios_num >= 0x80)
+    {
+      if (int13 (0x0800, 0, 0, d->bios_num, 0, 0) != 0)
+        {
+          return 0;
+        }
+
+      if ((d->bios_num - 0x80) >= (v86_state.edx & 0xFFu))
+        {
+          return 0;
+        }
+    }
 
   d->use_lba = (unsigned char)int13_has_edd (d);
 
