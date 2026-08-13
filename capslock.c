@@ -120,10 +120,10 @@ static void
 usage (void)
 {
   puts ("Usage: CAPSLOCK [on | off | control | swap]\r\n");
-  puts ("  (no args)  report what the Caps-Lock key currently does\r\n");
-  puts ("  on         Caps-Lock locks the shift; left Ctrl is left Ctrl\r\n");
-  puts ("  off        Caps-Lock does nothing at all\r\n");
-  puts ("  control    Caps-Lock acts as a second left Ctrl\r\n");
+  puts ("  (no args)  query the current Caps-Lock key configuration\r\n");
+  puts ("  on         Caps-Lock locks the shift; left-Ctrl is left-Ctrl\r\n");
+  puts ("  off        Caps-Lock is disabled\r\n");
+  puts ("  control    Caps-Lock acts as a second left-Ctrl\r\n");
   puts ("  swap       Caps-Lock and left-Ctrl exchange functions\r\n");
 }
 
@@ -135,7 +135,7 @@ report (UWORD mode)
   switch (mode)
     {
     case CAPS_ON:
-      puts ("Caps-Lock is enabled; left Ctrl is left Ctrl.\r\n");
+      puts ("Caps-Lock is enabled; left-Ctrl is left-Ctrl.\r\n");
 
       break;
 
@@ -145,12 +145,12 @@ report (UWORD mode)
       break;
 
     case CAPS_CTRL:
-      puts ("Caps-Lock acts as a second left Ctrl.\r\n");
+      puts ("Caps-Lock acts as a second left-Ctrl.\r\n");
 
       break;
 
     case CAPS_SWAP:
-      puts ("Caps-Lock and left Ctrl are swapped.\r\n");
+      puts ("Caps-Lock and left-Ctrl are swapped.\r\n");
 
       break;
 

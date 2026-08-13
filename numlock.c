@@ -167,11 +167,9 @@ usage (void)
   puts ("  (no args)  same as -q\r\n");
   puts ("  -h         show this help text\r\n");
   puts ("  -l arg     Num-Lock LED reporting on or off\r\n");
-  puts ("  -q         report the Num-Lock state and LED setting\r\n");
+  puts ("  -q         query the Num-Lock state and LED setting\r\n");
   puts ("  -s arg     turn Num-Lock on or off\r\n");
   puts ("\r\n");
-  puts ("  on, 1, enable and true are equivalent, as are off, 0,\r\n");
-  puts ("  disable and false.\r\n");
 }
 
 /*****************************************************************************/
