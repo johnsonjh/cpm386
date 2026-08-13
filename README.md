@@ -221,7 +221,7 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 | `GETSN.386`    | Display serial number (`S_SERIAL`, [BDOS 107](https://www.seasip.info/Cpm/bdos.html#107)) |
 | `GFXTEST.386`  | Graphics and framebuffer demo (BDOS 229/230/231/233) |
 | `HD.386`       | Hex dump utility |
-| `HELLO.386`    | Hello world - the very first **CP/M‑386** program! (`C_WRITESTR`, [BDOS 9](https://www.seasip.info/Cpm/bdos.html#9)) |
+| `HELLO.386`    | Hello world - the first **CP/M‑386** program! (`C_WRITESTR`, [BDOS 9](https://www.seasip.info/Cpm/bdos.html#9)) |
 | `ILLEGAL.386`  | Ring‑3 protection and exception handler test |
 | `IOTEST.386`   | File I/O BDOS tests |
 | `JULIA.386`    | Draw a Julia set fractal (terminal version) |
@@ -244,7 +244,7 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 | `SEROFF.386`   | Disable serial console (BDOS 223) |
 | `SERON.386`    | Enable serial console (BDOS 223) |
 | `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C January 1984) |
-| `SYNC.386`     | Synchronize disks (`DRV_FLUSH, [BDOS 48](https://www.seasip.info/Cpm/bdos.html#48)) |
+| `SYNC.386`     | Synchronize disks (`DRV_FLUSH`, [BDOS 48](https://www.seasip.info/Cpm/bdos.html#48)) |
 | `TERMTEST.386` | Terminal and keyboard test utility |
 | `TEST110.386`  | String delimiter test (`C_DELIMIT`, [BDOS 110](https://www.seasip.info/Cpm/bdos.html#110)) |
 | `TEST211.386`  | Numeric format test (`C_DECNUM`, [BDOS 211](https://www.seasip.info/Cpm/bdos.html#211)) |
@@ -341,7 +341,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>471</th>
                 <th>0</th>
-                <th>21760</th>
+                <th>21756</th>
                 <th>418</th>
         </tr><tr>
                 <th>Shell</th>
@@ -392,7 +392,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10111</th>
                 <th>34051</th>
                 <th>6460</th>
-                <th>1547117</th>
+                <th>1547113</th>
                 <th>21639</th>
         </tr></tfoot></table>
 <!-- scc-end -->
