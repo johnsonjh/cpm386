@@ -48,12 +48,6 @@
 #define QUIETCMD        15      /* submit echo control (ZCPR3 QUIET)    */
 #define QUIETPFX        '@'
 
-#ifdef RLI
-# define RLI_EXIT 12
-# define RLI_IMPORT 13
-# define RLI_EXPORT 14
-#endif
-
 /*****************************************************************************/
 
         /*-------------------------------------------*\

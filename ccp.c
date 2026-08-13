@@ -7,12 +7,6 @@
 
 /*****************************************************************************/
 
-#ifdef RLI
-# include "diverge.h"
-#endif
-
-/*****************************************************************************/
-
 /*--------------------------------------------------------------*\
  |      ccp.c         CONSOLE COMMAND PROCESSOR          v1.1   |
  |                    =========================                 |
@@ -72,11 +66,6 @@ struct _cmd_tbl cmd_tbl [] =
         {"SUBMIT",SUBCMD},
         {"GO",GOCMD},           /* re-exec last .386 still in the TPA */
         {"QUIET",QUIETCMD},     /* submit echo control; no-op interactive */
-#ifdef RLI
-        {"EXIT",RLI_EXIT},
-        {"IMPORT",RLI_IMPORT},
-        {"EXPORT",RLI_EXPORT},
-#endif
         {0, (UWORD)-1}
 };
 
@@ -1527,11 +1516,6 @@ REG BYTE *cmd;
                                         subprompt = FALSE;
                                 cmd_file(flag);
                                 break;
-#ifdef RLI
-                case RLI_EXIT: bios_exit(); break;
-                case RLI_IMPORT: bios_import(); break;
-                case RLI_EXPORT: bios_export(); break;
-#endif
 
                 /*
                  * QUIET - suppress the CCP's echo of submit file commands and

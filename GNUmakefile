@@ -1290,8 +1290,7 @@ $(MLTIBOOT_OBJ): mltiboot.c mltiboot.h memmap.h absaddr.h bdosinc.h biosdef.h
 # The BDOS sources share one set of headers; bdosdef.h carries the ring-3
 # request structs (cpm_vga_text / cpm_ticks / cpm_memlayout).
 
-BDOS_HDRS = diverge.h bdosinc.h bdosdef.h biosdef.h pktio.h platform.h \
-	vidmode.h vgacon.h
+BDOS_HDRS = bdosinc.h bdosdef.h biosdef.h pktio.h platform.h vidmode.h vgacon.h
 
 bdosmain.o: bdosmain.c $(BDOS_HDRS)
 bdosmisc.o: bdosmisc.c $(BDOS_HDRS)
@@ -1303,7 +1302,7 @@ iosys.o: iosys.c $(BDOS_HDRS)
 
 ################################################################################
 
-$(CCP_OBJ): ccp.c ccpdef.h diverge.h bdosinc.h bdosdef.h
+$(CCP_OBJ): ccp.c ccpdef.h bdosinc.h bdosdef.h
 
 ################################################################################
 

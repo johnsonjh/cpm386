@@ -293,23 +293,23 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>74</th>
-                <th>46400</th>
-                <th>8756</th>
-                <th>7928</th>
-                <th>29716</th>
+                <th>46344</th>
+                <th>8741</th>
+                <th>7921</th>
+                <th>29682</th>
                 <th>6063</th>
-                <th>1281741</th>
-                <th>17608</th>
+                <th>1280572</th>
+                <th>17598</th>
         </tr><tr>
                 <th>C Header</th>
-                <th>25</th>
-                <th>3545</th>
-                <th>660</th>
-                <th>1499</th>
-                <th>1386</th>
-                <th>13</th>
-                <th>128087</th>
-                <th>1782</th>
+                <th>24</th>
+                <th>3341</th>
+                <th>652</th>
+                <th>1469</th>
+                <th>1220</th>
+                <th>11</th>
+                <th>122682</th>
+                <th>1615</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>8</th>
@@ -323,13 +323,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1707</th>
+                <th>1706</th>
                 <th>333</th>
                 <th>215</th>
-                <th>1159</th>
+                <th>1158</th>
                 <th>352</th>
-                <th>56949</th>
-                <th>824</th>
+                <th>56926</th>
+                <th>823</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
@@ -383,14 +383,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>116</th>
-                <th>54673</th>
-                <th>10272</th>
-                <th>10144</th>
-                <th>34257</th>
-                <th>6463</th>
-                <th>1553582</th>
-                <th>21812</th>
+                <th>115</th>
+                <th>54412</th>
+                <th>10249</th>
+                <th>10107</th>
+                <th>34056</th>
+                <th>6461</th>
+                <th>1546985</th>
+                <th>21635</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

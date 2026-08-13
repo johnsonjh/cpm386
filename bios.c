@@ -604,8 +604,6 @@ UWORD bdos(WORD func, LONG info) {
 }
 #endif
 
-/* The CCP entry renamed? In no-RLI build, ccp() */
-
 extern void ccp(void);
 
 /* init_ramdisk moved to cpm_bringup.c */
