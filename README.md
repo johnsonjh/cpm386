@@ -39,7 +39,7 @@
   implementation with
   [Ring‑3 TPA](https://en.wikipedia.org/wiki/Protection_ring).
 * Bootable via 3.5" 1.44MB floppy disk
-  [MBR](https://en.wikipedia.org/wiki/Master_boot_record) or
+  [boot sector](https://en.wikipedia.org/wiki/Boot_sector) or
   [Multiboot](https://en.wikipedia.org/wiki/Multiboot_specification) kernel.
 * Supports [VGA text](https://en.wikipedia.org/wiki/VGA_text_mode) (`0xB8000`)
   and/or [COM1 serial](https://en.wikipedia.org/wiki/Serial_port)
@@ -182,7 +182,7 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 []()
 
 []()
-* Floppy [MBR](https://en.wikipedia.org/wiki/Master_boot_record) loader:
+* Floppy [boot sector](https://en.wikipedia.org/wiki/Boot_sector) loader:
   ```sh
   qemu-system-i386 -m 2M -serial stdio -monitor none -drive if=floppy,format=raw,file="floppy.img" -boot a
   ```
@@ -191,7 +191,10 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 
 * Use `-nographic -display none -vga none` to disable VGA video (and use *only* serial console).
 * Use `-serial none` to disable the serial UART (and use *only* VGA console).
-* Use `make disks` to create empty disk images.  To attach them to QEMU:
+[]()
+
+[]()
+* Use `make disks` to create empty disk images.  To attach them to QEMU, use:
   ```sh
   -drive if=floppy,format=raw,file="fd.img"
   -drive if=ide,format=raw,file="hd.img",index=0
@@ -211,7 +214,7 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 | `DEMO.SUB`     | SUBMIT demonstration |
 | `DUMPDIR.386`  | Directory entry dump utility (`F_SFIRST`/`F_SNEXT`, [BDOS 17](https://www.seasip.info/Cpm/bdos.html#17)/[18](https://www.seasip.info/Cpm/bdos.html#18)) |
 | `DUMPFCB.386`  | File control block dump utility (`F_OPEN`, [BDOS 15](https://www.seasip.info/Cpm/bdos.html#15)) |
-| `ED.386`       | ED (A WIP port of the DRI CP/M Context Editor 08/1982) |
+| `ED.386`       | ED (A WIP port of the DRI CP/M Context Editor, August 1982) |
 | `ENV.DAT`      | Environment data file |
 | `ESCTILDE.386` | Escape and Tilde key behavior utility (BDOS 237) |
 | `FPARSE.386`   | Filename parsing test (`F_PARSE`, [BDOS 152](https://www.seasip.info/Cpm/bdos.html#152)) |
@@ -230,7 +233,7 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 | `NUMLOCK.386`  | Num‑Lock key behavior utility (BDOS 236) |
 | `OD.386`       | Octal dump utility |
 | `PAUSE.386`    | Wait for keypress (`C_RAWIO`, [BDOS 6](https://www.seasip.info/Cpm/bdos.html#6)) |
-| `PIP.386`      | PIP (A port of Zilog **CP/M-Z8000** PIP v1.0A 01/03/1984) |
+| `PIP.386`      | PIP (A port of Zilog **CP/M-Z8000** PIP v1.0A, January 1984) |
 | `PRINTENV.386` | Print environment and system data |
 | `PRNG.386`     | PRNG test and demo utility (BDOS 253/254) |
 | `PROFILE.SUB`  | SUBMIT script (automatically executed at boot) |
@@ -240,7 +243,7 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 | `RM.386`       | UNIX `rm`‑like interactive file deletion utility (`F_DELETE`, [BDOS 19](https://www.seasip.info/Cpm/bdos.html#19)) |
 | `SEROFF.386`   | Disable serial console (BDOS 223) |
 | `SERON.386`    | Enable serial console (BDOS 223) |
-| `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C 01/03/1984) |
+| `STAT.386`     | STAT (A port of Zilog **CP/M‑Z8000** STAT v1.0C January 1984) |
 | `SYNC.386`     | Synchronize disks (`DRV_FLUSH, [BDOS 48](https://www.seasip.info/Cpm/bdos.html#48)) |
 | `TERMTEST.386` | Terminal and keyboard test utility |
 | `TEST110.386`  | String delimiter test (`C_DELIMIT`, [BDOS 110](https://www.seasip.info/Cpm/bdos.html#110)) |
@@ -333,12 +336,12 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>526</th>
-                <th>57</th>
+                <th>529</th>
+                <th>58</th>
                 <th>0</th>
-                <th>469</th>
+                <th>471</th>
                 <th>0</th>
-                <th>21719</th>
+                <th>21747</th>
                 <th>418</th>
         </tr><tr>
                 <th>Shell</th>
@@ -384,12 +387,12 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>115</th>
-                <th>54412</th>
-                <th>10249</th>
+                <th>54415</th>
+                <th>10250</th>
                 <th>10107</th>
-                <th>34056</th>
+                <th>34058</th>
                 <th>6461</th>
-                <th>1546985</th>
+                <th>1547013</th>
                 <th>21635</th>
         </tr></tfoot></table>
 <!-- scc-end -->
