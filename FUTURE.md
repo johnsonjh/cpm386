@@ -57,7 +57,6 @@ this section as *wishlist* and not a *roadmap*!
   * Extend MANDEL and JULIA to support arbitrary resolution via command tail
   * VGA framebuffer version of MANDEL and JULIA supporting many resolutions
   * Add return status to all software ports
-  * Extend VER to allow changing the reported BDOS version
   * Expand LS to show timestamps
   * Add SAVE program to write TPA to disk, and to optionally add a `.386`
     executable header.  SAVE should be able to take a range to save, as well
