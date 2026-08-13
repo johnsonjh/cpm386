@@ -1054,7 +1054,11 @@ ramdisk.bin: \
 		> ./.cpmd/README.TXT
 	$(PRINTF) '; Sample ENV.DAT for CP/M-386\r\nHELLO=World\r\n\x1a' \
 		> ./.cpmd/ENV.DAT
-	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; NOTE: No nested SUBMIT (yet!)\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST110\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L STAT.*\r\nLRBC STAT.386\r\nTRUNCTST\r\nALVTST\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\nPRNG 128\r\n; Run PRNG again from image existing in TPA\r\nGO 64\r\n; End of DEMO.SUB\r\n\x1a' \
+	$(PRINTF) '; Hello from ANOTHER1.SUB\r\n\x1a' \
+		> ./.cpmd/ANOTHER1.SUB
+	$(PRINTF) '; Hello from ANOTHER.SUB\r\nANOTHER1.SUB\r\n; Back in ANOTHER.SUB\r\n\x1a' \
+		> ./.cpmd/ANOTHER.SUB
+	$(PRINTF) '; DEMO.SUB - SUBMIT on CP/M-386 testing\r\n; Nested submit\r\nANOTHER.SUB\r\nSEROFF\r\nSERON\r\nVGAOFF\r\nVGAON\r\nVER\r\nGETSN\r\nMEM\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nTOD\r\nTSEC\r\nTICKS\r\nDELAY\r\nSTAT DSK:\r\nSTAT STAT.386 SIZE\r\nPRINTENV\r\nTEST110\r\nTEST211\r\nLS -A\r\nDIR\r\nLS -L STAT.*\r\nLRBC STAT.386\r\nTRUNCTST\r\nALVTST\r\nIOTEST\r\nSYNC\r\nFPARSE\r\nILLEGAL\r\nLRBC README.TXT\r\nTOUCH NEW.DAT\r\nERA NEW.DAT\r\nDUMPFCB DEMO.SUB\r\nDUMPDIR DEMO.*\r\nHD CLS.386\r\nOD CLS.386\r\nERA TRUNC.DAT\r\nRC 1\r\nREN IOWORK.D4T=IOWORK.DAT\r\nRM IOWORK.D4T\r\nRC\r\nHELLO\r\nPRNG 128\r\n; Run PRNG again from image existing in TPA\r\nGO 64\r\n; End of DEMO.SUB\r\n\x1a' \
 		> ./.cpmd/DEMO.SUB
 	$(PRINTF) '@QUIET ON\r\nVER\r\n\x1a' > ./.cpmd/PROFILE.SUB
 	$(CP) -f ./aclockdv.386 ./.cpmd/ACLOCKDV.386
@@ -1114,6 +1118,8 @@ ramdisk.bin: \
 	  ./.cpmd/ACLOCKDV.386 \
 	  ./.cpmd/ACLOCKVT.386 \
 	  ./.cpmd/ALVTST.386 \
+	  ./.cpmd/ANOTHER1.SUB \
+	  ./.cpmd/ANOTHER.SUB \
 	  ./.cpmd/CAPSLOCK.386 \
 	  ./.cpmd/CLEARTPA.386 \
 	  ./.cpmd/CLS.386 \
