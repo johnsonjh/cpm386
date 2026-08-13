@@ -946,6 +946,14 @@ capslock.386: capslock.bin $(MK386)
 
 ################################################################################
 
+esctilde.386: esctilde.bin $(MK386)
+	./$(MK386) ./esctilde.bin ./esctilde.386 0x100
+	@tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "$@ built successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
 numlock.386: numlock.bin $(MK386)
 	./$(MK386) ./numlock.bin ./numlock.386 0x100
 	@tput setaf 2 2> /dev/null || :
@@ -997,6 +1005,7 @@ ramdisk.bin: \
 			dumpdir.386 \
 			dumpfcb.386 \
 			ed.386 \
+			esctilde.386 \
 			fparse.386 \
 			getsn.386 \
 			gfxtest.386 \
@@ -1058,6 +1067,7 @@ ramdisk.bin: \
 	$(CP) -f ./dumpdir.386 ./.cpmd/DUMPDIR.386
 	$(CP) -f ./dumpfcb.386 ./.cpmd/DUMPFCB.386
 	$(CP) -f ./ed.386 ./.cpmd/ED.386
+	$(CP) -f ./esctilde.386 ./.cpmd/ESCTILDE.386
 	$(CP) -f ./fparse.386 ./.cpmd/FPARSE.386
 	$(CP) -f ./getsn.386 ./.cpmd/GETSN.386
 	$(CP) -f ./gfxtest.386 ./.cpmd/GFXTEST.386
@@ -1113,6 +1123,7 @@ ramdisk.bin: \
 	  ./.cpmd/DUMPFCB.386 \
 	  ./.cpmd/ED.386 \
 	  ./.cpmd/ENV.DAT \
+	  ./.cpmd/ESCTILDE.386 \
 	  ./.cpmd/FPARSE.386 \
 	  ./.cpmd/GETSN.386 \
 	  ./.cpmd/GFXTEST.386 \

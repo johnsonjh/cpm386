@@ -213,6 +213,7 @@ docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
 | `DUMPFCB.386`  | File control block dump utility (`F_OPEN`, [BDOS 15](https://www.seasip.info/Cpm/bdos.html#15)) |
 | `ED.386`       | ED (A WIP port of the DRI CP/M Context Editor 08/1982) |
 | `ENV.DAT`      | Environment data file |
+| `ESCTILDE.386` | Escape and Tilde key behavior utility (BDOS 237) |
 | `FPARSE.386`   | Filename parsing test (`F_PARSE`, [BDOS 152](https://www.seasip.info/Cpm/bdos.html#152)) |
 | `GETSN.386`    | Display serial number (`S_SERIAL`, [BDOS 107](https://www.seasip.info/Cpm/bdos.html#107)) |
 | `GFXTEST.386`  | Graphics and framebuffer demo (BDOS 229/230/231/233) |
@@ -291,24 +292,24 @@ See [FUTURE.md](FUTURE.md).
         </tr></thead>
         <tbody><tr>
                 <th>C</th>
-                <th>73</th>
-                <th>45980</th>
-                <th>8670</th>
-                <th>7882</th>
-                <th>29428</th>
-                <th>5997</th>
-                <th>1272924</th>
-                <th>17520</th>
+                <th>74</th>
+                <th>46329</th>
+                <th>8750</th>
+                <th>7928</th>
+                <th>29651</th>
+                <th>6050</th>
+                <th>1279831</th>
+                <th>17565</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>25</th>
-                <th>3539</th>
-                <th>658</th>
+                <th>3545</th>
+                <th>660</th>
                 <th>1499</th>
-                <th>1382</th>
+                <th>1386</th>
                 <th>13</th>
-                <th>127971</th>
-                <th>1778</th>
+                <th>128087</th>
+                <th>1782</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>8</th>
@@ -322,23 +323,23 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1690</th>
-                <th>331</th>
-                <th>214</th>
-                <th>1145</th>
-                <th>350</th>
-                <th>56324</th>
-                <th>813</th>
+                <th>1701</th>
+                <th>333</th>
+                <th>215</th>
+                <th>1153</th>
+                <th>352</th>
+                <th>56690</th>
+                <th>818</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>528</th>
+                <th>529</th>
                 <th>57</th>
                 <th>0</th>
-                <th>471</th>
+                <th>472</th>
                 <th>0</th>
-                <th>21812</th>
-                <th>420</th>
+                <th>21882</th>
+                <th>421</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -382,14 +383,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>115</th>
-                <th>54232</th>
-                <th>10182</th>
-                <th>10097</th>
-                <th>33953</th>
-                <th>6395</th>
-                <th>1544117</th>
-                <th>21711</th>
+                <th>116</th>
+                <th>54599</th>
+                <th>10266</th>
+                <th>10144</th>
+                <th>34189</th>
+                <th>6450</th>
+                <th>1551576</th>
+                <th>21766</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

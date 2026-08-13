@@ -1362,6 +1362,34 @@ REG UBYTE *infop;                        /* d1.l pointer parameter */
       break;
 
     /*
+     * BDOS 237 (KBD_ESC): ESC key control.
+     * DE = 0 normal, 1 swap w/Tilde, 0xFFFF to query.
+     * AX = the mode now in effect, or 0xFFFF if DE was not one of these.
+     */
+
+    case 237:
+      {
+        extern void kbd_esc_mode (unsigned);
+        extern unsigned kbd_esc_get (void);
+
+        if (info != 0xFFFF)
+          {
+            if (info > 1)
+              {
+                rtnval = 0xFFFF;
+
+                break;
+              }
+
+            kbd_esc_mode ((unsigned)info);
+          }
+
+        rtnval = (UWORD)kbd_esc_get ();
+      }
+
+      break;
+
+    /*
      * BDOS 253 (RNG_GET): get 16 bits of randomness.
      * DE is ignored.
      * AX = 0..0xFFFE (random), or 0xFFFF if the RNG is not seeded.

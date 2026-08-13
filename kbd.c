@@ -90,6 +90,7 @@ static unsigned char l_caps, l_num, l_scroll;
 static unsigned char leds_dirty;
 static unsigned char e0_pending, e1_pending;
 static unsigned char caps_mode = KBD_CAPS_ON;
+static unsigned char esc_mode = KBD_ESC_NORMAL;
 static unsigned char led_mask
     = KBD_LED_SCROLL | KBD_LED_NUM | KBD_LED_CAPS;
 
@@ -1010,6 +1011,16 @@ kbd_remap (unsigned char sc, int ext)
       return sc; /* E0 1D is the right Ctrl and is never remapped */
     }
 
+  if (sc == 0x01 && esc_mode == KBD_ESC_SWAP) /* ESC */
+    {
+      return 0x29;
+    }
+
+  if (sc == 0x29 && esc_mode == KBD_ESC_SWAP) /* Tilde */
+    {
+      return 0x01;
+    }
+
   if (sc == 0x3A) /* Caps Lock */
     {
       switch (caps_mode)
@@ -1108,6 +1119,25 @@ unsigned
 kbd_caps_get (void)
 {
   return caps_mode;
+}
+
+/*****************************************************************************/
+
+void
+kbd_esc_mode (unsigned mode)
+{
+  if (mode <= KBD_ESC_SWAP)
+    {
+      esc_mode = (unsigned char)mode;
+    }
+}
+
+/*****************************************************************************/
+
+unsigned
+kbd_esc_get (void)
+{
+  return esc_mode;
 }
 
 /*****************************************************************************/

@@ -85,6 +85,12 @@ void kbd_set_led_mask (unsigned mask);
 void kbd_caps_mode (unsigned mode);
 unsigned kbd_caps_get (void);
 
+# define KBD_ESC_NORMAL 0
+# define KBD_ESC_SWAP 1
+
+void kbd_esc_mode (unsigned mode);
+unsigned kbd_esc_get (void);
+
 /*****************************************************************************/
 
 /*
