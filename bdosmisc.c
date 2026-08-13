@@ -9,10 +9,11 @@
 
 /*****************************************************************
  *                                                               *
- *               CP/M-68K BDOS Miscellaneous Module              *
+ *               CP/M-386 BDOS Miscellaneous Module              *
+ *                    Derived from CP/M-68K                      *
  *                                                               *
  *       This module contains miscellaneous loose ends for       *
- *       CP/M-68K.  Included are:                                *
+ *       CP/M-386.  Included are:                                *
  *                                                               *
  *               bdosinit()  - BDOS initialization routine       *
  *                             called from CCP for system init   *

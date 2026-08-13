@@ -780,7 +780,7 @@ void cpm386_init(void) {
   extern void bdosinit(void);
   bdosinit(); /* reinit to ensure GBL.delim and state for clean bdos(9) banner */
 
-  /* ensure CP/M-68K banner (portable string); $ terminator */
+  /* ensure CP/M-386 banner (portable string); $ terminator */
   extern char *copyrt;
   extern char *copyr1;
   extern char *copyr2;
@@ -878,15 +878,6 @@ UWORD udiv(LONG dividend, UWORD divisor, UWORD *remainder) {
 
   return (UWORD)(dividend / (LONG)divisor);
 }
-
-#if 0
-UWORD load68k(BYTE *info)
-{
-  (void)info;
-
-  return 3; /* load error */
-}
-#endif
 
 /*
  * Minimal load_tbl stub so ccp.o (cmd_file) links for

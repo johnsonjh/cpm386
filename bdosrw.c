@@ -9,10 +9,11 @@
 
 /*****************************************************************
  *                                                               *
- *               CP/M-68K BDOS Disk Read/Write Module            *
+ *               CP/M-386 BDOS Disk Read/Write Module            *
+ *                      Derived from CP/M-68K                    *
  *                                                               *
  *       This module contains functions to perform sequential    *
- *       or random access read or write to the disk for CP/M-68K *
+ *       or random access read or write to the disk for CP/M-386 *
  *                                                               *
  *       It includes the following external functions:           *
  *                                                               *

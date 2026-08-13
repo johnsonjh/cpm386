@@ -9,10 +9,11 @@
 
 /*************************************************************
  *                                                           *
- *         CP/M-68K BDOS File I/O Module                     *
+ *         CP/M-386 BDOS File I/O Module                     *
+ *             Derived from CP/M-68K                         *
  *                                                           *
  * This module contains all file handling BDOS functions     *
- * except for read and write for CP/M-68K.  Included are:    *
+ * except for read and write for CP/M-386.  Included are:    *
  *                                                           *
  *         seldsk()      - select disk                       *
  *         openfile()    - open file                         *

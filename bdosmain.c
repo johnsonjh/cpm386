@@ -9,9 +9,10 @@
 
 /*****************************************************************
  *                                                               *
- *               CP/M-68K BDOS Main Routine                      *
+ *               CP/M-386 BDOS Main Routine                      *
+ *                 Derived from CP/M-68K                         *
  *                                                               *
- *       This is the main routine for the BDOS for CP/M-68K      *
+ *       This is the main routine for the BDOS for CP/M-386      *
  *       It has one entry point, _bdos, which is  called from    *
  *       the assembly language trap handler found in bdosif.s.   *
  *       The parameters are a function number (integer) and an   *

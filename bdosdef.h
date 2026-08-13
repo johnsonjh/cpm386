@@ -9,7 +9,9 @@
 
 /*********************************************************
  *                                                       *
- *               CP/M-68K header file                    *
+ *               CP/M-386 header file                    *
+ *               Derived from CP/M-68K                   *
+ *                                                       *
  *    Copyright (c) 1982 by Digital Research, Inc.       *
  *    Structure definitions for BDOS globals             *
  *       and BDOS data structures                        *

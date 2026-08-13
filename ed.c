@@ -248,8 +248,8 @@ char    date[] = "8/82";
 /*          -----------------------------------------                       */
 /*                                                                          */
 /*      Everything below stands in for the CP/M-68K C startup and the       */
-/*      portab.h / bdos.h / basepage.h / setjmp.h headers this program was   */
-/*      written against.  There is no C library: the only way out of the     */
+/*      portab.h / bdos.h / basepage.h / setjmp.h headers this program was  */
+/*      written against.  There is no C library: the only way out of the    */
 /*      program is a direct BDOS call, which is what __BDOS() below is.     */
 /*                                                                          */
 /****************************************************************************/

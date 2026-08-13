@@ -11,7 +11,7 @@
  |      ccp_def.c              DEFINES                    v1.0  |
  |                             =======                          |
  |                                                              |
- |      CP/M 68k:  A CP/M derived operating system              |
+ |      CP/M-386:  A CP/M-68K derived operating system          |
  |                                                              |
  |      File contents:                                          |
  |      -------------                                           |

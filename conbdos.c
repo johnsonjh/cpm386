@@ -9,7 +9,8 @@
 
 /********************************************************
 *                                                       *
-*       CP/M-68K BDOS Character I/O Routines            *
+*       CP/M-386 BDOS Character I/O Routines            *
+*               Derived from CP/M-68K                   *
 *                                                       *
 *       This module does BDOS functions 1 thru 11       *
 *                                                       *

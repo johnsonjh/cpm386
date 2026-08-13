@@ -9,10 +9,11 @@
 
 /****************************************************************
 *                                                               *
-*               CP/M-68K BDOS Disk Utilities Module             *
+*               CP/M-386 BDOS Disk Utilities Module             *
+*                    Derived from CP/M-68K                      *
 *                                                               *
 *       This module contains the miscellaneous utilities        *
-*       for manipulating the disk in CP/M-68K.  Included are:   *
+*       for manipulating the disk in CP/M-386.  Included are:   *
 *                                                               *
 *               dirscan()   - general purpose dir scanning      *
 *               setaloc()   - set bit in allocation vector      *

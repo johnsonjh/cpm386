@@ -18,7 +18,7 @@ this section as *wishlist* and not a *roadmap*!
   * Drivers for networking (with CP/Net NDOS and generic packet interface)
   * Optional ADM‑3A VGA console mode
   * Enhance filesystem with CP/M‑Plus parity (timestamps, passwords, etc.)
-  * Extend user area support from 16 to 32 user areas per disk
+  * Extend user area support from 16 to 26 (or even 32) user areas per disk
   * Support for non‑PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)
   * Improve PRNG (seeding only via PIT now, we should support RDRAND/RDSEED),
     and eliminate bias (don't use FF signal, instead raise carry flag?)

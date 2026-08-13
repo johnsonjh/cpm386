@@ -9,7 +9,8 @@
 
 /****************************************************************
 *                                                               *
-*               CP/M-68K BDOS Disk I/O System Module            *
+*               CP/M-386 BDOS Disk I/O System Module            *
+*                       Derived from CP/M-68K                   *
 *                                                               *
 *       This module translates from the packet oriented I/O     *
 *       passed from the other BDOS modules into BIOS calls.     *

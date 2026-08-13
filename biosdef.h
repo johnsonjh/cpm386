@@ -9,7 +9,8 @@
 
 /*********************************************************
  *                                                       *
- *       BIOS definitions for CP/M-68K                   *
+ *       BIOS definitions for CP/M-386                   *
+ *           Derived from CP/M-68K                       *
  *                                                       *
  *       Copyright (c) 1982 Digital Research, Inc.       *
  *                                                       *

@@ -11,13 +11,7 @@
  |      ccp.c         CONSOLE COMMAND PROCESSOR          v1.1   |
  |                    =========================                 |
  |                                                              |
- |      CP/M 68k:  A CP/M derived operating system              |
- |                                                              |
- |     *==================================================*     |
- |     *==================================================*     |
- |     *THIS IS THE DUAL PROCESSOR,ROMABLE CP/M-68K SYSTEM*     |
- |     *==================================================*     |
- |     *==================================================*     |
+ |      CP/M-386:  A CP/M-68K derived operating system          |
  |                                                              |
  |      Description:                                            |
  |      -----------                                             |
@@ -72,7 +66,7 @@ struct _cmd_tbl cmd_tbl [] =
 /*****************************************************************************/
 
 /*--------------------------------------------------------------*\
- |              CP/M-68K COMMAND FILE LOADER TABLE              |
+ |              CP/M-386 COMMAND FILE LOADER TABLE              |
 \*--------------------------------------------------------------*/
 extern struct _filetyps
 {
@@ -138,14 +132,14 @@ BYTE *user_ptr;                 /* next user command to execute */
 BYTE *glb_index;                /* points to current command    */
 BYTE save_sub [CMD_LEN+1];      /* saves cur cmd line for submit*/
 BYTE subfcb [FCB_LEN];          /* global fcb for sub files     */
-BYTE cmdfcb [FCB_LEN];          /* global fcb for 68k files     */
+BYTE cmdfcb [FCB_LEN];          /* global fcb for 386 files     */
 BYTE *tail;                     /* pointer to command tail      */
 BYTE autost = 0;                /* autostart flag               */
 BYTE autorom;                   /* needed for ROM system autost */
 BYTE dma [DMA_LEN+3];           /* 128 byte dma buffer          */
 BYTE parm [MAX_ARGS] [ARG_LEN]; /* cmd argument array           */
 BYTE *chainp;                   /*sw -> User-specified command  */
-BYTE del [] =                   /* CP/M-68K set of delimiters   */
+BYTE del [] =                   /* CP/M-386 set of delimiters   */
 {'>','<','.',',','=','[',']',';','|','&','/','(',')','+','-','\\'};
                                 /********************************/
 
@@ -160,7 +154,6 @@ UWORD delim(BYTE *ch);
 UWORD fill_fcb(UWORD which_parm, BYTE *fcb);
 #if 0
 UWORD (*ldrpgm)(BYTE *); /* ptr to load func, inited? or stub */
-extern UWORD load68k();         /* this returns a word(1-3)     */
 #endif
 /*BYTE *scan_cmd();             // bare */
 UWORD strcmp(BYTE *s1, BYTE *s2);       /* this returns a word      */
@@ -1056,13 +1049,13 @@ UWORD cmd_file(mode)
                                         /*      SEARCH ORDER    */
                                         /*      ============    */
                                         /*                      */
-                                        /* 1. 68K type on the   */
+                                        /* 1. 386 type on the   */
                                         /*    current user #    */
                                         /* 2. BLANK type on     */
                                         /*    current user #    */
                                         /* 3. SUB type on the   */
                                         /*    current user #    */
-                                        /* 4. 68K type on       */
+                                        /* 4. 386 type on       */
                                         /*    user 0            */
                                         /* 5. BLANK type on the */
                                         /*    user 0            */
