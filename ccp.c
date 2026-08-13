@@ -1939,7 +1939,7 @@ ccp()
                                         copy_cmd(subdma);
                                 else
                                         copy_cmd(glb_index);
-                                user_ptr = scan_cmd(glb_index);
+                                user_ptr = scan_cmd(save_sub);
                                 submit_cmd(save_sub);
                                 first_sub = FALSE;
                         }
