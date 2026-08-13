@@ -47,7 +47,6 @@ this section as *wishlist* and not a *roadmap*!
   * Command editing and recall (terminal and VGA console aware)
   * ALIAS/UNALIAS internal commands
   * Enhance SUBMIT:
-    * Allow nested SUBMIT scripts
     * Allow early exit from SUBMIT scripts depending on return codes
     * Refactor CCP to eliminate the `dirflag` global
     * ZCPR+SUPERSUB‑style conditional control (`IF`/`ELSE`/`FI`, etc.)

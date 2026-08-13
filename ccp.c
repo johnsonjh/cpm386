@@ -131,7 +131,6 @@ BYTE  gonomsg [] = "No program$";
                                 /********************************/
 BYTE load_try;                  /* flag to mark a load try      */
 BYTE first_sub;                 /* flag to save current cmd ptr */
-BYTE chain_sub;                 /* submit chaining flag         */
 BYTE submit = 0;                /* submit file flag             */
 BYTE quiet = 0;                 /* submit echo suppress (QUIET) */
 BYTE end_of_file;               /* submit end of file flag      */
@@ -1009,6 +1008,59 @@ UWORD user_cmd()                        /* change user number   */
         return(TRUE);
 }
 
+#define MAX_SUB_LEVEL 8
+static struct sub_context {
+    BYTE  subprompt;
+    BYTE  quiet;
+    UWORD sub_index;
+    UWORD sub_user;
+    BYTE  *user_ptr;
+    BYTE  subcom[CMD_LEN+1];
+    BYTE  subdma[CMD_LEN];
+    BYTE  subfcb[FCB_LEN];
+    BYTE  save_sub[CMD_LEN+1];
+} sub_stack[MAX_SUB_LEVEL];
+
+static UWORD sub_level = 0;
+
+static void push_submit(void)
+{
+    if (sub_level < MAX_SUB_LEVEL) {
+        struct sub_context *c = &sub_stack[sub_level++];
+        int i;
+        c->subprompt = subprompt;
+        c->quiet = quiet;
+        c->sub_index = sub_index;
+        c->sub_user = sub_user;
+        c->user_ptr = user_ptr;
+        for (i = 0; i <= CMD_LEN; i++) c->subcom[i] = subcom[i];
+        for (i = 0; i < CMD_LEN; i++) c->subdma[i] = subdma[i];
+        for (i = 0; i < FCB_LEN; i++) c->subfcb[i] = subfcb[i];
+        for (i = 0; i <= CMD_LEN; i++) c->save_sub[i] = save_sub[i];
+    }
+}
+
+static int pop_submit(void)
+{
+    if (sub_level > 0) {
+        struct sub_context *c = &sub_stack[--sub_level];
+        int i;
+        subprompt = c->subprompt;
+        quiet = c->quiet;
+        sub_index = c->sub_index;
+        sub_user = c->sub_user;
+        user_ptr = c->user_ptr;
+        for (i = 0; i <= CMD_LEN; i++) subcom[i] = c->subcom[i];
+        for (i = 0; i < CMD_LEN; i++) subdma[i] = c->subdma[i];
+        for (i = 0; i < FCB_LEN; i++) subfcb[i] = c->subfcb[i];
+        for (i = 0; i <= CMD_LEN; i++) save_sub[i] = c->save_sub[i];
+        submit = TRUE;
+        end_of_file = FALSE;
+        return 1;
+    }
+    return 0;
+}
+
 UWORD cmd_file(mode)
                                         /************************/
                                         /*                      */
@@ -1135,8 +1187,8 @@ UWORD mode;
                 {
                    sub_open = TRUE;
                    sub_user = bdos(GET_USER_NO,(long)255);
-                   if(submit) chain_sub = TRUE;
-                   else       first_sub = TRUE;
+                   if(submit) push_submit();
+                   first_sub = TRUE;
                    for(i = 0;i < FCB_LEN;i++)
                         subfcb[i] = cmdfcb[i];
                    if(mode == SEARCH) subprompt = FALSE;
@@ -1415,7 +1467,7 @@ REG BYTE *com_index;
         cur_user = bdos(GET_USER_NO,(long)255);
         bdos(GET_USER_NO,(long)sub_user);
         bdos(SET_DMA_ADDR,subdma);
-        if(first_sub || chain_sub)
+        if(first_sub)
         {
                 for(i = 0;i < CMD_LEN;i++)
                         subdma[i] = NULL;
@@ -1693,11 +1745,8 @@ REG BYTE *cmd;
                                                                     bdos(GET_USER_NO,
                                                                          (LONG)255);
                                                                 if (submit)
-                                                                        chain_sub =
-                                                                            TRUE;
-                                                                else
-                                                                        first_sub =
-                                                                            TRUE;
+                                                                        push_submit();
+                                                                first_sub = TRUE;
                                                                 for (oi = 0;
                                                                      oi < FCB_LEN;
                                                                      oi++)
@@ -1884,16 +1933,15 @@ ccp()
                 else
                 {
                         com_index = subcom;
-                        if(first_sub || chain_sub)
+                        if(first_sub)
                         {
                                 if(subprompt)
                                         copy_cmd(subdma);
                                 else
                                         copy_cmd(glb_index);
-                                if(first_sub)
-                                        user_ptr = scan_cmd(glb_index);
+                                user_ptr = scan_cmd(save_sub);
                                 submit_cmd(save_sub);
-                                first_sub = chain_sub = FALSE;
+                                first_sub = FALSE;
                         }
                         else
                                 *com_index = NULL;
@@ -1901,10 +1949,18 @@ ccp()
                         {
                                 if(end_of_file)
                                 {
+                                        if (!pop_submit())
+                                        {
+                                                com_index = user_ptr;
+                                                submit = FALSE;
+                                                quiet = FALSE;
+                                                break;
+                                        }
                                         com_index = user_ptr;
-                                        submit = FALSE;
-                                        quiet = FALSE;
-                                        break;
+                                        if (*com_index == NULL) {
+                                                com_index = subcom;
+                                                *com_index = NULL;
+                                        }
                                 }
                                 else
                                         submit_cmd(save_sub);
