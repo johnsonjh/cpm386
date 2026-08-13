@@ -294,8 +294,8 @@ static UBYTE dpb_raw [32];
 #define DPB_EXM (dpb_raw [4])
 #define DPB_DSM ((UWORD)(dpb_raw [6]  | ((UWORD)dpb_raw  [7] << 8)))
 #define DPB_DRM ((UWORD)(dpb_raw [8]  | ((UWORD)dpb_raw  [9] << 8)))
-#define DPB_CKS ((UWORD)(dpb_raw [14] | ((UWORD)dpb_raw [15] << 8)))
-#define DPB_OFS ((UWORD)(dpb_raw [16] | ((UWORD)dpb_raw [17] << 8)))
+#define DPB_CKS ((UWORD)(dpb_raw [12] | ((UWORD)dpb_raw [13] << 8)))
+#define DPB_OFS ((UWORD)(dpb_raw [14] | ((UWORD)dpb_raw [15] << 8)))
 #define DPB_SPT ((UWORD)(dpb_raw [0]  | ((UWORD)dpb_raw  [1] << 8)))
 
 /*****************************************************************************/
