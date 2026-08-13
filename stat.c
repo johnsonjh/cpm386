@@ -11,7 +11,7 @@
 
 /*
  * Ported from Zilog CP/M-Z8000 STAT v1.0C 01/03/84
- * Copyright (c) 1971-1984 Digital Research, Inc.
+ * Copyright (c) 1975-1984 Digital Research, Inc.
  *
  * Usage:
  *   STAT               - Free space on all logged drives
