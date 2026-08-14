@@ -326,13 +326,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1728</th>
+                <th>1734</th>
                 <th>337</th>
                 <th>217</th>
-                <th>1174</th>
-                <th>356</th>
-                <th>57436</th>
-                <th>832</th>
+                <th>1180</th>
+                <th>361</th>
+                <th>57760</th>
+                <th>838</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
@@ -371,7 +371,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>15</th>
                 <th>63</th>
                 <th>0</th>
-                <th>3606</th>
+                <th>3631</th>
                 <th>67</th>
         </tr><tr>
                 <th>Dockerfile</th>
@@ -387,13 +387,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>115</th>
-                <th>54412</th>
+                <th>54418</th>
                 <th>10246</th>
                 <th>10109</th>
-                <th>34057</th>
-                <th>6464</th>
-                <th>1547045</th>
-                <th>21641</th>
+                <th>34063</th>
+                <th>6469</th>
+                <th>1547394</th>
+                <th>21647</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
