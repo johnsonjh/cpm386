@@ -152,6 +152,20 @@ TR:=$(shell \
 
 ################################################################################
 
+TAIL:=$(shell \
+	command -v gtail 2> /dev/null || \
+	command -v tail 2> /dev/null || \
+	$(PRINTF) '%s' "tail")
+
+################################################################################
+
+HEAD:=$(shell \
+	command -v ghead 2> /dev/null || \
+	command -v head 2> /dev/null || \
+	$(PRINTF) '%s' "head")
+
+################################################################################
+
 LZ4:=$(shell \
 	command -v lz4 2> /dev/null || \
 	$(PRINTF) '%s' "lz4")
@@ -494,7 +508,8 @@ strip: all
 	    $(PRINTF) '%s\n' "ERROR: _start at 0x$$entry, expected 0x100"; \
 	    $(NM) ./$*.elf | head -20; \
 	    tput sgr0 2> /dev/null || :; \
-	    exit 1; fi
+	    exit 1; \
+	  fi
 	$(OBJCOPY) -O binary ./$*.elf ./$@
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -772,10 +787,11 @@ vgaon.bin: conctl.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaon.elf ./vgaon.o
 	@entry=$$($(NM) ./vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
-	  $(PRINTF) '%s\n' "ERROR: vgaon _start"; \
-	  tput sgr0 2> /dev/null || :; \
-	  exit 1; fi
+	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
+	    $(PRINTF) '%s\n' "ERROR: vgaon _start"; \
+	    tput sgr0 2> /dev/null || :; \
+	    exit 1; \
+	  fi
 	$(OBJCOPY) -O binary ./vgaon.elf ./$@
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -789,10 +805,11 @@ vgaoff.bin: conctl.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaoff.elf ./vgaoff.o
 	@entry=$$($(NM) ./vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
-	  $(PRINTF) '%s\n' "ERROR: vgaoff _start"; \
-	  tput sgr0 2> /dev/null || :; \
-	  exit 1; fi
+	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
+	    $(PRINTF) '%s\n' "ERROR: vgaoff _start"; \
+	    tput sgr0 2> /dev/null || :; \
+	    exit 1; \
+	  fi
 	$(OBJCOPY) -O binary ./vgaoff.elf ./$@
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -806,10 +823,11 @@ seron.bin: conctl.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seron.elf ./seron.o
 	@entry=$$($(NM) ./seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
-	  $(PRINTF) '%s\n' "ERROR: seron _start"; \
-	  tput sgr0 2> /dev/null || :; \
-	  exit 1; fi
+	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
+	    $(PRINTF) '%s\n' "ERROR: seron _start"; \
+	    tput sgr0 2> /dev/null || :; \
+	    exit 1; \
+	  fi
 	$(OBJCOPY) -O binary ./seron.elf ./$@
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -823,10 +841,11 @@ seroff.bin: conctl.c user.ld
 		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seroff.elf ./seroff.o
 	@entry=$$($(NM) ./seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
-	  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
-	  $(PRINTF) '%s\n' "ERROR: seroff _start"; \
-	  tput sgr0 2> /dev/null || :; \
-	  exit 1; fi
+	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
+	    $(PRINTF) '%s\n' "ERROR: seroff _start"; \
+	    tput sgr0 2> /dev/null || :; \
+	    exit 1; \
+	  fi
 	$(OBJCOPY) -O binary ./seroff.elf ./$@
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
@@ -1175,7 +1194,7 @@ ramdisk.bin: \
 	  ./.cpmd/VGATEXT.386 \
 	  0:
 	@RDS=$$($(PRINTF) '%d' "$$($(OD) -A x -t x2 ./ramdisk.tmp | \
-		$(GREP) -v '^*$$' | tail -2 | head -1 | \
+		$(GREP) -v '^*$$' | $(TAIL) -2 | $(HEAD) -1 | \
 		$(AWK) '{ print "0x"a$$1 }')"); \
 		RDS=$$(( (RDS / 1024) + 4 )); \
 		tput setaf 6 2> /dev/null || :; \
@@ -1389,12 +1408,13 @@ bss.inc: $(TARGET) os.bin.lz4raw
 		$(AWK) '/__kernel_end/ { print $$1 }'); \
 		top=$$((0x$$ke + 0x4000)); \
 		if [ "$$top" -gt $$((0x9E000)) ]; then \
-			tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
-			$(PRINTF) '%s' \
-				"ERROR: kernel end + r0 stack ($$top) overruns conventional"; \
-			$(PRINTF) '%s\n' " memory (0x9E000)!"; \
-			tput sgr0 2> /dev/null || :; \
-			exit 1; fi
+		  tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
+		  $(PRINTF) '%s' \
+		    "ERROR: kernel end + r0 stack ($$top) overruns conventional"; \
+		  $(PRINTF) '%s\n' " memory (0x9E000)!"; \
+		  tput sgr0 2> /dev/null || :; \
+		  exit 1; \
+		fi
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1477,11 +1497,12 @@ floppy.img: stage1.bin stage2.bin os.bin.lz4raw
 	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
 	    $(PRINTF) '%s\n' "ERROR: payload.bin $$pbytes >= 1474560 maximum"; \
 	    tput sgr0 2> /dev/null || :; \
-	    exit 1; fi
+	    exit 1; \
+	  fi
 	@tput setaf 6 2> /dev/null || :
 	@$(PRINTF) '*** floppy.img usage: ~%d KiB\n' \
 		$$(("$$($(OD) -A x -t x2 ./floppy.img | $(GREP) -v '^*$$' | \
-		tail -2 | head -1 | $(AWK) '{ print "0x"a$$1 }')" / 1024)) || :
+		$(TAIL) -2 | $(HEAD) -1 | $(AWK) '{ print "0x"a$$1 }')" / 1024)) || :
 	@tput sgr0 2> /dev/null || :
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
