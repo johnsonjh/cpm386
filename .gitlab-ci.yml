@@ -37,9 +37,11 @@ pages:
     - export TERM=xterm-color
     - export TZ=UTC
     - export LC_ALL=C
-    - dnf -y install advancecomp binutils brotli coreutils cpmtools cppi file gawk gcc glibc-devel.i686 glibc.i686 libatomic.i686 libatomic.x86_64 lz4 make nasm pigz reuse shellcheck shfmt zip --allowerasing --setopt=install_weak_deps=True
+    - dnf -y install advancecomp binutils brotli coreutils cpmtools cppi file gawk gcc glibc-devel.i686 glibc.i686 golang libatomic.i686 libatomic.x86_64 lz4 make nasm pigz reuse shellcheck zip --allowerasing --setopt=install_weak_deps=True
     - dnf -y clean all || true
     - mkdir -v -p /etc/apt/apt.conf.d || true
+    - go install go install "mvdan.cc/sh/v3/cmd/shfmt@master"
+    - export PATH="$HOME/go/bin:$PATH"
     - echo -e "section_end:`date +%s`:Setup_section\r\e[0K" || true
     - |
       #
