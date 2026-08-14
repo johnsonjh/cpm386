@@ -371,7 +371,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>15</th>
                 <th>63</th>
                 <th>0</th>
-                <th>3617</th>
+                <th>3606</th>
                 <th>67</th>
         </tr><tr>
                 <th>Dockerfile</th>
@@ -392,7 +392,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10109</th>
                 <th>34057</th>
                 <th>6464</th>
-                <th>1547056</th>
+                <th>1547045</th>
                 <th>21641</th>
         </tr></tfoot></table>
 <!-- scc-end -->
