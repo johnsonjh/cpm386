@@ -21,10 +21,10 @@
 
 /*****************************************************************************/
 
-# define MEMMAP_OFF_MAGIC 0x00 /* MEMMAP_MAGIC when valid           */
-# define MEMMAP_OFF_BASE 0x04  /* first usable byte  (>= 1MB)       */
-# define MEMMAP_OFF_TOP 0x08   /* one past last usable byte         */
-# define MEMMAP_OFF_FLAGS 0x0C /* MEMF_* below                      */
+# define MEMMAP_OFF_MAGIC 0x00 /* MEMMAP_MAGIC when valid     */
+# define MEMMAP_OFF_BASE 0x04  /* first usable byte  (>= 1MB) */
+# define MEMMAP_OFF_TOP 0x08   /* one past last usable byte   */
+# define MEMMAP_OFF_FLAGS 0x0C /* MEMF_* below                */
 
 /*****************************************************************************/
 

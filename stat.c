@@ -1,6 +1,7 @@
 /*
  * CP/M-386
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * Copyright (c) 1975-1984 Digital Research, Inc.
  * SPDX-License-Identifier: MIT
  * scspell-id: 00997242-8309-11f1-880f-80ee73e9b8e7
  */
@@ -11,7 +12,6 @@
 
 /*
  * Ported from Zilog CP/M-Z8000 STAT v1.0C 01/03/84
- * Copyright (c) 1975-1984 Digital Research, Inc.
  *
  * Usage:
  *   STAT               - Free space on all logged drives

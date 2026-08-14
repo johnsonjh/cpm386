@@ -1,6 +1,7 @@
 /*
  * CP/M-386
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * Copyright (c) 1975-1984 Digital Research, Inc.
  * SPDX-License-Identifier: MIT
  * scspell-id: dbea540e-9102-11f1-9f49-80ee73e9b8e7
  */
@@ -44,16 +45,9 @@
 /*            26 July  82  by Doug Huskey                                   */
 /*             1 Aug   82  by Dave Sallume, Zilog Inc.                      */
 /*            12 Sept  82  by Dominic Dunlop, Zilog Inc.                    */
-/*                                                                          */
-/*                                                                          */
-/*              **** this message should be in the header ****              */
-/*                                                                          */
-/* char copyright[] =                                                       */
-/*      " Copyright (c) 1982, Digital Research ";                           */
+/*            06 Aug   26  by Jeffrey Johnson (CP/M-386 PIP v1.0)           */
 /*                                                                          */
 /****************************************************************************/
-
-char    date[] = "8/82";
 
 /****************************************************************************/
 /*                                                                          */

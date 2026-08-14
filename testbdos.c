@@ -183,7 +183,7 @@ bios_seldsk (unsigned char d, unsigned char l)
   if (d < 16)
     {
       return &dph0; /* emulate only A: ramdisk for all drives; prevents null
-                     dphp + error(3) loop in fileio seldsk while() */
+                       dphp + error(3) loop in fileio seldsk while() */
     }
 
   return 0;

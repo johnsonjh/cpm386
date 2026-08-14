@@ -1,6 +1,7 @@
 /*
  * CP/M-386
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * Copyright (c) 1975-1984 Digital Research, Inc.
  * SPDX-License-Identifier: MIT
  * scspell-id: 3cee445c-82b4-11f1-ac88-80ee73e9b8e7
  */
@@ -48,8 +49,8 @@
 
 /* serial # and copyright notice */
 char *copyrt = "CP/M-386 Version 0.1 (" BUILDDATE ")$";
-char *copyr1 = "Copyright (c) 1975-1984 Digital Research, Inc.$";
-char *copyr2 = "Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>$";
+char *copyr1 = "Copyright (c) 2025-2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>$";
+char *copyr2 = "Copyright (c) 1975-1984 Digital Research, Inc.$";
 char *serial = "XXXX-0000-654321$";
 
 /*****************************************************************************/
@@ -366,7 +367,7 @@ UWORD setexc (epbp)
 /*****************************************************************************/
 
 /*****************************
- *  get/set TPA entry point   *
+ *  get/set TPA entry point  *
  *****************************/
 
 struct set_tpa_struct

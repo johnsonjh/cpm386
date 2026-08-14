@@ -16,9 +16,9 @@ bits 32
 section .multiboot
 align 4
 mb_header_start:
-    dd 0x1BADB002                   ; magic
-    dd 0x00000003                   ; flags: bit0=align modules, bit1=provide meminfo (and mmap if avail)
-    dd 0xE4524FFB                   ; checksum = -(magic + flags)  (must be exact)
+    dd 0x1BADB002   ; magic
+    dd 0x00000003   ; flags: bit0=align modules, bit1=provide meminfo and mmap
+    dd 0xE4524FFB   ; checksum = -(magic + flags)  (must be exact)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
