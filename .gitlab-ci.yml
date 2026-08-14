@@ -16,9 +16,7 @@ before_script:
     #
     echo -e "section_start:`date +%s`:Pre-setup_section[collapsed=true]\r\e[0K\033[0;36mPre-setup ...\033[0m" || true
   - dnf -y upgrade --allowerasing --setopt=install_weak_deps=True --setopt=keepcache=True
-  - dnf -y install dnf-utils git rpmconf --allowerasing --setopt=install_weak_deps=True --setopt=keepcache=True
-  - rpmconf -au use_maintainer || true
-  - rpmconf -acu use_maintainer || true
+  - dnf -y install dnf-utils git --allowerasing --setopt=install_weak_deps=True --setopt=keepcache=True
   - git fetch origin
   - git checkout -B "$CI_COMMIT_REF_NAME" "origin/$CI_COMMIT_REF_NAME"
   - echo -e "section_end:`date +%s`:Pre-setup_section\r\e[0K" || true
@@ -39,10 +37,8 @@ pages:
     - export TERM=xterm-color
     - export TZ=UTC
     - export LC_ALL=C
-    - dnf -y install advancecomp binutils brotli coreutils cpmtools cppi file gawk gcc glibc-devel.i686 glibc.i686 libatomic.i686 libatomic.x86_64 lz4 make nasm pigz reuse shellcheck zip --allowerasing --setopt=install_weak_deps=True
+    - dnf -y install advancecomp binutils brotli coreutils cpmtools cppi file gawk gcc glibc-devel.i686 glibc.i686 libatomic.i686 libatomic.x86_64 lz4 make nasm pigz reuse shellcheck shfmt zip --allowerasing --setopt=install_weak_deps=True
     - dnf -y clean all || true
-    - rpmconf -au use_maintainer || true
-    - rpmconf -acu use_maintainer || true
     - mkdir -v -p /etc/apt/apt.conf.d || true
     - echo -e "section_end:`date +%s`:Setup_section\r\e[0K" || true
     - |

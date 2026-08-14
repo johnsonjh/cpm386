@@ -7,7 +7,7 @@
 ###############################################################################
 
 command -v command > /dev/null 2>&1 || {
-  echo "ERROR: \"command\" not available!"
+  echo 'ERROR: "command" not available!'
   exit 1
 }
 
@@ -21,7 +21,7 @@ command -v printf > /dev/null 2>&1 || {
 ###############################################################################
 
 test -z "$1" && {
-  printf '%s\n' "ERROR: Must specify target device (e.g., \"/dev/sde\")!"
+  printf '%s\n' 'ERROR: Must specify target device (e.g., "/dev/sde")!'
   exit 1
 }
 
@@ -55,8 +55,8 @@ command -v mkfs.fat > /dev/null 2>&1 || {
 
 ###############################################################################
 
-GRUB_INSTALL=$(command -v grub2-install 2> /dev/null || \
-  command -v grub-install 2> /dev/null || printf '%s\n' "grub2-install")
+GRUB_INSTALL=$(command -v grub2-install 2> /dev/null \
+  || command -v grub-install 2> /dev/null || printf '%s\n' "grub2-install")
 
 ###############################################################################
 
@@ -123,8 +123,8 @@ command -v sync > /dev/null 2>&1 || {
 
 ###############################################################################
 
-SED=$(command -v gsed 2> /dev/null || command -v sed 2> /dev/null || \
-  printf '%s\n' "sed")
+SED=$(command -v gsed 2> /dev/null || command -v sed 2> /dev/null \
+  || printf '%s\n' "sed")
 
 ###############################################################################
 
@@ -169,14 +169,14 @@ rmdir /mnt/cpm386 > /dev/null 2>&1
 ###############################################################################
 
 test -d "/mnt/cpm386" && {
-  printf '%s\n' "ERROR: \"/mnt/cpm386\" already exists!"
+  printf '%s\n' 'ERROR: "/mnt/cpm386" already exists!'
   exit 1
 }
 
 ###############################################################################
 
 test -f ./cpm386.elf || {
-  printf '%s\n' "ERROR: \"./cpm386.elf\" does not exist!"
+  printf '%s\n' 'ERROR: "./cpm386.elf" does not exist!'
   exit 1
 }
 

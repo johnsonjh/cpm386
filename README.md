@@ -326,13 +326,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1727</th>
+                <th>1728</th>
                 <th>337</th>
                 <th>217</th>
-                <th>1173</th>
+                <th>1174</th>
                 <th>356</th>
-                <th>57399</th>
-                <th>831</th>
+                <th>57436</th>
+                <th>832</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
@@ -342,7 +342,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>471</th>
                 <th>0</th>
                 <th>21756</th>
-                <th>418</th>
+                <th>419</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -351,7 +351,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>62</th>
                 <th>143</th>
                 <th>30</th>
-                <th>8298</th>
+                <th>8290</th>
                 <th>114</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -366,13 +366,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
-                <th>86</th>
+                <th>82</th>
                 <th>6</th>
                 <th>15</th>
-                <th>65</th>
+                <th>61</th>
                 <th>0</th>
-                <th>3679</th>
-                <th>69</th>
+                <th>3515</th>
+                <th>65</th>
         </tr><tr>
                 <th>Dockerfile</th>
                 <th>1</th>
@@ -387,13 +387,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>115</th>
-                <th>54413</th>
+                <th>54410</th>
                 <th>10246</th>
                 <th>10109</th>
-                <th>34058</th>
+                <th>34055</th>
                 <th>6464</th>
-                <th>1547089</th>
-                <th>21641</th>
+                <th>1546954</th>
+                <th>21639</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

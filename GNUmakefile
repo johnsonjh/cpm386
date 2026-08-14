@@ -1568,6 +1568,7 @@ lint:
 	cppi -ac ./*.[ch]
 	reuse lint -q || reuse lint
 	shellcheck -o any,all ./*.sh
+	shfmt -bn -sr -fn -i 2 -s -d ./*.sh
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Lint completed successfully."
 	@tput sgr0 2> /dev/null || :
