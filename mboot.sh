@@ -56,7 +56,7 @@ command -v mkfs.fat > /dev/null 2>&1 || {
 ###############################################################################
 
 GRUB_INSTALL=$(command -v grub2-install 2> /dev/null || \
-  command -v grub-install || printf '%s\n' "grub2-install")
+  command -v grub-install 2> /dev/null || printf '%s\n' "grub2-install")
 
 ###############################################################################
 
@@ -123,7 +123,8 @@ command -v sync > /dev/null 2>&1 || {
 
 ###############################################################################
 
-SED=$(command -v gsed 2> /dev/null || command -v sed || printf '%s\n' "sed")
+SED=$(command -v gsed 2> /dev/null || command -v sed 2> /dev/null || \
+  printf '%s\n' "sed")
 
 ###############################################################################
 
