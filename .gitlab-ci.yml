@@ -64,6 +64,7 @@ pages:
     - |
       #
       echo -e "section_start:`date +%s`:Deploy_section[collapsed=true]\r\e[0K\033[0;36mDeploy ...\033[0m" || true
+    - make strip
     - mkdir -p "public/cpm386"
     - mv -v -f "fd.img" "public/cpm386/blankfd.img"
     - mv -v -f "hd.img" "public/cpm386/blankhd.img"
