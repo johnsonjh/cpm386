@@ -43,7 +43,7 @@ pages:
     - export GOPROXY="proxy.golang.org,direct"
     - export GOSUMDB="sum.golang.org"
     - export GOTOOLCHAIN="auto"
-    - $$(command -v go || printf '%s\n' "go") install "mvdan.cc/sh/v3/cmd/shfmt@master"
+    - $(command -v go || printf '%s\n' "go") install "mvdan.cc/sh/v3/cmd/shfmt@master"
     - export PATH="$HOME/go/bin:$PATH"
     - echo -e "section_end:`date +%s`:Setup_section\r\e[0K" || true
     - |
