@@ -1565,6 +1565,7 @@ testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 .PHONY: lint
 
 lint:
+	"$${MAKE:-$(MAKE)}" clean
 	@command -v cppi > /dev/null 2>&1 || exit 0; \
 		set -x; cppi -ac ./*.[ch]
 	@command -v reuse > /dev/null 2>&1 || exit 0; \
@@ -1575,6 +1576,8 @@ lint:
 		set -x; shfmt -bn -sr -fn -i 2 -s -d ./*.sh
 	@command -v checkbashisms > /dev/null 2>&1 || exit 0; \
 		set -x; checkbashisms ./*.sh
+	@command -v codespell > /dev/null 2>&1 || exit 0; \
+		set -x; codespell
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Lint completed successfully."
 	@tput sgr0 2> /dev/null || :

@@ -504,8 +504,8 @@ REG BYTE *cmd;                          /************************/
         /*      This function parses the command line   */
         /* read in by get_cmd().  The expected command  */
         /* from that line is put into parm[0].  All     */
-        /* parmeters associated with the command are put*/
-        /* in in sequential order in parm[1],parm[2],   */
+        /* parameters associated with the command are   */
+        /* put in sequential order in parm[1],parm[2],  */
         /* and parm[3]. A command ends at a NULL or     */
         /* an exlimation point.                         */
         /************************************************/

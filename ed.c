@@ -72,7 +72,7 @@
 /*   July 1982 DH: Installed patches to change macro abort command from     */
 /*        ^C to ^Y and to not print error message when trying to delete     */
 /*        a file that doesn't exist.  Added perror: procedure to print      */
-/*        error messages in a consistant format and modified error          */
+/*        error messages in a consistent format and modified error          */
 /*        message handler at reset: entry point.  Also corrected invalid    */
 /*        filename error to not abort ed if parsing a R or X command.       */
 /*        modified start and setdest to prompt for missing                  */
@@ -216,7 +216,7 @@
 /*   question    unrecognized command or illegal numeric field              */
 /*     (?)                                                                  */
 /*                                                                          */
-/*   pound       cannot apply the command the number of times specfied      */
+/*   pound       cannot apply the command the number of times specified     */
 /*     (#)       (occurs if search string cannot be found)                  */
 /*                                                                          */
 /*   letter O    cannot open <filename>.LIB in R command                    */
@@ -1193,7 +1193,7 @@ ferr()                                          /* Abort when directory full*/
                 /********************************/
 VOID
 delete_file(fcb)                                /* Delete the file describ- */
-struct fcbtab   *fcb;                           /*   -ed by the arument     */
+struct fcbtab   *fcb;                           /*   -ed by the argument    */
 {
         setpwd();
         _delete(fcb);
@@ -1953,7 +1953,7 @@ readfile()                                      /* Read a character from a  */
         {                                       /*   been reached           */
                 setrdma();
                 if (_s_read(&rfcb) != 0)
-                        return (ENDFILE);       /* End of libray file       */
+                        return (ENDFILE);       /* End of library file      */
                 rbp = 0;                        /* Point to buffer start    */
         }
         return (utran(buff[rbp++]));            /* Return current character */
@@ -2222,7 +2222,7 @@ setlimits()                                     /* Set memory limits over   */
         }
         else                                    /* FORWARD: operation       */
         {                                       /*   at base[back  -1] and  */
-                first = back + 1;               /*   staps at base[j + 1]   */
+                first = back + 1;               /*   stops at base[j + 1]   */
                 lastc = j + 1;
         }
 }
@@ -2771,7 +2771,7 @@ insert_chars()                                  /* Insert characters into   */
                 decfront();                     /* Delete char in buffer    */
                 if (tcolumn > scolumn)          /* Have there been printable*/
                 {                               /*   characters on this line*/
-                    printsuppress = TRUE;       /* Yes: Make change on scren*/
+                    printsuppress = TRUE;       /* Yes Make change on screen*/
                     column = scolumn;           /* Recompute current pos'n  */
                     typelines();                /*   (covers case where TAB */
                     printsuppress = FALSE;      /*    char is deleted)      */
@@ -2793,7 +2793,7 @@ insert_chars()                                  /* Insert characters into   */
                 break;
 
               case LF:                          /* Map line feeds into CR LF*/
-              case CR:                          /* Sme for carriage return  */
+              case CR:                          /* Same for carriage return */
                 prtnmac(CR);                    /* Send CR-LF sequence      */
                 prtnmac(LF);                    /*   (zeros column)         */
                 inscrlf();
@@ -2814,7 +2814,7 @@ insert_chars()                                  /* Insert characters into   */
                 break;
 
               case CTL_X:
-                setlimits();                    /* Delete line, screen syle */
+                setlimits();                    /* Delete line, screen style*/
                 setptrs();                      /* Restore indices to line  */
                 while (column > scolumn)        /*   start, backspace to    */
                         backspace();            /*   start column           */
@@ -2838,7 +2838,7 @@ insert_chars()                                  /* Insert characters into   */
 
                 insert();                       /* Just insert character and*/
                 prtnmac(chr);                   /*   echo for anything else  */
-                                                /*   (accomodates tabs, ctl */
+                                                /*   (accommodates tab, ctl */
                                                 /*   chars, adjusts column) */
 
                 tcolumn = 0;                    /* Allow CTL_H, DEL         */
@@ -3501,7 +3501,7 @@ _main()
         int reason;                             /* Internal error code      */
 
         ver = _version();                       /* Where are we?  What      */
-        has_bdos3 = ((ver & 0x00ff) >= CPM3);   /*   facilites are there?   */
+        has_bdos3 = ((ver & 0x00ff) >= CPM3);   /*   facilities are there?  */
                                                 /* BDOS 3 has passwds, xfcbs*/
 
         allocate_memory();

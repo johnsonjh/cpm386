@@ -79,7 +79,7 @@ char    signon[] = "CP/M-386 PIP v1.0 08/06/2026";
 /*      While the copy is taking place, PIP can optionally perform checks   */
 /*      - such as checking that an Intel Hex format file's checksums are    */
 /*      correct, and translations - for example from upper to lower case.   */
-/*      There are also facilites for adding line numbers to output and      */
+/*      There are also facilities for adding line numbers to output and     */
 /*      formatting it into pages for printing.  It is also possible to      */
 /*      specify that only part of a file, delimited by start and end        */
 /*      strings, is copied.                                                 */
@@ -91,8 +91,9 @@ char    signon[] = "CP/M-386 PIP v1.0 08/06/2026";
 /*      destination file name and rename the temporary file to the          */
 /*      destination name.  This minimizes the possibility that a failing    */
 /*      transfer will result in the loss of a backup or older version of    */
-/*      the detination file.  In the event that a transfer does fail, PIP's */
-/*      temporary file is not deleted in case it contains usable data.      */
+/*      the destination file.  In the event that a transfer does fail,      */
+/*      PIP's temporary file is not deleted in case it contains usable      */
+/*      data.                                                               */
 /*                                                                          */
 /* 2   PIP'S COMMAND MODES                                                  */
 /*                                                                          */
@@ -142,9 +143,9 @@ char    signon[] = "CP/M-386 PIP v1.0 08/06/2026";
 /*                                                                          */
 /*      Name    | Function              | Src?  | Dst?  | Comments          */
 /*      --------+-----------------------+-------+-------+---------------    */
-/*      AXI:    | Auxilliary input      | Yes   | No    | Serial input,     */
+/*      AXI:    | Auxiliary input       | Yes   | No    | Serial input,     */
 /*              |                       |       |       |  tape reader etc. */
-/*      AXO:    | Auxilliary output     | No    | Yes   | Serial ouput,     */
+/*      AXO:    | Auxiliary output      | No    | Yes   | Serial output,    */
 /*              |                       |       |       |  tape punch etc.  */
 /*      CON:    | Console               | Yes   | Yes   | Input is keyboard,*/
 /*              |                       |       |       |  output is screen */
@@ -213,7 +214,7 @@ char    signon[] = "CP/M-386 PIP v1.0 08/06/2026";
 /*      and are typically used by specialized programs such as database     */
 /*      managers and indexed access file handlers.                          */
 /*                                                                          */
-/*      PIP automatically accomodates both dense and sparse files and       */
+/*      PIP automatically accommodates both dense and sparse files and      */
 /*      copies only those sectors which are actually allocated in the       */
 /*      source when copying a sparse file.  The resulting destination file  */
 /*      is also sparse.  PIP does not allow sparse files to be concatenated.*/
@@ -364,7 +365,7 @@ char    signon[] = "CP/M-386 PIP v1.0 08/06/2026";
 /*           |     |     |  (selective back-up of modified files)           */
 /*      Dn   | Yes | No  | Delete characters after column n (truncate for   */
 /*           |     |     |  narrow paper or screen)                         */
-/*      E    | Yes | No  | Echo data to console as it is transfered         */
+/*      E    | Yes | No  | Echo data to console as it is transferred        */
 /*      F    | Yes | No  | Remove form feeds from data as it is copied      */
 /*      Gn   | Yes | Yes | Specify (Get) user number for source or          */
 /*           |     |     |  destination disk file                           */
@@ -373,21 +374,21 @@ char    signon[] = "CP/M-386 PIP v1.0 08/06/2026";
 /*           |     |     |  Intel Hex file (used for concatenating files)   */
 /*      L    | Yes | No  | Translate lower case alphabetic to upper         */
 /*      Nn   | Yes | No  | Prepend line numbers to output data.  Leading 0's*/
-/*           |     |     |  not supressed if n=2                            */
+/*           |     |     |  not suppressed if n=2                           */
 /*      O    | Yes | No  | Object file.  Ignore end-of-file marks           */
 /*      Pn   | Yes | No  | Output page eject (form feed) every n lines      */
 /*           |     |     |  (default 60)                                    */
-/*      Qs   | Yes | No  | Quit (stop) transfering data after the string s  */
+/*      Qs   | Yes | No  | Quit (stop) transferring data after the string s */
 /*           |     |     |  has been copied                                 */
 /*      R    | Yes | No  | Read system files (system attribute set).  By    */
 /*           |     |     |  default such files are not read                 */
-/*      S    | Yes | No  | Start transfering data when the string s is      */
+/*      S    | Yes | No  | Start transferring data when the string s is     */
 /*           |     |     |  found in input data.  s is first data copied    */
 /*      Tn   | Yes | No  | Expand tabs at every n columns (default 8)       */
 /*      U    | Yes | No  | Translate lower case alphabetic to upper         */
 /*      V    | Yes | No  | Check destination disk file for readability (not */
 /*           |     |     |  correctness) after transfer complete            */
-/*      W    | Yes | No  | Overwrite read-only destination file (supress    */
+/*      W    | Yes | No  | Overwrite read-only destination file (suppress   */
 /*           |     |     |  PIP's normal query to user before overwriting)  */
 /*      Z    | Yes | No  | Zero parity bit.  Normally parity bit is copied  */
 /*                                                                          */
@@ -892,7 +893,7 @@ char            copyright[] = " (10/04/82) Portable CP/M PIP vers 1.0 ";
 /****************************************************************************/
 
 /****************************************************************************/
-/* Useful charcaters                                                        */
+/* Useful characters                                                        */
 /****************************************************************************/
 
 #define TAB             0x09                    /* Horizontal TAB           */
@@ -917,10 +918,10 @@ char            copyright[] = " (10/04/82) Portable CP/M PIP vers 1.0 ";
 #define OUTT            0                       /* Output device            */
 #define PRNT            1                       /* Printer                  */
 #define LSTT            2                       /* List device              */
-#define AXOT            3                       /* Auxilary output device   */
+#define AXOT            3                       /* Auxiliary output device  */
 #define FILE            4                       /* File type                */
 #define CONS            5                       /* Console                  */
-#define AXIT            6                       /* Auxilary input device    */
+#define AXIT            6                       /* Auxiliary input device   */
 #define INPT            7                       /* Input device             */
 #define NULT            8                       /* Null characters          */
 #define EOFT            9                       /* EOF character            */
@@ -991,7 +992,7 @@ BYTE            ro;                             /* Read only attribute flag  */
 BYTE            sys;                            /* System attribute flag     */
 
 BOOLEAN         ambig;                          /* File is ambig type       */
-BOOLEAN         concat;                         /* Concatination command    */
+BOOLEAN         concat;                         /* Concatenation command    */
 BOOLEAN         dblbuf;                         /* Double buffering needed  */
 BOOLEAN         dfile;                          /* Dest is file type        */
 BOOLEAN         endofsrc;                       /* End of source file       */
@@ -1004,7 +1005,7 @@ BOOLEAN         multcom;                        /* Handling multiple command*/
 BOOLEAN         nendcmd;                        /* Not end of command tail  */
 BOOLEAN         putnum;                         /* Ready for next line num  */
 BOOLEAN         sfile;                          /* Source is file type      */
-BOOLEAN         sparfil;                        /* Sparce file being copied */
+BOOLEAN         sparfil;                        /* Sparse file being copied */
 
 char            ch;                             /* Last character scanned   */
 char            *dbase;                         /* Destination buffer base  */
@@ -1026,7 +1027,7 @@ UWORD           dcnt;                           /* Error/directory code     */
 UWORD           exten;                          /* Extended error code      */
 UWORD           feedbase;                       /* String search base       */
 UWORD           feedlen;                        /* Length of search string  */
-UWORD           matchlen;                       /* Lenght of matched string */
+UWORD           matchlen;                       /* Length of matched string */
 UWORD           ndest;                          /* Index of next dest char  */
 UWORD           nsbuf;                          /* Next source sector index */
 UWORD           nsource;                        /* Index of next src char   */
@@ -1098,7 +1099,7 @@ char    *errmsg[] =                             /* Standard messages        */
                 "UNEXPECTED END OF HEX FILE",   /*  15                      */
                 "INVALID SEPARATOR",            /*  16                      */
                 "NO DIRECTORY SPACE",           /*  17                      */
-                "INVALID FORMAT WITH SPARCE FILE",/*18                      */
+                "INVALID FORMAT WITH SPARSE FILE",/*18                      */
                 "MAKE FILE",                    /*  19                      */
                 "OPEN FILE",                    /*  20                      */
                 "PRINTER BUSY",                 /*  21                      */
@@ -1958,7 +1959,7 @@ register int    b;                              /*   odest.type             */
                 _lstout(b);                     /*    PRN: by putdstc())    */
                 break;
 
-          case AXOT:                            /* Auxilliary (punch) output*/
+          case AXOT:                            /* Auxiliary (punch) output */
                 if (! IS_MPM(ver))
                 {
                         _punch(b);
@@ -2022,7 +2023,7 @@ newline()                                       /* Output a new line number */
         while (factor /= 10)                    /* Print 6 digit positions  */
         {
                 digit = number / factor;        /* Get digit for this place */
-                zeroprint |= ((digit != 0)      /* Suppresed leading zero?  */
+                zeroprint |= ((digit != 0)      /* Suppressed leading zero? */
                              || (factor == 1));
                 _conout((zeroprint) ?           /* Print digit or space     */
                         digit + '0' : ' ');
@@ -2845,7 +2846,7 @@ globok()                                        /*   next_file() turned up  */
                 /*                              */
                 /********************************/
 
-VOID                                            /* Copy mutiple files to a  */
+VOID                                            /* Copy multiple files to a */
 multcopy()                                      /*   a named drive or user  */
 {
         /*
@@ -2971,7 +2972,7 @@ ck_eol()                                        /*   follows a complete cmd */
                 /*                              */
                 /********************************/
 
-BOOLEAN                                         /* Return TRUE if the curent*/
+BOOLEAN                                         /* Return TRUE if current   */
 delimiter(c)                                    /*   character is delimiter */
 int     c;
 {
@@ -3447,7 +3448,7 @@ copy_source()                                   /*   source file to the     */
         switch (source.type)                    /* How we behave depends on */
         {                                       /*   source type            */
           case FILE:                            /* It's a file              */
-                if (ambig)                      /* Name cannot be abiguous  */
+                if (ambig)                      /* Name cannot be ambigiuous*/
                         nonfile_error(4);
                 break;                          /* Name is unique: go to it!*/
 

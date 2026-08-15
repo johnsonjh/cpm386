@@ -8,7 +8,7 @@
 
 /*****************************************************************************/
 
-/* disk.h - CBIOS disk layer backed forthe V86 server disk server */
+/* disk.h - CBIOS disk layer backed for the V86 server disk server */
 
 /*****************************************************************************/
 
