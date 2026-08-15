@@ -12,117 +12,191 @@
 lz4_boot_decompress:
 
 .lz4d_next_block:
-    mov   ebx, [esi]          ; read 4-byte block size
+    mov   ecx, [esi]          ; read 4-byte block size
     add   esi, 4
 
-    test  ebx, ebx            ; end mark?
+    test  ecx, ecx            ; end mark?
     jz    .lz4d_done
 
     ; Check for uncompressed block
-    test  ebx, 0x80000000
+    test  ecx, 0x80000000
     jnz   .lz4d_raw
 
-    and   ebx, 0x7FFFFFFF     ; mask off high bit
-
-    mov   ebp, esi
-    add   ebp, ebx            ; EBP = absolute end of compressed block
+    and   ecx, 0x7FFFFFFF     ; block size
+    mov   ebx, esi
+    add   ebx, ecx            ; EBX = absolute end of compressed block
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .lz4d_next_token:
-    cmp   esi, ebp
+    cmp   esi, ebx
     jae   .lz4d_next_block
 
-    movzx eax, byte [esi]     ; read token byte
+    movzx eax, byte [esi]     ; token
     inc   esi
-    mov   edx, eax            ; save copy for match length
-    shr   eax, 4              ; isolate literal length (high 4 bits)
+    mov   edx, eax            ; save full token
+    shr   eax, 4              ; literal length (high nibble)
     jz    .lz4d_skip_lits
 
     cmp   al, 15
-    jne   .lz4d_copy_lits
+    jne   .lz4d_lit_len_ready
+
 .lz4d_lit_ext:
     movzx ecx, byte [esi]
     inc   esi
     add   eax, ecx
-    cmp   cl, 255
+    cmp   ecx, 255
     je    .lz4d_lit_ext
 
-.lz4d_copy_lits:
-    mov   ecx, eax            ; ECX = total literal count
-    shr   ecx, 2              ; DWORD count
-    jz    .lz4d_lit_rem
-    rep   movsd               ; transfer 4 bytes at a time
-
-.lz4d_lit_rem:
+.lz4d_lit_len_ready:
+    ; EAX = literal length
     mov   ecx, eax
-    and   ecx, 3              ; remaining 0..3 bytes
-    rep   movsb
+    test  ecx, ecx
+    jz    .lz4d_skip_lits
+
+    ; copy literals unrolled in 16-byte chunks then bytes
+.lz4d_copy_lits_dwords:
+    cmp   ecx, 16
+    jb    .lz4d_copy_lits_bytes
+
+    mov   eax, [esi]
+    mov   [edi], eax
+    mov   eax, [esi+4]
+    mov   [edi+4], eax
+    mov   eax, [esi+8]
+    mov   [edi+8], eax
+    mov   eax, [esi+12]
+    mov   [edi+12], eax
+
+    add   esi, 16
+    add   edi, 16
+    sub   ecx, 16
+    jmp   .lz4d_copy_lits_dwords
+
+.lz4d_copy_lits_bytes:
+    test  ecx, ecx
+    jz    .lz4d_skip_lits
+
+.lz4d_copy_lits_bytes_loop:
+    mov   al, [esi]
+    mov   [edi], al
+    inc   esi
+    inc   edi
+    dec   ecx
+    jnz   .lz4d_copy_lits_bytes_loop
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .lz4d_skip_lits:
-    cmp   esi, ebp            ; check if block ended after literals
+    cmp   esi, ebx            ; check if block ended after literals
     jae   .lz4d_next_block
 
-    and   edx, 0x0F           ; isolate match length (low 4 bits)
+    and   edx, 0x0F           ; match length nibble
 
     movzx eax, word [esi]     ; 16-bit match offset
     add   esi, 2
 
     add   edx, 4              ; baseline minimum match = 4
     cmp   dl, 19              ; 15 + 4 = 19 means extended
-    jne   .lz4d_copy_match
+    jne   .lz4d_match_len_ready
+
 .lz4d_match_ext:
     movzx ecx, byte [esi]
     inc   esi
     add   edx, ecx
-    cmp   cl, 255
+    cmp   ecx, 255
     je    .lz4d_match_ext
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-.lz4d_copy_match:
-    push  esi                  ; save input stream position
+.lz4d_match_len_ready:
+    ; EAX = offset, EDX = match length
+    push  esi                 ; save input stream position
     mov   esi, edi
-    sub   esi, eax             ; source = dest - offset
+    sub   esi, eax            ; source = dest - offset
 
-    cmp   eax, 4
-    jl    .lz4d_safe_match
-
-    mov   ecx, edx             ; ECX = match length
-    shr   ecx, 2               ; DWORD count
-    jz    .lz4d_match_rem
-    rep   movsd                ; copy 4 bytes at a time
-
-.lz4d_match_rem:
     mov   ecx, edx
-    and   ecx, 3               ; remaining 0..3 bytes
-    rep   movsb
-    jmp   .lz4d_match_done
+    cmp   eax, 4
+    jb    .lz4d_safe_match
+
+    ; offset >= 4: forward copy 4-byte chunks then bytes
+.lz4d_copy_match_dwords:
+    cmp   ecx, 4
+    jb    .lz4d_copy_match_bytes
+
+    mov   eax, [esi]
+    mov   [edi], eax
+    add   esi, 4
+    add   edi, 4
+    sub   ecx, 4
+    jmp   .lz4d_copy_match_dwords
+
+.lz4d_copy_match_bytes:
+    test  ecx, ecx
+    jz    .lz4d_match_done_restore
+
+.lz4d_copy_match_bytes_loop:
+    mov   al, [esi]
+    mov   [edi], al
+    inc   esi
+    inc   edi
+    dec   ecx
+    jnz   .lz4d_copy_match_bytes_loop
+    jmp   .lz4d_match_done_restore
 
 .lz4d_safe_match:
-    mov   ecx, edx             ; small-offset fallback: byte-by-byte
-.lz4d_safe_loop:
-    lodsb
-    stosb
-    loop  .lz4d_safe_loop
+    ; small-offset / overlapping fallback: byte-by-byte
+    test  ecx, ecx
+    jz    .lz4d_match_done_restore
 
-.lz4d_match_done:
-    pop   esi                  ; restore source context
+.lz4d_safe_match_loop:
+    mov   al, [esi]
+    mov   [edi], al
+    inc   esi
+    inc   edi
+    dec   ecx
+    jnz   .lz4d_safe_match_loop
+
+.lz4d_match_done_restore:
+    pop   esi                 ; restore source context
     jmp   .lz4d_next_token
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .lz4d_raw:
-    ; Uncompressed block: copy verbatim
-    and   ebx, 0x7FFFFFFF
-    mov   ecx, ebx
-    shr   ecx, 2
-    rep   movsd
-    mov   ecx, ebx
-    and   ecx, 3
-    rep   movsb
+    ; Uncompressed block: copy as-is (ECX = size)
+    and   ecx, 0x7FFFFFFF
+    test  ecx, ecx
+    jz    .lz4d_next_block
+
+    ; unrolled 16-byte chunks then bytes
+.lz4d_raw_dwords:
+    cmp   ecx, 16
+    jb    .lz4d_raw_bytes
+
+    mov   eax, [esi]
+    mov   [edi], eax
+    mov   eax, [esi+4]
+    mov   [edi+4], eax
+    mov   eax, [esi+8]
+    mov   [edi+8], eax
+    mov   eax, [esi+12]
+    mov   [edi+12], eax
+
+    add   esi, 16
+    add   edi, 16
+    sub   ecx, 16
+    jmp   .lz4d_raw_dwords
+
+.lz4d_raw_bytes:
+    test  ecx, ecx
+    jz    .lz4d_next_block
+
+.lz4d_raw_bytes_loop:
+    mov   al, [esi]
+    mov   [edi], al
+    inc   esi
+    inc   edi
+    dec   ecx
+    jnz   .lz4d_raw_bytes_loop
     jmp   .lz4d_next_block
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
