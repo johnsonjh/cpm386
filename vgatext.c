@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - vgatext.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: fd6930d8-82b5-11f1-8667-80ee73e9b8e7

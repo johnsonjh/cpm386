@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - tsec.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: f375076e-82b5-11f1-bbab-80ee73e9b8e7

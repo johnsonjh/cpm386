@@ -1,4 +1,4 @@
-; CP/M-386
+; CP/M-386 - lz4dec.inc
 ; Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
 ; SPDX-License-Identifier: MIT
 ; scspell-id: 800fa5d2-9416-11f1-87d0-80ee73e9b8e7

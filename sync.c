@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - sync.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 580958e2-830b-11f1-b4a2-80ee73e9b8e7

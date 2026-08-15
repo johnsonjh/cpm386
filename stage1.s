@@ -1,4 +1,4 @@
-; CP/M-386
+; CP/M-386 - stage1.s
 ; Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
 ; SPDX-License-Identifier: MIT
 ; scspell-id: cf0d5c12-8a55-11f1-ab00-80ee73e9b8e7

@@ -1,14 +1,9 @@
 /*
- * CP/M-386
+ * CP/M-386 - cleartpa.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: cca7b4c6-856a-11f1-a3fd-80ee73e9b8e7
  */
-
-/*****************************************************************************/
-
-/* XXX: CLEARTPA fails when the TPA is >3.4GB - need to fix this bug! */
-/* TODO: Show progress as the TPA is cleared and verified */
 
 /*****************************************************************************/
 

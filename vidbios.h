@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - vidbios.h
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 907659f2-8caf-11f1-ae04-80ee73e9b8e7

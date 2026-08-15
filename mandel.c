@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - mandel.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: f51db99c-8645-11f1-99e7-80ee73e9b8e7

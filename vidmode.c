@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - vidmode.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 9d504d04-8caf-11f1-959e-80ee73e9b8e7

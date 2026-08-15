@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - trunctst.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: ee1bcffa-82b5-11f1-9319-80ee73e9b8e7

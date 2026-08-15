@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - prng.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 853dc088-8e95-11f1-9727-80ee73e9b8e7

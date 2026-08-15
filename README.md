@@ -1,5 +1,6 @@
 # CP/M-386
 
+<!-- CP/M-386 - README.md -->
 <!-- Copyright (c) 2026 Jeffrey H. Johnson -->
 <!-- SPDX-License-Identifier: MIT -->
 <!-- scspell-id: 696e52ee-8276-11f1-b02c-80ee73e9b8e7 -->
@@ -296,23 +297,23 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>74</th>
-                <th>46341</th>
+                <th>46362</th>
                 <th>8738</th>
-                <th>7929</th>
+                <th>7950</th>
                 <th>29674</th>
                 <th>6062</th>
-                <th>1280676</th>
-                <th>17597</th>
+                <th>1282453</th>
+                <th>17676</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>24</th>
-                <th>3332</th>
-                <th>646</th>
-                <th>1475</th>
+                <th>3349</th>
+                <th>648</th>
+                <th>1490</th>
                 <th>1211</th>
                 <th>11</th>
-                <th>122663</th>
-                <th>1613</th>
+                <th>123617</th>
+                <th>1647</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>8</th>
@@ -321,8 +322,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>413</th>
                 <th>1125</th>
                 <th>1</th>
-                <th>46633</th>
-                <th>965</th>
+                <th>46728</th>
+                <th>972</th>
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
@@ -336,13 +337,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>529</th>
+                <th>531</th>
                 <th>58</th>
                 <th>0</th>
-                <th>471</th>
+                <th>473</th>
                 <th>0</th>
-                <th>21756</th>
-                <th>419</th>
+                <th>21816</th>
+                <th>421</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -361,8 +362,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>168</th>
                 <th>0</th>
-                <th>5137</th>
-                <th>95</th>
+                <th>5159</th>
+                <th>96</th>
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
@@ -371,7 +372,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>15</th>
                 <th>67</th>
                 <th>0</th>
-                <th>3843</th>
+                <th>3880</th>
                 <th>71</th>
         </tr><tr>
                 <th>Dockerfile</th>
@@ -387,13 +388,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>115</th>
-                <th>54434</th>
-                <th>10245</th>
-                <th>10123</th>
-                <th>34066</th>
+                <th>54474</th>
+                <th>10247</th>
+                <th>10159</th>
+                <th>34068</th>
                 <th>6469</th>
-                <th>1548068</th>
-                <th>21649</th>
+                <th>1551013</th>
+                <th>21763</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

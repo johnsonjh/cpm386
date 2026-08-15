@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - ccpdef.h
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * Copyright (c) 1975-1984 Digital Research, Inc.
  * SPDX-License-Identifier: MIT
@@ -9,7 +9,7 @@
 /*****************************************************************************/
 
 /*--------------------------------------------------------------*\
- |      ccp_def.c              DEFINES                    v1.0  |
+ |      ccpdef.c               DEFINES                    v1.0  |
  |                             =======                          |
  |                                                              |
  |      CP/M-386:  A CP/M-68K derived operating system          |

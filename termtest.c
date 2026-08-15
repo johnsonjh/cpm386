@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - termtest.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 4b2d9efe-91a6-11f1-9eff-80ee73e9b8e7

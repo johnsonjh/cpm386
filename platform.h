@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - platform.h
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 61324b14-82b5-11f1-8b10-80ee73e9b8e7

@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - vgafont.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 83d226d6-8caf-11f1-83e4-80ee73e9b8e7

@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - hello.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 5537d2e2-830b-11f1-93ce-80ee73e9b8e7

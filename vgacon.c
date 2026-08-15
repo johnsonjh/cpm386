@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - vgacon.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 6c93229a-8caf-11f1-911d-80ee73e9b8e7

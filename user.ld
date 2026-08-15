@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - user.ld
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 6ecd1e9c-82b6-11f1-9a75-80ee73e9b8e7

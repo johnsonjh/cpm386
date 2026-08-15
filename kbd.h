@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - kbd.h
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: f6253786-91a6-11f1-991c-80ee73e9b8e7

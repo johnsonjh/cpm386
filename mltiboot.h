@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - mltiboot.h
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 1833f84a-82b5-11f1-85c2-80ee73e9b8e7
@@ -7,7 +7,7 @@
 
 /*****************************************************************************/
 
-/* mltiboot.h - minimal multiboot definitions for CP/M-386 */
+/* mltiboot.h - multiboot 1 definitions for CP/M-386 */
 
 /*****************************************************************************/
 

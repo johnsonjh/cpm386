@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - gfxtest.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: b78dcf04-8cb7-11f1-9112-80ee73e9b8e7

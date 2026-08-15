@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - vgaterm.h
  * Copyright (c) 2025-2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: c3ad0618-91a5-11f1-af2b-80ee73e9b8e7

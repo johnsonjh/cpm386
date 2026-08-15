@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - vgafb.h
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: dcb63dac-8cb7-11f1-8db6-80ee73e9b8e7

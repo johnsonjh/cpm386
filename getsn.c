@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - getsn.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 5aaa331e-830b-11f1-8bd5-80ee73e9b8e7

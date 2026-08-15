@@ -1,4 +1,4 @@
-; CP/M-386
+; CP/M-386 - pmode.s
 ; Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
 ; SPDX-License-Identifier: MIT
 ; scspell-id: 7a9ae46c-82b5-11f1-ac87-80ee73e9b8e7

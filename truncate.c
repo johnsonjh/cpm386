@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - truncate.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 8e3ba22a-8889-11f1-a6c5-80ee73e9b8e7

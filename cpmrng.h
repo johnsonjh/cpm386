@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - cpmrng.h
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 886941f6-8e95-11f1-8f36-80ee73e9b8e7

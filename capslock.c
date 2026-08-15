@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - capslock.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 5da7a342-918b-11f1-9764-246e96298730

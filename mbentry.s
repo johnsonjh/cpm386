@@ -1,4 +1,4 @@
-; CP/M-386
+; CP/M-386 - mbentry.s
 ; Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
 ; SPDX-License-Identifier: MIT
 ; scspell-id: db39e440-82b4-11f1-aa93-80ee73e9b8e7

@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - illegal.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: c200fcfc-82b4-11f1-8214-80ee73e9b8e7

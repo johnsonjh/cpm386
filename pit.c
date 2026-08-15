@@ -1,5 +1,5 @@
 /*
- * CP/M-386
+ * CP/M-386 - pit.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
  * SPDX-License-Identifier: MIT
  * scspell-id: 45985934-82b5-11f1-bbce-80ee73e9b8e7
