@@ -145,13 +145,29 @@ CentOS Stream 9 (or later), and Fedora 36 (or later).
 
 ## Docker build
 
-If you are unable to build **CP/M‑386** natively on your Linux distribution,
-a Docker‑based Fedora build is available:
-```sh
-docker build --progress plain -t cpm386/cpm386-build:latest -f Dockerfile .
-docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest \
-  make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
-```
+If you are unable to build **CP/M‑386** natively on your system, a
+Docker‑based Fedora build is available.
+[]()
+
+[]()
+* First, build the `cpm386/cpm386-build` container:
+  ```sh
+  docker build --progress plain -t cpm386/cpm386-build:latest -f Dockerfile .
+  ```
+[]()
+
+[]()
+* Next, build **CP/M‑386** using this container:
+  ```sh
+  docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest \
+    make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
+  ```
+[]()
+
+[]()
+Additional targets (*i.e.*, `clean`, `test`, `lint`, `update-readme`) and
+builds using the Clang compiler (`CC="clang" OPTFLAGS="-O1"`) are also
+supported.
 
 ## Build output
 
@@ -338,13 +354,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>532</th>
-                <th>58</th>
+                <th>548</th>
+                <th>61</th>
                 <th>0</th>
-                <th>474</th>
+                <th>487</th>
                 <th>0</th>
-                <th>21880</th>
-                <th>421</th>
+                <th>22184</th>
+                <th>425</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -389,13 +405,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>115</th>
-                <th>54613</th>
-                <th>10261</th>
+                <th>54629</th>
+                <th>10264</th>
                 <th>10166</th>
-                <th>34186</th>
+                <th>34199</th>
                 <th>6503</th>
-                <th>1554618</th>
-                <th>21837</th>
+                <th>1554922</th>
+                <th>21841</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
