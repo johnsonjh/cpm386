@@ -149,7 +149,8 @@ If you are unable to build **CP/M‑386** natively on your Linux distribution,
 a Docker‑based Fedora build is available:
 ```sh
 docker build --progress plain -t cpm386/cpm386-build:latest -f Dockerfile .
-docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest
+docker run --rm -v "$(pwd -P)":/src -w /src cpm386/cpm386-build:latest \
+  make -Orecurse -j "$(nproc 2> /dev/null || printf '%s' 1)"
 ```
 
 ## Build output
@@ -337,12 +338,12 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
-                <th>531</th>
+                <th>532</th>
                 <th>58</th>
                 <th>0</th>
-                <th>473</th>
+                <th>474</th>
                 <th>0</th>
-                <th>21816</th>
+                <th>21880</th>
                 <th>421</th>
         </tr><tr>
                 <th>Shell</th>
@@ -365,6 +366,16 @@ See [FUTURE.md](FUTURE.md).
                 <th>5159</th>
                 <th>96</th>
         </tr><tr>
+                <th>Dockerfile</th>
+                <th>1</th>
+                <th>93</th>
+                <th>8</th>
+                <th>12</th>
+                <th>73</th>
+                <th>34</th>
+                <th>3127</th>
+                <th>78</th>
+        </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
                 <th>88</th>
@@ -374,27 +385,17 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>3890</th>
                 <th>71</th>
-        </tr><tr>
-                <th>Dockerfile</th>
-                <th>1</th>
-                <th>47</th>
-                <th>8</th>
-                <th>12</th>
-                <th>27</th>
-                <th>4</th>
-                <th>1310</th>
-                <th>34</th>
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
                 <th>115</th>
-                <th>54566</th>
+                <th>54613</th>
                 <th>10261</th>
                 <th>10166</th>
-                <th>34139</th>
-                <th>6473</th>
-                <th>1552737</th>
-                <th>21793</th>
+                <th>34186</th>
+                <th>6503</th>
+                <th>1554618</th>
+                <th>21837</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
