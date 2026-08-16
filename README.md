@@ -284,9 +284,9 @@ supported.
 * Do **not** open pull requests with large amounts of LLM‑generated code.
   These will be immediately rejected.
 * There is **no** AI‑generated code in the core operating system at
-  this time (though there *are* some AI‑generated tests, comments, and
-  analysis), as the project is intended to be as much of a learning experience
-  for me as it is a useful OS port.
+  this time (though there *are* AI‑generated tests, comments, and analysis),
+  as the project is intended to be as much of a learning experience for me as
+  it is a useful OS port.
 * Usage of AI (artificial intelligence) tools by contributors *is* currently
   permitted, subject to the same terms and conditions as the
   [LLVM AI Tool Use Policy](https://llvm.org/docs/AIToolPolicy.html), but
@@ -359,7 +359,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>487</th>
                 <th>0</th>
-                <th>22184</th>
+                <th>22179</th>
                 <th>425</th>
         </tr><tr>
                 <th>Shell</th>
@@ -410,7 +410,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10166</th>
                 <th>34199</th>
                 <th>6503</th>
-                <th>1554922</th>
+                <th>1554917</th>
                 <th>21841</th>
         </tr></tfoot></table>
 <!-- scc-end -->
