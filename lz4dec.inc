@@ -9,7 +9,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-lz4_boot_decompress:
+lz4_decompress:
 
 .lz4d_next_block:
     mov   ecx, [esi]          ; read 4-byte block size

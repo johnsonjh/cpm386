@@ -537,7 +537,7 @@ pm_entry:
 
     mov esi, kernel_end - COMPRESSED_SIZE
     mov edi, 0x10000
-    call lz4_boot_decompress
+    call lz4_decompress
 
     mov edi, bss_start
     mov ecx, bss_end

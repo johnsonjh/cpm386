@@ -322,7 +322,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>418</th>
                 <th>1182</th>
                 <th>1</th>
-                <th>47952</th>
+                <th>47942</th>
                 <th>999</th>
         </tr><tr>
                 <th>Makefile</th>
@@ -393,7 +393,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10166</th>
                 <th>34139</th>
                 <th>6473</th>
-                <th>1552747</th>
+                <th>1552737</th>
                 <th>21793</th>
         </tr></tfoot></table>
 <!-- scc-end -->
