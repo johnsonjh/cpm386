@@ -174,35 +174,35 @@ LZ4:=$(shell \
 
 GOBJ=$(shell $(OBJCOPY) --version 2>&1 | $(GREP) '^GNU objcopy' || :)
 ifneq "$(findstring objcopy,$(GOBJ))" ""
- OBJCOPY+= -v
+ OBJCOPY+=-v
 endif
 
 ################################################################################
 
 GSTR=$(shell $(STRIP) --version 2>&1 | $(GREP) '^GNU strip' || :)
 ifneq "$(findstring strip,$(GSTR))" ""
- STRIP+= -v
+ STRIP+=-v
 endif
 
 ################################################################################
 
 GCP=$(shell $(CP) --version 2>&1 | $(GREP) 'GNU coreutils' || :)
 ifneq "$(findstring coreutils,$(GCP))" ""
- CP+= -v
+ CP+=-v
 endif
 
 ################################################################################
 
 GMV=$(shell $(MV) --version 2>&1 | $(GREP) 'GNU coreutils' || :)
 ifneq "$(findstring coreutils,$(GMV))" ""
- MV+= -v
+ MV+=-v
 endif
 
 ################################################################################
 
 GRM=$(shell $(RM) --version 2>&1 | $(GREP) 'GNU coreutils' || :)
 ifneq "$(findstring coreutils,$(GRM))" ""
- RM+= -v
+ RM+=-v
 endif
 
 ################################################################################
@@ -274,7 +274,7 @@ DATESTR=$(shell env TZ=UTC date +"built %Y-%m-%d %H:%M:%S UTC")
 
 ################################################################################
 
-LDEXTRA+= $(W_NO_UNUSED_COMMAND_LINE_ARGUMENT)
+LDEXTRA+=$(W_NO_UNUSED_COMMAND_LINE_ARGUMENT)
 
 ################################################################################
 
@@ -404,8 +404,8 @@ endif
 
 # Solaris or illumos: Force `-flto=auto` to `-flto`
 ifneq "$(findstring SunOS,$(OS))" ""
- CFLAGS := $(subst -flto=auto,-flto,$(CFLAGS))
- LDFLAGS := $(subst -flto=auto,-flto,$(LDFLAGS))
+ CFLAGS:=$(subst -flto=auto,-flto,$(CFLAGS))
+ LDFLAGS:=$(subst -flto=auto,-flto,$(LDFLAGS))
 endif
 
 ################################################################################
