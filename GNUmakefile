@@ -298,7 +298,7 @@ endif
 
 ################################################################################
 
-CFLAGS = \
+CFLAGS=\
 	$(CSTD) \
 	$(DEBUGFLAGS) \
 	$(F_COLOR_DIAGNOSTICS) \
@@ -362,7 +362,7 @@ NASMFLAGS2=-DBUILDDATE='"$(DATESTR)"'
 
 ################################################################################
 
-LDFLAGS = -m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-T,linker.ld \
+LDFLAGS=-m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-T,linker.ld \
 	-Wl,--build-id=none -Wl,--gc-sections
 
 ################################################################################
@@ -422,43 +422,44 @@ endif
 
 ################################################################################
 
-BDOS_OBJS = bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil.o iosys.o
-BIOS_OBJ = bios.o
-BRINGUP_OBJ = bringup.o
-CCP_OBJ = ccp.o
-DISK_OBJ = disk.o
-DISK_V86_OBJ = disk_v86.o
-KBD_OBJ = kbd.o
-MBENTRY_OBJ = mbentry.o
-MEMMAP_OBJ = memmap.o
-MLTIBOOT_OBJ = mltiboot.o
-PIT_OBJ = pit.o
-PMODE_OBJS = pmode.o pmodeasm.o
-RNG_OBJ = cpmrng.o
-RTC_OBJ = rtc.o
-VGACON_OBJ = vgacon.o
-VGATERM_OBJ = vgaterm.o
-VIDBIOS_OBJS = vidbios.o vidbiosasm.o
-VIDMODE_OBJ = vidmode.o
+BDOS_OBJS=bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o dskutil.o iosys.o
+BIOS_OBJ=bios.o
+BRINGUP_OBJ=bringup.o
+CCP_OBJ=ccp.o
+DISK_OBJ=disk.o
+DISK_V86_OBJ=disk_v86.o
+KBD_OBJ=kbd.o
+MBENTRY_OBJ=mbentry.o
+MEMMAP_OBJ=memmap.o
+MLTIBOOT_OBJ=mltiboot.o
+PIT_OBJ=pit.o
+PMODE_OBJS=pmode.o pmodeasm.o
+RNG_OBJ=cpmrng.o
+RTC_OBJ=rtc.o
+VGACON_OBJ=vgacon.o
+VGATERM_OBJ=vgaterm.o
+VIDBIOS_OBJS=vidbios.o vidbiosasm.o
+VIDMODE_OBJ=vidmode.o
 
 ################################################################################
 
-OBJS = $(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
+OBJS=$(BIOS_OBJ) $(BDOS_OBJS) $(CCP_OBJ) $(BRINGUP_OBJ) $(PMODE_OBJS) \
 	$(MEMMAP_OBJ) $(VGACON_OBJ) $(VGATERM_OBJ) $(KBD_OBJ) $(VIDBIOS_OBJS) \
 	$(VIDMODE_OBJ) $(RTC_OBJ) $(PIT_OBJ) $(RNG_OBJ) $(MBENTRY_OBJ) \
 	$(MLTIBOOT_OBJ) $(DISK_OBJ) $(DISK_V86_OBJ)
 
 ################################################################################
 
-TARGET = cpm386.elf
+TARGET=cpm386.elf
+TARGET_DBG=cpm386.dbg
 
 ################################################################################
 
-MK386 = mk386
+MK386=mk386
 
 ################################################################################
 
-MKLZ4RAW = mklz4raw
+MKLZ4RAW=mklz4raw
 
 ################################################################################
 
@@ -512,6 +513,9 @@ strip: all
 	    exit 1; \
 	  fi
 	$(OBJCOPY) -O binary ./$*.elf ./$@
+ifdef DEBUG
+	$(OBJCOPY) --only-keep-debug ./$*.elf ./${@:.bin=.dbg}
+endif
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -796,6 +800,9 @@ vgaon.bin: conctl.c user.ld
 	    exit 1; \
 	  fi
 	$(OBJCOPY) -O binary ./vgaon.elf ./$@
+ifdef DEBUG
+	$(OBJCOPY) --only-keep-debug ./vgaon.elf ./${@:.bin=.dbg}
+endif
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -815,6 +822,9 @@ vgaoff.bin: conctl.c user.ld
 	    exit 1; \
 	  fi
 	$(OBJCOPY) -O binary ./vgaoff.elf ./$@
+ifdef DEBUG
+	$(OBJCOPY) --only-keep-debug ./vgaoff.elf ./${@:.bin=.dbg}
+endif
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -834,6 +844,9 @@ seron.bin: conctl.c user.ld
 	    exit 1; \
 	  fi
 	$(OBJCOPY) -O binary ./seron.elf ./$@
+ifdef DEBUG
+	$(OBJCOPY) --only-keep-debug ./seron.elf ./${@:.bin=.dbg}
+endif
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -853,6 +866,9 @@ seroff.bin: conctl.c user.ld
 	    exit 1; \
 	  fi
 	$(OBJCOPY) -O binary ./seroff.elf ./$@
+ifdef DEBUG
+	$(OBJCOPY) --only-keep-debug ./seroff.elf ./${@:.bin=.dbg}
+endif
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1315,7 +1331,7 @@ $(MLTIBOOT_OBJ): mltiboot.c mltiboot.h memmap.h absaddr.h bdosinc.h biosdef.h
 # The BDOS sources share one set of headers; bdosdef.h carries the ring-3
 # request structs (cpm_vga_text / cpm_ticks / cpm_memlayout).
 
-BDOS_HDRS = bdosinc.h bdosdef.h biosdef.h pktio.h platform.h vidmode.h vgacon.h
+BDOS_HDRS=bdosinc.h bdosdef.h biosdef.h pktio.h platform.h vidmode.h vgacon.h
 
 bdosmain.o: bdosmain.c $(BDOS_HDRS)
 bdosmisc.o: bdosmisc.c $(BDOS_HDRS)
@@ -1449,6 +1465,9 @@ stage2.bin: stage2.s layout.inc bss.inc lz4dec.inc
 
 os.bin: $(TARGET)
 	$(OBJCOPY) -O binary ./$(TARGET) ./$@
+ifdef DEBUG
+	$(OBJCOPY) --only-keep-debug ./$(TARGET) ./$(TARGET_DBG)
+endif
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1548,7 +1567,7 @@ fd.img: diskdefs
 clean distclean:
 	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./*.lst \
 		./bss.inc ./testbdos ./*.su ./*.ci ./*.map ./$(MK386) ./$(MKLZ4RAW) \
-		./*.lz4 ./*.lz4raw ramdisk.tmp ./$(TARGET)
+		./*.dbg ./*.lz4 ./*.lz4raw ramdisk.tmp ./$(TARGET)
 	$(RM) -f -r ./.cpmd
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :

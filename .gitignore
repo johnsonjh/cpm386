@@ -12,6 +12,7 @@
 /core-*
 /.cpmd/
 /cscope.out
+/*.dbg
 /*.elf
 /.envrc
 /GPATH
