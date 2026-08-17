@@ -349,8 +349,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>218</th>
                 <th>1216</th>
                 <th>371</th>
-                <th>58842</th>
-                <th>859</th>
+                <th>58925</th>
+                <th>860</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
@@ -410,8 +410,8 @@ See [FUTURE.md](FUTURE.md).
                 <th>10167</th>
                 <th>34232</th>
                 <th>6512</th>
-                <th>1555899</th>
-                <th>21860</th>
+                <th>1555982</th>
+                <th>21861</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

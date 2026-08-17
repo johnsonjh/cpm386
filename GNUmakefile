@@ -10,7 +10,7 @@
 export LC_ALL=C
 export MAKE=$(shell printf '%s' \
 	"$${MAKE:-$$(command -v gmake 2> /dev/null \
-		|| command -v make 2> /dev/null || echo make)}")
+		|| command -v make 2> /dev/null || printf '%s' make)}")
 
 ################################################################################
 
@@ -369,23 +369,23 @@ LDFLAGS=-m32 -nostdlib -Wl,-m,$(ELF_I386) -Wl,-T,linker.ld \
 
 # Detect if CC with current CFLAGS supports `-flto`
 ifndef NO_LTO
- FLTO_WR:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
+ FLTO_WR:=$(shell $(PRINTF) '%s\n' "int main(void){return 0;}" > .test.c; \
   $(CC) $(CFLAGS) -flto .test.c -o .test.out > /dev/null 2>&1; \
-   echo $$?; $(RM) -f .test.c .test.out > /dev/null 2>&1)
+   $(PRINTF) '%s\n' "$$?"; $(RM) -f .test.c .test.out > /dev/null 2>&1)
  ifeq ($(FLTO_WR),0)
-  FLTO_OK:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
+  FLTO_OK:=$(shell $(PRINTF) '%s\n' "int main(void){return 0;}" > .test.c; \
    $(CC) $(CFLAGS) -Werror -flto .test.c -o .test.out > /dev/null 2>&1; \
-    echo $$?; $(RM) -f .test.c .test.out > /dev/null 2>&1)
+    $(PRINTF) '%s\n' "$$?"; $(RM) -f .test.c .test.out > /dev/null 2>&1)
   ifeq ($(FLTO_OK),0)
    LTO_FLAGS:=-flto
    # Detect if CC supports `-flto=auto`
-   AUTO_WR:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
+   AUTO_WR:=$(shell $(PRINTF) '%s\n' "int main(void){return 0;}" > .test.c; \
     $(CC) $(CFLAGS) -flto=auto .test.c -o .test.out > /dev/null 2>&1; \
-     echo $$?; $(RM) -f .test.c .test.out > /dev/null 2>&1)
+     $(PRINTF) '%s\n' "$$?"; $(RM) -f .test.c .test.out > /dev/null 2>&1)
    ifeq ($(AUTO_WR),0)
-    AUTO_OK:=$(shell printf '%s\n' "int main(void){return 0;}" > .test.c; \
+    AUTO_OK:=$(shell $(PRINTF) '%s\n' "int main(void){return 0;}" > .test.c; \
      $(CC) $(CFLAGS) -Werror -flto=auto .test.c -o .test.out > /dev/null 2>&1; \
-      echo $$?; $(RM) -f .test.c .test.out > /dev/null 2>&1)
+      $(PRINTF) '%s\n' "$$?"; $(RM) -f .test.c .test.out > /dev/null 2>&1)
     ifeq ($(AUTO_OK),0)
      LTO_FLAGS:=-flto=auto
     endif
@@ -1602,7 +1602,7 @@ testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 .PHONY: lint
 
 lint:
-	"$${MAKE:-$(MAKE)}" clean
+	"$${MAKE:-$(MAKE)}" distclean
 	@command -v cppi > /dev/null 2>&1 || exit 0; \
 		set -x; cppi -ac ./*.[ch]
 	@command -v reuse > /dev/null 2>&1 || exit 0; \
@@ -1655,7 +1655,7 @@ markdown-toc: README.md
 .PHONY: scc
 
 scc: README.md
-	"$${MAKE:-$(MAKE)}" clean
+	"$${MAKE:-$(MAKE)}" distclean
 	"$${MAKE:-$(MAKE)}" scc-real
 	"$${MAKE:-$(MAKE)}" scc-real
 	@tput setaf 2 2> /dev/null || :
