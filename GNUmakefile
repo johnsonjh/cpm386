@@ -501,7 +501,8 @@ strip: all
 %.bin: %.c user.ld
 	$(CC) $(CFLAGS) -c -o ./$*.o ./$<
 	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./$*.elf ./$*.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -Wl,-Map=./$*.map \
+		-o ./$*.elf ./$*.o
 	@entry=$$($(NM) ./$*.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
@@ -518,7 +519,8 @@ strip: all
 ################################################################################
 
 $(MK386): mk386.c
-	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
+	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none \
+	-Wl,-Map=./${@:=.map} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -784,7 +786,8 @@ pause.386: pause.bin $(MK386)
 vgaon.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAON -c -o ./vgaon.o ./conctl.c
 	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaon.elf ./vgaon.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -Wl,-Map=./vgaon.map \
+		-o ./vgaon.elf ./vgaon.o
 	@entry=$$($(NM) ./vgaon.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
@@ -802,7 +805,8 @@ vgaon.bin: conctl.c user.ld
 vgaoff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_VGAOFF -c -o ./vgaoff.o ./conctl.c
 	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./vgaoff.elf ./vgaoff.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -Wl,-Map=./vgaoff.map \
+		-o ./vgaoff.elf ./vgaoff.o
 	@entry=$$($(NM) ./vgaoff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
@@ -820,7 +824,8 @@ vgaoff.bin: conctl.c user.ld
 seron.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SERON -c -o ./seron.o ./conctl.c
 	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seron.elf ./seron.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -Wl,-Map=./seron.map \
+		-o ./seron.elf ./seron.o
 	@entry=$$($(NM) ./seron.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
@@ -838,7 +843,8 @@ seron.bin: conctl.c user.ld
 seroff.bin: conctl.c user.ld
 	$(CC) $(CFLAGS) -DPROG_SEROFF -c -o ./seroff.o ./conctl.c
 	$(CC) $(LDEXTRA) $(LTO_FLAGS) -Wl,--build-id=none -nostdlib \
-		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -o ./seroff.elf ./seroff.o
+		-Wl,-m,$(ELF_I386) -no-pie -Wl,-T,./user.ld -Wl,-Map=./seroff.map \
+		-o ./seroff.elf ./seroff.o
 	@entry=$$($(NM) ./seroff.elf | $(AWK) '$$NF=="_start"{print $$1}'); \
 	  if [ "$$entry" != "00000100" ]; then \
 	    tput bold 2> /dev/null || :; tput setaf 1 2> /dev/null || :; \
@@ -1450,7 +1456,8 @@ os.bin: $(TARGET)
 ################################################################################
 
 $(MKLZ4RAW): mklz4raw.c
-	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none -o ./$@ ./$<
+	$(CC) $(CSTD) $(OPTFLAGS) $(LTO_FLAGS) -Wl,--build-id=none \
+	-Wl,-Map=./${@:=.map} -o ./$@ ./$<
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1480,7 +1487,7 @@ os.bin.lz4raw: os.bin.lz4 $(MKLZ4RAW)
 ################################################################################
 
 $(TARGET): $(OBJS) linker.ld
-	$(CC) $(LDEXTRA) $(LDFLAGS) -o ./$@ ./$(OBJS)
+	$(CC) $(LDEXTRA) $(LDFLAGS) -Wl,-Map=./${@:.elf=.map} -o ./$@ ./$(OBJS)
 	@tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "$@ built successfully."
 	@tput sgr0 2> /dev/null || :
@@ -1540,7 +1547,7 @@ fd.img: diskdefs
 
 clean distclean:
 	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./*.lst \
-		./bss.inc ./testbdos ./*.su ./*.ci ./$(MK386) ./$(MKLZ4RAW) \
+		./bss.inc ./testbdos ./*.su ./*.ci ./*.map ./$(MK386) ./$(MKLZ4RAW) \
 		./*.lz4 ./*.lz4raw ramdisk.tmp ./$(TARGET)
 	$(RM) -f -r ./.cpmd
 	@ccache -cC > /dev/null 2>&1 || :
@@ -1553,7 +1560,7 @@ clean distclean:
 testbdos: testbdos.c bdosmain.o bdosmisc.o bdosrw.o conbdos.o fileio.o \
 	dskutil.o iosys.o $(CCP_OBJ) $(BRINGUP_OBJ)
 	$(CC) $(CSTD) -m32 $(LTO_FLAGS) $(OPTFLAGS) -Wl,--build-id=none -I. \
-	-o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB) -Wl,--build-id=none \
+	-o ./$@ ./$^ -DRAMDISK_KB=$(RAMDISK_KB) -Wl,-Map=./${@:=.map} \
 	-fno-asynchronous-unwind-tables -fno-builtin -fno-pic -fno-pie -fno-plt \
 	-fno-stack-protector -fno-unwind-tables -fomit-frame-pointer $(TEST_FLAGS)
 	@tput setaf 2 2> /dev/null || :

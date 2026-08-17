@@ -23,6 +23,7 @@
 /*.lst
 /*.lz4
 /*.lz4raw
+/*.map
 /mk386
 /mklz4raw
 /NOTES.TXT
