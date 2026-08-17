@@ -1562,14 +1562,25 @@ fd.img: diskdefs
 
 ################################################################################
 
-.PHONY: clean distclean
+.PHONY: distclean
 
-clean distclean:
+distclean: clean
+	$(RM) -f ./a.out ./a.exe ./*.bak ./*~ ./"#"*"#"
+	$(RM) -f ./core ./*.core ./core-*
+	@ccache -cC > /dev/null 2>&1 || :
+	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
+	@$(PRINTF) '%s\r\n' "Distclean completed successfully."
+	@tput sgr0 2> /dev/null || :
+
+################################################################################
+
+.PHONY: clean
+
+clean:
 	$(RM) -f ./*.o ./*.elf ./*.img /*.log ./*.bin ./*.386 ./*.lst \
 		./bss.inc ./testbdos ./*.su ./*.ci ./*.map ./$(MK386) ./$(MKLZ4RAW) \
 		./*.dbg ./*.lz4 ./*.lz4raw ramdisk.tmp ./$(TARGET)
 	$(RM) -f -r ./.cpmd
-	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Clean completed successfully."
 	@tput sgr0 2> /dev/null || :

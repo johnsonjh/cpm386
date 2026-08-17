@@ -344,13 +344,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1763</th>
-                <th>337</th>
-                <th>217</th>
-                <th>1209</th>
-                <th>368</th>
-                <th>58510</th>
-                <th>854</th>
+                <th>1774</th>
+                <th>340</th>
+                <th>218</th>
+                <th>1216</th>
+                <th>371</th>
+                <th>58842</th>
+                <th>859</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>2</th>
@@ -405,13 +405,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>115</th>
-                <th>54655</th>
-                <th>10264</th>
-                <th>10166</th>
-                <th>34225</th>
-                <th>6509</th>
-                <th>1555567</th>
-                <th>21855</th>
+                <th>54666</th>
+                <th>10267</th>
+                <th>10167</th>
+                <th>34232</th>
+                <th>6512</th>
+                <th>1555899</th>
+                <th>21860</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
