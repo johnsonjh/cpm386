@@ -156,6 +156,13 @@ test "$(id -u || :)" = "0" || {
 
 ###############################################################################
 
+test -d "/mnt" || {
+  printf '%s\n' 'ERROR: "/mnt" directory does not exist!'
+  exit 1
+}
+
+###############################################################################
+
 test "$(uname -s || :)" = "Linux" || {
   printf '%s\n' "WARNING: This script has only been tested on GNU/Linux."
   sleep 2
