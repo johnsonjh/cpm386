@@ -17,7 +17,6 @@ this section as *wishlist* and not a *roadmap*!
   * User‑defined configurable first‑class RAM disk (default to M:)
   * Disk caching
   * Drivers for networking (with CP/Net NDOS and generic packet interface)
-  * Optional ADM‑3A VGA console mode
   * Enhance filesystem with CP/M‑Plus parity (timestamps, passwords, etc.)
   * Extend user area support from 16 to 26 (or even 32) user areas per disk
   * Support for non‑PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)
