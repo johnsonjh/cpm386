@@ -114,8 +114,8 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   const int MAX_ITER = 16;
 
   /* Julia set parameter c = CR + i*CI (fixed-point) */
-  const LONG CR = -11469L;  /* ≈ -0.7 * SCALE */
-  const LONG CI =  4427L;   /* ≈  0.27015 * SCALE */
+  const LONG CR = -11469L;  /* ~= -0.7 * SCALE */
+  const LONG CI =  4427L;   /* ~=  0.27015 * SCALE */
 
   int y, x;
 
