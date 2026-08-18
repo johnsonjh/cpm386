@@ -31,7 +31,6 @@
 /*       E D  :   T h e   C P / M   C o n t e x t    E d i t o r            */
 /*       -------------------------------------------------------            */
 /*                                                                          */
-/*      Copyright (c) 1976, 1977, 1978, 1979, 1980, 1981, 1982              */
 /*          Digital Research                                                */
 /*          Box 579 Pacific Grove                                           */
 /*          California 93950                                                */

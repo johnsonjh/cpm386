@@ -11,7 +11,6 @@
 /*********************************************************
  *                                                       *
  *    CP/M-386 header file, derived from CP/M-68K        *
- *    Copyright (c) 1982 by Digital Research, Inc.       *
  *    Structure definitions for doing I/O in packets     *
  *                                                       *
  *********************************************************/

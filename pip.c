@@ -29,7 +29,6 @@
 /*       P e r i p h e r a l  I n t e r c h a n g e  P r o g r a m          */
 /*       ---------------------------------------------------------          */
 /*                                                                          */
-/*         Copyright (c) 1976, 1977, 1978, 1979, 1980, 1981                 */
 /*         Digital Research                                                 */
 /*         Box 579                                                          */
 /*         Pacific Grove, CA                                                */

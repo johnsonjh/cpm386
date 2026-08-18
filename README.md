@@ -1,7 +1,7 @@
 # CP/M-386
 
 <!-- CP/M-386 - README.md -->
-<!-- Copyright (c) 2026 Jeffrey H. Johnson -->
+<!-- Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com> -->
 <!-- SPDX-License-Identifier: MIT -->
 <!-- scspell-id: 696e52ee-8276-11f1-b02c-80ee73e9b8e7 -->
 
@@ -314,22 +314,22 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>74</th>
-                <th>46377</th>
+                <th>46373</th>
                 <th>8740</th>
-                <th>7952</th>
+                <th>7948</th>
                 <th>29685</th>
                 <th>6065</th>
-                <th>1282852</th>
-                <th>17677</th>
+                <th>1282578</th>
+                <th>17674</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>24</th>
-                <th>3349</th>
+                <th>3344</th>
                 <th>648</th>
-                <th>1490</th>
+                <th>1485</th>
                 <th>1211</th>
                 <th>11</th>
-                <th>123618</th>
+                <th>123305</th>
                 <th>1647</th>
         </tr><tr>
                 <th>Assembly</th>
@@ -359,7 +359,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>536</th>
                 <th>0</th>
-                <th>25564</th>
+                <th>25616</th>
                 <th>474</th>
         </tr><tr>
                 <th>Shell</th>
@@ -369,7 +369,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>62</th>
                 <th>143</th>
                 <th>30</th>
-                <th>8290</th>
+                <th>8316</th>
                 <th>114</th>
         </tr><tr>
                 <th>Linker&nbsp;Script</th>
@@ -405,13 +405,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>116</th>
-                <th>54728</th>
+                <th>54719</th>
                 <th>10280</th>
-                <th>10167</th>
+                <th>10158</th>
                 <th>34281</th>
                 <th>6512</th>
-                <th>1559357</th>
-                <th>21910</th>
+                <th>1558848</th>
+                <th>21906</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

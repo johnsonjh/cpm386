@@ -12,7 +12,6 @@
  *
  *                   C P / M   C   H E A D E R   F I L E
  *                   -----------------------------------
- *               Copyright (c) 1982 by Digital Research Inc.
  *
  *       This is an include file for assisting the user to write portable
  *       programs for C.

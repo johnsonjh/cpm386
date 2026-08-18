@@ -1,7 +1,7 @@
 #!/bin/sh
 ###############################################################################
 # CP/M-386 - mboot.sh
-# Copyright (c) 2026 Jeffrey H. Johnson
+# Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
 # SPDX-License-Identifier: MIT
 # scspell-id: 45ecfa78-93e2-11f1-92f7-80ee73e9b8e7
 ###############################################################################

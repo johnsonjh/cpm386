@@ -24,8 +24,6 @@
 *               prt_line();                             *
 *               readline();                             *
 *                                                       *
-*       Copyright (c) 1982 Digital Research, Inc.       *
-*                                                       *
 *       Modified 2/5/84 sw Allow typeahead              *
 *                          ^C warmboot modifications    *
 *       Again   3/17/84 sw Chain hack                   *
