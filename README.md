@@ -353,14 +353,14 @@ See [FUTURE.md](FUTURE.md).
                 <th>860</th>
         </tr><tr>
                 <th>Markdown</th>
-                <th>2</th>
-                <th>548</th>
-                <th>61</th>
+                <th>3</th>
+                <th>610</th>
+                <th>74</th>
                 <th>0</th>
-                <th>487</th>
+                <th>536</th>
                 <th>0</th>
-                <th>22179</th>
-                <th>425</th>
+                <th>25564</th>
+                <th>474</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -404,14 +404,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>115</th>
-                <th>54666</th>
-                <th>10267</th>
+                <th>116</th>
+                <th>54728</th>
+                <th>10280</th>
                 <th>10167</th>
-                <th>34232</th>
+                <th>34281</th>
                 <th>6512</th>
-                <th>1555972</th>
-                <th>21861</th>
+                <th>1559357</th>
+                <th>21910</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
