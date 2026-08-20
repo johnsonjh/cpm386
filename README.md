@@ -389,7 +389,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>12</th>
                 <th>74</th>
                 <th>35</th>
-                <th>3156</th>
+                <th>3158</th>
                 <th>79</th>
         </tr><tr>
                 <th>YAML</th>
@@ -410,7 +410,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10159</th>
                 <th>34285</th>
                 <th>6514</th>
-                <th>1559007</th>
+                <th>1559009</th>
                 <th>21905</th>
         </tr></tfoot></table>
 <!-- scc-end -->

@@ -17,7 +17,7 @@ ENV TERM="xterm-color"
 
 RUN \
   set -eux && \
-  mkdir -p "${HOME:?}" && \
+  mkdir -vp "${HOME:?}" && \
   dnf -y upgrade \
     --allowerasing \
     --setopt=keepcache=True && \
@@ -51,7 +51,7 @@ RUN \
   curl -fsSL "https://rpm.nodesource.com/setup_26.x" | bash - && \
   dnf install -y nodejs && \
   { dnf -y clean all || :; } && \
-  mkdir -p "/etc/apt/apt.conf.d" && \
+  mkdir -vp "/etc/apt/apt.conf.d" && \
   export PATH="${HOME:?}/go/bin:${PATH:-}" && \
   export GOPROXY="proxy.golang.org,direct" && \
   export GOSUMDB="sum.golang.org" && \
