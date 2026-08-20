@@ -360,7 +360,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>535</th>
                 <th>0</th>
                 <th>25577</th>
-                <th>471</th>
+                <th>470</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -384,13 +384,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Dockerfile</th>
                 <th>1</th>
-                <th>93</th>
+                <th>94</th>
                 <th>8</th>
                 <th>12</th>
-                <th>73</th>
-                <th>34</th>
-                <th>3127</th>
-                <th>78</th>
+                <th>74</th>
+                <th>35</th>
+                <th>3156</th>
+                <th>79</th>
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
@@ -405,12 +405,12 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>116</th>
-                <th>54725</th>
+                <th>54726</th>
                 <th>10282</th>
                 <th>10159</th>
-                <th>34284</th>
-                <th>6513</th>
-                <th>1558978</th>
+                <th>34285</th>
+                <th>6514</th>
+                <th>1559007</th>
                 <th>21905</th>
         </tr></tfoot></table>
 <!-- scc-end -->

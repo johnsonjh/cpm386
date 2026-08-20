@@ -10,13 +10,14 @@ FROM quay.io/fedora/fedora:rawhide
 ################################################################################
 
 ENV HOME="/root"
-ENV PATH="${HOME:?}/.local/bin:${HOME:?}/go/bin:${PATH-}"
+ENV PATH="${HOME:?}/.local/bin:${HOME:?}/go/bin:${PATH:-}"
 ENV TERM="xterm-color"
 
 ################################################################################
 
 RUN \
   set -eux && \
+  mkdir -p "${HOME:?}" && \
   dnf -y upgrade \
     --allowerasing \
     --setopt=keepcache=True && \
