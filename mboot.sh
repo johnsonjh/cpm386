@@ -61,7 +61,7 @@ GRUB_INSTALL=$(command -v grub2-install 2> /dev/null \
 ###############################################################################
 
 command -v "${GRUB_INSTALL:?}" > /dev/null 2>&1 || {
-  printf '%s\n' "ERROR: grub2-install command not available!"
+  printf '%s\n' "ERROR: ${GRUB_INSTALL:?} command not available!"
   exit 1
 }
 
