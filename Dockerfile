@@ -47,6 +47,7 @@ RUN \
     pigz \
     python3 \
     python3-pip \
+    ShellCheck \
       --allowerasing && \
   curl -fsSL "https://rpm.nodesource.com/setup_26.x" | bash - && \
   dnf install -y nodejs && \
