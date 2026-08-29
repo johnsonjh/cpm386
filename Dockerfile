@@ -25,7 +25,6 @@ RUN \
     bash \
     binutils \
     clang \
-    codespell \
     coreutils \
     cpmtools \
     cppi \
