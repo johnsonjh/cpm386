@@ -15,6 +15,7 @@
 - [Hardware support](#hardware-support)
 - [CP/M compatibility](#cpm-compatibility)
 - [Build requirements](#build-requirements)
+- [Optional dependencies](#optional-dependencies)
 - [Downloads](#downloads)
 - [Compilation](#compilation)
 - [Docker build](#docker-build)
@@ -81,7 +82,7 @@ The system currently reports **BDOS 2.2** to applications.
 
 ## Build requirements
 
-The following dependencies are required to compile **CP/M‑386**:
+The following dependencies are *required* to compile **CP/M‑386**:
 
 * [AWK](https://en.wikipedia.org/wiki/AWK)
 * [Cpmtools](https://www.moria.de/~michael/cpmtools/files)<sup>†</sup>
@@ -91,12 +92,17 @@ The following dependencies are required to compile **CP/M‑386**:
 * [GNU Make](https://www.gnu.org/software/make/)
 * [LZ4](https://lz4.org/)
 * [NASM](https://nasm.us/)
-* [QEMU](https://www.qemu.org) (required only for testing)
 []()
 
 []()
 <sup>†</sup>Be sure to use `cpmtools` version **2.23** or later.  Older
 versions may *appear* to work but have several known bugs.
+
+## Optional dependencies
+
+* [diff](https://en.wikipedia.org/wiki/Diff)
+* [QEMU](https://www.qemu.org)
+* [sed](https://en.wikipedia.org/wiki/Sed)
 
 ## Downloads
 
@@ -354,13 +360,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>3</th>
-                <th>620</th>
-                <th>74</th>
+                <th>626</th>
+                <th>76</th>
                 <th>0</th>
-                <th>546</th>
+                <th>550</th>
                 <th>0</th>
-                <th>25880</th>
-                <th>476</th>
+                <th>26019</th>
+                <th>481</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -415,13 +421,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>117</th>
-                <th>54775</th>
-                <th>10288</th>
+                <th>54781</th>
+                <th>10290</th>
                 <th>10124</th>
-                <th>34363</th>
+                <th>34367</th>
                 <th>6518</th>
-                <th>1560070</th>
-                <th>21957</th>
+                <th>1560209</th>
+                <th>21962</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

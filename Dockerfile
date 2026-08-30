@@ -30,6 +30,7 @@ RUN \
     cppi \
     curl \
     devscripts-checkbashisms \
+    diff \
     file \
     file-devel \
     gawk \
@@ -46,6 +47,7 @@ RUN \
     pigz \
     python3 \
     python3-pip \
+    sed \
     ShellCheck \
       --allowerasing && \
   curl -fsSL "https://rpm.nodesource.com/setup_26.x" | bash - && \
