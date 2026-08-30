@@ -49,6 +49,7 @@ RUN \
     python3-pip \
     sed \
     ShellCheck \
+    util-linux \
       --allowerasing && \
   curl -fsSL "https://rpm.nodesource.com/setup_26.x" | bash - && \
   dnf install -y nodejs && \

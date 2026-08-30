@@ -166,6 +166,20 @@ HEAD:=$(shell \
 
 ################################################################################
 
+GCOLUMN:=$(shell \
+	command -v gcolumn 2> /dev/null || \
+	command -v column 2> /dev/null || \
+	$(PRINTF) '%s' "missing")
+
+################################################################################
+
+COLUMN:=$(shell \
+	test "$(GCOLUMN)" != "missing" 2>/dev/null && \
+	$(PRINTF) '%s' "$(GCOLUMN) -t -o ' '" || \
+	$(PRINTF) '%s' "$$(command -v cat || $(PRINTF) '%s' 'cat')")
+
+################################################################################
+
 LZ4:=$(shell \
 	command -v lz4 2> /dev/null || \
 	$(PRINTF) '%s' "lz4")
@@ -488,7 +502,7 @@ endif
 .PHONY: sizes
 
 AWKDIFF:=$$1=="<"{ f=$$3; s1=$$2; next } $$1==">" && $$3==f \
-	{ d=$$2 - s1; print f":", s1" ->", $$2, "[delta "d"]" }
+	{ d=$$2 - s1; print f": ", s1" ->", $$2, "[delta "d"]" }
 
 sizes:
 	@touch ./.sizes.txt
@@ -496,7 +510,7 @@ sizes:
 		sort -k2 > .sizes.new || :
 	@diff ./.sizes.txt ./.sizes.new 2> /dev/null | $(GREP) ' ' | \
 		$(GREP) -v '\--' | sort -k3 | "$(AWK)" '$(AWKDIFF)' | \
-		sed '/delta [^-]/s/delta /delta +/' || :
+		sed '/delta [^-]/s/delta /delta +/' | $(COLUMN) || :
 	@$(MV) -f ./.sizes.new ./.sizes.txt > /dev/null 2>&1 || :
 	@touch ./.sizes.txt
 

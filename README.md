@@ -103,6 +103,7 @@ versions may *appear* to work but have several known bugs.
 * [diff](https://en.wikipedia.org/wiki/Diff)
 * [QEMU](https://www.qemu.org)
 * [sed](https://en.wikipedia.org/wiki/Sed)
+* [util-linux](https://en.wikipedia.org/wiki/Util-linux) (for `column`)
 
 ## Downloads
 
@@ -350,23 +351,23 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1789</th>
-                <th>342</th>
-                <th>218</th>
-                <th>1229</th>
-                <th>376</th>
-                <th>59508</th>
-                <th>872</th>
+                <th>1803</th>
+                <th>346</th>
+                <th>220</th>
+                <th>1237</th>
+                <th>382</th>
+                <th>59981</th>
+                <th>880</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>3</th>
-                <th>629</th>
+                <th>630</th>
                 <th>76</th>
                 <th>0</th>
-                <th>553</th>
+                <th>554</th>
                 <th>0</th>
-                <th>26161</th>
-                <th>483</th>
+                <th>26233</th>
+                <th>486</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -390,13 +391,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Dockerfile</th>
                 <th>1</th>
-                <th>96</th>
+                <th>97</th>
                 <th>8</th>
                 <th>12</th>
-                <th>76</th>
+                <th>77</th>
                 <th>35</th>
-                <th>3180</th>
-                <th>81</th>
+                <th>3197</th>
+                <th>82</th>
         </tr><tr>
                 <th>YAML</th>
                 <th>1</th>
@@ -405,7 +406,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>15</th>
                 <th>66</th>
                 <th>0</th>
-                <th>3850</th>
+                <th>3875</th>
                 <th>70</th>
         </tr><tr>
                 <th>Plain Text</th>
@@ -421,13 +422,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>117</th>
-                <th>54786</th>
-                <th>10292</th>
-                <th>10123</th>
-                <th>34371</th>
-                <th>6519</th>
-                <th>1560237</th>
-                <th>21963</th>
+                <th>54802</th>
+                <th>10296</th>
+                <th>10125</th>
+                <th>34381</th>
+                <th>6525</th>
+                <th>1560824</th>
+                <th>21975</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
