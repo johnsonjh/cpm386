@@ -348,7 +348,7 @@ parse_hex_byte (const char *s, UBYTE *out)
 static void
 help (void)
 {
-  puts ("Usage: TRUNCATE [-h] [-f 0xNN] filename bytes\r\n");
+  puts ("Usage: TRUNCATE [-h] [-f 0xNN] <filename> <bytes|LRBC>\r\n");
   puts ("  -h       show this help text\r\n");
   puts ("  -f 0xNN  fill byte for data past LRBC");
   puts (" (default: 0x1A)\r\n");

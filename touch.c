@@ -1,6 +1,7 @@
 /*
  * CP/M-386 - touch.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * Copyright (c) 2021 tsupplis <https://github.com/tsupplis>
  * SPDX-License-Identifier: MIT
  * scspell-id: e48c929e-82b5-11f1-a4ac-80ee73e9b8e7
  */
@@ -188,7 +189,7 @@ touch_one (const char *name)
 static void
 usage (void)
 {
-  puts ("Usage: TOUCH [-h] filename [filename ...]\r\n");
+  puts ("Usage: TOUCH [-h] <filename> [filename ...]\r\n");
   puts ("  -h  help\r\n");
 }
 

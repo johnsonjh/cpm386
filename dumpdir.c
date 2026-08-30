@@ -11,16 +11,6 @@
 
 /*****************************************************************************/
 
-/*
- * Usage:
- *   DUMPDIR              list all non-empty dirents (user 0..15)
- *   DUMPDIR filespec     search pattern (wildcards * ? ok)
- *   DUMPDIR -a filespec  include all users (still skips 0xE5 empty)
- *   DUMPDIR -h           help
- */
-
-/*****************************************************************************/
-
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;
@@ -138,7 +128,7 @@ help (void)
 {
   puts ("Usage: DUMPDIR [-a] [filespec]\r\n");
   puts ("  no args    all files, current user\r\n");
-  puts ("  filespec   name pattern (* and ? wildcards)\r\n");
+  puts ("  filespec   name pattern (* and ? wildcards accepted)\r\n");
   puts ("  -a         show all users 0..15 (not only current)\r\n");
 }
 

@@ -77,7 +77,8 @@ main (int argc, char **argv)
 
   if (argc < 3)
     {
-      (void)fprintf (stderr, "usage: %s in.bin out.386 [load_off [min_kb]]\n",
+      (void)fprintf (stderr,
+                     "Usage: %s <in.bin> <out.386> [load_off [min_kb]]\n",
                      argv [0]);
       (void)fprintf (stderr,
                      "  min_kb: total TPA the program needs, in KB.\n");

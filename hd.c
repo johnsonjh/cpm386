@@ -1,6 +1,7 @@
 /*
  * CP/M-386 - hd.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * Copyright (c) 2021 tsupplis <https://github.com/tsupplis>
  * SPDX-License-Identifier: MIT
  * scspell-id: b805f072-82b4-11f1-82bb-80ee73e9b8e7
  */

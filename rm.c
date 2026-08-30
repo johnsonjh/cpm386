@@ -1,6 +1,7 @@
 /*
  * CP/M-386 - rm.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * Copyright (c) 2021 tsupplis <https://github.com/tsupplis>
  * SPDX-License-Identifier: MIT
  * scspell-id: a060f59c-82b5-11f1-b974-80ee73e9b8e7
  */
@@ -8,18 +9,6 @@
 /*****************************************************************************/
 
 /* rm.c: delete files */
-
-/*****************************************************************************/
-
-/*
- * Usage: RM [-h] | [-a] [-i] [-f] filespec [filespec ...]
- *
- *   -a  include system files
- *   -i  confirm each delete (Y/N)
- *   -f  force: clear R/O then delete
- *
- * BDOS only (int 0x30).  Multi-extent names appear once (ex/s2 search = '?').
- */
 
 /*****************************************************************************/
 
@@ -127,7 +116,7 @@ getch_wait (void)
 static void
 help (void)
 {
-  puts ("Usage: RM [-h] [-a] [-i] [-f] filespec [filespec ...]\r\n");
+  puts ("Usage: RM [-a] [-f] [-h] [-i] <filespec> [filespec ...]\r\n");
   puts ("  -a  include system files\r\n");
   puts ("  -f  force delete of R/O files\r\n");
   puts ("  -h  show this help text\r\n");

@@ -7,16 +7,7 @@
 
 /*****************************************************************************/
 
-/*
- * prng.c - PRNG test program
- *
- * Usage:
- *   PRNG          print 2 random bytes as hex
- *   PRNG N        print N random bytes as hex
- *   PRNG -h       help
- *   PRNG -s       re-seed the RNG from PIT jitter
- *   PRNG -s HEX   re-seed with a 64-char hex string (32 bytes / 256 bits)
- */
+/* prng.c - PRNG test program */
 
 /*****************************************************************************/
 
@@ -159,7 +150,7 @@ static void
 help (void)
 {
   puts ("PRNG: Salsa20-based PRNG utility (BDOS 253/254)\r\n");
-  puts ("Usage:\r\n");
+  puts ("Usage: PRNG [1..32767] [-h] [-s [HEX]]\r\n");
   puts ("  PRNG          print 2 random bytes (as hex)\r\n");
   puts ("  PRNG N        print N random bytes (N=1..32767)\r\n");
   puts ("  PRNG -h       print this help text\r\n");

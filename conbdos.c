@@ -31,11 +31,8 @@
 ********************************************************/
 
 #include "bdosinc.h"
-
 #include "bdosdef.h"
-
 #include "biosdef.h"
-
 
 #define ctrlc 0x03
 #define ctrle 0x05

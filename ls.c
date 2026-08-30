@@ -1,6 +1,7 @@
 /*
  * CP/M-386 - ls.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * Copyright (c) 2021 tsupplis <https://github.com/tsupplis>
  * SPDX-License-Identifier: MIT
  * scspell-id: d66b04da-82b4-11f1-89db-80ee73e9b8e7
  */
@@ -518,7 +519,7 @@ getch_wait (void)
 static void
 help (void)
 {
-  puts ("Usage: LS [-h] [-a] [-p] [-s|-z] [-r] [-i] [-l|-b]");
+  puts ("Usage: LS [-a] [-b|-l] [-h] [-i] [-p] [-r] [-s|-z]");
   puts (" [filespec ...]\r\n");
   puts ("  -a  all files (including system)\r\n");
   puts ("  -b  bare names only\r\n");

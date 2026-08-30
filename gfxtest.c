@@ -447,6 +447,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (i <= tlen && (CMD_TAIL [i] == '-' || CMD_TAIL [i] == '/'))
     {
       usage ();
+
       (void)bdos (0, 0);
     }
 
@@ -479,12 +480,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       if (r == VIDR_NOHW)
         {
           puts ("No video adapter present\r\n");
+
           (void)bdos (0, 0);
         }
 
       if (r == VIDR_NOMORE)
         {
           puts ("No such mode; try TEXTMODE -A for the list\r\n");
+
           (void)bdos (0, 0);
         }
 
@@ -499,6 +502,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts ("Mode ");
       putu (want);
       puts (" is a text mode; use TEXTMODE for those\r\n");
+
       (void)bdos (0, 0);
     }
 
@@ -509,12 +513,14 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts (" is ");
       putu (v.bpp);
       puts (" bits per pixel; this demo only draws 8\r\n");
+
       (void)bdos (0, 0);
     }
 
   if (v.width < W || v.height < H)
     {
       puts ("Mode is smaller than the test pattern\r\n");
+
       (void)bdos (0, 0);
     }
 
@@ -548,6 +554,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (r != VIDR_OK)
     {
       puts ("Could not set the mode\r\n");
+
       (void)bdos (0, 0);
     }
 

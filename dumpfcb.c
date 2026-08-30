@@ -11,15 +11,6 @@
 
 /*****************************************************************************/
 
-/*
- * Usage:
- *   DUMPFCB              dump default FCB at base page 0x5C (as CCP set it)
- *   DUMPFCB filename     open file (LRBC request), dump resulting FCB
- *   DUMPFCB -h           help
- */
-
-/*****************************************************************************/
-
 typedef unsigned short UWORD;
 typedef short WORD;
 typedef long LONG;

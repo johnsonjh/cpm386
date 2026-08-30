@@ -314,23 +314,23 @@ See [FUTURE.md](FUTURE.md).
         <tbody><tr>
                 <th>C</th>
                 <th>74</th>
-                <th>46373</th>
-                <th>8740</th>
-                <th>7948</th>
-                <th>29685</th>
+                <th>46346</th>
+                <th>8744</th>
+                <th>7916</th>
+                <th>29686</th>
                 <th>6065</th>
-                <th>1282576</th>
-                <th>17674</th>
+                <th>1281899</th>
+                <th>17655</th>
         </tr><tr>
                 <th>C Header</th>
                 <th>24</th>
-                <th>3344</th>
-                <th>648</th>
-                <th>1485</th>
+                <th>3338</th>
+                <th>646</th>
+                <th>1481</th>
                 <th>1211</th>
                 <th>11</th>
-                <th>123305</th>
-                <th>1647</th>
+                <th>123146</th>
+                <th>1646</th>
         </tr><tr>
                 <th>Assembly</th>
                 <th>8</th>
@@ -405,13 +405,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>116</th>
-                <th>54727</th>
-                <th>10282</th>
-                <th>10159</th>
-                <th>34286</th>
+                <th>54694</th>
+                <th>10284</th>
+                <th>10123</th>
+                <th>34287</th>
                 <th>6514</th>
-                <th>1559042</th>
-                <th>21906</th>
+                <th>1558206</th>
+                <th>21886</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

@@ -12,15 +12,6 @@
 /*****************************************************************************/
 
 /*
- * Usage:
- *   RC nnn     set return code to nnn (decimal) and exit
- *   RC         print current return code (usually 0 at CCP)
- *   RC -h      help
- */
-
-/*****************************************************************************/
-
-/*
  * After "RC 42", CCP prints "Return code 42" (nonzero only).
  * Codes 0xFF00-0xFF7F are "fatal" per CP/M 3; 0xFFFE = ^C terminate.
  */

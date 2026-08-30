@@ -136,7 +136,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   /* Need a filename in the default FCB (from CCP base-page setup) */
   if (DEF_FCB [1] == ' ' || DEF_FCB [1] == 0)
     {
-      puts ("Usage: LRBC filename [value]\r\n");
+      puts ("Usage: LRBC <filename> [value]\r\n");
 
       (void)bdos (0, 0);
     }

@@ -1,6 +1,7 @@
 /*
  * CP/M-386 - more.c
  * Copyright (c) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>
+ * Copyright (c) 2021 tsupplis <https://github.com/tsupplis>
  * SPDX-License-Identifier: MIT
  * scspell-id: 09a4b440-82b5-11f1-8918-80ee73e9b8e7
  */
@@ -112,7 +113,7 @@ getch_wait (void)
 static void
 help (void)
 {
-  puts ("Usage: MORE [-h] filename\r\n");
+  puts ("Usage: MORE [-h] <filename>\r\n");
   puts ("  Space  next page\r\n");
   puts ("  Enter  next line\r\n");
   puts ("  Q/^C   quit\r\n");

@@ -253,6 +253,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (tail [i])
     {
       usage ();
+
       (void)bdos (0, 0);
 
       return;
@@ -261,6 +262,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (n == 0)
     {
       report (bdos (BDOS_KBD_CAPS, (LONG)(ULONG)CAPS_QUERY));
+
       (void)bdos (0, 0);
 
       return;
@@ -269,6 +271,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
   if (word [0] == '-' || word [0] == '/' || word [0] == '?')
     {
       usage ();
+
       (void)bdos (0, 0);
 
       return;
@@ -282,6 +285,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       puts (word);
       puts ("\r\n\r\n");
       usage ();
+
       (void)bdos (0, 0);
 
       return;
