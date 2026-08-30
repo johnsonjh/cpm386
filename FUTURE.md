@@ -10,6 +10,9 @@ this section as *wishlist* and not a *roadmap*!
 
 * OS enhancements:
   * 80387 FPU emulation
+  * Configurable serial console parameters (currently hardcoded 9600/N/8/1)
+  * On supported systems, support setting MTRRs for write coalescing for
+    video memory areas
   * Add support for full keyboard remapping and keyboard macros
   * Support and use Multiboot 2 specification (we are Multiboot 1 right now)
   * Fix `testbdos` when building with Clang
