@@ -465,9 +465,6 @@ MKLZ4RAW=mklz4raw
 
 # Initial ramdisk image is 384 KiB (cpm386-384k)
 RAMDISK_KB:=384
-
-################################################################################
-
 CPMFS:=cpm386-384k
 
 ################################################################################
@@ -500,7 +497,8 @@ sizes:
 	@diff ./.sizes.txt ./.sizes.new 2> /dev/null | $(GREP) ' ' | \
 		$(GREP) -v '\--' | sort -k3 | "$(AWK)" '$(AWKDIFF)' | \
 		sed '/delta [^-]/s/delta /delta +/' || :
-	@$(MV) -f ./.sizes.new ./.sizes.txt > /dev/null 2>&1
+	@$(MV) -f ./.sizes.new ./.sizes.txt > /dev/null 2>&1 || :
+	@touch ./.sizes.txt
 
 ################################################################################
 
@@ -1555,11 +1553,11 @@ floppy.img: stage1.bin stage2.bin os.bin.lz4raw
 
 .PHONY: disks
 
-disks: hd.img fd.img
+disks: blankhd.img blankfd.img
 
 ################################################################################
 
-hd.img: diskdefs
+blankhd.img: diskdefs
 	$(DD) if="/dev/zero" bs="1024" count="8192" 2>/dev/null | \
 		$(TR) '\0' '\345' > "$@"
 	mkfs.cpm -f cpm386-hd8 "$@"
@@ -1569,7 +1567,7 @@ hd.img: diskdefs
 
 ################################################################################
 
-fd.img: diskdefs
+blankfd.img: diskdefs
 	$(DD) if="/dev/zero" bs="1024" count="1440" 2>/dev/null | \
 		$(TR) '\0' '\345' > "$@"
 	mkfs.cpm -f cpm386-fd144 "$@"
