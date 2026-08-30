@@ -45,6 +45,7 @@ pages:
     - export GOTOOLCHAIN="auto"
     - $(command -v go || printf '%s\n' "go") install "mvdan.cc/sh/v3/cmd/shfmt@master"
     - export PATH="$HOME/go/bin:$PATH"
+    - rm -v -f ./.sizes.txt || true
     - echo -e "section_end:`date +%s`:Setup_section\r\e[0K" || true
     - |
       #

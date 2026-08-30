@@ -475,6 +475,7 @@ CPMFS:=cpm386-384k
 .PHONY: all
 
 all: $(TARGET) stage1.bin stage2.bin os.bin floppy.img disks
+	@"$${MAKE:-$(MAKE)}" --no-print-directory sizes 2> /dev/null || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Build completed successfully."
 	@tput sgr0 2> /dev/null || :
@@ -484,6 +485,22 @@ ifeq "$(findstring gcc,$(CC))" ""
 		"NOTE: $(CC) was used for this invocation but gcc is recommended!"
 	@tput sgr0 2> /dev/null || :
 endif
+
+################################################################################
+
+.PHONY: sizes
+
+AWKDIFF:=$$1=="<"{ f=$$3; s1=$$2; next } $$1==">" && $$3==f \
+	{ d=$$2 - s1; print f":", s1" ->", $$2, "[delta "d"]" }
+
+sizes:
+	@touch ./.sizes.txt
+	@wc -c cpm386.elf *.386 | $(GREP) -v ' [Tt]otal$$' | \
+		sort -k2 > .sizes.new || :
+	@diff ./.sizes.txt ./.sizes.new 2> /dev/null | $(GREP) ' ' | \
+		$(GREP) -v '\--' | sort -k3 | "$(AWK)" '$(AWKDIFF)' | \
+		sed '/delta [^-]/s/delta /delta +/' || :
+	@$(MV) -f ./.sizes.new ./.sizes.txt > /dev/null 2>&1
 
 ################################################################################
 
@@ -1566,7 +1583,7 @@ fd.img: diskdefs
 
 distclean: clean
 	$(RM) -f ./a.out ./a.exe ./*.bak ./*~ ./"#"*"#"
-	$(RM) -f ./core ./*.core ./core-*
+	$(RM) -f ./core ./*.core ./core-* ./.sizes.new
 	@ccache -cC > /dev/null 2>&1 || :
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "Distclean completed successfully."

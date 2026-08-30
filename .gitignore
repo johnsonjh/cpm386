@@ -37,6 +37,7 @@
 /RES*.md
 /RES*.txt
 /shole
+/.sizes.new
 /staging
 /*.su
 /tags
