@@ -354,13 +354,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>3</th>
-                <th>609</th>
+                <th>610</th>
                 <th>74</th>
                 <th>0</th>
-                <th>535</th>
+                <th>536</th>
                 <th>0</th>
-                <th>25577</th>
-                <th>470</th>
+                <th>25605</th>
+                <th>471</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -369,10 +369,10 @@ See [FUTURE.md](FUTURE.md).
                 <th>63</th>
                 <th>147</th>
                 <th>31</th>
-                <th>8487</th>
+                <th>8491</th>
                 <th>116</th>
         </tr><tr>
-                <th>Linker&nbsp;Script</th>
+                <th>Linker&amp;nbsp;Script</th>
                 <th>2</th>
                 <th>207</th>
                 <th>39</th>
@@ -389,7 +389,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>12</th>
                 <th>74</th>
                 <th>35</th>
-                <th>3158</th>
+                <th>3159</th>
                 <th>79</th>
         </tr><tr>
                 <th>YAML</th>
@@ -405,13 +405,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>116</th>
-                <th>54726</th>
+                <th>54727</th>
                 <th>10282</th>
                 <th>10159</th>
-                <th>34285</th>
+                <th>34286</th>
                 <th>6514</th>
-                <th>1559009</th>
-                <th>21905</th>
+                <th>1559042</th>
+                <th>21906</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 

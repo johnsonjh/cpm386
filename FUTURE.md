@@ -9,6 +9,7 @@ I hope to eventually implement the following features in **CP/M‑386**.  Treat
 this section as *wishlist* and not a *roadmap*!
 
 * OS enhancements:
+  * 80387 FPU emulation
   * Add support for full keyboard remapping and keyboard macros
   * Support and use Multiboot 2 specification (we are Multiboot 1 right now)
   * Fix `testbdos` when building with Clang
