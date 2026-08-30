@@ -356,7 +356,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>220</th>
                 <th>1238</th>
                 <th>382</th>
-                <th>60007</th>
+                <th>60008</th>
                 <th>881</th>
         </tr><tr>
                 <th>Markdown</th>
@@ -366,7 +366,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>554</th>
                 <th>0</th>
-                <th>26224</th>
+                <th>26225</th>
                 <th>486</th>
         </tr><tr>
                 <th>Shell</th>
@@ -379,7 +379,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>8491</th>
                 <th>116</th>
         </tr><tr>
-                <th>Linker Script</th>
+                <th>Linker Script</th>
                 <th>2</th>
                 <th>207</th>
                 <th>39</th>
@@ -427,7 +427,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10125</th>
                 <th>34382</th>
                 <th>6525</th>
-                <th>1560842</th>
+                <th>1560844</th>
                 <th>21976</th>
         </tr></tfoot></table>
 <!-- scc-end -->
