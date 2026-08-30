@@ -178,12 +178,12 @@ supported.
 ## Build output
 
 * The build produces four primary artifacts:
-  |         File | Description                              |
-  |-------------:|:-----------------------------------------|
-  | `cpm386.elf` | Multiboot kernel image                   |
-  | `floppy.img` | Bootable 3.5" 1.44MB floppy disk image   |
-  | `fd.img`     | Blank CP/M 3.5" 1.44MB floppy disk image |
-  | `hd.img`     | Blank CP/M 8MB hard disk image           |
+  |          File | Description                              |
+  |--------------:|:-----------------------------------------|
+  | `cpm386.elf`  | Multiboot kernel image                   |
+  | `floppy.img`  | Bootable 3.5" 1.44MB floppy disk image   |
+  | `blankfd.img` | Blank CP/M 3.5" 1.44MB floppy disk image |
+  | `blankhd.img` | Blank CP/M 8MB hard disk image           |
 []()
 
 []()
@@ -191,7 +191,7 @@ supported.
   with GRUB2) can be used to create bootable multiboot media (such as a USB
   drive or SD card) using the `cpm386.elf` file.
 * The `floppy.img` file can be written directly to a 1.44MB floppy disk.
-  * **NOTE**: This disk image does *not* contain a CP/M filesystem.
+  * **NOTE**: This disk image does *not* contain a CP/M filesystem!
     It can be removed from the drive once system is up and running.
 * The blank images are useful because **CP/M‑386** does not yet have a
   `FORMAT` utility.
@@ -218,10 +218,10 @@ supported.
 []()
 
 []()
-* Use `make disks` to create empty disk images.  To attach them to QEMU, use:
+* To attach media to QEMU, use:
   ```sh
-  -drive if=floppy,format=raw,file="fd.img"
-  -drive if=ide,format=raw,file="hd.img",index=0
+  -drive if=floppy,format=raw,file="blankfd.img"
+  -drive if=ide,format=raw,file="blankhd.img",index=0
   ```
 
 ## Included utilities
@@ -365,7 +365,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>550</th>
                 <th>0</th>
-                <th>26019</th>
+                <th>25989</th>
                 <th>480</th>
         </tr><tr>
                 <th>Shell</th>
@@ -426,7 +426,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10123</th>
                 <th>34368</th>
                 <th>6519</th>
-                <th>1560117</th>
+                <th>1560087</th>
                 <th>21961</th>
         </tr></tfoot></table>
 <!-- scc-end -->
