@@ -174,9 +174,10 @@ GCOLUMN:=$(shell \
 ################################################################################
 
 COLUMN:=$(shell \
-	test "$(GCOLUMN)" != "missing" 2>/dev/null && \
+	test "$(GCOLUMN)" != "missing" 2> /dev/null && \
 	$(PRINTF) '%s' "$(GCOLUMN) -t -o ' '" || \
-	$(PRINTF) '%s' "$$(command -v cat || $(PRINTF) '%s' 'cat')")
+	$(PRINTF) '%s' "$$(command -v cat 2> /dev/null || \
+	$(PRINTF) '%s' 'cat')")
 
 ################################################################################
 
@@ -506,11 +507,11 @@ AWKDIFF:=$$1=="<"{ f=$$3; s1=$$2; next } $$1==">" && $$3==f \
 
 sizes:
 	@touch ./.sizes.txt
-	@wc -c cpm386.elf *.386 | $(GREP) -v ' [Tt]otal$$' | \
+	@wc -c payload.bin *.386 | $(GREP) -v ' [Tt]otal$$' | \
 		sort -k2 > .sizes.new || :
 	@diff ./.sizes.txt ./.sizes.new 2> /dev/null | $(GREP) ' ' | \
 		$(GREP) -v '\--' | sort -k3 | "$(AWK)" '$(AWKDIFF)' | \
-		sed '/delta [^-]/s/delta /delta +/' | $(COLUMN) || :
+		sed '/delta [^-]/s/delta /delta +/' | $(COLUMN) 2> /dev/null || :
 	@$(MV) -f ./.sizes.new ./.sizes.txt > /dev/null 2>&1 || :
 	@touch ./.sizes.txt
 

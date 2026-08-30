@@ -4,7 +4,6 @@
   2309 capslock.386
   1867 cleartpa.386
     46 cls.386
-555264 cpm386.elf
    358 delay.386
   3965 dumpdir.386
   5185 dumpfcb.386
@@ -26,6 +25,7 @@
   2281 numlock.386
   5472 od.386
    196 pause.386
+144299 payload.bin
  16328 pip.386
   2409 printenv.386
   3165 prng.386
