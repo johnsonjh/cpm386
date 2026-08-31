@@ -1637,6 +1637,13 @@ lint:
 		set -x; cppi -ac ./*.[ch]
 	@command -v reuse > /dev/null 2>&1 || exit 0; \
 		set -x; reuse lint -q || reuse lint
+	@command -v reuse > /dev/null 2>&1 || exit 0; \
+		set -x; reuse spdx \
+		--creator-person \
+			"CP/M-386 (build automation)" \
+		--creator-organization \
+			"CP/M-386 (https://gitlab.com/johnsonjh/cpm386)" \
+		-o SBOM.spdx
 	@command -v shellcheck > /dev/null 2>&1 || exit 0; \
 		set -x; shellcheck -o any,all ./*.sh
 	@command -v shfmt > /dev/null 2>&1 || exit 0; \
@@ -1665,6 +1672,7 @@ test: testbdos
 
 update-readme: README.md
 	"$${MAKE:-$(MAKE)}" markdown-toc
+	"$${MAKE:-$(MAKE)}" lint
 	"$${MAKE:-$(MAKE)}" scc
 	@tput bold 2> /dev/null || :; tput setaf 2 2> /dev/null || :
 	@$(PRINTF) '%s\r\n' "update-readme completed successfully."

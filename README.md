@@ -351,23 +351,33 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Makefile</th>
                 <th>2</th>
-                <th>1804</th>
+                <th>1812</th>
                 <th>346</th>
                 <th>220</th>
-                <th>1238</th>
-                <th>382</th>
-                <th>60008</th>
-                <th>881</th>
+                <th>1246</th>
+                <th>383</th>
+                <th>60258</th>
+                <th>888</th>
+        </tr><tr>
+                <th>SPDX</th>
+                <th>1</th>
+                <th>1007</th>
+                <th>121</th>
+                <th>0</th>
+                <th>886</th>
+                <th>0</th>
+                <th>45939</th>
+                <th>504</th>
         </tr><tr>
                 <th>Markdown</th>
                 <th>3</th>
-                <th>636</th>
+                <th>648</th>
                 <th>76</th>
                 <th>0</th>
-                <th>560</th>
+                <th>572</th>
                 <th>0</th>
-                <th>26587</th>
-                <th>492</th>
+                <th>27005</th>
+                <th>500</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -421,14 +431,14 @@ See [FUTURE.md](FUTURE.md).
         </tr></tbody>
         <tfoot><tr>
                 <th>Total</th>
-                <th>117</th>
-                <th>54842</th>
-                <th>10329</th>
+                <th>118</th>
+                <th>55869</th>
+                <th>10450</th>
                 <th>10125</th>
-                <th>34388</th>
-                <th>6525</th>
-                <th>1561239</th>
-                <th>21982</th>
+                <th>35294</th>
+                <th>6526</th>
+                <th>1607846</th>
+                <th>22500</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
@@ -442,6 +452,8 @@ See [FUTURE.md](FUTURE.md).
 
 * **CP/M‑386** is distributed under the terms of the permissive
   [MIT&nbsp;License](LICENSE).
+* Some bundled utilities are [licensed separately](LICENSES).  A complete
+  [SPDX SBOM](SBOM.spdx) (Software Bill of Materials) is provided.
 * Bryan W. Sparks of DRDOS,&nbsp;Inc. dba DeviceLogics&nbsp;LLC, successor
   in interest to Digital&nbsp;Research,&nbsp;Inc.’s CP/M assets, explicitly
   grants an unlimited authorization to use, distribute, modify, enhance, and

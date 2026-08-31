@@ -1,0 +1,1007 @@
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
+DocumentName: cpm386
+DocumentNamespace: http://spdx.org/spdxdocs/spdx-v2.1-bcaf7b37-1a0a-4029-94d8-150e1ef06aaa
+Creator: Person: CP/M-386 (build automation)
+Creator: Organization: CP/M-386 (https://gitlab.com/johnsonjh/cpm386)
+Creator: Tool: reuse-6.2.0
+Created: 2026-08-31T10:49:40Z
+CreatorComment: <text>This document was created automatically using available reuse information consistent with REUSE.</text>
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-16272ac9834cb0d535708d548bd08fb4
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-830cdba30d7b79b8dcf9008fdc660464
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d89d38966068b24d82bcfad3d8dfa027
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d83392eb69f0067ad71aa7f458d93f83
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-52cd39ca4b60027289f5cbafc370722f
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b4c10cbd5def18659b79c57d3fc5d48a
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-5d1be1fa521f55a87c06969cf24d7838
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-80d02bfe9dbdd3df6013d5af04b28c26
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-09a8f961367f52125c1ba1c54a60448b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-375ecddbad0840e427fcb3972cd9cfe4
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-76bea95d1d04e46c77d8226944faab69
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-0a70292df42a9cbcb1535f2d7e67460d
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-942ba20ac1560b309421d42e2ec39818
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-8da00f8ce5ebafc0a1d3edbda7d5c947
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d2b25dece59ee3d56145b2983c022e6a
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-c538cb93197cbea33a11e41ce4a56149
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-377b1577fa3c4b63fb26ab0030871a78
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-340909b8d7d0b9b65c1f53904122abc4
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-5f6d8f7ce478f302019edfd3a095fbbb
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-bf8b8f4b06ca602a631ca248bf5bf09b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d0d8fde2a1b397b961647127272dcb15
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-26cb22217f8589b9aafc31ad9a331dba
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-7d882420b94b8cb53f48845b9585c128
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-ba01986981ad29368a97af7ac2f46e14
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-0ddaa17bb0f54c64575add0bce928390
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-acf18f0361fb7d7f69ee5ab41204c794
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d7c9d5397369858d3b092ffca0b3ff45
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-8a66b031176ed42630ffc92c5ff8795c
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-8e6a57160d8e37d150994cf6e3ec6489
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-2d924d30b78049979528ba04210d9d23
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-6cf5a07060d9e3256af5c5b121ffcb4c
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-1c1598cabf49625df248fe4e501e809c
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-2241a92b154b9efa694f265b2be5235d
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-44acfbb713af24ab7282170e8331df66
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-73cbd7c06080aba526017a14f4598c3b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-80894e928a8e47115f3408ab6cfafe4a
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-632392ed0935682c26cc612933972d09
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-942bb0a8eb82f65cfc18ca8c9289c75a
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-30b4c378021ced3147174ff198d988d8
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-e143c982e772df95b9d328bbe82cc055
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-a630cef8582d7e1e5d3e7cbad64688d9
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-f60e7cba44758dbcb0144b7ad00e1f65
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-8d26c6b0c8a45549c0a5b91c35d9c85a
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-19cf5f2542619106ee2d1755087cbec7
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d5f6ced80f8bbbc149749d1ecd4313a2
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-478d5f2875cb7a303fa0c11743291fb9
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-81d4e8cd6306c3ab404015364964382f
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-552e4c35590804753bf9180b64937b2e
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d36d58560b42d1b6d2cc43067ba3c816
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-c0d19939ad3371aae0c1d71e41241c8e
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-5604e89626beed85f49e80a12d0b67d3
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-01c01501187f74c6d3aa286b8c91683f
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-069a7da03e3bd03c8b3d21720006290d
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-e292aaff48554a0d8c1539c5233a3c08
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-6a7ce4e71583f27edd64d31a42bdbce8
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-82db9222447d13c3dec4599b7742c725
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-4038c21000c16c8bc95c5bfc0142ee1c
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-4c3cfa32ab39b421c53fe671f49f0fb4
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b622891ac9915790f2093a75190d9711
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-15b4b5d7ae86005cd2318c3ed2e74aec
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-1e9e9f25128bab9545f7358ad9f0e26f
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-dc787aa5aa82946a4bdd21b87fcc8bc8
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-1254d864474c76e0f0fdc63547bd23dc
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-48036a29ecf4d7d021712c64a5fc54a3
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-6ef4fa5ad888be77c0f0e722038dcb22
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-0611f239ecc2ad8e92cd1084392711fe
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-237145b272a01238d9ec880303238bd9
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-61f9c6ae5f2c648fca5cc4fd63ccb7fa
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-ece12c40cb19179a48cfc01587ea8c99
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b9f39924700f44dcc3779bab90e1ac53
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-e678b4a22bd5f78e28974d608cbe5340
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-aec68bab79d72abeb0c29dd5be02321e
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-f33560487fd3dcc72adc831548c32651
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-5748e427221e15dfe6ac39277da79ccf
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-ea4652e57d72810353d3bce8de4da510
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-fe61565556fa72a413784a1e0b1ebe69
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-4e9bb58c96bc862c7fe751170d06d58b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-bd2150f7b4addd8f92d3ae492910b403
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-12dc9fe0186e119a201ed0bd90122799
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b3d22c5db3c6d3de6731691158d84b78
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-f9193b82c8e9619c8284d32278190e53
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-81c8af732790875e75fefeca058746ad
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-a976fb5fc8f315bda4911a52ad2c88b4
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-3a31630f2a9292519f0fb17243c9f3bb
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-5813862f55a42943f6e9905493626050
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-ce0f51afdb36fe5ff4c81161c30b4a7b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-0e9dcb6e4a4c421337db6fc4a71c0ba7
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-89e3ffc79ecba9e4fd0b85aab6fd0b47
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-85a4845aa1da63de3361e4971c0fac35
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d70d61af71469ffc63feba6897e8beec
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-364abfc1318463df8a13903372ba4dce
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-7849ec3ebdaf985702527322f794e75f
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-65facae6d41a4baabaaa97ec865de80b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-805b5d05215aebdc32bd4c2adbb79fdc
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b89047ae8a1144b765cdef56f13c93dc
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-dd307da51613c81d98725dbe4a27c996
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-380f6a7c8aa1afb46a94349aaa43d091
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-e16f1370e7377416d6259fa9ee5e074e
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-eeac6bf227a3204fbe319b220c7fce5b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-0dd6f877268de4cfe82740dd610dae81
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-69aa28096611bbb40dd4eff6d633a35b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-96d3943a52274110bc2a1087264f92ae
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b49bbf772ddb342db7481410e904297c
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-a8c468074ce40ef148edc4d9fffe7a00
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-ff06b85161eae40a0fce614b8dec300b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-21dfa5012e2e28b8dc767d32b849de7e
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d9bd47edab54d9b774de2ee60219daee
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-aaabf9a57162cc99e7c900a6cd041517
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-c07d3da6b19cfd4903f8502dc091ed99
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-88cccb9f0db7994216d22a994de736cf
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-1f144a7df682b98082c447b0123d0adc
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-bb9cddacc03b37c8ff72c89a74514fbb
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-930721e333d16266334dff3a8ec28c07
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-701933320d827482075c9ca5e845f4c5
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-8e0178fe4248577e59ea945a4702dc74
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-449ce3337765aa44739737f37d44d543
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-3c2d6b40d1774dffaf377f5d917a64ff
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-86142abab36582189615bb3f58a93990
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-f39520c09a4d57053a7a02ce5136ef89
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-ade97fa6c93ddd991c73f8a92f5ceae1
+
+FileName: ./.codespellrc
+SPDXID: SPDXRef-16272ac9834cb0d535708d548bd08fb4
+FileChecksum: SHA1: e8a3e97668721546259877fbba17adcc3b13c38d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2025-2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./.gitignore
+SPDXID: SPDXRef-830cdba30d7b79b8dcf9008fdc660464
+FileChecksum: SHA1: 9797651eebdb71bf25e6abe2cbf3d1eb726fd123
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./.gitlab-ci.yml
+SPDXID: SPDXRef-d89d38966068b24d82bcfad3d8dfa027
+FileChecksum: SHA1: f4c4898f84dae423783db6ca2e472c677dfa3fb5
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./.sizes.txt
+SPDXID: SPDXRef-d83392eb69f0067ad71aa7f458d93f83
+FileChecksum: SHA1: 37baacc4a2869268e6891479197009b49278065d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./BSDmakefile
+SPDXID: SPDXRef-52cd39ca4b60027289f5cbafc370722f
+FileChecksum: SHA1: 3239a2354e01d08d367ac1c5bd6d2565eabe3fa0
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./CODE_OF_CONDUCT.md
+SPDXID: SPDXRef-b4c10cbd5def18659b79c57d3fc5d48a
+FileChecksum: SHA1: 27d5bac471e3c33c67589b43b05f40f68b4ff9bb
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT-0
+FileCopyrightText: <text>Copyright (C) 2024-2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./Dockerfile
+SPDXID: SPDXRef-5d1be1fa521f55a87c06969cf24d7838
+FileChecksum: SHA1: 81d7cceb8e4558733ce0dfba5da071b5a5b14211
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./FUTURE.md
+SPDXID: SPDXRef-80d02bfe9dbdd3df6013d5af04b28c26
+FileChecksum: SHA1: 6b5f6b7bf1194489e2ce56a4223e5bcbebe2dd1d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./GNUmakefile
+SPDXID: SPDXRef-09a8f961367f52125c1ba1c54a60448b
+FileChecksum: SHA1: d70319fcd6cff7b94e507439ae1624b960ee442b
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./README.md
+SPDXID: SPDXRef-375ecddbad0840e427fcb3972cd9cfe4
+FileChecksum: SHA1: 7608f98eb883221c551bfb069036ed34ff1b9f40
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./absaddr.h
+SPDXID: SPDXRef-76bea95d1d04e46c77d8226944faab69
+FileChecksum: SHA1: 13e403f65421be7b9850fe887228dc4b25678ce9
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./aclock.h
+SPDXID: SPDXRef-0a70292df42a9cbcb1535f2d7e67460d
+FileChecksum: SHA1: 3e6b3d6e87c1486384fafad3049bf5b10e5dc9ab
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: Apache-2.0
+FileCopyrightText: <text>Copyright (C) 2002 Antoni Sawicki <tenox@tenox.tc>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./aclockdv.c
+SPDXID: SPDXRef-942ba20ac1560b309421d42e2ec39818
+FileChecksum: SHA1: 0bc3347a2b1b78ac529d88b09059f5f12c042070
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: Apache-2.0
+FileCopyrightText: <text>Copyright (C) 2002 Antoni Sawicki <tenox@tenox.tc>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./aclockvt.c
+SPDXID: SPDXRef-8da00f8ce5ebafc0a1d3edbda7d5c947
+FileChecksum: SHA1: 19e05757af8f14a6507a176be2de34a703da606e
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: Apache-2.0
+FileCopyrightText: <text>Copyright (C) 2002 Antoni Sawicki <tenox@tenox.tc>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./alvtst.c
+SPDXID: SPDXRef-d2b25dece59ee3d56145b2983c022e6a
+FileChecksum: SHA1: 1758de40ed50f3e50f135c98a64fb04d446c9869
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./bdosdef.h
+SPDXID: SPDXRef-c538cb93197cbea33a11e41ce4a56149
+FileChecksum: SHA1: a4e5850332b423e7bae268050538a1e569b345a7
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./bdosinc.h
+SPDXID: SPDXRef-377b1577fa3c4b63fb26ab0030871a78
+FileChecksum: SHA1: e32da054f8d6c66ad1e5dda2e4983ad651a071a4
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./bdosmain.c
+SPDXID: SPDXRef-340909b8d7d0b9b65c1f53904122abc4
+FileChecksum: SHA1: 53fbd05e4b8d62da92c819b23adcf38391a28a4e
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./bdosmisc.c
+SPDXID: SPDXRef-5f6d8f7ce478f302019edfd3a095fbbb
+FileChecksum: SHA1: 6c74b559044180563d8999fe0b5a9edcc1682df6
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 1975-1984 Digital Research, Inc.$";
+Copyright (C) 2025-2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com>$";
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./bdosrw.c
+SPDXID: SPDXRef-bf8b8f4b06ca602a631ca248bf5bf09b
+FileChecksum: SHA1: d03d3df5d58885501639b5b09baa3ea200f98e3b
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./bios.c
+SPDXID: SPDXRef-d0d8fde2a1b397b961647127272dcb15
+FileChecksum: SHA1: 91b07244919741b023af96e9a0a34381c2d7b985
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./biosdef.h
+SPDXID: SPDXRef-26cb22217f8589b9aafc31ad9a331dba
+FileChecksum: SHA1: dfcf9a7b9078479882b9343b03d24e002d135f0e
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./bringup.c
+SPDXID: SPDXRef-7d882420b94b8cb53f48845b9585c128
+FileChecksum: SHA1: f320bdd6534bfc6ea90996ccddf0129662828758
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./bringup.h
+SPDXID: SPDXRef-ba01986981ad29368a97af7ac2f46e14
+FileChecksum: SHA1: 13fc06acf1a7ab98bbc032bdfcbe7d15565c3e47
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./capslock.c
+SPDXID: SPDXRef-0ddaa17bb0f54c64575add0bce928390
+FileChecksum: SHA1: c8f1ebd02f907edd133406714fd5847e7c002166
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./ccp.c
+SPDXID: SPDXRef-acf18f0361fb7d7f69ee5ab41204c794
+FileChecksum: SHA1: 385783354f149e55704cfb5c2a4b4a87ddd52e2b
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./ccpdef.h
+SPDXID: SPDXRef-d7c9d5397369858d3b092ffca0b3ff45
+FileChecksum: SHA1: a410b7b9195c5ac0042f97ce9497adf6cff820d9
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./cleartpa.c
+SPDXID: SPDXRef-8a66b031176ed42630ffc92c5ff8795c
+FileChecksum: SHA1: 5bbbc649019cc2f0d5b2bd6d5d30b0626dd07c9d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./cls.c
+SPDXID: SPDXRef-8e6a57160d8e37d150994cf6e3ec6489
+FileChecksum: SHA1: 27424853faa0464681a6aad4de63eb1fb0448176
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./conbdos.c
+SPDXID: SPDXRef-2d924d30b78049979528ba04210d9d23
+FileChecksum: SHA1: 3583d1f4cd84267fb475520066903443ec581061
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./conctl.c
+SPDXID: SPDXRef-6cf5a07060d9e3256af5c5b121ffcb4c
+FileChecksum: SHA1: fcb71ec1a7f7fca100bf9792718131cbac696e9d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./cpmrng.c
+SPDXID: SPDXRef-1c1598cabf49625df248fe4e501e809c
+FileChecksum: SHA1: d7d7f5ae9a3adadf1780cdf1504cb911251981e3
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./cpmrng.h
+SPDXID: SPDXRef-2241a92b154b9efa694f265b2be5235d
+FileChecksum: SHA1: c6a1acf6ea60436cf4bd83fcd4ba2fcab9b8dc76
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./delay.c
+SPDXID: SPDXRef-44acfbb713af24ab7282170e8331df66
+FileChecksum: SHA1: a8711cf2a35bbdacaf38db2aa61364bc2154855c
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./disk.c
+SPDXID: SPDXRef-73cbd7c06080aba526017a14f4598c3b
+FileChecksum: SHA1: 068aad967d2f0b0c134a8ca4983d399a404b079d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./disk.h
+SPDXID: SPDXRef-80894e928a8e47115f3408ab6cfafe4a
+FileChecksum: SHA1: 1fc42e00efd1090b8c920abda9a3d4fd9272c981
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./disk_v86.s
+SPDXID: SPDXRef-632392ed0935682c26cc612933972d09
+FileChecksum: SHA1: 32675e3c93292881a87d87d3fcfd94988d8f83c7
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./diskdefs
+SPDXID: SPDXRef-942bb0a8eb82f65cfc18ca8c9289c75a
+FileChecksum: SHA1: 8a42db1e73054e1e65b363f323fe4c1f6186f0d0
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./dskutil.c
+SPDXID: SPDXRef-30b4c378021ced3147174ff198d988d8
+FileChecksum: SHA1: 01939ac4b291f3d83a58b7a8855002e3c6dd1db0
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./dumpdir.c
+SPDXID: SPDXRef-e143c982e772df95b9d328bbe82cc055
+FileChecksum: SHA1: daf69f7ba1bf038696c79649f09f0fb9ec37f4fe
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./dumpfcb.c
+SPDXID: SPDXRef-a630cef8582d7e1e5d3e7cbad64688d9
+FileChecksum: SHA1: ff491aa6f13887a1b1c3153bc77e667685a4abd2
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./ed.c
+SPDXID: SPDXRef-f60e7cba44758dbcb0144b7ad00e1f65
+FileChecksum: SHA1: 6d92c6872d68315b4718cd0566263cf2d6beb3a5
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./esctilde.c
+SPDXID: SPDXRef-8d26c6b0c8a45549c0a5b91c35d9c85a
+FileChecksum: SHA1: 6b83b940f2378d58f7a6508a04ae060a47f663db
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./fileio.c
+SPDXID: SPDXRef-19cf5f2542619106ee2d1755087cbec7
+FileChecksum: SHA1: 233ed809a2035caec64ce7311f74d52efe491841
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./fparse.c
+SPDXID: SPDXRef-d5f6ced80f8bbbc149749d1ecd4313a2
+FileChecksum: SHA1: 0ec8032f9339f22ca1fae9aba91f4303815e6a5d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./getsn.c
+SPDXID: SPDXRef-478d5f2875cb7a303fa0c11743291fb9
+FileChecksum: SHA1: 3845c8943706396eee102b01975d38a23048d32b
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./gfxtest.c
+SPDXID: SPDXRef-81d4e8cd6306c3ab404015364964382f
+FileChecksum: SHA1: af062973895da47bd9368a334a902bccee6ae1d6
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./hd.c
+SPDXID: SPDXRef-552e4c35590804753bf9180b64937b2e
+FileChecksum: SHA1: aa30bae766c6102725a954a0677cbf669448a8e0
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./hello.c
+SPDXID: SPDXRef-d36d58560b42d1b6d2cc43067ba3c816
+FileChecksum: SHA1: a9c9bef58af67579cc5f5df1b13e1dcf3be6130b
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./illegal.c
+SPDXID: SPDXRef-c0d19939ad3371aae0c1d71e41241c8e
+FileChecksum: SHA1: 5acbaa5c02745fed842ac03d8b56e225b77c2c11
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./io.h
+SPDXID: SPDXRef-5604e89626beed85f49e80a12d0b67d3
+FileChecksum: SHA1: 969c883a501c6455a11431ccd68ea3d46c8c870f
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./iosys.c
+SPDXID: SPDXRef-01c01501187f74c6d3aa286b8c91683f
+FileChecksum: SHA1: 700cb3958e41a22c97fdfa6cec68a9c62ad4edbe
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./iotest.c
+SPDXID: SPDXRef-069a7da03e3bd03c8b3d21720006290d
+FileChecksum: SHA1: a16eb69a2eadd78008ae64aa868f728f8885b4f4
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./julia.c
+SPDXID: SPDXRef-e292aaff48554a0d8c1539c5233a3c08
+FileChecksum: SHA1: a305cc74f8f985f88b4b8b8e1ac66cebba28da38
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./kbd.c
+SPDXID: SPDXRef-6a7ce4e71583f27edd64d31a42bdbce8
+FileChecksum: SHA1: 837f86bd681a6018cca589d4b4d87f57e3253234
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./kbd.h
+SPDXID: SPDXRef-82db9222447d13c3dec4599b7742c725
+FileChecksum: SHA1: bcbe96363ae38e99dbadb6542f795f541598a256
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./layout.inc
+SPDXID: SPDXRef-4038c21000c16c8bc95c5bfc0142ee1c
+FileChecksum: SHA1: 0e2de0957ca84f29487115422c518f8570dbb1c3
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./linker.ld
+SPDXID: SPDXRef-4c3cfa32ab39b421c53fe671f49f0fb4
+FileChecksum: SHA1: 0402af3499c7afd14f6d9cb1e22decd8a2d266dd
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./lrbc.c
+SPDXID: SPDXRef-b622891ac9915790f2093a75190d9711
+FileChecksum: SHA1: 7c0de7b0ce27ff1dbe476db2899a590255fea130
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./ls.c
+SPDXID: SPDXRef-15b4b5d7ae86005cd2318c3ed2e74aec
+FileChecksum: SHA1: 98d9233f06693c202463340fd518b30b234c2211
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./lz4dec.inc
+SPDXID: SPDXRef-1e9e9f25128bab9545f7358ad9f0e26f
+FileChecksum: SHA1: b43ec9b70566ff85bf41d40dc5483cc1927a3234
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./mandel.c
+SPDXID: SPDXRef-dc787aa5aa82946a4bdd21b87fcc8bc8
+FileChecksum: SHA1: 30f03fe66bd372c901b8fe59cbbe5af0dda272c8
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./mbentry.s
+SPDXID: SPDXRef-1254d864474c76e0f0fdc63547bd23dc
+FileChecksum: SHA1: 0a0c7ae2446d13f52bbaa66a582c8b8147a4462a
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./mboot.sh
+SPDXID: SPDXRef-48036a29ecf4d7d021712c64a5fc54a3
+FileChecksum: SHA1: 2c65177caa53383e29548131213257bfbd5a2456
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./mem.c
+SPDXID: SPDXRef-6ef4fa5ad888be77c0f0e722038dcb22
+FileChecksum: SHA1: d029e11477c283f4b68b6628ad7d3c33a258e624
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./memmap.c
+SPDXID: SPDXRef-0611f239ecc2ad8e92cd1084392711fe
+FileChecksum: SHA1: 00bda986bd5e7b17f16ca42ed557a0f8fff738be
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./memmap.h
+SPDXID: SPDXRef-237145b272a01238d9ec880303238bd9
+FileChecksum: SHA1: 9ac01a5c54007d028044bab06ed74dcb860036b2
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./mk386.c
+SPDXID: SPDXRef-61f9c6ae5f2c648fca5cc4fd63ccb7fa
+FileChecksum: SHA1: f6adfa6938ea8fece479c9f4e215df5a38d9448f
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./mklz4raw.c
+SPDXID: SPDXRef-ece12c40cb19179a48cfc01587ea8c99
+FileChecksum: SHA1: bff84b0a6fcb11daf61c0da0c65cf414efbc994c
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./mltiboot.c
+SPDXID: SPDXRef-b9f39924700f44dcc3779bab90e1ac53
+FileChecksum: SHA1: e0ee27b5eba67234ab41153c52091e2ada81b5eb
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./mltiboot.h
+SPDXID: SPDXRef-e678b4a22bd5f78e28974d608cbe5340
+FileChecksum: SHA1: e05f9a91aa4aca9916914392138e3f92fbdf1cb0
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./more.c
+SPDXID: SPDXRef-aec68bab79d72abeb0c29dd5be02321e
+FileChecksum: SHA1: 062fd0c91679a6e0cef2e911539849457a5f30ff
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./numlock.c
+SPDXID: SPDXRef-f33560487fd3dcc72adc831548c32651
+FileChecksum: SHA1: 00389a4997cc632dd90364fe78d696c1456c3b71
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./od.c
+SPDXID: SPDXRef-5748e427221e15dfe6ac39277da79ccf
+FileChecksum: SHA1: 530fa70dc4c0a67be76aa3d40bae4d01c66e45f9
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./pause.c
+SPDXID: SPDXRef-ea4652e57d72810353d3bce8de4da510
+FileChecksum: SHA1: 703608dfa3cc15f86cc468d2a3de8c29cbfd6f34
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./pip.c
+SPDXID: SPDXRef-fe61565556fa72a413784a1e0b1ebe69
+FileChecksum: SHA1: d07d0f1df510ac29b43cd884aca18af8389ce850
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./pit.c
+SPDXID: SPDXRef-4e9bb58c96bc862c7fe751170d06d58b
+FileChecksum: SHA1: fbfc5a4511aac2a4d95506d0383e490dec1cdd55
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./pit.h
+SPDXID: SPDXRef-bd2150f7b4addd8f92d3ae492910b403
+FileChecksum: SHA1: 7473aff7a9c24ef520af56131511235e592947d5
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./pktio.h
+SPDXID: SPDXRef-12dc9fe0186e119a201ed0bd90122799
+FileChecksum: SHA1: 5ebbce8f41eb90ece76390de477a68ba7a05379d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./platform.h
+SPDXID: SPDXRef-b3d22c5db3c6d3de6731691158d84b78
+FileChecksum: SHA1: b0e58273564cdc0793fc469d8f98b9b0f80d9625
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./pmode.c
+SPDXID: SPDXRef-f9193b82c8e9619c8284d32278190e53
+FileChecksum: SHA1: e9bfe7c75880d9e09da132f9325d18c4dbdcd810
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./pmode.h
+SPDXID: SPDXRef-81c8af732790875e75fefeca058746ad
+FileChecksum: SHA1: 9357fef99c28670d2a146a88a2dd9841f7746b2a
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./pmode.s
+SPDXID: SPDXRef-a976fb5fc8f315bda4911a52ad2c88b4
+FileChecksum: SHA1: 9ab48c858299a4951f83b1bfd1c84234e064574d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./printenv.c
+SPDXID: SPDXRef-3a31630f2a9292519f0fb17243c9f3bb
+FileChecksum: SHA1: 02ed87676ef9e62a189c2d55d50329fbd9b4de6d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./prng.c
+SPDXID: SPDXRef-5813862f55a42943f6e9905493626050
+FileChecksum: SHA1: d10fa28167e6079c778519e348e992ed96035c6f
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./rc.c
+SPDXID: SPDXRef-ce0f51afdb36fe5ff4c81161c30b4a7b
+FileChecksum: SHA1: df72baff65ecc413983ce8d30e07e4640c57ef08
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./reboot.c
+SPDXID: SPDXRef-0e9dcb6e4a4c421337db6fc4a71c0ba7
+FileChecksum: SHA1: bed7cfe246f8750acabf89429a7361bb6bb43a92
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./rm.c
+SPDXID: SPDXRef-89e3ffc79ecba9e4fd0b85aab6fd0b47
+FileChecksum: SHA1: 3d16e0947756abff7f604edf2b208cf319bb9d8f
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./rtc.c
+SPDXID: SPDXRef-85a4845aa1da63de3361e4971c0fac35
+FileChecksum: SHA1: 6e2a40a556498fa64ef25c242b8320f47fa9d319
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./rtc.h
+SPDXID: SPDXRef-d70d61af71469ffc63feba6897e8beec
+FileChecksum: SHA1: 90bf251378570946fd7137db405faaf28c1f1c78
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./stage1.s
+SPDXID: SPDXRef-364abfc1318463df8a13903372ba4dce
+FileChecksum: SHA1: dc09a1b81825fbf3f960a0663d43afebe651e6e4
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./stage2.s
+SPDXID: SPDXRef-7849ec3ebdaf985702527322f794e75f
+FileChecksum: SHA1: 98ee7d64c770a0847360c303a10ed9665b9aeb33
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./stat.c
+SPDXID: SPDXRef-65facae6d41a4baabaaa97ec865de80b
+FileChecksum: SHA1: ddef82e0396048d50fe0a1ee7c6191c6948e1266
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 1975-1984 Digital Research, Inc.
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./sync.c
+SPDXID: SPDXRef-805b5d05215aebdc32bd4c2adbb79fdc
+FileChecksum: SHA1: c6048d0f0bca234ebb260b486310ace00c44b451
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./termtest.c
+SPDXID: SPDXRef-b89047ae8a1144b765cdef56f13c93dc
+FileChecksum: SHA1: e656bbc2997da288425a8b8f2fac5a8b012ecc32
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./test110.c
+SPDXID: SPDXRef-dd307da51613c81d98725dbe4a27c996
+FileChecksum: SHA1: 94473a1fd8244e8c3549e70f5f2b7b76e50657bc
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./test211.c
+SPDXID: SPDXRef-380f6a7c8aa1afb46a94349aaa43d091
+FileChecksum: SHA1: 75c522b4c5c8baf5ede831b4c3fd7cd634d8e1f0
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./testbdos.c
+SPDXID: SPDXRef-e16f1370e7377416d6259fa9ee5e074e
+FileChecksum: SHA1: 142e39d1983f6bf20233cb21b279287cb621f87a
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./textmode.c
+SPDXID: SPDXRef-eeac6bf227a3204fbe319b220c7fce5b
+FileChecksum: SHA1: 658b09f4a0ad1a35187d60241b1972281b2962ff
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./ticks.c
+SPDXID: SPDXRef-0dd6f877268de4cfe82740dd610dae81
+FileChecksum: SHA1: b2f3d3ebf2f06c4c28bf185c193be82dda8dd17b
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./tod.c
+SPDXID: SPDXRef-69aa28096611bbb40dd4eff6d633a35b
+FileChecksum: SHA1: 1f1ccfb7a98ced96ae394ff247e7fb4546ce91cb
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./touch.c
+SPDXID: SPDXRef-96d3943a52274110bc2a1087264f92ae
+FileChecksum: SHA1: ffc85f58833722a7516095de60832e8a285b050a
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./truncate.c
+SPDXID: SPDXRef-b49bbf772ddb342db7481410e904297c
+FileChecksum: SHA1: 02f51fe87f0a4e9662c20fa5c70ac587e859047d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./trunctst.c
+SPDXID: SPDXRef-a8c468074ce40ef148edc4d9fffe7a00
+FileChecksum: SHA1: a9228f52a3c12fc7640f6862414cbf3c7aaa2c8d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./tsec.c
+SPDXID: SPDXRef-ff06b85161eae40a0fce614b8dec300b
+FileChecksum: SHA1: 60819390637791004ca8f0a59eed81178c7bb38a
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./user.ld
+SPDXID: SPDXRef-21dfa5012e2e28b8dc767d32b849de7e
+FileChecksum: SHA1: 8d61551af2683d3000e6a0e4e5b004e5d7ba03c2
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./ver.c
+SPDXID: SPDXRef-d9bd47edab54d9b774de2ee60219daee
+FileChecksum: SHA1: 1dbacfc4748e0d99e86601c47986be058bec44b9
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2021 tsupplis <https://github.com/tsupplis>
+Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vgacon.c
+SPDXID: SPDXRef-aaabf9a57162cc99e7c900a6cd041517
+FileChecksum: SHA1: ea07f6d990811f1b541df42a0fcb01c26b58bfb1
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vgacon.h
+SPDXID: SPDXRef-c07d3da6b19cfd4903f8502dc091ed99
+FileChecksum: SHA1: f4df9a83b3ff4bd52dbb3ca99ded77d886be1380
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vgafb.h
+SPDXID: SPDXRef-88cccb9f0db7994216d22a994de736cf
+FileChecksum: SHA1: 71a27610ad891707c3ab41f7c4885435b612c775
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vgafont.c
+SPDXID: SPDXRef-1f144a7df682b98082c447b0123d0adc
+FileChecksum: SHA1: 4187949d6f1f84a4b7167e301601e812acdbef71
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vgaterm.c
+SPDXID: SPDXRef-bb9cddacc03b37c8ff72c89a74514fbb
+FileChecksum: SHA1: eac5849484d4aa884a99667f4049a6f5ac9d5377
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2025-2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vgaterm.h
+SPDXID: SPDXRef-930721e333d16266334dff3a8ec28c07
+FileChecksum: SHA1: 22552dae8577cd73eedf908397c942f546d4c82c
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2025-2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vgatext.c
+SPDXID: SPDXRef-701933320d827482075c9ca5e845f4c5
+FileChecksum: SHA1: 18f83f4d86566050624d896c076fe110eb988f50
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vgauser.h
+SPDXID: SPDXRef-8e0178fe4248577e59ea945a4702dc74
+FileChecksum: SHA1: f92c121ddf0ffde460eaf9c3fad395c9db119ec5
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vidbios.c
+SPDXID: SPDXRef-449ce3337765aa44739737f37d44d543
+FileChecksum: SHA1: 27c86edce712077bb8bc1b7230ea5b8573b78fff
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vidbios.h
+SPDXID: SPDXRef-3c2d6b40d1774dffaf377f5d917a64ff
+FileChecksum: SHA1: 3dc5a97304879c9096518c47c6534b321bed47df
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vidbios.s
+SPDXID: SPDXRef-86142abab36582189615bb3f58a93990
+FileChecksum: SHA1: d5249f99ad94707245611536e3c98f7fc8533728
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vidmode.c
+SPDXID: SPDXRef-f39520c09a4d57053a7a02ce5136ef89
+FileChecksum: SHA1: 8ef7273f8ea176abf6679ac082037e0de5aceb12
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
+FileName: ./vidmode.h
+SPDXID: SPDXRef-ade97fa6c93ddd991c73f8a92f5ceae1
+FileChecksum: SHA1: f1eecda0515db3cf986b5becd0030aab2ac2dac4
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: MIT
+FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
+
