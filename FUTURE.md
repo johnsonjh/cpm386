@@ -13,13 +13,17 @@ this section as *wishlist* and not a *roadmap*!
   * Configurable serial console parameters (currently hardcoded 9600/N/8/1)
   * On supported systems, support setting MTRRs for write coalescing for
     video memory areas
+  * Allow adjusting keyboard repeat rate and repeat delay
+  * Allow key stacking/stuffing functionality and associated utility for
+    scripting applications
   * Add support for full keyboard remapping and keyboard macros
+  * Increase the keyboard typeahead/keystack buffer size
   * PC speaker driver supporting at least frequency and duration via BDOS
   * Configurable keyboard feedback "click" using PC speaker driver
   * Support and use Multiboot 2 specification (we are Multiboot 1 right now)
   * Fix `testbdos` when building with Clang
   * Support filesystems on partitions
-  * Drivers for ATA/UDMA/NVME hard disks, ATAPI, and parallel printer
+  * Drivers (non-BIOS) for ATA/UDMA/NVME disks, ATAPI, and parallel printer
   * User‑defined configurable first‑class RAM disk (default to M:)
   * Disk caching
   * Drivers for networking (with CP/Net NDOS and generic packet interface)
