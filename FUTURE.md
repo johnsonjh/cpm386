@@ -11,6 +11,7 @@ this section as *wishlist* and not a *roadmap*!
 * OS enhancements:
   * 80387 FPU emulation
   * Configurable serial console parameters (currently hardcoded 9600/N/8/1)
+  * VT102 history/scrollback support for the VGA text console emulator
   * On supported systems, support setting MTRRs for write coalescing for
     video memory areas
   * Allow adjusting keyboard repeat rate and repeat delay
@@ -29,6 +30,7 @@ this section as *wishlist* and not a *roadmap*!
   * Drivers for networking (with CP/Net NDOS and generic packet interface)
   * Enhance filesystem with CP/M‑Plus parity (timestamps, passwords, etc.)
   * Extend user area support from 16 to 26 (or even 32) user areas per disk
+  * Pass a proper and normalized `argv[0]` to user programs (as well as tail)
   * Support for non‑PIT high‑resolution timers (HPET, APIC, TSC, RDTSC)
   * Improve PRNG (seeding only via PIT now, we should support RDRAND/RDSEED),
     and eliminate bias (don't use FF signal, instead raise carry flag?)
