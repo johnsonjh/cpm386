@@ -376,7 +376,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>0</th>
                 <th>573</th>
                 <th>0</th>
-                <th>27041</th>
+                <th>27028</th>
                 <th>501</th>
         </tr><tr>
                 <th>Shell</th>
@@ -437,7 +437,7 @@ See [FUTURE.md](FUTURE.md).
                 <th>10125</th>
                 <th>35295</th>
                 <th>6526</th>
-                <th>1607882</th>
+                <th>1607869</th>
                 <th>22501</th>
         </tr></tfoot></table>
 <!-- scc-end -->
@@ -452,8 +452,8 @@ See [FUTURE.md](FUTURE.md).
 
 * **CP/M‑386** is distributed under the terms of the permissive
   [MIT&nbsp;License](LICENSE).
-* Some miscellaneous files and bundled utilities are distributed under the
-  terms of [other licenses](LICENSES).
+* Some miscellaneous files and bundled utilities are distributed under
+  [other licenses](LICENSES).
 * An [SPDX Software Bill of Materials](SBOM.spdx) is provided.
 * Bryan W. Sparks of DRDOS,&nbsp;Inc. dba DeviceLogics&nbsp;LLC, successor
   in interest to Digital&nbsp;Research,&nbsp;Inc.’s CP/M assets, explicitly
