@@ -14,6 +14,8 @@ this section as *wishlist* and not a *roadmap*!
   * On supported systems, support setting MTRRs for write coalescing for
     video memory areas
   * Add support for full keyboard remapping and keyboard macros
+  * PC speaker driver supporting at least frequency and duration via BDOS
+  * Configurable keyboard feedback "click" using PC speaker driver
   * Support and use Multiboot 2 specification (we are Multiboot 1 right now)
   * Fix `testbdos` when building with Clang
   * Support filesystems on partitions
