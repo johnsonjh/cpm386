@@ -371,13 +371,13 @@ See [FUTURE.md](FUTURE.md).
         </tr><tr>
                 <th>Markdown</th>
                 <th>3</th>
-                <th>648</th>
+                <th>649</th>
                 <th>76</th>
                 <th>0</th>
-                <th>572</th>
+                <th>573</th>
                 <th>0</th>
-                <th>27005</th>
-                <th>500</th>
+                <th>27041</th>
+                <th>501</th>
         </tr><tr>
                 <th>Shell</th>
                 <th>1</th>
@@ -432,13 +432,13 @@ See [FUTURE.md](FUTURE.md).
         <tfoot><tr>
                 <th>Total</th>
                 <th>118</th>
-                <th>55869</th>
+                <th>55870</th>
                 <th>10450</th>
                 <th>10125</th>
-                <th>35294</th>
+                <th>35295</th>
                 <th>6526</th>
-                <th>1607846</th>
-                <th>22500</th>
+                <th>1607882</th>
+                <th>22501</th>
         </tr></tfoot></table>
 <!-- scc-end -->
 
@@ -452,8 +452,9 @@ See [FUTURE.md](FUTURE.md).
 
 * **CP/M‑386** is distributed under the terms of the permissive
   [MIT&nbsp;License](LICENSE).
-* Some bundled utilities are [licensed separately](LICENSES).  A complete
-  [SPDX SBOM](SBOM.spdx) (Software Bill of Materials) is provided.
+* Some miscellaneous files and bundled utilities are distributed under the
+  terms of [other licenses](LICENSES).
+* An [SPDX Software Bill of Materials](SBOM.spdx) is provided.
 * Bryan W. Sparks of DRDOS,&nbsp;Inc. dba DeviceLogics&nbsp;LLC, successor
   in interest to Digital&nbsp;Research,&nbsp;Inc.’s CP/M assets, explicitly
   grants an unlimited authorization to use, distribute, modify, enhance, and

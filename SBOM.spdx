@@ -2,11 +2,11 @@ SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 SPDXID: SPDXRef-DOCUMENT
 DocumentName: cpm386
-DocumentNamespace: http://spdx.org/spdxdocs/spdx-v2.1-bcaf7b37-1a0a-4029-94d8-150e1ef06aaa
+DocumentNamespace: http://spdx.org/spdxdocs/spdx-v2.1-32efecea-9cfc-419c-aaf3-5c1ab7d14b02
 Creator: Person: CP/M-386 (build automation)
 Creator: Organization: CP/M-386 (https://gitlab.com/johnsonjh/cpm386)
 Creator: Tool: reuse-6.2.0
-Created: 2026-08-31T10:49:40Z
+Created: 2026-08-31T10:57:55Z
 CreatorComment: <text>This document was created automatically using available reuse information consistent with REUSE.</text>
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-16272ac9834cb0d535708d548bd08fb4
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-830cdba30d7b79b8dcf9008fdc660464
@@ -17,7 +17,7 @@ Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b4c10cbd5def18659b79c57d3fc5d48
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-5d1be1fa521f55a87c06969cf24d7838
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-80d02bfe9dbdd3df6013d5af04b28c26
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-09a8f961367f52125c1ba1c54a60448b
-Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-375ecddbad0840e427fcb3972cd9cfe4
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-aa3ce3847b622b1e22af73228ce0eba4
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-76bea95d1d04e46c77d8226944faab69
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-0a70292df42a9cbcb1535f2d7e67460d
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-942ba20ac1560b309421d42e2ec39818
@@ -193,8 +193,8 @@ LicenseInfoInFile: MIT
 FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
 
 FileName: ./README.md
-SPDXID: SPDXRef-375ecddbad0840e427fcb3972cd9cfe4
-FileChecksum: SHA1: 7608f98eb883221c551bfb069036ed34ff1b9f40
+SPDXID: SPDXRef-aa3ce3847b622b1e22af73228ce0eba4
+FileChecksum: SHA1: 55c650f1eb57746506350455e566e1f9827cb9a3
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: MIT
 FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
