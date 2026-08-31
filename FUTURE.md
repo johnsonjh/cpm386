@@ -10,6 +10,7 @@ this section as *wishlist* and not a *roadmap*!
 
 * OS enhancements:
   * 80387 FPU emulation
+  * Transparent executable compression using existing LZ4 decode engine
   * Configurable serial console parameters (currently hardcoded 9600/N/8/1)
   * VT102 history/scrollback support for the VGA text console emulator
   * On supported systems, support setting MTRRs for write coalescing for

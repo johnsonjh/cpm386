@@ -2,11 +2,11 @@ SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 SPDXID: SPDXRef-DOCUMENT
 DocumentName: cpm386
-DocumentNamespace: http://spdx.org/spdxdocs/spdx-v2.1-fb8dbbd0-278f-4cf8-9e26-9b40f6be0828
+DocumentNamespace: http://spdx.org/spdxdocs/spdx-v2.1-0c878106-abd3-4ce3-8914-630543e32568
 Creator: Person: CP/M-386 (build automation)
 Creator: Organization: CP/M-386 (https://gitlab.com/johnsonjh/cpm386)
 Creator: Tool: reuse-6.2.0
-Created: 2026-08-31T23:27:23Z
+Created: 2026-08-31T23:29:05Z
 CreatorComment: <text>This document was created automatically using available reuse information consistent with REUSE.</text>
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-16272ac9834cb0d535708d548bd08fb4
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-830cdba30d7b79b8dcf9008fdc660464
@@ -15,9 +15,9 @@ Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d83392eb69f0067ad71aa7f458d93f8
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-52cd39ca4b60027289f5cbafc370722f
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b4c10cbd5def18659b79c57d3fc5d48a
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-5d1be1fa521f55a87c06969cf24d7838
-Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-5e96bf49cda350b982a8a56d7ba7393e
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-2a2880140fe6b5839349c6fab45647f4
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-09a8f961367f52125c1ba1c54a60448b
-Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-2fb7973f5b197605dd3945234021de6b
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-0a7c9a5c6d05f1fd2a3b44a52c6a30a2
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-76bea95d1d04e46c77d8226944faab69
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-0a70292df42a9cbcb1535f2d7e67460d
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-942ba20ac1560b309421d42e2ec39818
@@ -179,8 +179,8 @@ LicenseInfoInFile: MIT
 FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
 
 FileName: ./FUTURE.md
-SPDXID: SPDXRef-5e96bf49cda350b982a8a56d7ba7393e
-FileChecksum: SHA1: 0443397e5f33c86ca39b8fbbabd4b01f7598b902
+SPDXID: SPDXRef-2a2880140fe6b5839349c6fab45647f4
+FileChecksum: SHA1: 368ad9add92f2c114254f8c06efe89b93d37c549
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: MIT
 FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
@@ -193,8 +193,8 @@ LicenseInfoInFile: MIT
 FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
 
 FileName: ./README.md
-SPDXID: SPDXRef-2fb7973f5b197605dd3945234021de6b
-FileChecksum: SHA1: 1c275011ec5d715019644143a7ee96cf7f041b88
+SPDXID: SPDXRef-0a7c9a5c6d05f1fd2a3b44a52c6a30a2
+FileChecksum: SHA1: dc143b45dba453edb4193cb20eacf1b79dda2f6f
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: MIT
 FileCopyrightText: <text>Copyright (C) 2026 Jeffrey H. Johnson <johnsonjh.dev@gmail.com></text>
