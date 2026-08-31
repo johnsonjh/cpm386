@@ -95,6 +95,7 @@ putu (ULONG n)
       b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
+
   while (i)
     {
       putch (b [--i]);

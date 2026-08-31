@@ -479,6 +479,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   (void)bdos (0, 0);
                 }
             }
+
           while (tail [i] == ' ' || tail [i] == '\t')
             {
               i++;

@@ -223,6 +223,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       i++;
     }
+
   while (tail [i])
     {
       if (tail [i] == '-' || tail [i] == '/')

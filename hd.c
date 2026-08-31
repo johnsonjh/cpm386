@@ -80,6 +80,7 @@ putch (char c)
     }
 
   out_dma [out_col++] = c;
+
   if (out_col == 128)
     {
       (void)bdos (26, (LONG)(ULONG)out_dma);
@@ -396,6 +397,7 @@ hexdump_feed (const UBYTE *buf, unsigned size)
       if (col == 0)
         {
           line_clear ();
+
           if (opt_o)
             {
               if (opt_d)
@@ -406,8 +408,10 @@ hexdump_feed (const UBYTE *buf, unsigned size)
                 {
                   ULONG tmp = file_offset;
                   int k;
+
                   line [8] = ':';
                   line [9] = ' ';
+
                   for (k = 7; k >= 0; k--)
                     {
                       line [k] = hexdig (tmp);
@@ -486,6 +490,7 @@ set_fcb (UBYTE *fcb, const char *name)
   if (name [0] && name [1] == ':')
     {
       char c = name [0];
+
       if (c >= 'a' && c <= 'z')
         {
           c -= 32;
@@ -499,6 +504,7 @@ set_fcb (UBYTE *fcb, const char *name)
          && *name != '\r')
     {
       char c = *name++;
+
       if (c >= 'a' && c <= 'z')
         {
           c -= 32;
@@ -514,9 +520,11 @@ set_fcb (UBYTE *fcb, const char *name)
     {
       name++;
       j = 9;
+
       while (*name && *name != ' ' && *name != '\t' && *name != '\r')
         {
           char c = *name++;
+
           if (c >= 'a' && c <= 'z')
             {
               c -= 32;

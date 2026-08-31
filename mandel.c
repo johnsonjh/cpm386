@@ -122,7 +122,6 @@ _start (void) /*cppcheck-suppress unusedFunction*/
       for (x = 0; x < WIDTH; ++x)
         {
           LONG cr = REAL_MIN + (REAL_SPAN * (LONG)x) / (LONG)(WIDTH - 1);
-
           LONG zr = 0;
           LONG zi = 0;
           int iter = 0;

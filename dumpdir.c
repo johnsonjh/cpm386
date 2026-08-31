@@ -396,6 +396,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
     {
       i++;
     }
+
   while (tail [i])
     {
       if (tail [i] == '-' || tail [i] == '/')
@@ -418,6 +419,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
                   flag_all = 1;
                 }
             }
+
           while (tail [i] == ' ' || tail [i] == '\t')
             {
               i++;

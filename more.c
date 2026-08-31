@@ -95,6 +95,7 @@ getch_wait (void)
     {
       ;
     }
+
   while (bdos (11, 0))
     {
       int d = (int)bdos (6, 0xFF) & 0xff;
@@ -175,6 +176,7 @@ parse_tail_help (void)
 
               i++;
             }
+
           while (tail [i] == ' ' || tail [i] == '\t')
             {
               i++;
@@ -307,6 +309,7 @@ _start (void) /*cppcheck-suppress unusedFunction*/
           else
             {
               c = prev [pos++] & 0xff;
+
               if (c == 9)
                 {
                   c = ' ';

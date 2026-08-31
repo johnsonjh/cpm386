@@ -424,6 +424,7 @@ parse_help (void)
     {
       i++;
     }
+
   if (tail [i] == '-' || tail [i] == '/')
     {
       i++;

@@ -516,9 +516,11 @@ set_fcb (UBYTE *fcb, const char *name)
     {
       name++;
       j = 9;
+
       while (*name && *name != ' ' && *name != '\t' && *name != '\r')
         {
           char c = *name++;
+
           if (c >= 'a' && c <= 'z')
             {
               c -= 32;

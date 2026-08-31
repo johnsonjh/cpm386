@@ -230,6 +230,7 @@ parse_set (const char *p, struct cpm_datetime *dt)
     {
       p++;
     }
+
   for (i = 0; i < 17 && p [i] && p [i] != '\r' && p [i] != '\n'; i++)
     {
       buf [i] = p [i];

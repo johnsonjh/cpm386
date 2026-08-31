@@ -1148,12 +1148,14 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
   /* PIT for BDOS 225/226 high-res ticks */
   {
     extern void pit_init (void);
+
     pit_init ();
   }
 
   /* RNG: gather PIT jitter and seed the initial pool */
   {
     extern void salsa20rng_auto_seed_pit (void);
+
     salsa20rng_auto_seed_pit ();
   }
 

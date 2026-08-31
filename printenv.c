@@ -90,6 +90,7 @@ putu (unsigned n)
       b [i++] = (char)('0' + n % 10);
       n /= 10;
     }
+
   while (i)
     {
       putch (b [--i]);
@@ -257,6 +258,7 @@ dump_env_file (void)
   for (;;)
     {
       r = bdos (20, (LONG)(ULONG)fcb);
+
       if (r != 0)
         {
           final = 1;

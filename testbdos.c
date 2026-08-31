@@ -211,6 +211,7 @@ void
 bios_setdma (void *a)
 {
   last_dma = a;
+
   if (a)
     {
       memcpy (mock_dma, a, 128);
@@ -223,6 +224,7 @@ unsigned short int
 bios_read (void)
 {
   mock_read_count++;
+
   if (last_dma)
     {
       unsigned char *d = (unsigned char *)last_dma;
@@ -660,9 +662,11 @@ test_stream_reader (UBYTE rec[128], void *ctx)
   int k;
 
   (void)ctx;
+
   if (g_stream_idx == g_stream_hole)
     {
       g_stream_idx++;
+
       for (k = 0; k < 128; k++)
         {
           rec[k] = 0xAA;
@@ -786,6 +790,7 @@ main (void)
           "ran0/1/2=%u/%u/%u\n",
           fcb[0], fcb[12], fcb[13], fcb[14], fcb[15], fcb[16], fcb[32],
           fcb[33], fcb[34], fcb[35]);
+
   if (open_ret > 3 || fcb[15] != 1 || fcb[16] != 4 || (fcb[14] & 0x80) == 0
       || fcb[33] || fcb[34] || fcb[35])
     {
@@ -1222,6 +1227,7 @@ main (void)
                    */
 
                   FILE *hf = fopen ("hello.386", "rb");
+
                   if (hf)
                     {
                       fseek (hf, 0, SEEK_END);
@@ -1472,11 +1478,13 @@ main (void)
     else
       {
         int bad = 0;
+
         for (i = 0; i < (int)sz; i++)
           {
             UBYTE exp = (i >= HOLE_FIRST && i < HOLE_FIRST + 128)
                             ? 0
                             : (UBYTE)((i + 1) & 0xff);
+
             if (tpa[0x100 + i] != exp)
               {
                 bad = i + 1;
