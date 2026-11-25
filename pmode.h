@@ -97,9 +97,10 @@ int v86_faulted (void);
 void v86_clear_fault (void);
 
 /*
- * Open the TSS I/O permission bitmap to the V86 task, or close it again.
- * Must be closed whenever a ring-3 program can run: a present bitmap
- * overrides IOPL, and this one allows every port.
+ * Permit or deny V86 I/O by changing the TSS bitmap contents.  Its base stays
+ * fixed after LTR for compatibility with V86 monitors that cache the address.
+ * Must be denied whenever a ring-3 program can run: a present bitmap overrides
+ * IOPL, and an all-zero bitmap allows every port.
  */
 
 void pmode_v86_io (int allow);

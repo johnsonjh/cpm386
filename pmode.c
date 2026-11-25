@@ -62,21 +62,19 @@ struct dt_ptr
  *
  * IOPL does not gate port access in virtual-8086 mode - the bitmap always
  * does - so the V86 disk server can only touch the FDC and IDE registers if
- * one is present.  It is left all-zero, meaning every port is allowed: the
- * server runs stock ROM code, and the kernel is the only thing that puts it
- * there.  The trailing 0xFF byte is the terminator the CPU requires.
+ * one is present.  The bitmap is all-zero while the V86 server runs, meaning
+ * every port is allowed; otherwise it is all 0xFF, denying every port.
+ * The trailing 0xFF byte is the terminator the CPU requires.
  *
- * The map must not be visible to ring-3 programs, though.  A present map
- * overrides IOPL for them too, and an all-zero one would hand every user
- * program the I/O ports.  So iomap_base is parked past the segment limit -
- * the encoding for "no map at all", which denies I/O to anything above
- * IOPL - and only moved onto the map for the duration of a V86 call.  The
- * CPU reads the field out of the TSS on each I/O instruction, so the switch
- * is a single 16-bit store.  See pmode_v86_io().
+ * Keep iomap_base pointing at the bitmap for the entire lifetime of the
+ * loaded TSS.  Some V86 monitors cache the bitmap address when the task
+ * register is loaded, so changing iomap_base later is not reliably observed.
+ * Change the bitmap contents instead: all 0xFF denies I/O to ring-3 programs,
+ * and all zero permits the V86 disk server to run stock ROM code.  See
+ * pmode_v86_io().
  */
 
 #define TSS_IOMAP_BYTES (65536 / 8)
-#define TSS_NO_IOMAP 0xFFFFu
 
 struct tss_with_iomap
 {
@@ -556,7 +554,12 @@ fault_handler_c (struct fault_frame *f)
   fault_puts ("  Err ");
   fault_puthex32 (f->err);
 
-  if (from_user && g_tpa_base)
+  if (from_v86)
+    {
+      fault_puts ("  linear ");
+      fault_puthex32 (((f->cs & 0xFFFFu) << 4) + (f->eip & 0xFFFFu));
+    }
+  else if (from_user && g_tpa_base)
     {
       fault_puts ("  linear ");
       fault_puthex32 ((uint32_t)g_tpa_base + f->eip);
@@ -729,8 +732,19 @@ v86_clear_fault (void)
 void
 pmode_v86_io (int allow)
 {
-  tss.iomap_base
-      = allow ? (uint16_t)(sizeof (tss) - sizeof (tss.iomap)) : TSS_NO_IOMAP;
+  volatile uint8_t *map = tss.iomap;
+  uint8_t value = (uint8_t)(allow ? 0x00u : 0xFFu);
+  unsigned int i;
+
+  /*
+   * Do not change iomap_base here: it is deliberately stable after LTR.
+   * The processor (and some emulators) consults the bitmap contents for each
+   * V86 I/O instruction.
+   */
+  for (i = 0; i < TSS_IOMAP_BYTES; i++)
+    {
+      map [i] = value;
+    }
 }
 
 /*****************************************************************************/
@@ -1227,7 +1241,8 @@ pmode_init (unsigned long tpa_base, unsigned long tpa_len)
 
   tss.ss0 = SEL_KDATA;
   tss.esp0 = (uint32_t)(unsigned long)(ring0_stack + sizeof (ring0_stack));
-  tss.iomap_base = TSS_NO_IOMAP;      /* no map: ring 3 gets no I/O at all */
+  tss.iomap_base = (uint16_t)(sizeof (tss) - sizeof (tss.iomap));
+  pmode_v86_io (0);                   /* deny every port outside V86 calls */
   tss.iomap [TSS_IOMAP_BYTES] = 0xFF; /* required terminator byte          */
 
   gdtp.limit = sizeof (gdt) - 1;
