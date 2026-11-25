@@ -25,7 +25,7 @@
   2281 numlock.386
   5472 od.386
    196 pause.386
-144299 payload.bin
+144426 payload.bin
  16328 pip.386
   2409 printenv.386
   3165 prng.386
