@@ -86,7 +86,9 @@ RUN \
   npm config set audit "false" && \
   npm install -g "npm@latest" && \
   npm install -g "markdown-toc" && \
-  rm -vrf /var/log/dnf*.log "${HOME:?}/.npm/"* "${HOME:?}/.cache/"*
+  rm -vrf /var/log/dnf* "${HOME:?}/.npm/"* "${HOME:?}/.cache/"* && \
+  rm -vrf /var/tmp/* 2> /dev/null || true && rm -vrf /usr/share/doc && \
+  rm -vrf /usr/share/man
 
 ################################################################################
 
